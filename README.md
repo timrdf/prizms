@@ -1,4 +1,4 @@
 prizms
 ======
 
-End-to-end Linked Data ecosystem
+Better Visualizations Catalyzed by Better Data

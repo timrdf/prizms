@@ -296,6 +296,7 @@ if [[ "$install_it" == [yY] ]]; then
          echo "It seems that you didn't have permissions to $clone $project_code_repository"
          echo "GitHub requires an ssh key to check out a writeable working clone"
          echo "See https://help.github.com/articles/generating-ssh-keys"
+         echo
 
          if [ ! -e ~$person_user_name/.ssh/id_dsa.pub ]; then
             echo -n "Q: You don't have a ~/.ssh/id_dsa.pub; do you want to set one up now? [y/n] "

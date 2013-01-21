@@ -258,7 +258,7 @@ echo "The following command will add the paths that Prizms requires."
 echo "Running it multiple times will have no effect, since only the missing paths are added."
 echo
 echo "    $set_paths_cmd"
-already_there=`grep ".*export PATH=.*prizms/bin/paths.sh.*" ~/.bashrc`
+already_there=`grep ".*export PATH=.*prizms/bin/install/paths.sh.*" ~/.bashrc`
 echo
 if [ -n "$already_there" ]; then
    echo "It seems that you already have the following in your ~/.bashrc, so we won't try to add it again:"

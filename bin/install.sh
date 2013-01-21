@@ -294,6 +294,7 @@ pushd &> /dev/null
          target_dir=`basename $project_code_repository`
          target_dir=${target_dir%.*}
 
+         echo $target_dir
          if [ ! -e $target_dir ]; then
             echo
             touch .before_clone

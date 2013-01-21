@@ -63,10 +63,10 @@ fi
 echo "Okay, let's install Prizms!"
 echo "   https://github.com/timrdf/prizms/wiki"
 echo "   https://github.com/timrdf/prizms/wiki/Installing-Prizms"
-echo
 
 div="-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
 if [[ -z "$project_user_name" ]]; then
+   echo
    echo "First, we need to know about the current user `whoami`."
    echo "Q: Is `whoami` your project's user name? (y/n) "
    read -u 1 it_is

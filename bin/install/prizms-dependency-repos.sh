@@ -18,7 +18,7 @@ if [ ! -e $PRIZMS_HOME/repos ]; then
 fi
 
 pushd $PRIZMS_HOME/repos &> /dev/null
-   for repos in git://github.com/timrdf/DataFAQs.git \
+   for repos in git://github.com:timrdf/csv2rdf4lod-automation.git \
                 git://github.com:timrdf/DataFAQs.git; do
       echo git clone $repos
            git clone $repos

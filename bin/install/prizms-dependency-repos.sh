@@ -27,7 +27,7 @@ pushd $PRIZMS_HOME/repos &> /dev/null
          echo git clone $repos
               git clone $repos
       else
-         echo $directory
+         echo $directory...
          pushd $directory &> /dev/null
             git pull
          popd &> /dev/null

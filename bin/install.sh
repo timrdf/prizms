@@ -268,8 +268,7 @@ if [ "$vcs" == "svn" ]; then
    clone="checkout"
 fi
 echo "Now let's install your development copy of your Prizms."
-echo "Q: May we run '$vcs $clone $project_code_repository'"
-echo -n "Q:   from ~$person_user_name/prizms/? [y/n] "
+echo "Q: May we run '$vcs $clone $project_code_repository' from ~$person_user_name/prizms/? [y/n] "
 read -u 1 install_it
 if [[ "$install_it" == [yY] ]]; then
    if [ ! -e ~$person_user_name/prizms ]; then

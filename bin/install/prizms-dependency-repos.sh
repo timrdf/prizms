@@ -20,6 +20,7 @@ fi
 pushd $PRIZMS_HOME/repos &> /dev/null
    for repos in git://github.com/timrdf/csv2rdf4lod-automation.git \
                 git://github.com/timrdf/DataFAQs.git; do
+      echo
       directory=`basename $repos`
       directory=${directory%.*}
       if [ ! -e $directory ]; then
@@ -29,7 +30,6 @@ pushd $PRIZMS_HOME/repos &> /dev/null
          echo $directory
          pushd $directory &> /dev/null
             git pull
-            echo
          popd &> /dev/null
       fi
    done

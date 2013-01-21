@@ -5,7 +5,7 @@
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo
-   echo "usage: `basename $0` [--me <your-URI>] [--proj-user <user>] [--repos <code-repo>] [--upstream-ckan] <ckan>]"
+   echo "usage: `basename $0` [--me <your-URI>] [--proj-user <user>] [--repos <code-repo>] [--upstream-ckan <ckan>]"
    echo
    echo "This script will determine and use the following parameters to install an instance of Prizms:"
    echo

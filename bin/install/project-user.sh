@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# <> prov:specializationOf <> .
+# <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install/project-user.sh> .
 #
 
 if [[ $# -lt 1 || "$1" == "--help" || "$1" == "-h" ]]; then
@@ -28,7 +28,7 @@ if [[ -z $exists ]]; then
         sudo /usr/sbin/useradd $user
    echo sudo /usr/sbin/usermod -g$user $user
         sudo /usr/sbin/usermod -g$user $user
-   #echo sudo /usr/sbin/usermod -g$user -G$admin $user
+   #echo sudo /usr/sbin/usermod -g$user -G$admin $user # TODO: the user needs admin/wheel
    #     sudo /usr/sbin/usermod -g$user -G$admin $user
 else
    echo "INFO `basename $0`: $user already exists; not trying to add or modify." >&2

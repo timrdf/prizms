@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# <> prov:specializationOf <> .
+# <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install.sh> .
 #
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then

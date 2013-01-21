@@ -241,10 +241,16 @@ set_paths_cmd=`prizms/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
 echo "The following command will add the paths that Prizms requires."
 echo "Running it multiple times will have no effect, since only the missing paths are added."
 echo "    $set_paths_cmd"
-echo "Add this command to your ~/.bashrc? [y/n]"
-read -u 1 install_it
-if [[ "$install_it" == [yY] ]]; then
-   echo $set_paths_cmd >> ~/.bashrc
+already_there=`grep ".*export PATH=.*prizms/bin/paths.sh.*" ~/.bashrc`
+if [ -n "$already_there" ]; then
+   echo "It seems that you already have this in your ~/.bashrc:"
+   echo $already_there
 else
-   echo "We didn't touch your ~/.bashrc, so you'll need to make sure you set the paths correctly each time."
-fi
+   echo "Add this command to your ~/.bashrc? [y/n]"
+   read -u 1 install_it
+   if [[ "$install_it" == [yY] ]]; then
+      echo $set_paths_cmd >> ~/.bashrc
+   else
+      echo "We didn't touch your ~/.bashrc, so you'll need to make sure you set the paths correctly each time."
+   fi
+else

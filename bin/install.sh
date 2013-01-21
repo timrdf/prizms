@@ -215,7 +215,7 @@ echo "  ~$project_user_name/prizms <-- This is where the production data and aut
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
-if [[ ! -e ~$project_user_name ]]; then
+if [[ `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == "no" ]]; then
    echo
    echo -n "Create user $project_user_name? [y/n] "
    read -u 1 install_project_user

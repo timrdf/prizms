@@ -4,7 +4,7 @@
 #
 
 if [[ $# -lt 1 || "$1" == "--help" || "$1" == "-h" ]]; then
-   echo "usage: `basename $0` <project-user-name>"
+   echo "usage: `basename $0` <project-user-name> [[--exists]"
    exit 1
 fi
 
@@ -12,6 +12,15 @@ user="$1"
 
    echo sudo cat /etc/passwd | cut -d: -f1 | grep $user
 exists=`sudo cat /etc/passwd | cut -d: -f1 | grep $user`
+
+if [[ "$1" == "--exists" ]]; then
+   if [[ -z $exists ]]; then
+      echo "no"
+   else
+      echo "yes"
+   fi
+   exit
+fi
 
 if [[ -z $exists ]]; then
    admin="wheel" # Could be 'admin'

@@ -302,8 +302,7 @@ if [[ "$install_it" == [yY] ]]; then
             read -p "Q: You don't have a ~$person_user_name/.ssh/id_dsa.pub; do you want to set one up now? [y/n] " timbo
             if [[ "$timbo" == [yY] ]]; then
                if [ -z "$user_email" ]; then
-                  echo -n "Q: We need your email address to set up an SSH key. What is it? "
-                  read -u $user_email
+                  read -p "Q: We need your email address to set up an SSH key. What is it? " user_email
                fi
                if [ -n "$user_email" ]; then
                   echo ssh-keygen -t dsa -C $user_email

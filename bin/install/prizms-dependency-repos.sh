@@ -10,7 +10,7 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    exit
 fi
 
-PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
+PRIZMS_HOME=$(cd ${0%/*/*} && echo ${PWD%/*})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
 if [ ! -e $PRIZMS_HOME/repos ]; then

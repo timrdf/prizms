@@ -4,7 +4,7 @@
 #    prov:wasDerivedFrom   <https://github.com/timrdf/prizms/blob/master/bin/install/project-user.sh> .
 #
 
-if [[ $# -lt 1 || "$1" == "--help" || "$1" == "-h" ]]; then
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo "usage: `basename $0` [-n]"
    echo "  Retrieves the dependency code repositories (e.g. csv2rdf4lod-automation, lodspeakr, DataFAQs)."
    exit

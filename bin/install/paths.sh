@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#3> <> prov:specializationOf <>;
+#3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install/paths.sh>;
 #3>    prov:wasDerivedFrom <https://github.com/timrdf/DataFAQs/blob/master/bin/df-situate-paths.sh> .
 #
 # Usage:
@@ -8,6 +8,9 @@
 #   (can be repeated indefinately, once paths are in PATH, nothing is returned.)
 
 HOME=$(cd ${0%/*} && echo ${PWD%/*})
+
+echo $HOME
+exit
 
 if [ "$1" == "--help" ]; then
    echo "`basename $0` [--help]"

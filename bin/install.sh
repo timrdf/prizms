@@ -263,4 +263,24 @@ fi
 
 echo
 echo $div
+clone='clone'
+if [ "$vcs" == "svn" ]; then
+   clone="checkout"
+fi
+echo "Now let's install your development copy of your Prizms."
+echo "Q: May we run '$vcs $clone $project_code_repository'"
+echo -n "Q:   from ~$person_user_name/prizms/ ? [y/n]"
+read -u 1 install_it
+if [[ "$install_it" == [yY] ]]; then
+   if [ ! -d ~$person_user_name/prizms ]; then
+      mkdir ~$person_user_name/prizms
+   fi
+   pushd ~$person_user_name/prizms &> /dev/null
+      $vcs $clone $project_code_repository
+   popd &> /dev/null
+else
+   echo "If you aren't going to use a code repository, we can't help you as much."
+fi
+
+
 

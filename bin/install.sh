@@ -77,22 +77,19 @@ div="-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 if [[ -z "$project_user_name" ]]; then
    echo
    echo "First, we need to know about the current user `whoami`."
-   echo -n "Q: Is `whoami` your project's user name? (y/n) "
-   read -u 1 it_is
+   read -p "Q: Is `whoami` your project's user name? (y/n) " -u 1 it_is
    if [[ $it_is == [yY] ]]; then
       project_user_name=`whoami`
       echo "Your project's user name is: $project_user_name"
       echo
       echo $div
-      echo -n "Q: What is your user name? "
-      read -u 1 person_user_name
+      read -p "Q: What is your user name? " -u 1 person_user_name
       echo "Okay, your user name is $person_user_name"
    else
       echo
       echo $div
       echo "Okay, `whoami` isn't your project's user name."
-      echo -n "Q: Is `whoami` _your_ user name? (y/n) "
-      read -u 1 it_is
+      read -p "Q: Is `whoami` _your_ user name? (y/n) "-u 1 it_is
       if [[ $it_is == [yY] ]]; then
          # https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
          person_user_name=`whoami`
@@ -100,11 +97,9 @@ if [[ -z "$project_user_name" ]]; then
          echo
          echo $div
          echo "Prizms should be installed to a user name created specifically for the project."
-         echo -n "Q: Does your project have a user name yet? (y/n) "
-         read -u 1 it_does
+         read -p "Q: Does your project have a user name yet? (y/n) "-u 1 it_does
          if [[ $it_does == [yY] ]]; then
-            echo -n "Q: What is the user name of your project? "
-            read -u 1 project_user_name
+            read -p "Q: What is the user name of your project? "-u 1 project_user_name
             if [ ! -e ~$project_user_name ]; then
                echo "ERROR: ~$project_user_name does not exist."
             else 
@@ -112,8 +107,7 @@ if [[ -z "$project_user_name" ]]; then
             fi
          else
             echo "Okay, let's make a user name for your project."
-            echo -n "Q: What should your project's user name be? "
-            read -u 1 project_user_name
+            read -p "Q: What should your project's user name be? " -u 1 project_user_name
             echo "Okay, your project's user name will be: $project_user_name"
          fi
       else
@@ -133,8 +127,7 @@ echo $div
 echo "It is important to maintain your Prizms using version control."
 echo "It helps you maintain your site, it facilitates collaboration with others, and it encourages reproducibility by others."
 if [ -z "$project_code_repository" ]; then
-   echo -n "Q: Where is $project_user_name's code repository (URL)?"
-   read -u 1 project_code_repository
+   read -p "Q: Where is $project_user_name's code repository (URL)?" -u 1 project_code_repository
 else
    echo "(We'll use the code repository that you already indicated: $project_code_repository)"
 fi
@@ -160,8 +153,7 @@ echo "Prizms can pull dataset listings from an installation of CKAN,"
 echo "which can make it easier to gather the datasets that you'd like to integrate."
 echo "It's fine not to pull from a CKAN, so if you don't want to, just leave this blank."
 if [ -z "$upstream_ckan" ]; then
-   echo -n "Q: Would you like your Prizms to pull dataset listings from a installation of CKAN?"
-   read -u 1 upstream_ckan
+   read -p "Q: Would you like your Prizms to pull dataset listings from a installation of CKAN?" -u 1 upstream_ckan
    if [ -n "$upstream_ckan" ]; then
       echo "Okay, we'll pull dataset listings from the CKAN $upstream_ckan"
    else
@@ -180,8 +172,7 @@ if [ -z "$person_uri" ]; then
    see='https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_PERSON_URI'
    echo "If you provide a URI for yourself, we can get you credit for the data that you produce."
    echo "See $see."
-   echo -n "If you have one, what is your preferred URI for yourself (e.g. http://www.w3.org/People/Berners-Lee/card#i)? "
-   read -u 1 person_uri
+   read -p "If you have one, what is your preferred URI for yourself (e.g. http://www.w3.org/People/Berners-Lee/card#i)? " person_uri
    if [ -n "$person_uri" ]; then
       echo "Okay, your URI is $person_uri"
    else
@@ -228,8 +219,7 @@ me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 if [[ `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == "no" ]]; then
    echo
    echo $div
-   echo -n "Create user $project_user_name? [y/n] "
-   read -u 1 install_project_user
+   read -p "Create user $project_user_name? [y/n] " -u 1 install_project_user
    if [[ "$install_project_user" == [yY] ]]; then
       $PRIZMS_HOME/bin/install/project-user.sh $project_user_name
    else
@@ -276,8 +266,7 @@ if [ "$vcs" == "svn" ]; then
    clone="checkout"
 fi
 echo "Now let's install your development copy of your Prizms."
-echo -n "Q: May we run '$vcs $clone $project_code_repository' from ~$person_user_name/prizms/? [y/n] "
-read -u 1 install_it
+read -p "Q: May we run '$vcs $clone $project_code_repository' from ~$person_user_name/prizms/? [y/n] " -u 1 install_it
 if [[ "$install_it" == [yY] ]]; then
    if [ ! -e ~$person_user_name/prizms ]; then
       mkdir -p ~$person_user_name/prizms

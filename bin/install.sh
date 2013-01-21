@@ -280,70 +280,72 @@ clone='clone'
 if [ "$vcs" == "svn" ]; then
    clone="checkout"
 fi
-echo "Now let's install your development copy of your Prizms."
-read -p "Q: May we run '$vcs $clone $project_code_repository' from ~$person_user_name/prizms/? [y/n] " -u 1 install_it
-if [[ "$install_it" == [yY] ]]; then
-   if [ ! -e ~$person_user_name/prizms ]; then
-      mkdir -p ~$person_user_name/prizms
-   fi
-   pushd ~/prizms &> /dev/null
-      echo
-      touch .before_clone
-      $vcs $clone $project_code_repository
-      status=$?
-      dir=`find . -mindepth 1 -maxdepth 1 -type d -newer .before_clone`
-      rm .before_clone
-      echo
-
-      if [ "$status" -eq 128 ]; then
-
-         echo "It seems that you didn't have permissions to $clone $project_code_repository"
-         echo "GitHub requires an ssh key to check out a writeable working clone"
-         echo "See https://help.github.com/articles/generating-ssh-keys"
+pushd &> /dev/null
+   cd
+   echo "Now let's install your development copy of your Prizms."
+   read -p "Q: May we run '$vcs $clone $project_code_repository' from `pwd`/prizms/? [y/n] " -u 1 install_it
+   if [[ "$install_it" == [yY] ]]; then
+      if [ ! -e ~$person_user_name/prizms ]; then
+         mkdir -p ~$person_user_name/prizms
+      fi
+      pushd prizms &> /dev/null
+         echo
+         touch .before_clone
+         $vcs $clone $project_code_repository
+         status=$?
+         dir=`find . -mindepth 1 -maxdepth 1 -type d -newer .before_clone`
+         rm .before_clone
          echo
 
-         if [ ! -e ~$person_user_name/.ssh/id_dsa.pub ]; then
-            read -p "Q: You don't have a ~$person_user_name/.ssh/id_dsa.pub; do you want to set one up now? [y/n] " timbo
-            if [[ "$timbo" == [yY] ]]; then
-               if [ -z "$user_email" ]; then
-                  read -p "Q: We need your email address to set up an SSH key. What is it? " user_email
-               fi
-               if [ -n "$user_email" ]; then
-                  echo ssh-keygen -t dsa -C $user_email
-                       ssh-keygen -t dsa -C $user_email
+         if [ "$status" -eq 128 ]; then
+
+            echo "It seems that you didn't have permissions to $clone $project_code_repository"
+            echo "GitHub requires an ssh key to check out a writeable working clone"
+            echo "See https://help.github.com/articles/generating-ssh-keys"
+            echo
+
+            if [ ! -e ~$person_user_name/.ssh/id_dsa.pub ]; then
+               read -p "Q: You don't have a ~$person_user_name/.ssh/id_dsa.pub; do you want to set one up now? [y/n] " timbo
+               if [[ "$timbo" == [yY] ]]; then
+                  if [ -z "$user_email" ]; then
+                     read -p "Q: We need your email address to set up an SSH key. What is it? " user_email
+                  fi
+                  if [ -n "$user_email" ]; then
+                     echo ssh-keygen -t dsa -C $user_email
+                          ssh-keygen -t dsa -C $user_email
+                  else
+                     echo "WARNING `basename $0` needs an email address to set up an SSH key."
+                  fi
                else
-                  echo "WARNING `basename $0` needs an email address to set up an SSH key."
+                  echo "We didn't do anything to create an SSH key."
+               fi
+               if [ -e ~$person_user_name/.ssh/id_dsa.pub ]; then
+                  echo "Great! You have a shiny new SSH key."
+                  if [ "$vcs" == "git" ]; then
+                     echo "Go add the following to https://github.com/settings/ssh"
+                     cat ~$person_user_name/.ssh/id_dsa.pub
+                     echo
+                     read -p "Q: Finished adding your key? Once you do, we'll try running this install script again. Ready? [y]" finished
+                     $0 --me $person_uri --my-email $user_email --proj-user $project_user_name --repos $project_code_repository --upstream-ckan $upstream_ckan
+                     # ^ Recursive call
+                  fi
                fi
             else
-               echo "We didn't do anything to create an SSH key."
+               echo "WARNING `basename $0`: ~$person_user_name/.ssh/id_dsa.pub exists, so we won't touch it."
+               echo "Please set up your ssh key for $project_code_repository and run this install script again."
+               echo "See https://help.github.com/articles/generating-ssh-keys"
             fi
-            if [ -e ~$person_user_name/.ssh/id_dsa.pub ]; then
-               echo "Great! You have a shiny new SSH key."
-               if [ "$vcs" == "git" ]; then
-                  echo "Go add the following to https://github.com/settings/ssh"
-                  cat ~$person_user_name/.ssh/id_dsa.pub
-                  echo
-                  read -p "Q: Finished adding your key? Once you do, we'll try running this install script again. Ready? [y]" finished
-                  $0 --me $person_uri --my-email $user_email --proj-user $project_user_name --repos $project_code_repository --upstream-ckan $upstream_ckan
-                  # ^ Recursive call
-               fi
-            fi
-         else
-            echo "WARNING `basename $0`: ~$person_user_name/.ssh/id_dsa.pub exists, so we won't touch it."
-            echo "Please set up your ssh key for $project_code_repository and run this install script again."
-            echo "See https://help.github.com/articles/generating-ssh-keys"
+
+         elif [ "$status" -ne 0 ]; then
+
+            echo "Okay, $project_code_repository is now ${clone}'d to $dir." 
+
          fi
-
-      elif [ "$status" -ne 0 ]; then
-
-         echo "Okay, $project_code_repository is now ${clone}'d to $dir." 
-
-      fi
-   popd &> /dev/null
-else
-   echo "If you aren't going to use a code repository, we can't help you as much."
-fi
-
+      popd &> /dev/null
+   else
+      echo "If you aren't going to use a code repository, we can't help you as much."
+   fi
+popd &> /dev/null
 
 
 

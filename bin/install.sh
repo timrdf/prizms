@@ -226,3 +226,7 @@ if [[ `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == 
       exit 1
    fi
 fi
+
+
+$PRIZMS_HOME/bin/install/prizms-dependency-repos.sh
+

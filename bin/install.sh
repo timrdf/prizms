@@ -201,9 +201,9 @@ echo "Your user name is:                        $person_user_name"
 echo "Your project's user name is (or will be): $project_user_name"
 echo "Your project's code repository ($vcs):     $project_code_repository"
 if [ -n "$upstream_ckan" ]; then
-   echo "You will pull dataset listings from CKAN: $upstream_ckan"  
+   echo "Your project will pull dataset listings from CKAN: $upstream_ckan"  
 else
-   echo "You won't pull dataset listings from a CKAN."
+   echo "Your project won't pull dataset listings from a CKAN (for now)."
 fi
 
 

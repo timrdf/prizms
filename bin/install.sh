@@ -9,12 +9,12 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo
    echo "This script will determine and use the following parameters to install an instance of Prizms:"
    echo
-   echo " --me            : [optional] the project administrator's URI                          (e.g. http://jsmith.me/foaf#me)"
-   echo "                 : the project developer's (i.e. your) user name (determined by whois) (e.g. jsmith)"
+   echo " --me            : [optional] the project administrator's URI                           (e.g. http://jsmith.me/foaf#me)"
+   echo "                 : the project developer's (i.e. your) user name (determined by whoami) (e.g. jsmith)"
    echo "                   ^- this user will need sudo privileges."
-   echo " --proj-user     : the project's                       user name                       (e.g. melagrid)"
-   echo " --repos         : the project's code repository                                       (e.g. git@github.com:jimmccusker/melagrid.git)"
-   echo " --upstream-ckan : [optional] the URL of a CKAN from which to pull dataset listings    (e.g. http://data.melagrid.org)"
+   echo " --proj-user     : the project's                       user name                        (e.g. melagrid)"
+   echo " --repos         : the project's code repository                                        (e.g. git@github.com:jimmccusker/melagrid.git)"
+   echo " --upstream-ckan : [optional] the URL of a CKAN from which to pull dataset listings     (e.g. http://data.melagrid.org)"
    echo
    echo "If the required parameters are not known, the script will ask for them before installing anything."
    echo
@@ -34,7 +34,7 @@ if [[ "$1" == "--me" && $# -gt 1 ]]; then
 fi
 
 #
-person_user_name=`whois`
+person_user_name=`whoami`
 
 #
 project_user_name=""

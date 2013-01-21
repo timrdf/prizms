@@ -260,3 +260,7 @@ else
       echo "We didn't touch your ~/.bashrc, so you'll need to make sure you set the paths correctly each time."
    fi
 fi
+
+echo
+echo $div
+

@@ -299,7 +299,7 @@ if [[ "$install_it" == [yY] ]]; then
          echo
 
          if [ ! -e ~$person_user_name/.ssh/id_dsa.pub ]; then
-            echo -n "Q: You don't have a ~/.ssh/id_dsa.pub; do you want to set one up now? [y/n] "
+            echo -n "Q: You don't have a ~$person_user_name/.ssh/id_dsa.pub; do you want to set one up now? [y/n] "
             read -u 1 timbo
             if [[ "$timbo" == [yY] ]]; then
                if [ -z "$user_email" ]; then

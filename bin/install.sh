@@ -60,6 +60,7 @@ fi
 
 
 
+echo
 echo "Okay, let's install Prizms!"
 echo "   https://github.com/timrdf/prizms/wiki"
 echo "   https://github.com/timrdf/prizms/wiki/Installing-Prizms"

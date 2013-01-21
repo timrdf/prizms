@@ -193,7 +193,7 @@ echo $div
 echo "We now have what we need to start installing Prizms:"
 echo
 if [ -n "$person_uri" ]; then
-   echo "Your URI is:                              $person_uri"
+   echo "Your URI is:                                      $person_uri"
 else
    echo "You don't have a URI."
 fi

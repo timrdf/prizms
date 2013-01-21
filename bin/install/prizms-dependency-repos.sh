@@ -17,9 +17,10 @@ if [ ! -e $PRIZMS_HOME/repos ]; then
    mkdir -p $PRIZMS_HOME/repos
 fi
 
-pushd $PRIZMS_HOME &> /dev/null
+pushd $PRIZMS_HOME/repos &> /dev/null
    for repos in git@github.com:timrdf/csv2rdf4lod-automation.git \
                 git@github.com:timrdf/DataFAQs.git; do
-      echo $repos
+      echo git clone $repos
+           git clone $repos
    done
 popd

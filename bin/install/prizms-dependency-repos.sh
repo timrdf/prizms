@@ -31,6 +31,7 @@ pushd $PRIZMS_HOME/repos &> /dev/null
          echo $directory
          pushd $directory &> /dev/null
             git pull
+            echo
          popd &> /dev/null
       fi
    done

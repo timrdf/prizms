@@ -7,7 +7,7 @@
 #   export PATH=$PATH`$DATAFAQS_HOME/bin/df-situate-paths.sh`
 #   (can be repeated indefinately, once paths are in PATH, nothing is returned.)
 
-HOME=$(cd ${0%/*} && echo ${PWD%/*})
+HOME=$(cd ${0%/*/*} && echo ${PWD%/*})
 
 echo $HOME
 exit

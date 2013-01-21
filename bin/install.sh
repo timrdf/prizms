@@ -283,11 +283,13 @@ if [[ "$install_it" == [yY] ]]; then
       mkdir -p ~$person_user_name/prizms
    fi
    pushd ~$person_user_name/prizms &> /dev/null
+      echo
       touch .before_clone
       $vcs $clone $project_code_repository
       status=$?
       dir=`find . -mindepth 1 -maxdepth 1 -type d -newer .before_clone`
       rm .before_clone
+      echo
 
       if [ "$status" -eq 128 ]; then
 

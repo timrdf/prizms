@@ -34,7 +34,7 @@ if [[ "$1" == "--me" && $# -gt 1 ]]; then
 fi
 
 #
-person_user_name=""
+person_user_name=`whois`
 
 #
 project_user_name=""

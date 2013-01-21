@@ -276,6 +276,7 @@ if [[ "$install_it" == [yY] ]]; then
    fi
    pushd ~$person_user_name/prizms &> /dev/null
       $vcs $clone $project_code_repository
+      echo $?
    popd &> /dev/null
 else
    echo "If you aren't going to use a code repository, we can't help you as much."

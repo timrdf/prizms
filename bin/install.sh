@@ -237,7 +237,6 @@ echo "If they're already there, we'll just update them from the latest on github
 echo
 $PRIZMS_HOME/bin/install/prizms-dependency-repos.sh
 
-echo
 echo $div
 set_paths_cmd=`prizms/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
 echo "The following command will add the paths that Prizms that it requires:"

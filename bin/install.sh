@@ -286,7 +286,7 @@ if [[ "$install_it" == [yY] ]]; then
    if [ ! -e ~$person_user_name/prizms ]; then
       mkdir -p ~$person_user_name/prizms
    fi
-   pushd ~prizms &> /dev/null
+   pushd ~/prizms &> /dev/null
       echo
       touch .before_clone
       $vcs $clone $project_code_repository

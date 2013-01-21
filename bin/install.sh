@@ -234,7 +234,7 @@ fi
 echo
 echo $div
 echo "Prizms combines a couple other projects, all of which are available on github."
-echo "We'll retrieve those and place them at $PRIZMS_HOME/repos/"
+echo "We'll retrieve those and place them in the directory $PRIZMS_HOME/repos/"
 echo "If they're already there, we'll just update them from the latest on github."
 $PRIZMS_HOME/bin/install/prizms-dependency-repos.sh
 

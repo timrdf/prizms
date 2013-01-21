@@ -5,11 +5,12 @@
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo
-   echo "usage: `basename $0` [--me <your-URI>] [--proj-user <user>] [--repos <code-repo>] [--upstream-ckan <ckan>]"
+   echo "usage: `basename $0` [--me <your-URI>] [--my-email <your-email>] [--proj-user <user>] [--repos <code-repo>] [--upstream-ckan <ckan>]"
    echo
    echo "This script will determine and use the following parameters to install an instance of Prizms:"
    echo
-   echo " --me            : [optional] the project administrator's URI                           (e.g. http://jsmith.me/foaf#me)"
+   echo " --me            : [optional] the project developer's URI                               (e.g. http://jsmith.me/foaf#me)"
+   echo " --my-email      :            the project developer's email address                     (e.g. me@jsmith.me)"
    echo "                 : the project developer's (i.e. your) user name (determined by whoami) (e.g. jsmith)"
    echo "                   ^- this user will need sudo privileges."
    echo " --proj-user     : the project's                       user name                        (e.g. melagrid)"
@@ -30,6 +31,13 @@ fi
 person_uri=""
 if [[ "$1" == "--me" && $# -gt 1 ]]; then
    person_uri="$2"
+   shift 2
+fi
+
+#
+person_email=""
+if [[ "$1" == "--my-email" && $# -gt 1 ]]; then
+   person_email="$2"
    shift 2
 fi
 
@@ -275,12 +283,54 @@ if [[ "$install_it" == [yY] ]]; then
       mkdir -p ~$person_user_name/prizms
    fi
    pushd ~$person_user_name/prizms &> /dev/null
+      touch .before_clone
       $vcs $clone $project_code_repository
-      echo $?
+      status=$?
+      dir=`find . -mindepth 1 -maxdepth 1 -type d -newer .before_clone`
+      rm .before_clone
+
+      if [ "$status" -eq 128 ]; then
+
+         echo "It seems that you didn't have permissions to $clone $project_code_repository"
+         echo "GitHub requires an ssh key to check out a writeable working clone"
+         echo "See https://help.github.com/articles/generating-ssh-keys"
+
+         if [ ! -e ~$person_user_name/.ssh/id_dsa.pub ];
+            echo -n "Q: You don't have a ~/.ssh/id_dsa.pub; do you want to set one up now? [y/n] "
+            read -u 1 create_key
+            if [[ "$create_key" == [yY] ]]; then
+               if [ -z "$user_email" ]; then
+                  echo -n "Q: We need your email address to set up an SSH key. What is it? "
+                  read -u $user_email
+               fi
+               if [ -n "$user_email" ]; then
+                  echo ssh-keygen -t dsa -C $user_email
+                       ssh-keygen -t dsa -C $user_email
+               else
+                  echo "WARNING `basename $0` needs an email address to set up an SSH key."
+               fi
+            else
+               echo "We didn't do anything to create an SSH key."
+            fi
+         else
+            echo "WARNING `basename $0`: ~$person_user_name/.ssh/id_dsa.pub exists, so we won't touch it."
+            echo "Please set up your ssh key for $project_code_repository and run this install script again."
+            echo "See https://help.github.com/articles/generating-ssh-keys"
+         fi
+
+      elif [ "$status" -ne 0 ]; then
+
+         echo "Okay, $project_code_repository is now ${clone}'d to $dir." 
+
+      fi
    popd &> /dev/null
 else
    echo "If you aren't going to use a code repository, we can't help you as much."
 fi
+
+
+
+
 
 
 

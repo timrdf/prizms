@@ -22,7 +22,16 @@ echo $PRIZMS_HOME/repos
 pushd $PRIZMS_HOME/repos &> /dev/null
    for repos in git://github.com/timrdf/csv2rdf4lod-automation.git \
                 git://github.com/timrdf/DataFAQs.git; do
-      echo git clone $repos
-           git clone $repos
+      directory=`basename $repos`
+      directory=${directory%.*}
+      echo $directory
+      if [ ! -e $directory ]; then
+         echo git clone $repos
+              git clone $repos
+      else
+         pushd $directory &> /dev/null
+            git pull
+         popd &> /dev/null
+      fi
    done
 popd

@@ -20,8 +20,8 @@ fi
 echo $PRIZMS_HOME/repos
 
 pushd $PRIZMS_HOME/repos &> /dev/null
-   for repos in git://github.com:timrdf/csv2rdf4lod-automation.git \
-                git://github.com:timrdf/DataFAQs.git; do
+   for repos in git://github.com/timrdf/csv2rdf4lod-automation.git \
+                git://github.com/timrdf/DataFAQs.git; do
       echo git clone $repos
            git clone $repos
    done

@@ -231,3 +231,14 @@ fi
 
 $PRIZMS_HOME/bin/install/prizms-dependency-repos.sh
 
+set_paths_cmd=`prizms/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
+echo "The following command will add the paths that Prizms that it requires:"
+echo "    $set_paths_cmd"
+echo "Running it a second time will have no effect, since they are set the first time."
+echo "Add this command to your ~/.bashrc?"
+read -u 1 install_it
+if [[ "$install_it" == [yY] ]]; then
+   echo $set_paths_cmd >> ~/.bashrc
+else
+   echo "We didn't touch your ~/.bashrc, so you'll need to make sure you set the paths correctly each time."
+fi

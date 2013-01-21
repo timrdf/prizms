@@ -216,7 +216,8 @@ PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
 if [[ ! -e ~$project_user_name ]]; then
-   echo "Create user $project_user_name? "
+   echo
+   echo "Create user $project_user_name? [y/n]"
    read -u 1 install_project_user
    if [[ "$install_project_user" == [yY] ]]; then
       $PRIZMS_HOME/bin/install/project-user.sh $project_user_name

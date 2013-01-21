@@ -33,4 +33,5 @@ pushd $PRIZMS_HOME/repos &> /dev/null
          popd &> /dev/null
       fi
    done
+   echo
 popd &> /dev/null

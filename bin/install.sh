@@ -211,9 +211,9 @@ if [ -n "$person_uri" ]; then
 else
    echo "You don't have a URI."
 fi
-echo "Your user name is:                                $person_user_name"
-echo "Your project's user name is (or will be):         $project_user_name"
-echo "Your project's code repository ($vcs):             $project_code_repository"
+echo "Your user name is:                                 $person_user_name"
+echo "Your project's user name is (or will be):          $project_user_name"
+echo "Your project's code repository ($vcs):              $project_code_repository"
 if [ -n "$upstream_ckan" ]; then
    echo "Your project will pull dataset listings from CKAN: $upstream_ckan"  
 else

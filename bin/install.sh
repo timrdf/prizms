@@ -248,7 +248,7 @@ echo "    $set_paths_cmd"
 already_there=`grep ".*export PATH=.*prizms/bin/paths.sh.*" ~/.bashrc`
 echo
 if [ -n "$already_there" ]; then
-   echo "It seems that you already have this in your ~/.bashrc:"
+   echo "It seems that you already have this in your ~/.bashrc, so we won't try to add it again:"
    echo
    echo $already_there
 else

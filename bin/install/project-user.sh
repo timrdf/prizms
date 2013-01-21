@@ -22,5 +22,5 @@ if [[ -z $exists ]]; then
    #echo sudo /usr/sbin/usermod -g$user -G$admin $user
    #     sudo /usr/sbin/usermod -g$user -G$admin $user
 else
-   echo "WARNING `basename $0`: $user already exists; not trying to add or modify." >&2
+   echo "INFO `basename $0`: $user already exists; not trying to add or modify." >&2
 fi

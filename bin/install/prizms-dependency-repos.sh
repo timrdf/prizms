@@ -24,11 +24,11 @@ pushd $PRIZMS_HOME/repos &> /dev/null
                 git://github.com/timrdf/DataFAQs.git; do
       directory=`basename $repos`
       directory=${directory%.*}
-      echo $directory
       if [ ! -e $directory ]; then
          echo git clone $repos
               git clone $repos
       else
+         echo $directory
          pushd $directory &> /dev/null
             git pull
          popd &> /dev/null

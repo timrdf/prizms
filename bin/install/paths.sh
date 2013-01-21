@@ -9,9 +9,6 @@
 
 HOME=$(cd ${0%/*/*} && echo ${PWD%/*})
 
-echo $HOME
-exit
-
 if [ "$1" == "--help" ]; then
    echo "`basename $0` [--help]"
    echo

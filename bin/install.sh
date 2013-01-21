@@ -285,8 +285,8 @@ pushd &> /dev/null
    echo "Now let's install your development copy of your Prizms."
    read -p "Q: May we run '$vcs $clone $project_code_repository' from `pwd`/prizms/? [y/n] " -u 1 install_it
    if [[ "$install_it" == [yY] ]]; then
-      if [ ! -e ~$person_user_name/prizms ]; then
-         mkdir -p ~$person_user_name/prizms
+      if [ ! -e prizms ]; then
+         mkdir prizms
       fi
       pushd prizms &> /dev/null
          echo

@@ -206,6 +206,7 @@ else
    echo "You won't pull dataset listings from a CKAN."
 fi
 
+
 echo
 echo $div
 echo "Okay, we'd like to install prizms at the following locations."
@@ -229,12 +230,14 @@ if [[ `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == 
    fi
 fi
 
+
 echo
 echo $div
 echo "Prizms combines a couple other projects, all of which are available on github."
 echo "We'll retrieve those and place them at $PRIZMS_HOME/repos/"
 echo "If they're already there, we'll just update them from the latest on github."
 $PRIZMS_HOME/bin/install/prizms-dependency-repos.sh
+
 
 echo $div
 set_paths_cmd=`prizms/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`

@@ -13,7 +13,13 @@ fi
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
-for repos in git@github.com:timrdf/csv2rdf4lod-automation.git \
-             git@github.com:timrdf/DataFAQs.git; do
-   echo $repos
-done
+if [ ! -e $PRIZMS_HOME/repos ]; then
+   mkdir -p $PRIZMS_HOME/repos
+fi
+
+pushd $PRIZMS_HOME &> /dev/null
+   for repos in git@github.com:timrdf/csv2rdf4lod-automation.git \
+                git@github.com:timrdf/DataFAQs.git; do
+      echo $repos
+   done
+popd

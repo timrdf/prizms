@@ -348,7 +348,7 @@ pushd &> /dev/null
                echo "Okay, $project_code_repository is now ${clone}'d to $dir." 
             fi
          fi
-         if [ -e $target_dir ];
+         if [ -e $target_dir ]; then
             pushd $target_dir &> /dev/null
                echo
                echo "$project_code_repository is already ${clone}'d into $target_dir; ${pull}'ing it..."

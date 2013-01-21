@@ -338,6 +338,10 @@ pushd &> /dev/null
 
          elif [ "$status" -ne 0 ]; then
 
+            echo "We're not sure what happended; $vcs returned $status"
+
+         else
+
             echo "Okay, $project_code_repository is now ${clone}'d to $dir." 
 
          fi

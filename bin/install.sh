@@ -165,17 +165,23 @@ fi
 # https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_PERSON_URI
 echo
 echo $div
-see='https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_PERSON_URI'
-echo "If you provide a URI for yourself, we can get you credit for the data that you produce."
-echo "See $see."
-echo "If you have one, what is your preferred URI for yourself (e.g. http://www.w3.org/People/Berners-Lee/card#i)? "
-read -u 1 person_uri
-if [ -n "$person_uri" ]; then
-   echo "Okay, your URI is $person_uri"
+echo "Prizms can include you in the provenance that it captures."
+echo "This can give you credit for the work that you're doing to create great data."
+if [ -z "$person_uri" ]; then
+   see='https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_PERSON_URI'
+   echo "If you provide a URI for yourself, we can get you credit for the data that you produce."
+   echo "See $see."
+   echo "If you have one, what is your preferred URI for yourself (e.g. http://www.w3.org/People/Berners-Lee/card#i)? "
+   read -u 1 person_uri
+   if [ -n "$person_uri" ]; then
+      echo "Okay, your URI is $person_uri"
+   else
+      echo "Okay, you don't have a URI. We can press forward without it, but you won't get credit in some of our provenance."
+      echo "See $see"
+      echo "and set CSV2RDF4LOD_CONVERT_PERSON_URI to your URI if you'd like to get some credit in the future."
+   fi
 else
-   echo "Okay, you don't have a URI. We can press forward without it, but you won't get credit in some of our provenance."
-   echo "See $see"
-   echo "and set CSV2RDF4LOD_CONVERT_PERSON_URI to your URI if you'd like to get some credit in the future."
+   echo "(We'll use the URI that you already indicated: $person_uri)"
 fi
 
 echo

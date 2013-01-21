@@ -29,16 +29,22 @@ fi
 
 #
 person_uri=""
-if [[ "$1" == "--me" && $# -gt 1 ]]; then
-   person_uri="$2"
-   shift 2
+if [[ "$1" == "--me" ]]; then
+   if [[ "$2" != --* ]]; then
+      person_uri="$2"
+      shift
+   fi
+   shift
 fi
 
 #
 person_email=""
-if [[ "$1" == "--my-email" && $# -gt 1 ]]; then
-   person_email="$2"
-   shift 2
+if [[ "$1" == "--my-email" ]]; then
+   if [[ "$2" != --* ]]; then
+      person_email="$2"
+      shift
+   fi
+   shift
 fi
 
 #
@@ -46,23 +52,32 @@ person_user_name=`whoami`
 
 #
 project_user_name=""
-if [[ "$1" == "--proj-user" && $# -gt 1 ]]; then
-   project_user_name="$2"
-   shift 2
+if [[ "$1" == "--proj-user" ]]; then
+   if [[ "$2" != --* ]]; then
+      project_user_name="$2"
+      shift
+   fi
+   shift
 fi
 
 #
 project_code_repository=""
-if [[ "$1" == "--repos" && $# -gt 1 ]]; then
-   project_code_repository="$2"
-   shift 2
+if [[ "$1" == "--repos" ]]; then
+   if [[ "$2" != --* ]]; then
+      project_code_repository="$2"
+      shift
+   fi
+   shift
 fi
 
 #
 upstream_ckan=""
-if [[ "$1" == "--upstream-ckan" && $# -gt 1 ]]; then
-   upstream_ckan="$2"
-   shift 2
+if [[ "$1" == "--upstream-ckan" ]]; then
+   if [[ "$2" != --* ]]; then
+      upstream_ckan="$2"
+      shift
+   fi
+   shift
 fi
 
 
@@ -301,6 +316,17 @@ if [[ "$install_it" == [yY] ]]; then
                fi
             else
                echo "We didn't do anything to create an SSH key."
+            fi
+            if [ -e ~$person_user_name/.ssh/id_dsa.pub ]; then
+               echo "Great! You have a shiny new SSH key."
+               if [ "$vcs" == "git" ]; then
+                  echo "Go add the following to https://github.com/settings/ssh"
+                  cat ~$person_user_name/.ssh/id_dsa.pub
+                  echo
+                  read -p "Q: Finished adding your key? Once you do, we'll try running this install script again. Ready? [y]" finished
+                  $0 --me $person_uri --my-email $user_email --proj-user $project_user_name --repos $project_code_repository --upstream-ckan $upstream_ckan
+                  # ^ Recursive call
+               fi
             fi
          else
             echo "WARNING `basename $0`: ~$person_user_name/.ssh/id_dsa.pub exists, so we won't touch it."

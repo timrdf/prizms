@@ -294,7 +294,6 @@ pushd &> /dev/null
          target_dir=`basename $project_code_repository`
          target_dir=${target_dir%.*}
 
-         echo $target_dir
          if [ ! -e $target_dir ]; then
             echo
             touch .before_clone
@@ -348,9 +347,11 @@ pushd &> /dev/null
             else
                echo "Okay, $project_code_repository is now ${clone}'d to $dir." 
             fi
-         else
+         fi
+         if [ -e $target_dir ];
             pushd $target_dir &> /dev/null
-               echo "$project_code_repository is already ${clone}'d; ${pull}'ing it..."
+               echo
+               echo "$project_code_repository is already ${clone}'d into $target_dir; ${pull}'ing it..."
                $vcs $pull
             popd &> /dev/null
          fi

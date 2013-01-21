@@ -218,6 +218,7 @@ me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
 if [[ `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == "no" ]]; then
    echo
+   echo $div
    echo -n "Create user $project_user_name? [y/n] "
    read -u 1 install_project_user
    if [[ "$install_project_user" == [yY] ]]; then
@@ -228,13 +229,20 @@ if [[ `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == 
    fi
 fi
 
-
+echo
+echo $div
+echo "Prizms combines a couple other projects, all of which are available on github."
+echo "We'll retrieve those and place them at $PRIZMS_HOME/repos/"
+echo "If they're already there, we'll just update them from the latest on github."
+echo
 $PRIZMS_HOME/bin/install/prizms-dependency-repos.sh
 
+echo
+echo $div
 set_paths_cmd=`prizms/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
 echo "The following command will add the paths that Prizms that it requires:"
-echo "    $set_paths_cmd"
 echo "Running it a second time will have no effect, since they are set the first time."
+echo "    $set_paths_cmd"
 echo "Add this command to your ~/.bashrc?"
 read -u 1 install_it
 if [[ "$install_it" == [yY] ]]; then

@@ -50,9 +50,16 @@ fi
 #   missing=$missing$DATAFAQS_HOME/bin/util/virtuoso
 #fi
 
+if [ -e $HOME/repos/csv2rdf4lod-automation/bin/util/cr-situate-paths.sh ]; then
+   missing=$missing`$HOME/repos/csv2rdf4lod-automation/bin/util/cr-situate-paths.sh`
+fi
+
+if [ -e $HOME/repos/DataFAQs/bin/df-situate-paths.sh ]; then
+   missing=$missing`$HOME/repos/DataFAQs/bin/df-situate-paths.sh`
+fi
+
 echo $missing
 
 #for path in `echo ${PATH//://  }`; do
 #   echo $path
 #done
-

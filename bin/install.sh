@@ -436,8 +436,8 @@ pushd &> /dev/null
                if [[ "$upstream_ckan" == http* && -e "$target" ]]; then
                   echo
                   echo $div
-                  echo "Prizms uses the shell environment variable CSV2RDF4LOD_CKAN_SOURCE to indicate the"
-                  echo "upstream CKAN from which to pull dataset listings."
+                  echo "Prizms uses the shell environment variable CSV2RDF4LOD_CKAN_SOURCE to"
+                  echo "indicate the upstream CKAN from which to pull dataset listings."
                   current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target`
                   if [ "$current" != "$upstream_ckan" ]; then
                      echo

@@ -489,8 +489,25 @@ pushd &> /dev/null
                target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
                if [[ ! -e $target ]]; then
                   cp $template $target
-                  perl -pi -e "s/export CSV2RDF4LOD_CONVERT_PERSON_URI=.*/export CSV2RDF4LOD_CONVERT_PERSON_URI='$person_uri'/" $target
+                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CONVERT_PERSON_URI' $target --change-to $person_uri
                   added="$added $target"
+                  echo
+                  echo $div
+                  echo "There wasn't a source-me.sh for your user name in the data conversion root, so we created one for you at $target"
+               fi
+
+
+               #
+               # 
+               #
+               template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
+               target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
+               if [[ ! -e $target ]]; then
+                  cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI=' > $target
+                  added="$added $target"
+                  echo
+                  echo $div
+                  echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
                fi
 
 
@@ -517,6 +534,7 @@ pushd &> /dev/null
                   fi
                fi
 
+               # TODO: create as-healthdata.sh to source the others.
                # TODO: move .bashrc edit to source-me
                # TODO: implement "cr-review-vars.sh"
                # TODO: install csv2rdf4lod-dependencies.

@@ -394,7 +394,8 @@ pushd &> /dev/null
                         cat ~$person_user_name/.ssh/id_dsa.pub
                         echo
                         read -p "Q: Finished adding your key? Once you do, we'll try running this install script again. Ready? [y]" finished
-                        $0 --me $person_uri --my-email $user_email --proj-user $project_user_name --repos $project_code_repository --upstream-ckan $upstream_ckan
+                        $0 --me $person_uri --my-email $user_email --proj-user $project_user_name --repos $project_code_repository \
+                           --upstream-ckan $upstream_ckan --our-source-id $our_source_id
                         # ^ Recursive call
                      fi
                   fi
@@ -626,23 +627,25 @@ pushd &> /dev/null
                fi
 
 
-               # TODO: need CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID
                #
-               # csv2rdf4lod-source-me-as-${project_user_name}.sh is *the* one and only source-me.sh that 
-               # the project name should source when initializing -- particular when from a cronjob.
-               # This is *the* only source-me.sh that should appear in the project user name's ~/.bashrc
+               # Set up cr-cron.sh
                #
                template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-cron.sh"
-               target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
-               if [[ ! -e $target ]]; then
-                  cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI='                 > $target
-                  echo "source `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
-                  echo "source `pwd`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
-                  # TODO: create as-melagrid.sh to source the others.
-                  added="$added $target"
+               target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
+               if [[ -n "$our_source_id" && ! -e $target ]]; then
                   echo
                   echo $div
-                  echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
+                  read -p "There isn't a $target in your repository, should we add it for you? [y/n] " -u 1 install_it
+                  echo
+                  if [[ "$push_them" == [yY] ]]; then
+                     cp $template $target
+                     added="$added $target"
+                     echo "Okay, we added $target"
+                  else
+                     echo "Okay, we didn't add $target, but your Prizms won't automatically update."
+                     echo "See https://github.com/jimmccusker/twc-healthdata/wiki/Automation"
+                     echo "and https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets"
+                  fi
                fi
 
 

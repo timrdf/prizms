@@ -408,9 +408,9 @@ pushd &> /dev/null
                   fi
                fi
 
-               if [[ ! -e data/source/csv2rdf4lod-source-me-for-$person_user_name.sh ]]; then
-                  template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
-                  target="data/source/csv2rdf4lod-source-me-for-$person_user_name.sh"
+               template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
+               target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
+               if [[ ! -e $target ]]; then
                   cp $template $target
                   perl -pi -e "s/export CSV2RDF4LOD_CONVERT_PERSON_URI=.*/export CSV2RDF4LOD_CONVERT_PERSON_URI=\"$person_uri\"/" $target
                   added="$added $target"

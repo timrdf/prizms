@@ -524,6 +524,7 @@ pushd &> /dev/null
                   echo "Add this command to your ~/.bashrc? [y/n]"
                   read -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
+                     echo            >> ~/.bashrc
                      echo $source_me >> ~/.bashrc
                      echo
                      echo "Okay, we added it:"

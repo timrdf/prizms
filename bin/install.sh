@@ -396,6 +396,7 @@ pushd &> /dev/null
                   echo "Prizms uses the CSV2RDF4LOD_ environment variables that are part of csv2rdf4lod-automation."
                   echo "These environment variables are used to control how Prizms operates."
                   echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables"
+                  echo
                   read -p "May we add the environment variables to `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh? [y/n] " -u 1 add_them
                   if [[ "$add_them" == [yY] ]]; then
                      $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh --non-interactive --vars-only > data/source/csv2rdf4lod-source-me-for-$project_user_name.sh
@@ -409,6 +410,7 @@ pushd &> /dev/null
                   echo
                   echo $div
                   echo "We just added the following to `pwd`: $added"
+                  echo
                   read -p "Since we added some files to your working copy of $project_code_repository, let's add, commit, and push them, okay? [y/n] " -u 1 push_them
                   if [[ "$push_them" == [yY] ]]; then
                      git add $added

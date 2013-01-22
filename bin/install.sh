@@ -372,14 +372,14 @@ pushd &> /dev/null
                read -p "Q: ^-- May we create these directories in `pwd` if they don't already exist? [y/n] " -u 1 install_them
                if [[ "$install_them" == [yY] ]]; then
                   if [ ! -e data/source ]; then
-                     added="data/source"
+                     added="data"
                      echo "Creating `pwd`/data/source using stub from csv2rdf4lod-automation"
-                     mkdir -p data/source
-                     cp -R $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/* data/source/
+                     mkdir -p data
+                     cp -R $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/* data/
                   fi
                   for directory in lodspeakr doc; do
                      if [ ! -e $directory ]; then
-                        added="$added data/source"
+                        added="$added $directory"
                         echo "Creating `pwd`/$directory"
                         mkdir -p $directory
                      fi

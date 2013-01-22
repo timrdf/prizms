@@ -360,14 +360,20 @@ pushd &> /dev/null
                echo "Following these conventions aids uniformity across many projects' offerings."
                echo "For more, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Directory-Conventions"
                echo
-               echo `pwd`/doc/
                echo `pwd`/data/source/
                echo `pwd`/lodspeakr/
+               echo `pwd`/doc/
                echo
                read -p "Q: ^-- May we create these directories in `pwd` if they don't already exist? [y/n] " -u 1 install_them
                if [ "$install_them" == [yY] ]; then
-                  for directory in doc data/source lodspeakr; do
+                  if [ ! -e data/source ]; then
+                     echo "Creating data/source using stub from csv2rdf4lod-automation"
+                     mkdir -p data/source
+                     cp -R $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/* data/source/
+                  fi
+                  for directory in lodspeakr doc; do
                      if [ ! -e $directory ]; then
+                        echo "Creating $directory"
                         mkdir -p $directory
                      fi
                   done

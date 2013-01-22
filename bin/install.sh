@@ -241,7 +241,9 @@ echo "Prizms generates its own versioned datasets based on the versioned dataset
 echo "These are called 'autonomic datasets' and provide added value on top of the collection of others' datasets."
 echo "To organize these generated autonomic datasets properly, we need to know the right value for"
 echo "the CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID environment variable. The identifier should indicate 'you', as either a"
-echo "person or the organization that is setting up this instance of Prizms."
+echo "person or the organization that is setting up this instance of Prizms. The source-id is usually a cleaned up"
+echo "string from your CSV2RDF4LOD_BASE_URI, e.g. http://lod.melagrid.org -> melagrid-org ('lod' does not indicate"
+echo "the organization creating the datasets, so that part is dropped by convention)."
 echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name"
 if [ -z "$our_source_id" ]; then
    echo

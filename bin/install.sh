@@ -365,7 +365,7 @@ pushd &> /dev/null
                echo `pwd`/doc/
                echo
                read -p "Q: ^-- May we create these directories in `pwd` if they don't already exist? [y/n] " -u 1 install_them
-               if [ "$install_them" == [yY] ]; then
+               if [[ "$install_them" == [yY] ]]; then
                   if [ ! -e data/source ]; then
                      echo "Creating data/source using stub from csv2rdf4lod-automation"
                      mkdir -p data/source

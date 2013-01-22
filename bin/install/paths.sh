@@ -8,6 +8,7 @@
 #   (can be repeated indefinately, once paths are in PATH, nothing is returned.)
 
 HOME=$(cd ${0%/*/*} && echo ${PWD%/*})
+me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
 if [ "$1" == "--help" ]; then
    echo "`basename $0` [--help]"
@@ -15,7 +16,7 @@ if [ "$1" == "--help" ]; then
    echo "Return the shell paths needed for Prizms scripts to run."
    echo "Set them executing:"
    echo
-   echo "    export PATH=\$PATH\`$HOME  /bin/${0#*/}\`"
+   echo "    export PATH=\$PATH\`$me\`"
    exit
 fi
 

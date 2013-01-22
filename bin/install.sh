@@ -353,11 +353,29 @@ pushd &> /dev/null
                echo
                echo "$project_code_repository is already ${clone}'d into $target_dir; ${pull}'ing it..."
                $vcs $pull
+
+               echo
+               echo $div
+               echo "Prizms reuses the directory conventions that csv2rdf4lod-automation uses."
+               echo "Following these conventions aids uniformity across many projects' offerings."
+               echo "For more, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Directory-Conventions"
+               echo
+               echo `pwd`/doc/
+               echo `pwd`/data/source/
+               echo `pwd`/lodspeakr/
+               read -p "Q: May we create the following directories in `pwd` if they don't already exist? [y/n] " -u 1 install_them
+               if [ "$install_them" == [yY] ]; then
+                  for directory in doc data/source lodspeakr; do
+                     if [ ! -e $directory ]; then
+                        mkdir -p $directory
+                     fi
+                  done
+               fi
             popd &> /dev/null
          fi
       popd &> /dev/null
    else
-      echo "If you aren't going to use a code repository, we can't help you as much."
+      echo "If you aren't going to use a code repository, we can't help you very much."
    fi
 popd &> /dev/null
 

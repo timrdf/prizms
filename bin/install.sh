@@ -29,7 +29,8 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo " --our-source-id | the identifier for *us* as an organization that produces datasets.   (e.g. melagrid-org)"
    echo "                 : see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase%3A-name"
    echo
-   echo "If the required parameters are not known, the script will ask for them before installing anything."
+   echo "If the required parameters are not known, the script will ask for them interactively before installing anything."
+   echo "The installer will ask permission before performing each install step, so that you know what it's doing."
    echo
    echo "https://github.com/timrdf/prizms/wiki"
    echo "https://github.com/timrdf/prizms/wiki/Installing-Prizms"
@@ -87,6 +88,26 @@ upstream_ckan=""
 if [[ "$1" == "--upstream-ckan" ]]; then
    if [[ "$2" != --* ]]; then
       upstream_ckan="$2"
+      shift
+   fi
+   shift
+fi
+
+#
+our_base_uri=""
+if [[ "$1" == "--our-base-uri" ]]; then
+   if [[ "$2" != --* ]]; then
+      our_base_uri="$2"
+      shift
+   fi
+   shift
+fi
+
+#
+our_source_id=""
+if [[ "$1" == "--our-source-id" ]]; then
+   if [[ "$2" != --* ]]; then
+      our_source_id="$2"
       shift
    fi
    shift
@@ -190,6 +211,7 @@ else
    echo "(We'll use the upstream CKAN that you already indicated: $upstream_ckan)"
 fi
 
+
 # https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_PERSON_URI
 echo
 echo $div
@@ -199,7 +221,7 @@ if [ -z "$person_uri" ]; then
    see='https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_PERSON_URI'
    echo "If you provide a URI for yourself, we can get you credit for the data that you produce."
    echo "See $see."
-   read -p "If you have one, what is your preferred URI for yourself (e.g. http://www.w3.org/People/Berners-Lee/card#i)? " person_uri
+   read -p "Q: If you have one, what is your preferred URI for yourself (e.g. http://www.w3.org/People/Berners-Lee/card#i)? " person_uri
    if [ -n "$person_uri" ]; then
       echo "Okay, your URI is $person_uri"
    else
@@ -210,6 +232,33 @@ if [ -z "$person_uri" ]; then
 else
    echo "(We'll use the URI that you already indicated: $person_uri)"
 fi
+
+
+# https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name
+echo
+echo $div
+echo "Prizms generates its own versioned datasets based on the versioned datasets that it accumulates and integrates."
+echo "These are called 'autonomic datasets' and provide added value on top of the collection of others' datasets."
+echo "To organize these generated autonomic datasets properly, we need to know the right value for"
+echo "the CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID environment variable. The identifier should indicate 'you', as either a"
+echo "person or the organization that is setting up this instance of Prizms."
+echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name"
+if [ -z "$our_source_id" ]; then
+   echo
+   read -p "Q: What source-id should we use for you (or your organization) as the creator of $project_user_name? " our_source_id
+   if [ -n "$our_source_id" ]; then
+      echo "Okay, we'll use $our_source_id for CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID"
+   else
+      echo "We won't be able to set up cr-cron.sh or any of the aggregated metadatasets for you,"
+      echo "since those are organized under CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID."
+      echo "See https://github.com/jimmccusker/twc-healthdata/wiki/Automation"
+      echo "and https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets"
+      echo "and set CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID if you'd like to get the automation up and running in the future."
+   fi
+else
+   echo "(We'll use the source-id that you already indicated: $our_source_id)"
+fi
+
 
 echo
 echo $div

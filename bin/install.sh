@@ -650,7 +650,7 @@ pushd &> /dev/null
                      echo "and https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets"
                   fi
                fi
-
+               # NOTE: setting up the cron should be done on the project user name side, NOT on the person user name side.
 
 
                #

@@ -419,7 +419,8 @@ pushd &> /dev/null
                if [ -n "$added" ]; then
                   echo
                   echo $div
-                  echo "We just added the following to `pwd`: $added"
+                  echo "We just added the following to `pwd`"
+                  echo "   $added"
                   echo
                   read -p "Since we added some files to your working copy of $project_code_repository, let's add, commit, and push them, okay? [y/n] " -u 1 push_them
                   if [[ "$push_them" == [yY] ]]; then

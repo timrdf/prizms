@@ -6,16 +6,27 @@
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo
    echo "usage: `basename $0` [--me <your-URI>] [--my-email <your-email>] [--proj-user <user>] [--repos <code-repo>] [--upstream-ckan <ckan>]"
+   echo "            [--our-base-uri <uri>] [--our-source-id <source-id>]"
    echo
    echo "This script will determine and use the following parameters to install an instance of Prizms:"
    echo
-   echo " --me            : [optional] the project developer's URI                               (e.g. http://jsmith.me/foaf#me)"
-   echo " --my-email      :            the project developer's email address                     (e.g. me@jsmith.me)"
+   echo " --me            | [optional] the project developer's URI                               (e.g. http://jsmith.me/foaf#me)"
+   echo
+   echo " --my-email      |            the project developer's email address                     (e.g. me@jsmith.me)"
    echo "                 : the project developer's (i.e. your) user name (determined by whoami) (e.g. jsmith)"
-   echo "                   ^- this user will need sudo privileges."
-   echo " --proj-user     : the project's                       user name                        (e.g. melagrid)"
-   echo " --repos         : the project's code repository                                        (e.g. git@github.com:jimmccusker/melagrid.git)"
-   echo " --upstream-ckan : [optional] the URL of a CKAN from which to pull dataset listings     (e.g. http://data.melagrid.org)"
+   echo "                 : ^- this user will need sudo privileges."
+   echo
+   echo " --proj-user     | the project's                       user name                        (e.g. melagrid)"
+   echo
+   echo " --repos         | the project's code repository                                        (e.g. git@github.com:jimmccusker/melagrid.git)"
+   echo
+   echo " --upstream-ckan | [optional] the URL of a CKAN from which to pull dataset listings     (e.g. http://data.melagrid.org)"
+   echo
+   echo " --our-base-uri  | the HTTP namespace for all datasets in the Prizms that we are making (e.g. http://lod.melagrid.org)"
+   echo "                 : see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase%3A-name"
+   echo
+   echo " --our-source-id | the identifier for *us* as an organization that produces datasets.   (e.g. melagrid-org)"
+   echo "                 : see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase%3A-name"
    echo
    echo "If the required parameters are not known, the script will ask for them before installing anything."
    echo
@@ -457,6 +468,7 @@ pushd &> /dev/null
                   fi # CSV2RDF4LOD_CKAN
                fi
 
+               # TODO: mirror ckan and commit dcats.ttls
 
                # 
                # Create a stub for the user-level environment variables, based on the template available from the csv2rdf4lod-automation.
@@ -552,6 +564,27 @@ pushd &> /dev/null
                   cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI='                 > $target
                   echo "source `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
                   echo "source `pwd`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
+                  # TODO: create as-melagrid.sh to source the others.
+                  added="$added $target"
+                  echo
+                  echo $div
+                  echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
+               fi
+
+
+               # TODO: need CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID
+               #
+               # csv2rdf4lod-source-me-as-${project_user_name}.sh is *the* one and only source-me.sh that 
+               # the project name should source when initializing -- particular when from a cronjob.
+               # This is *the* only source-me.sh that should appear in the project user name's ~/.bashrc
+               #
+               template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-cron.sh"
+               target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
+               if [[ ! -e $target ]]; then
+                  cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI='                 > $target
+                  echo "source `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
+                  echo "source `pwd`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
+                  # TODO: create as-melagrid.sh to source the others.
                   added="$added $target"
                   echo
                   echo $div
@@ -584,11 +617,8 @@ pushd &> /dev/null
                   fi
                fi
 
-               # TODO: create as-healthdata.sh to source the others.
-               # TODO: move .bashrc edit to source-me
                # TODO: implement "cr-review-vars.sh"
                # TODO: install csv2rdf4lod-dependencies.
-               # TODO: mirror ckan and commit dcats.ttls
 
             popd &> /dev/null
          fi # if $target_dir e.g. /home/lebot/prizms/melagrid

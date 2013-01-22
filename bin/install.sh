@@ -557,27 +557,28 @@ pushd &> /dev/null
                echo $div
                echo "Prizms uses the shell environment variable CSV2RDF4LOD_BASE_URI to"
                echo "indicate the Linked Data base URI to use for all datasets that it creates."
+               ENVVAR='CSV2RDF4LOD_BASE_URI'
                target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
                if [[ -n "$our_base_uri" && "$our_base_uri" == http* ]]; then
-                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_BASE_URI' $target`
+                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh $ENVVAR $target`
                   if [ "$current" != "$our_base_uri" ]; then
                      echo
-                     echo "CSV2RDF4LOD_BASE_URI is currently set to '$current' in $target"
-                     read -p "Q: May we change CSV2RDF4LOD_CKAN_SOURCE to $upstream_ckan in $target? [y/n] " -u 1 change_it
+                     echo "$ENVVAR is currently set to '$current' in $target"
+                     read -p "Q: May we change $ENVVAR to $our_base_uri in $target? [y/n] " -u 1 change_it
                      echo
                      if [[ "$change_it" == [yY] ]]; then
-                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target --change-to $upstream_ckan
+                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh $ENVVAR $target --change-to $our_base_uri
                         echo "Okay, we changed $target to:"
-                        grep 'export CSV2RDF4LOD_CKAN_SOURCE=' $target | tail -1
+                        grep "export $ENVVAR=" $target | tail -1
                         added="$added $target"
                      else
-                        echo "Okay, we won't change it. You'll need to change it in order for Prizms to obtain $upstream_ckan's dataset listing."
+                        echo "Okay, we won't change it. You'll need to change it in order for Prizms to create useful Linked Data URIs."
                      fi
                   else
-                     echo "(CSV2RDF4LOD_CKAN_SOURCE is already correctly set to $upstream_ckan in $target)"
+                     echo "($ENVVAR is already correctly set to $our_base_uri in $target)"
                   fi # CSV2RDF4LOD_CKAN_SOURCE
                else
-                  echo "WARNING: We can't set the CSV2RDF4LOD_BASE_URI in $target because it is not given."
+                  echo "WARNING: We can't set the $ENVVAR in $target because it is not given."
                fi
 
 

@@ -357,6 +357,8 @@ pushd &> /dev/null
                echo "$project_code_repository is already ${clone}'d into $target_dir; ${pull}'ing it..."
                $vcs $pull
 
+               added=''
+
                echo
                echo $div
                echo "Prizms reuses the directory conventions that csv2rdf4lod-automation uses."
@@ -369,7 +371,6 @@ pushd &> /dev/null
                echo
                read -p "Q: ^-- May we create these directories in `pwd` if they don't already exist? [y/n] " -u 1 install_them
                if [[ "$install_them" == [yY] ]]; then
-                  added=''
                   if [ ! -e data/source ]; then
                      added="data/source"
                      echo "Creating `pwd`/data/source using stub from csv2rdf4lod-automation"
@@ -383,15 +384,45 @@ pushd &> /dev/null
                         mkdir -p $directory
                      fi
                   done
-                  if [ -n "$added" ]; then
-                     echo "Since we added some files to your working copy of $project_code_repository, let's add, commit, and push them."
+               fi
+               
+               if [[ ! -e data/source/csv2rdf4lod-source-me-for-$project_user_name.sh && \
+                       -e $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/install.sh ]]; then
+                  mv $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/install.sh $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh
+               fi
+               if [ -e $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh ]; then
+                  echo
+                  echo "Prizms uses the CSV2RDF4LOD_ environment variables that are part of csv2rdf4lod-automation."
+                  echo "These environment variables are used to control how Prizms operates."
+                  echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables"
+                  read -p "May we add the environment variables to `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh? [y/n] " -u 1 add_them
+                  if [[ "$add_them" == [yY] ]]; then
+                     $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh --non-interactive --vars-only > data/source/csv2rdf4lod-source-me-for-$project_user_name.sh
+                     added="$added data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
+                  else
+                     echo "Okay, but at some point you should create these environment variables. Otherwise, we might not behave as you'd like us to."
+                  fi
+               fi
+
+               if [ -n "$added" ]; then
+                  echo
+                  echo "We just added the following to `pwd`: $added"
+                  read -p "Since we added some files to your working copy of $project_code_repository, let's add, commit, and push them, okay? [y/n] " -u 1 push_them
+                  if [[ "$push_them" == [yY] ]]; then
                      git add $added
                      git commit -m 'During install: added stub directories and readme files.'
                      git push
+                  else
+                     echo "Okay, we won't push anything to $project_code_repository; but at some point, you should run:"
+                     echo
+                     echo git add $added
+                     echo git commit -m 'During install: added stub directories and readme files.'
+                     echo git push
                   fi
                fi
+
             popd &> /dev/null
-         fi
+         fi # if $target_dir e.g. /home/lebot/prizms/melagrid
       popd &> /dev/null
    else
       echo "If you aren't going to use a code repository, we can't help you very much."

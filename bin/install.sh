@@ -366,17 +366,24 @@ pushd &> /dev/null
                echo
                read -p "Q: ^-- May we create these directories in `pwd` if they don't already exist? [y/n] " -u 1 install_them
                if [[ "$install_them" == [yY] ]]; then
+                  added=''
                   if [ ! -e data/source ]; then
-                     echo "Creating data/source using stub from csv2rdf4lod-automation"
+                     echo "Creating `pwd`/data/source using stub from csv2rdf4lod-automation"
                      mkdir -p data/source
                      cp -R $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/* data/source/
                   fi
                   for directory in lodspeakr doc; do
                      if [ ! -e $directory ]; then
-                        echo "Creating $directory"
+                        echo "Creating `pwd`/$directory"
                         mkdir -p $directory
                      fi
                   done
+                  if [ -n "$added" ]; then
+                     echo "Since we added some files to your working copy of $project_code_repository, let's add, commit, and push them."
+                     git add $added
+                     git commit -m 'During install: added stub directories and readme files.'
+                     git push
+                  fi
                fi
             popd &> /dev/null
          fi

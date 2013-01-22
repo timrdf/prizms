@@ -635,20 +635,26 @@ pushd &> /dev/null
                template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/cr-cron.sh"
                target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
                echo "TODO: talk about the automation"
-               if [[ -n "$our_source_id" && ! -e $target ]]; then
-                  echo
-                  read -p "There isn't a $target in your repository, should we add it for you? [y/n] " -u 1 install_it
-                  echo
-                  if [[ "$install_it" == [yY] ]]; then
-                     mkdir -p `dirname $target`
-                     cp $template $target
-                     added="$added $target"
-                     echo "Okay, we added $target"
+               if [[ -n "$our_source_id" ]]; then
+                  if [[ ! -e $target ]]; then
+                     echo
+                     read -p "There isn't a $target in your repository, should we add it for you? [y/n] " -u 1 install_it
+                     echo
+                     if [[ "$install_it" == [yY] ]]; then
+                        mkdir -p `dirname $target`
+                        cp $template $target
+                        added="$added $target"
+                        echo "Okay, we added $target"
+                     else
+                        echo "Okay, we didn't add $target, but your Prizms won't automatically update."
+                        echo "See https://github.com/jimmccusker/twc-healthdata/wiki/Automation"
+                        echo "and https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets"
+                     fi
                   else
-                     echo "Okay, we didn't add $target, but your Prizms won't automatically update."
-                     echo "See https://github.com/jimmccusker/twc-healthdata/wiki/Automation"
-                     echo "and https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets"
+                     echo "($target is already set up, and is ready for $project_user_name to add to its crontab.)"
                   fi
+               else
+                  echo "(WARNING We can't set up $target because we don't know what source-id we should use.)"
                fi
                # NOTE: setting up the cron should be done on the project user name side, NOT on the person user name side.
 

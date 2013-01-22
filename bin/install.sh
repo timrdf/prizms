@@ -438,6 +438,7 @@ pushd &> /dev/null
                   echo $div
                   echo "Prizms uses the shell environment variable CSV2RDF4LOD_CKAN_SOURCE to"
                   echo "indicate the upstream CKAN from which to pull dataset listings."
+
                   current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target`
                   if [ "$current" != "$upstream_ckan" ]; then
                      echo
@@ -454,8 +455,26 @@ pushd &> /dev/null
                      fi
                   else
                      echo "(CSV2RDF4LOD_CKAN_SOURCE is already correctly set to $upstream_ckan in $target)"
-                  fi
+                  fi # CSV2RDF4LOD_CKAN_SOURCE
+
+                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target`
+                  if [ "$current" == "$upstream_ckan" ]; then
+                     value=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN' $target`
+                     if [ "$value" != "true" ]; then
+                        echo "Although CSV2RDF4LOD_CKAN_SOURCE is set to $upstream_ckan, we still need to set CSV2RDF4LOD_CKAN to 'true'."
+                        read -p "Q: May we change CSV2RDF4LOD_CKAN to 'true' in $target? [y/n] " -u 1 change_it
+                        if [[ "$change_it" == [yY] ]]; then
+                           $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN' $target --change-to 'true'
+                           echo "Okay, we changed $target to:"
+                           grep 'export CSV2RDF4LOD_CKAN_SOURCE=' $target | tail -1
+                           added="$added $target"
+                        else
+                           echo "Okay, we won't change CSV2RDF4LOD_CKAN_SOURCE. You'll need to set it to 'true' in order for Prizms to obtain $upstream_ckan's dataset listing."
+                        fi
+                     fi
+                  fi # CSV2RDF4LOD_CKAN
                fi
+
 
                # 
                # Create a stub for the user-level environment variables, based on the template available from the csv2rdf4lod-automation.
@@ -468,6 +487,7 @@ pushd &> /dev/null
                   perl -pi -e "s/export CSV2RDF4LOD_CONVERT_PERSON_URI=.*/export CSV2RDF4LOD_CONVERT_PERSON_URI='$person_uri'/" $target
                   added="$added $target"
                fi
+
 
                #
                # Add all new files to version control.
@@ -494,7 +514,6 @@ pushd &> /dev/null
 
                # TODO: move .bashrc edit to source-me
                # TODO: implement "cr-review-vars.sh"
-               # TODO: set env var for upstream-ckan
                # TODO: install csv2rdf4lod-dependencies.
                # TODO: mirror ckan and commit dcats.ttls
 

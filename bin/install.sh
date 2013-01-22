@@ -359,31 +359,33 @@ pushd &> /dev/null
 
                added=''
 
-               echo
-               echo $div
-               echo "Prizms reuses the directory conventions that csv2rdf4lod-automation uses."
-               echo "Following these conventions aids uniformity across many projects' offerings."
-               echo "For more, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Directory-Conventions"
-               echo
-               echo `pwd`/data/source/
-               echo `pwd`/lodspeakr/
-               echo `pwd`/doc/
-               echo
-               read -p "Q: ^-- May we create these directories in `pwd` if they don't already exist? [y/n] " -u 1 install_them
-               if [[ "$install_them" == [yY] ]]; then
-                  if [ ! -e data/source ]; then
-                     added="data"
-                     echo "Creating `pwd`/data/source using stub from csv2rdf4lod-automation"
-                     mkdir -p data
-                     cp -R $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/* data/
-                  fi
-                  for directory in lodspeakr doc; do
-                     if [ ! -e $directory ]; then
-                        added="$added $directory"
-                        echo "Creating `pwd`/$directory"
-                        mkdir -p $directory
+               if [[ ! -e data/source/ || ! -e lodspeakr/ || ! -e doc/ ]]; then
+                  echo
+                  echo $div
+                  echo "Prizms reuses the directory conventions that csv2rdf4lod-automation uses."
+                  echo "Following these conventions aids uniformity across many projects' offerings."
+                  echo "For more, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Directory-Conventions"
+                  echo
+                  echo `pwd`/data/source/
+                  echo `pwd`/lodspeakr/
+                  echo `pwd`/doc/
+                  echo
+                  read -p "Q: ^-- May we create these directories in `pwd` if they don't already exist? [y/n] " -u 1 install_them
+                  if [[ "$install_them" == [yY] ]]; then
+                     if [ ! -e data/source ]; then
+                        added="data"
+                        echo "Creating `pwd`/data/source using stub from csv2rdf4lod-automation"
+                        mkdir -p data
+                        cp -R $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/* data/
                      fi
-                  done
+                     for directory in lodspeakr doc; do
+                        if [ ! -e $directory ]; then
+                           added="$added $directory"
+                           echo "Creating `pwd`/$directory"
+                           mkdir -p $directory
+                        fi
+                     done
+                  fi
                fi
                
                if [[ ! -e data/source/csv2rdf4lod-source-me-for-$project_user_name.sh && \

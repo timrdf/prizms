@@ -14,9 +14,11 @@ if [ "$1" == "--help" ]; then
    echo "`basename $0` [--help]"
    echo
    echo "Return the shell paths needed for Prizms scripts to run."
-   echo "Set them executing:"
+   echo "Set them by executing:"
    echo
    echo "    export PATH=\$PATH\`$me\`"
+   echo $HOME
+   echo $me
    exit
 fi
 

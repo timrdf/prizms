@@ -525,6 +525,9 @@ pushd &> /dev/null
                   read -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
                      echo $source_me >> ~/.bashrc
+                     echo
+                     echo "Okay, we added it:"
+                     grep ".*source \`pwd\`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh.*" ~/.bashrc
                   else
                      echo "We didn't touch your ~/.bashrc, so you'll need to make sure you set the paths correctly each time."
                   fi

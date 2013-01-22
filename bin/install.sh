@@ -567,6 +567,7 @@ pushd &> /dev/null
                      echo
                      echo "Okay, we added it:"
                      grep ".*export PATH=.*prizms/bin/install/paths.sh.*" $target
+                     added="$added $target"
                   else
                      echo "We didn't touch your $target, so you'll need to make sure you set the paths correctly each time."
                   fi

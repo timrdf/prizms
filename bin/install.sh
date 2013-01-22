@@ -496,6 +496,9 @@ pushd &> /dev/null
                   read -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
                      echo $set_paths_cmd >> $target
+                     echo
+                     echo "Okay, we added it:"
+                     grep ".*export PATH=.*prizms/bin/install/paths.sh.*" $target
                   else
                      echo "We didn't touch your $target, so you'll need to make sure you set the paths correctly each time."
                   fi

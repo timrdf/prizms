@@ -444,8 +444,9 @@ pushd &> /dev/null
                      echo
                      read -p "Q: May we change CSV2RDF4LOD_CKAN_SOURCE to $upstream_ckan in $target? [y/n] " -u 1 change_it
                      if [[ "$change_it" == [yY] ]]; then
-                        line=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target --line-number`
-                        echo "TODO: change CSV2RDF4LOD_CKAN_SOURCE to $upstream_ckan in $target at line $line"
+                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target --change-to $upstream_ckan
+                        echo "Okay, we changed $target to:"
+                        grep 'export CSV2RDF4LOD_CKAN_SOURCE=' $target | tail -1
                      else
                         echo "Okay, we won't change it. You'll need to change it in order for Prizms to obtain $upstream_ckan's dataset listing."
                      fi

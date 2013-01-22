@@ -227,8 +227,8 @@ echo
 echo $div
 echo "Okay, we'd like to install prizms at the following locations."
 echo
-echo " $PRIZMS_HOME/"
-echo " $PRIZMS_HOME/repos"
+echo "  $PRIZMS_HOME/"
+echo "  $PRIZMS_HOME/repos"
 echo
 echo "    ^-- This is where we'll keep the Prizms utilities. Nothing in here is specific to $project_user_name."
 echo "        the repos/ directory will contain a variety of supporting utilities that Prizms uses from other projects."

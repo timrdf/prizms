@@ -461,12 +461,15 @@ pushd &> /dev/null
                   if [ "$current" == "$upstream_ckan" ]; then
                      value=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN' $target`
                      if [ "$value" != "true" ]; then
+                        echo
                         echo "Although CSV2RDF4LOD_CKAN_SOURCE is set to $upstream_ckan, we still need to set CSV2RDF4LOD_CKAN to 'true'."
+                        echo
                         read -p "Q: May we change CSV2RDF4LOD_CKAN to 'true' in $target? [y/n] " -u 1 change_it
+                        echo
                         if [[ "$change_it" == [yY] ]]; then
                            $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN' $target --change-to 'true'
                            echo "Okay, we changed $target to:"
-                           grep 'export CSV2RDF4LOD_CKAN_SOURCE=' $target | tail -1
+                           grep 'export CSV2RDF4LOD_CKAN=' $target | tail -1
                            added="$added $target"
                         else
                            echo "Okay, we won't change CSV2RDF4LOD_CKAN_SOURCE. You'll need to set it to 'true' in order for Prizms to obtain $upstream_ckan's dataset listing."
@@ -498,7 +501,7 @@ pushd &> /dev/null
                   echo "We just added the following to `pwd`"
                   echo "   $added"
                   echo
-                  read -p "Since we added some files to your working copy of $project_code_repository, let's add, commit, and push them, okay? [y/n] " -u 1 push_them
+                  read -p "Q: ^--- Since we modified these files to your working copy of $project_code_repository, let's add, commit, and push them, okay? [y/n] " -u 1 push_them
                   if [[ "$push_them" == [yY] ]]; then
                      git add $added
                      git commit -m 'During install: added stub directories and readme files.'

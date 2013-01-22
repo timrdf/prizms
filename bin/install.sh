@@ -438,16 +438,18 @@ pushd &> /dev/null
                   echo $div
                   echo "Prizms uses the shell environment variable CSV2RDF4LOD_CKAN_SOURCE to indicate the upstream CKAN from"
                   echo "which it should pull dataset listings."
-                  echo
                   current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target`
                   if [ "$current" != "$upstream_ckan" ]; then
-                     echo "CSV2RDF4LOD_CKAN_SOURCE is currently set to $current in $target"
+                     echo "CSV2RDF4LOD_CKAN_SOURCE is currently set to '$current. in $target"
+                     echo
                      read -p "Q: May we change CSV2RDF4LOD_CKAN_SOURCE to $upstream_ckan in $target? [y/n] " -u 1 change_it
                      if [[ "$change_it" == [yY] ]]; then
                         echo "TODO: change CSV2RDF4LOD_CKAN_SOURCE to $upstream_ckan in $target"
                      else
                         echo "Okay, we won't change it. You'll need to change it in order for Prizms to obtain $upstream_ckan's dataset listing."
                      fi
+                  else
+                     echo "CSV2RDF4LOD_CKAN_SOURCE is correctly set to $upstream_ckan in $target"
                   fi
                fi
 

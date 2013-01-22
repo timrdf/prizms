@@ -317,6 +317,9 @@ pushd &> /dev/null
                         read -p "Q: We need your email address to set up an SSH key. What is it? " user_email
                      fi
                      if [ -n "$user_email" ]; then
+                        #echo git config --global user.email $user_email
+                        #     git config --global user.email $user_email
+
                         echo ssh-keygen -t dsa -C $user_email
                              ssh-keygen -t dsa -C $user_email
                      else

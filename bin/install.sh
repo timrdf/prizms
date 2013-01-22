@@ -267,7 +267,7 @@ $PRIZMS_HOME/bin/install/prizms-dependency-repos.sh
 
 
 echo $div
-set_paths_cmd=`prizms/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
+set_paths_cmd=`$PRIZMS_HOME/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
 echo "The following command will add the paths that Prizms requires."
 echo "Running it multiple times will have no effect, since only the missing paths are added."
 echo

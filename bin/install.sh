@@ -282,6 +282,8 @@ if [ -n "$upstream_ckan" ]; then
 else
    echo "Your project won't pull dataset listings from a CKAN (for now)."
 fi
+echo "Your project's Linked Data base URI:               $our_base_uri"
+echo "Your project's source-id:                          $our_source_id"
 
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`

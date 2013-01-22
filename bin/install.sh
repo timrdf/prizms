@@ -477,6 +477,7 @@ pushd &> /dev/null
                #
                # Add PATH = PATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$person_user_name.sh
                #
+               echo
                echo $div
                set_paths_cmd=`$PRIZMS_HOME/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
                echo "The following command will add the paths that Prizms requires."
@@ -504,6 +505,7 @@ pushd &> /dev/null
                #
                # Add source data/source/csv2rdf4lod-source-me-as-$person_user_name.sh to ~/.bashrc
                #
+               echo
                echo $div
                source_me="source `pwd`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
                echo "TODO: describe Your source-me.sh as the only one in ~/.bashrc"

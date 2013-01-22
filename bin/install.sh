@@ -266,29 +266,6 @@ echo "If they're already there, we'll just update them from the latest on github
 $PRIZMS_HOME/bin/install/prizms-dependency-repos.sh
 
 
-echo $div
-set_paths_cmd=`$PRIZMS_HOME/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
-echo "The following command will add the paths that Prizms requires."
-echo "Running it multiple times will have no effect, since only the missing paths are added."
-echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
-echo
-echo "    $set_paths_cmd"
-already_there=`grep ".*export PATH=.*prizms/bin/install/paths.sh.*" ~/.bashrc`
-echo
-if [ -n "$already_there" ]; then
-   echo "It seems that you already have the following in your ~/.bashrc, so we won't offer to add it again:"
-   echo
-   echo $already_there
-else
-   echo "Add this command to your ~/.bashrc? [y/n]"
-   read -u 1 install_it
-   if [[ "$install_it" == [yY] ]]; then
-      echo $set_paths_cmd >> ~/.bashrc
-   else
-      echo "We didn't touch your ~/.bashrc, so you'll need to make sure you set the paths correctly each time."
-   fi
-fi
-
 echo
 echo $div
 clone='clone'
@@ -498,6 +475,60 @@ pushd &> /dev/null
 
 
                #
+               # Add PATH = PATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$person_user_name.sh
+               #
+               echo $div
+               set_paths_cmd=`$PRIZMS_HOME/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
+               echo "The following command will add the paths that Prizms requires."
+               echo "Running it multiple times will have no effect, since only the missing paths are added."
+               echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
+               echo
+               echo "    $set_paths_cmd"
+               already_there=`grep ".*export PATH=.*prizms/bin/install/paths.sh.*" $target`
+               echo
+               if [ -n "$already_there" ]; then
+                  echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
+                  echo
+                  echo $already_there
+               else
+                  echo "Add this command to your $target? [y/n]"
+                  read -u 1 install_it
+                  if [[ "$install_it" == [yY] ]]; then
+                     echo $set_paths_cmd >> $target
+                  else
+                     echo "We didn't touch your $target, so you'll need to make sure you set the paths correctly each time."
+                  fi
+               fi
+
+
+               #
+               # Add source data/source/csv2rdf4lod-source-me-as-$person_user_name.sh to ~/.bashrc
+               #
+               echo $div
+               source_me="source `pwd`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
+               echo "TODO: describe Your source-me.sh as the only one in ~/.bashrc"
+               echo
+               echo "   $source_me"
+               target='~/.bashrc'
+               already_there=`grep ".*source `pwd`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh.*" $target`
+               echo
+               if [ -n "$already_there" ]; then
+                  echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
+                  echo
+                  echo $already_there
+               else
+                  echo "Add this command to your $target? [y/n]"
+                  read -u 1 install_it
+                  if [[ "$install_it" == [yY] ]]; then
+                     echo $source_me >> $target
+                  else
+                     echo "We didn't touch your $target, so you'll need to make sure you set the paths correctly each time."
+                  fi
+               fi
+
+
+
+               #
                # csv2rdf4lod-source-me-as-${project_user_name}.sh is *the* one and only source-me.sh that 
                # the project name should source when initializing -- particular when from a cronjob.
                # This is *the* only source-me.sh that should appear in the project user name's ~/.bashrc
@@ -513,6 +544,7 @@ pushd &> /dev/null
                   echo $div
                   echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
                fi
+
 
 
                #

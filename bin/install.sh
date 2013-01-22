@@ -228,6 +228,7 @@ echo
 echo "  ~$person_user_name/prizms/$project_user_name"
 echo "    ^-- This is where you will develop $project_user_name."
 echo "        It is your working copy of $project_code_repository"
+echo
 echo "  ~$project_user_name/prizms"
 echo "    ^-- This is where the production data and automation is performed and published."
 

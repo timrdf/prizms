@@ -483,6 +483,7 @@ pushd &> /dev/null
                echo "The following command adds the paths that Prizms requires into your shell's environment."
                echo "Running it multiple times will have no effect, since only the missing paths are added."
                echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
+               echo "The following command should appear in your data/source/csv2rdf4lod-source-me-as-$person_user_name.sh."
                echo
                echo "    $set_paths_cmd"
                already_there=`grep ".*export PATH=.*prizms/bin/install/paths.sh.*" $target`
@@ -514,7 +515,8 @@ pushd &> /dev/null
                echo "Prizms encapsulates all of the environment variables and PATH setup that is needed within"
                echo "a single source-me.sh script dedicated to the user that needs it. The script is version-controlled"
                echo "so we can manage the environment variables used. The single source-me.sh should be the *only*"
-               echo "source-me.sh that appears in your user configuration ~/.bashrc"
+               echo "source-me.sh that is called from your ~/.bashrc. The following command is the only"
+               echo "source-me.sh that you need to run, and should be placed within your ~/.bashrc."
                echo
                echo "   $source_me"
                already_there=`grep ".*source \`pwd\`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh.*" ~/.bashrc`

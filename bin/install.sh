@@ -555,19 +555,19 @@ pushd &> /dev/null
                #
                echo
                echo $div
-               echo "Prizms uses the shell environment variable CSV2RDF4LOD_BASE_URI to"
+               ENVVAR='CSV2RDF4LOD_BASE_URI'; new_value="$our_base_uri"
+               echo "Prizms uses the shell environment variable $ENVVAR to"
                echo "indicate the Linked Data base URI to use for all datasets that it creates."
-               ENVVAR='CSV2RDF4LOD_BASE_URI'
                target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
-               if [[ -n "$our_base_uri" && "$our_base_uri" == http* ]]; then
+               if [[ -n "$new_value" && "$new_value" == http* ]]; then
                   current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh $ENVVAR $target`
-                  if [ "$current" != "$our_base_uri" ]; then
+                  if [ "$current" != "$new_value" ]; then
                      echo
                      echo "$ENVVAR is currently set to '$current' in $target"
-                     read -p "Q: May we change $ENVVAR to $our_base_uri in $target? [y/n] " -u 1 change_it
+                     read -p "Q: May we change $ENVVAR to $new_value in $target? [y/n] " -u 1 change_it
                      echo
                      if [[ "$change_it" == [yY] ]]; then
-                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh $ENVVAR $target --change-to $our_base_uri
+                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh $ENVVAR $target --change-to $new_value
                         echo "Okay, we changed $target to:"
                         grep "export $ENVVAR=" $target | tail -1
                         added="$added $target"
@@ -575,11 +575,45 @@ pushd &> /dev/null
                         echo "Okay, we won't change it. You'll need to change it in order for Prizms to create useful Linked Data URIs."
                      fi
                   else
-                     echo "($ENVVAR is already correctly set to $our_base_uri in $target)"
-                  fi # CSV2RDF4LOD_CKAN_SOURCE
+                     echo "($ENVVAR is already correctly set to $new_value in $target)"
+                  fi
                else
                   echo "WARNING: We can't set the $ENVVAR in $target because it is not given."
                fi
+
+
+               #
+               # Set CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID in $target
+               #
+               echo
+               echo $div
+               ENVVAR='CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID'; new_value="$our_source_id"
+               echo "Prizms uses the shell environment variable $ENVVAR to"
+               echo "indicate the source identifier for all datasets that it creates on its own."
+               target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
+               if [[ -n "$new_value" ]]; then
+                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh $ENVVAR $target`
+                  if [ "$current" != "$new_value" ]; then
+                     echo
+                     echo "$ENVVAR is currently set to '$current' in $target"
+                     read -p "Q: May we change $ENVVAR to $new_value in $target? [y/n] " -u 1 change_it
+                     echo
+                     if [[ "$change_it" == [yY] ]]; then
+                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh $ENVVAR $target --change-to $new_value
+                        echo "Okay, we changed $target to:"
+                        grep "export $ENVVAR=" $target | tail -1
+                        added="$added $target"
+                     else
+                        echo "Okay, we won't change it. You'll need to change it in order for Prizms to create useful Linked Data URIs."
+                     fi
+                  else
+                     echo "($ENVVAR is already correctly set to $new_value in $target)"
+                  fi
+               else
+                  echo "WARNING: We can't set the $ENVVAR in $target because it is not given."
+               fi
+
+
 
 
 
@@ -748,6 +782,7 @@ pushd &> /dev/null
 
                # TODO: implement "cr-review-vars.sh"
                # TODO: install csv2rdf4lod-dependencies.
+               # TODO: set CSV2RDF4LOD_CONVERT_DATA_ROOT
 
             popd &> /dev/null
          fi # if $target_dir e.g. /home/lebot/prizms/melagrid

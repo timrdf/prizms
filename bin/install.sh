@@ -474,6 +474,8 @@ pushd &> /dev/null
                         else
                            echo "Okay, we won't change CSV2RDF4LOD_CKAN_SOURCE. You'll need to set it to 'true' in order for Prizms to obtain $upstream_ckan's dataset listing."
                         fi
+                     else
+                        echo "(CSV2RDF4LOD_CKAN is already correctly set to 'true' in $target)"
                      fi
                   fi # CSV2RDF4LOD_CKAN
                fi

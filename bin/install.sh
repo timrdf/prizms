@@ -515,7 +515,7 @@ pushd &> /dev/null
                echo
                echo "   $source_me"
                target='~/.bashrc'
-               already_there=`grep ".*source `pwd`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh.*" $target`
+               already_there=`grep ".*source \`pwd\`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh.*" $target`
                echo
                if [ -n "$already_there" ]; then
                   echo "It seems that you already have the following in your $target, so we won't offer to add it again:"

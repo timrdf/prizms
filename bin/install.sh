@@ -243,7 +243,7 @@ echo
 echo "    ^-- This is where the production data and automation is performed and published."
 echo "        The essential bits will be pulled read-only from $project_code_repository"
 echo "        Automation will trigger on those essential bits to organize, describe, retrieve, convert, and publish your Linked Data."
-echo "        To make changes in here, push into $project_code_repository from any working copy (e.g. ~$person_user_name/prizms/$project_user_name)
+echo "        To make changes in here, push into $project_code_repository from any working copy (e.g. ~$person_user_name/prizms/$project_user_name)"
 
 if [[ `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == "no" ]]; then
    echo

@@ -248,6 +248,7 @@ echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-proce
 if [ -z "$our_source_id" ]; then
    echo
    read -p "Q: What source-id should we use for you (or your organization) as the creator of $project_user_name? " our_source_id
+   echo
    if [ -n "$our_source_id" ]; then
       echo "Okay, we'll use $our_source_id for CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID"
    else
@@ -271,6 +272,7 @@ echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-proce
 if [ -z "$our_base_uri" ]; then
    echo
    read -p "Q: What base URI should we use for your instance of Prizms ($project_user_name)? " our_base_uri
+   echo
    if [ -n "$our_base_uri" ]; then
       echo "Okay, we'll use $our_base_uri for CSV2RDF4LOD_PUBLISH_BASE_URI"
    else

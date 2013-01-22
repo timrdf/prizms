@@ -235,7 +235,7 @@ echo "        the repos/ directory will contain a variety of supporting utilitie
 echo
 echo "  ~$person_user_name/prizms/$project_user_name"
 echo
-echo "    ^-- This is where you will develop $project_user_name."
+echo "    ^-- This is where you will develop $project_user_name, i.e. your application/instance of Prizms."
 echo "        It will be your working copy of $project_code_repository"
 echo
 echo "  ~$project_user_name/prizms"

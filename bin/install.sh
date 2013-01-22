@@ -632,7 +632,7 @@ pushd &> /dev/null
                #
                echo
                echo $div
-               template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-cron.sh"
+               template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/cr-cron.sh"
                target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
                echo "TODO: talk about the automation"
                if [[ -n "$our_source_id" && ! -e $target ]]; then

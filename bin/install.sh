@@ -514,20 +514,19 @@ pushd &> /dev/null
                echo "TODO: describe Your source-me.sh as the only one in ~/.bashrc"
                echo
                echo "   $source_me"
-               target='~/.bashrc'
-               already_there=`grep ".*source \`pwd\`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh.*" $target`
+               already_there=`grep ".*source \`pwd\`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh.*" ~/.bashrc`
                echo
                if [ -n "$already_there" ]; then
-                  echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
+                  echo "It seems that you already have the following in your ~/.bashrc, so we won't offer to add it again:"
                   echo
                   echo $already_there
                else
-                  echo "Add this command to your $target? [y/n]"
+                  echo "Add this command to your ~/.bashrc? [y/n]"
                   read -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
-                     echo $source_me >> $target
+                     echo $source_me >> ~/.bashrc
                   else
-                     echo "We didn't touch your $target, so you'll need to make sure you set the paths correctly each time."
+                     echo "We didn't touch your ~/.bashrc, so you'll need to make sure you set the paths correctly each time."
                   fi
                fi
 

@@ -630,11 +630,12 @@ pushd &> /dev/null
                #
                # Set up cr-cron.sh
                #
+               echo
+               echo $div
                template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-cron.sh"
                target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
+               echo "TODO: talk about the automation"
                if [[ -n "$our_source_id" && ! -e $target ]]; then
-                  echo
-                  echo $div
                   read -p "There isn't a $target in your repository, should we add it for you? [y/n] " -u 1 install_it
                   echo
                   if [[ "$install_it" == [yY] ]]; then

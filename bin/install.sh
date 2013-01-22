@@ -300,6 +300,8 @@ fi
 pushd &> /dev/null
    cd
    echo "Now let's install your development copy of your Prizms."
+   echo "(If you already have a working copy there, we'll update it.)"
+   echo
    read -p "Q: May we run '$vcs $clone $project_code_repository' from `pwd`/prizms/? [y/n] " -u 1 install_it
    if [[ "$install_it" == [yY] ]]; then
       if [ ! -e prizms ]; then

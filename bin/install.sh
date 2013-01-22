@@ -514,7 +514,7 @@ pushd &> /dev/null
                source_me="source `pwd`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
                echo "Prizms encapsulates all of the environment variables and PATH setup that is needed within"
                echo "a single source-me.sh script dedicated to the user that needs it. The script is version-controlled"
-               echo "so we can manage the environment variables used. The single source-me.sh should be the *only*"
+               echo "so we can manage the environment variables that everybody uses. The single source-me.sh should be the *only*"
                echo "source-me.sh that is called from your ~/.bashrc. The following command is the only"
                echo "source-me.sh that you need to run, and should be placed within your ~/.bashrc."
                echo

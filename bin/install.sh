@@ -404,11 +404,16 @@ pushd &> /dev/null
                      done
                   fi
                fi
-               
+              
+               # 
+               # Create the project-level environment variables, based on the template created by the csv2rdf4lod-automation installer.
+               # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables
+               #
                if [[ ! -e data/source/csv2rdf4lod-source-me-for-$project_user_name.sh && \
                        -e $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/install.sh ]]; then
                   mv $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/install.sh $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh
                fi
+               target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
                if [ -e $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh ]; then
                   echo
                   echo $div
@@ -416,15 +421,30 @@ pushd &> /dev/null
                   echo "These environment variables are used to control how Prizms operates."
                   echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables"
                   echo
-                  read -p "May we add the environment variables to `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh? [y/n] " -u 1 add_them
+                  read -p "May we add the environment variables to `pwd`/$target? [y/n] " -u 1 add_them
                   if [[ "$add_them" == [yY] ]]; then
-                     $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh --non-interactive --vars-only > data/source/csv2rdf4lod-source-me-for-$project_user_name.sh
-                     added="$added data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
+                     $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh --non-interactive --vars-only > $target
+                     added="$added $target"
                   else
                      echo "Okay, but at some point you should create these environment variables. Otherwise, we might not behave as you'd like us to."
                   fi
                fi
 
+               #
+               # Change the CSV2RDF4LOD_CKAN_SOURCE env var to $upstream_ckan.
+               #
+               if [[ "$upstream_ckan" == http* && -e "$target" ]]; then
+                  echo
+                  echo $div
+                  echo "Prizms uses the shell environment variable CSV2RDF4LOD_CKAN_SOURCE to indicate the upstream CKAN from"
+                  echo "which it should pull dataset listings."
+                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target
+               fi
+
+               # 
+               # Create a stub for the user-level environment variables, based on the template available from the csv2rdf4lod-automation.
+               # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables-%28considerations-for-a-distributed-workflow%29
+               # 
                template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
                target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
                if [[ ! -e $target ]]; then
@@ -433,6 +453,9 @@ pushd &> /dev/null
                   added="$added $target"
                fi
 
+               #
+               # Add all new files to version control.
+               #
                if [ -n "$added" ]; then
                   echo
                   echo $div

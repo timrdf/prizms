@@ -220,20 +220,27 @@ else
    echo "Your project won't pull dataset listings from a CKAN (for now)."
 fi
 
+PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
+me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
 echo
 echo $div
 echo "Okay, we'd like to install prizms at the following locations."
 echo
+echo " $PRIZMS_HOME/"
+echo " $PRIZMS_HOME/repos"
+echo
+echo "    ^-- This is where we'll keep the Prizms utilities. Nothing in here is specific to $project_user_name."
+echo "        the repos/ directory will contain a variety of supporting utilities that Prizms uses from other projects."
+echo
 echo "  ~$person_user_name/prizms/$project_user_name"
+echo
 echo "    ^-- This is where you will develop $project_user_name."
-echo "        It is your working copy of $project_code_repository"
+echo "        It will be your working copy of $project_code_repository"
 echo
 echo "  ~$project_user_name/prizms"
+echo
 echo "    ^-- This is where the production data and automation is performed and published."
-
-PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
-me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
 if [[ `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == "no" ]]; then
    echo

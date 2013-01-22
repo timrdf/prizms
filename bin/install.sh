@@ -640,6 +640,7 @@ pushd &> /dev/null
                   read -p "There isn't a $target in your repository, should we add it for you? [y/n] " -u 1 install_it
                   echo
                   if [[ "$install_it" == [yY] ]]; then
+                     mkdir -p `dirname $target`
                      cp $template $target
                      added="$added $target"
                      echo "Okay, we added $target"

@@ -225,8 +225,11 @@ echo
 echo $div
 echo "Okay, we'd like to install prizms at the following locations."
 echo
-echo "  ~$person_user_name/prizms/$project_user_name <-- This is where you will develop $project_user_name."
-echo "  ~$project_user_name/prizms <-- This is where the production data and automation is performed and published."
+echo "  ~$person_user_name/prizms/$project_user_name"
+echo "    ^-- This is where you will develop $project_user_name."
+echo "        It is your working copy of $project_code_repository"
+echo "  ~$project_user_name/prizms"
+echo "    ^-- This is where the production data and automation is performed and published."
 
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
@@ -435,6 +438,12 @@ pushd &> /dev/null
                      echo git push
                   fi
                fi
+
+               # TODO: move .bashrc edit to source-me
+               # TODO: implement "cr-review-vars.sh"
+               # TODO: set env var for upstream-ckan
+               # TODO: install csv2rdf4lod-dependencies.
+               # TODO: mirror ckan and commit dcats.ttls
 
             popd &> /dev/null
          fi # if $target_dir e.g. /home/lebot/prizms/melagrid

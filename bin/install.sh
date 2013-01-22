@@ -498,12 +498,16 @@ pushd &> /dev/null
 
 
                #
-               # 
+               # csv2rdf4lod-source-me-as-${project_user_name}.sh is *the* one and only source-me.sh that 
+               # the project name should source when initializing -- particular when from a cronjob.
+               # This is *the* only source-me.sh that should appear in the project user name's ~/.bashrc
                #
                template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
                target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
                if [[ ! -e $target ]]; then
-                  cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI=' > $target
+                  cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI='                 > $target
+                  echo "source `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
+                  echo "source `pwd`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
                   added="$added $target"
                   echo
                   echo $div
@@ -526,6 +530,7 @@ pushd &> /dev/null
                      git commit -m 'During install: added stub directories and readme files.'
                      git push
                   else
+                     echo
                      echo "Okay, we won't push anything to $project_code_repository; but at some point, you should run:"
                      echo
                      echo git add $added

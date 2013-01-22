@@ -511,7 +511,10 @@ pushd &> /dev/null
                echo
                echo $div
                source_me="source `pwd`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
-               echo "TODO: describe Your source-me.sh as the only one in ~/.bashrc"
+               echo "Prizms encapsulates all of the environment variables and PATH setup that is needed within"
+               echo "a single source-me.sh script dedicated to the user that needs it. The script is version-controlled"
+               echo "so we can manage the environment variables used. The single source-me.sh should be the *only*"
+               echo "source-me.sh that appears in your user configuration ~/.bashrc"
                echo
                echo "   $source_me"
                already_there=`grep ".*source \`pwd\`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh.*" ~/.bashrc`

@@ -636,6 +636,7 @@ pushd &> /dev/null
                target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
                echo "TODO: talk about the automation"
                if [[ -n "$our_source_id" && ! -e $target ]]; then
+                  echo
                   read -p "There isn't a $target in your repository, should we add it for you? [y/n] " -u 1 install_it
                   echo
                   if [[ "$install_it" == [yY] ]]; then

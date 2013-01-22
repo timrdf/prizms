@@ -230,7 +230,7 @@ echo
 echo "  $PRIZMS_HOME/"
 echo "  $PRIZMS_HOME/repos"
 echo
-echo "    ^-- This is where we'll keep the Prizms utilities. Nothing in here is specific to $project_user_name."
+echo "    ^-- This is where we'll keep the Prizms utilities. Nothing in here will ever be specific to $project_user_name."
 echo "        the repos/ directory will contain a variety of supporting utilities that Prizms uses from other projects."
 echo
 echo "  ~$person_user_name/prizms/$project_user_name"

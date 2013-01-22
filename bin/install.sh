@@ -270,6 +270,7 @@ echo $div
 set_paths_cmd=`$PRIZMS_HOME/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
 echo "The following command will add the paths that Prizms requires."
 echo "Running it multiple times will have no effect, since only the missing paths are added."
+echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
 echo
 echo "    $set_paths_cmd"
 already_there=`grep ".*export PATH=.*prizms/bin/install/paths.sh.*" ~/.bashrc`

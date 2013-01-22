@@ -637,7 +637,7 @@ pushd &> /dev/null
                   echo $div
                   read -p "There isn't a $target in your repository, should we add it for you? [y/n] " -u 1 install_it
                   echo
-                  if [[ "$push_them" == [yY] ]]; then
+                  if [[ "$install_it" == [yY] ]]; then
                      cp $template $target
                      added="$added $target"
                      echo "Okay, we added $target"

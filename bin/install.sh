@@ -783,6 +783,10 @@ pushd &> /dev/null
                # TODO: implement "cr-review-vars.sh"
                # TODO: install csv2rdf4lod-dependencies.
                # TODO: set CSV2RDF4LOD_CONVERT_DATA_ROOT
+               # TODO: set CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT (and install one...)
+               # TODO: CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA and CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID
+               # TODO: CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE
+               # TODO: X_GOOGLE_MAPS_API_Key
 
             popd &> /dev/null
          fi # if $target_dir e.g. /home/lebot/prizms/melagrid

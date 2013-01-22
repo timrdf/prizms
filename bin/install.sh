@@ -5,7 +5,7 @@
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo
-   echo "usage: `basename $0` [--me <your-URI>] [--my-email <your-email>] [--proj-user <user>] [--repos <code-repo>] [--upstream-ckan <ckan>]"
+   echo "usage: `basename $0` [--me <your-URI>] [--my-email <your-email>] [--proj-user <user>] [--upstream-ckan <ckan>] [--repos <code-repo>]"
    echo "                  [--our-base-uri <uri>] [--our-source-id <source-id>]"
    echo
    echo "This script will determine and use the following parameters to install an instance of Prizms:"
@@ -18,9 +18,9 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo
    echo " --proj-user     | the project's                       user name                        (e.g. melagrid)"
    echo
-   echo " --repos         | the project's code repository                                        (e.g. git@github.com:jimmccusker/melagrid.git)"
-   echo
    echo " --upstream-ckan | [optional] the URL of a CKAN from which to pull dataset listings     (e.g. http://data.melagrid.org)"
+   echo
+   echo " --repos         | the project's code repository                                        (e.g. git@github.com:jimmccusker/melagrid.git)"
    echo
    echo " --our-base-uri  | the HTTP namespace for all datasets in the Prizms that we are making (e.g. http://lod.melagrid.org)"
    echo "                 : see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase%3A-name"

@@ -262,6 +262,29 @@ else
 fi
 
 
+# https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name
+echo
+echo $div
+echo "Prizms names datasets and their entities within a base uri that is given in"
+echo "the CSV2RDF4LOD_BASE_URI environment variable."
+echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name"
+if [ -z "$our_base_uri" ]; then
+   echo
+   read -p "Q: What base URI should we use for your instance of Prizms ($project_user_name)? " our_base_uri
+   if [ -n "$our_base_uri" ]; then
+      echo "Okay, we'll use $our_base_uri for CSV2RDF4LOD_PUBLISH_BASE_URI"
+   else
+      echo "We won't be able to create Linked Data with useful URIs."
+      echo "since we don't know what namespace to name them within (CSV2RDF4LOD_BASE_URI)."
+      echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name"
+      echo "and set CSV2RDF4LOD_BASE_URI if you'd like useful Linked Data URIs in the future."
+   fi
+else
+   echo "(We'll use the base URI that you already indicated: $our_base_uri)"
+fi
+
+
+
 echo
 echo $div
 echo $div
@@ -485,7 +508,7 @@ pushd &> /dev/null
                   current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target`
                   if [ "$current" != "$upstream_ckan" ]; then
                      echo
-                     echo "CSV2RDF4LOD_CKAN_SOURCE is currently set to '$current. in $target"
+                     echo "CSV2RDF4LOD_CKAN_SOURCE is currently set to '$current' in $target"
                      read -p "Q: May we change CSV2RDF4LOD_CKAN_SOURCE to $upstream_ckan in $target? [y/n] " -u 1 change_it
                      echo
                      if [[ "$change_it" == [yY] ]]; then
@@ -523,7 +546,43 @@ pushd &> /dev/null
                   fi # CSV2RDF4LOD_CKAN
                fi
 
+
+
+               #
+               #
+               #
+               echo
+               echo $div
+               echo "Prizms uses the shell environment variable CSV2RDF4LOD_BASE_URI to"
+               echo "indicate the Linked Data base URI to use for all datasets that it creates."
+               target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
+               if [[ -n "$our_base_uri" && "$our_base_uri" == http* ]]; then
+                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_BASE_URI' $target`
+                  if [ "$current" != "$our_base_uri" ]; then
+                     echo
+                     echo "CSV2RDF4LOD_BASE_URI is currently set to '$current' in $target"
+                     read -p "Q: May we change CSV2RDF4LOD_CKAN_SOURCE to $upstream_ckan in $target? [y/n] " -u 1 change_it
+                     echo
+                     if [[ "$change_it" == [yY] ]]; then
+                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target --change-to $upstream_ckan
+                        echo "Okay, we changed $target to:"
+                        grep 'export CSV2RDF4LOD_CKAN_SOURCE=' $target | tail -1
+                        added="$added $target"
+                     else
+                        echo "Okay, we won't change it. You'll need to change it in order for Prizms to obtain $upstream_ckan's dataset listing."
+                     fi
+                  else
+                     echo "(CSV2RDF4LOD_CKAN_SOURCE is already correctly set to $upstream_ckan in $target)"
+                  fi # CSV2RDF4LOD_CKAN_SOURCE
+               else
+                  echo "WARNING: We can't set the CSV2RDF4LOD_BASE_URI in $target because it is not given."
+               fi
+
+
+
                # TODO: mirror ckan and commit dcats.ttls
+
+
 
                # 
                # Create a stub for the user-level environment variables, based on the template available from the csv2rdf4lod-automation.

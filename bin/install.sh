@@ -363,7 +363,8 @@ pushd &> /dev/null
                echo `pwd`/doc/
                echo `pwd`/data/source/
                echo `pwd`/lodspeakr/
-               read -p "Q: May we create the following directories in `pwd` if they don't already exist? [y/n] " -u 1 install_them
+               echo
+               read -p "Q: ^-- May we create these directories in `pwd` if they don't already exist? [y/n] " -u 1 install_them
                if [ "$install_them" == [yY] ]; then
                   for directory in doc data/source lodspeakr; do
                      if [ ! -e $directory ]; then

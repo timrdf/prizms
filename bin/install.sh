@@ -787,6 +787,9 @@ pushd &> /dev/null
                # TODO: X_GOOGLE_MAPS_API_Key
                # TODO: set CSV2RDF4LOD_CONVERT_DATA_ROOT (ONLY for project user name)
                # TODO: install csv2rdf4lod-dependencies.
+               # TODO: JENAROOT add to source-me-as-lebot/melagrid
+               # TODO: set up the user-based install that does NOT require sudo. python's easy_install
+               # TODO: 5 more -n in install-csv2rdf4lod-depends
 
             popd &> /dev/null
          fi # if $target_dir e.g. /home/lebot/prizms/melagrid

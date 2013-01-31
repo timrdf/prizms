@@ -873,8 +873,8 @@ pushd &> /dev/null
                   else
                      echo "Okay, we won't try to extract access metadata from $target.. Check out the following if you want to do it yourself:"
                      echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"
-                     echo "This installer will quit now, instead of trying to finish."
-                     exit 1
+                     #echo "This installer will quit now, instead of trying to finish."
+                     #exit 1
                   fi
                fi
 

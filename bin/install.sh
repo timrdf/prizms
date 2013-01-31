@@ -688,7 +688,7 @@ pushd &> /dev/null
                echo
                echo "    $set_paths_cmd"
                target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
-               already_there=`grep ".*export PATH=.*prizms/bin/install/classpaths.sh.*" $target`
+               already_there=`grep ".*export CLASSPATH=.*prizms/bin/install/classpaths.sh.*" $target`
                echo
                if [ -n "$already_there" ]; then
                   echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
@@ -707,6 +707,9 @@ pushd &> /dev/null
                      echo "We didn't touch your $target, so you'll need to make sure you set the paths correctly each time."
                   fi
                fi
+
+               $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.okay"
+               $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO"
 
                java edu.rpi.tw.string.NameFactory --source-id-of http://data.melagrid.org/cowabunga/dude.html
 

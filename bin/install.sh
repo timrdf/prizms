@@ -863,18 +863,20 @@ pushd &> /dev/null
                export CLASSPATH=$CLASSPATH`$PRIZMS_HOME/bin/install/classpaths.sh` 
                upstream_ckan_source_id=`java edu.rpi.tw.string.NameFactory --source-id-of $upstream_ckan`
                target="data/source/$upstream_ckan_source_id"
-               if [ ! -e $target ]; then
-                  echo "You've specified an upstream CKAN from which to mirror dataset listings ($upstream_ckan),"
-                  echo "but Prizms hasn't extracted the access metadata into $target."
-                  echo
+               echo "Prizms can collect and convert datasets that are listed in CKAN instances."
+               echo "You've specified an upstream CKAN from which to mirror dataset listings ($upstream_ckan),"
+               echo "but Prizms hasn't extracted the access metadata into $target."
+               echo
+               if [[ -n "$upstream_ckan_source_id" && ! -e $target ]]; then
                   read -p "Extract the access metadata from the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
                   if [[ "$extract_it" == [yY] ]]; then
-                     echo "TODO: extract from $upstream_ckan"
+                     mkdir -p $target
+                     pushd $target &> /dev/null
+                        echo cr-create-dataset-dirs-from-ckan.py $upstream_ckan $our_base_uri
+                     popd &> /dev/null
                   else
-                     echo "Okay, we won't try to extract access metadata from $target.. Check out the following if you want to do it yourself:"
-                     echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"
-                     #echo "This installer will quit now, instead of trying to finish."
-                     #exit 1
+                     echo "Okay, we won't try to extract access metadata from $upstream_ckan. Check out the following if you want to do it yourself:"
+                     echo "  https://github.com/jimmccusker/twc-healthdata/wiki/Mirroring-a-Source-CKAN-Instance"
                   fi
                fi
 

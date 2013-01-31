@@ -708,6 +708,7 @@ pushd &> /dev/null
                   fi
                fi
 
+               java edu.rpi.tw.string.NameFactory --source-id-of http://data.melagrid.org/cowabunga/dude.html
 
 
                #

@@ -755,6 +755,7 @@ pushd &> /dev/null
 
 
                echo
+               echo $div
                echo "It appears as though Prizms is not configured to load data into Virtuoso."
                read -p "Would you like us to help configure Prizms so that it can load data into Virtuoso? [y/n] " -u 1 configure_it
                echo

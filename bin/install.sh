@@ -675,6 +675,40 @@ pushd &> /dev/null
 
 
                #
+               # Add CLASSPATH = CLASSPATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$person_user_name.sh
+               #
+               echo
+               echo $div
+               set_paths_cmd=`$PRIZMS_HOME/bin/install/classpaths.sh --help | tail -1 | sed 's/^ *//'`
+               echo "The following command adds into your shell's environment the Java class paths that Prizms requires to run its scripts."
+               echo "Just like the previous paths.sh command, running this multiple times will have no effect, since only the missing paths are added."
+               echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
+               echo "The following command should appear in your data/source/csv2rdf4lod-source-me-as-$person_user_name.sh."
+               echo
+               echo "    $set_paths_cmd"
+               already_there=`grep ".*export PATH=.*prizms/bin/install/classpaths.sh.*" $target`
+               echo
+               if [ -n "$already_there" ]; then
+                  echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
+                  echo
+                  echo $already_there
+               else
+                  echo "Add this command to your $target? [y/n]"
+                  read -u 1 install_it
+                  if [[ "$install_it" == [yY] ]]; then
+                     echo $set_paths_cmd >> $target
+                     echo
+                     echo "Okay, we added it:"
+                     grep ".*export PATH=.*prizms/bin/install/classpaths.sh.*" $target
+                     added="$added $target"
+                  else
+                     echo "We didn't touch your $target, so you'll need to make sure you set the paths correctly each time."
+                  fi
+               fi
+
+
+
+               #
                # Add source data/source/csv2rdf4lod-source-me-as-$person_user_name.sh to ~/.bashrc
                #
                echo

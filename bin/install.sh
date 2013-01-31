@@ -749,7 +749,8 @@ pushd &> /dev/null
                         echo "and https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets"
                      fi
                   else
-                     echo "(`pwd`/$target is already set up, and is ready for the $project_user_name project user to add to its crontab.)"
+                     echo "(`pwd`/$target is already set up,"
+                     echo "and is ready for the $project_user_name project user to add to its crontab.)"
                   fi
                else
                   echo "(WARNING We can't set up $target because we don't know what source-id we should use.)"

@@ -750,7 +750,7 @@ pushd &> /dev/null
                      fi
                   else
                      echo "(`pwd`/$target is already set up,"
-                     echo "and is ready for the $project_user_name project user to add to its crontab.)"
+                     echo " and is ready for the $project_user_name project user to add to its crontab.)"
                   fi
                else
                   echo "(WARNING We can't set up $target because we don't know what source-id we should use.)"

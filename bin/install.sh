@@ -724,12 +724,12 @@ pushd &> /dev/null
                echo
                echo "However, the following do not seem to be installed:"
                echo
-               $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n --avoid-sudo | grep "^.TODO"
+               $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO"
                echo
                read -p "Can we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
                echo
                if [[ "$install_them" == [yY] ]]; then
-                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh --avoid-sudo
+                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh
                else
                   echo "Okay, we won't try to install them. Check out the following if you want to do it yourself:"
                   echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"

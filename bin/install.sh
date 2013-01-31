@@ -295,12 +295,12 @@ echo $div
 echo "We now have what we need to start installing Prizms:"
 echo
 if [ -n "$person_uri" ]; then
-   echo "Your URI is:                                            $person_uri"
+   echo "Your URI is:                                           $person_uri"
 else
    echo "You don't have a URI."
 fi
-echo "Your user name is:                                      $person_user_name"
-echo "Your project's user name is (or will be):               $project_user_name"
+echo "Your user name is:                                     $person_user_name"
+echo "Your project's user name is (or will be):              $project_user_name"
 echo "Your project's code repository ($vcs) is:               $project_code_repository"
 if [ -n "$upstream_ckan" ]; then
    echo "Your project will pull dataset listings from CKAN is:  $upstream_ckan"  

@@ -723,6 +723,7 @@ pushd &> /dev/null
                read -p "Can we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
                echo
                if [[ "$install_them" == [yY] ]]; then
+                  touch .before-prizms-installed-dependencies
                   $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh
                else
                   echo "Okay, we won't try to install them. Check out the following if you want to do it yourself:"
@@ -747,29 +748,6 @@ pushd &> /dev/null
                # 
                # cannot:
 
-
-
-
-               #
-               # TODO Sprinkle "access.ttl" files within the csv2rdf4lod conversion root, as mirrors of the upstream CKAN.
-               #
-               # http://data.melagrid.org/cowabunga/dude.html -> data-melagrid-org
-               upstream_ckan_source_id=`java edu.rpi.tw.string.NameFactory --source-id-of $upstream_ckan`
-               target="data/source/$upstream_ckan_source_id"
-               if [ ! -e $target ]; then
-                  echo "You've specified an upstream CKAN from which to mirror dataset listings,"
-                  echo "but Prizms hasn't extracted their access metadata into $target."
-                  echo
-                  read -p "Extract the access metadata fro the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
-                  if [[ "$extract_it" == [yY] ]]; then
-                     echo "TODO: extract from $upstream_ckan"
-                  else
-                     echo "Okay, we won't try to extract access metadata from $target.. Check out the following if you want to do it yourself:"
-                     echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"
-                     echo "This installer will quit now, instead of trying to finish."
-                     exit 1
-                  fi
-               fi
 
 
 
@@ -863,6 +841,39 @@ pushd &> /dev/null
                   echo $div
                   echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
                fi
+
+
+
+               # TODO: Create csv2rdf4lod-source-me-on-melagrid.sh (machine)
+               # TODO WARNING: set JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc
+               # TODO WARNING: set PATH="${PATH}:/home/lebot/opt/apache-jena-2.7.4/bin" in your my-csv2rdf4lod-source-me.sh or .bashrc
+
+
+
+
+
+               #
+               # TODO Sprinkle "access.ttl" files within the csv2rdf4lod conversion root, as mirrors of the upstream CKAN.
+               #
+               # http://data.melagrid.org/cowabunga/dude.html -> data-melagrid-org
+               export CLASSPATH=$CLASSPATH`$PRIZMS_HOME/bin/install/classpaths.sh` 
+               upstream_ckan_source_id=`java edu.rpi.tw.string.NameFactory --source-id-of $upstream_ckan`
+               target="data/source/$upstream_ckan_source_id"
+               if [ ! -e $target ]; then
+                  echo "You've specified an upstream CKAN from which to mirror dataset listings,"
+                  echo "but Prizms hasn't extracted their access metadata into $target."
+                  echo
+                  read -p "Extract the access metadata fro the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
+                  if [[ "$extract_it" == [yY] ]]; then
+                     echo "TODO: extract from $upstream_ckan"
+                  else
+                     echo "Okay, we won't try to extract access metadata from $target.. Check out the following if you want to do it yourself:"
+                     echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"
+                     echo "This installer will quit now, instead of trying to finish."
+                     exit 1
+                  fi
+               fi
+
 
 
                #

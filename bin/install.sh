@@ -653,6 +653,7 @@ pushd &> /dev/null
                echo "The following command should appear in your data/source/csv2rdf4lod-source-me-as-$person_user_name.sh."
                echo
                echo "    $set_paths_cmd"
+               target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
                already_there=`grep ".*export PATH=.*prizms/bin/install/paths.sh.*" $target`
                echo
                if [ -n "$already_there" ]; then
@@ -686,6 +687,7 @@ pushd &> /dev/null
                echo "The following command should appear in your data/source/csv2rdf4lod-source-me-as-$person_user_name.sh."
                echo
                echo "    $set_paths_cmd"
+               target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
                already_there=`grep ".*export PATH=.*prizms/bin/install/classpaths.sh.*" $target`
                echo
                if [ -n "$already_there" ]; then
@@ -699,7 +701,7 @@ pushd &> /dev/null
                      echo $set_paths_cmd >> $target
                      echo
                      echo "Okay, we added it:"
-                     grep ".*export PATH=.*prizms/bin/install/classpaths.sh.*" $target
+                     grep ".*export CLASSPATH=.*prizms/bin/install/classpaths.sh.*" $target
                      added="$added $target"
                   else
                      echo "We didn't touch your $target, so you'll need to make sure you set the paths correctly each time."

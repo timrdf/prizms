@@ -300,15 +300,15 @@ else
    echo "You don't have a URI."
 fi
 echo "Your user name is:                                  $person_user_name"
-echo "Your project's user name is (or will be):           $project_user_name"
-echo "Your project's code repository ($vcs):               $project_code_repository"
+echo "Your project's user name is (or will be):              $project_user_name"
+echo "Your project's code repository ($vcs) is:            $project_code_repository"
 if [ -n "$upstream_ckan" ]; then
-   echo "Your project will pull dataset listings from CKAN:  $upstream_ckan"  
+   echo "Your project will pull dataset listings from CKAN is:  $upstream_ckan"  
 else
    echo "Your project won't pull dataset listings from a CKAN (for now)."
 fi
-echo "Your project's Linked Data base URI:                $our_base_uri"
-echo "Your project's source-id:                           $our_source_id"
+echo "Your project's Linked Data base URI is:             $our_base_uri"
+echo "Your project's source-id is:                        $our_source_id"
 
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`

@@ -726,7 +726,7 @@ pushd &> /dev/null
                echo
                $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n --avoid-sudo | grep "^.TODO"
                echo
-               read -p "Can we try to install the dependencies listed above? [y/n] " -u 1 install_them
+               read -p "Can we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
                echo
                if [[ "$install_them" == [yY] ]]; then
                   $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh --avoid-sudo

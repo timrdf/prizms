@@ -708,10 +708,22 @@ pushd &> /dev/null
                   fi
                fi
 
+
+
+
+               #
+               # Add CLASSPATH = CLASSPATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$person_user_name.sh
+               #
+               echo
+               echo $div
                $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.okay"
                $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO"
 
                java edu.rpi.tw.string.NameFactory --source-id-of http://data.melagrid.org/cowabunga/dude.html
+
+
+
+
 
 
                #

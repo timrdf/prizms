@@ -321,7 +321,7 @@ echo "  $PRIZMS_HOME/"
 echo "  $PRIZMS_HOME/repos"
 echo
 echo "    ^-- This is where we'll keep the Prizms utilities. Nothing in here will ever be specific to $project_user_name."
-echo "        the repos/ directory will contain a variety of supporting utilities that Prizms uses from other projects."
+echo "        The repos/ directory will contain a variety of supporting utilities that Prizms uses from other projects."
 echo
 echo "  ~$person_user_name/prizms/$project_user_name"
 echo
@@ -644,7 +644,7 @@ pushd &> /dev/null
                echo
                echo $div
                set_paths_cmd=`$PRIZMS_HOME/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
-               echo "The following command adds the paths that Prizms requires into your shell's environment."
+               echo "The following command adds into your shell's environment the paths that Prizms requires to run its scripts."
                echo "Running it multiple times will have no effect, since only the missing paths are added."
                echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
                echo "The following command should appear in your data/source/csv2rdf4lod-source-me-as-$person_user_name.sh."

@@ -720,7 +720,7 @@ pushd &> /dev/null
                echo
                $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO"
                echo
-               read -p "Q: Can we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
+               read -p "Q: May we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
                echo
                if [[ "$install_them" == [yY] ]]; then
                   touch .before-prizms-installed-dependencies
@@ -772,7 +772,7 @@ pushd &> /dev/null
                      echo
                      grep "DirsAllowed" $target
                      echo
-                     read -p "Can we add XXX directory to DirsAllowed in $target? [y/n] " -u 1 install_it
+                     read -p "May we add XXX directory to DirsAllowed in $target? [y/n] " -u 1 install_it
                      echo
                      if [[ "$install_it" == [yY] ]]; then
                         echo TODO sudo edit $target

@@ -5,7 +5,7 @@
 #
 # Usage:
 #   export PATH=$PATH`$DATAFAQS_HOME/bin/df-situate-paths.sh`
-#   (can be repeated indefinately, once paths are in PATH, nothing is returned.)
+#   (can be repeated indefinitely, once paths are in PATH, nothing is returned.)
 
 HOME=$(cd ${0%/*/*} && echo ${PWD%/*})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`

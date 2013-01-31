@@ -618,7 +618,8 @@ pushd &> /dev/null
 
 
                # TODO: mirror ckan and commit dcats.ttls
-
+               # java edu.rpi.tw.string.NameFactory --source-id-of http://data.melagrid.org/cowabunga/dude.html 
+               # >> data-melagrid-org
 
 
                # 

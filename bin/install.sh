@@ -619,12 +619,6 @@ pushd &> /dev/null
 
 
 
-
-               # TODO: mirror ckan and commit dcats.ttls
-               # java edu.rpi.tw.string.NameFactory --source-id-of http://data.melagrid.org/cowabunga/dude.html 
-               # >> data-melagrid-org
-
-
                # 
                # Create a stub for the user-level environment variables, based on the template available from the csv2rdf4lod-automation.
                # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables-%28considerations-for-a-distributed-workflow%29
@@ -712,7 +706,7 @@ pushd &> /dev/null
 
 
                #
-               # Add CLASSPATH = CLASSPATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$person_user_name.sh
+               # Install third party utilities (mostly with apt-get and tarball installs).
                #
                echo
                echo $div
@@ -738,10 +732,81 @@ pushd &> /dev/null
                fi
 
 
+               # Selecting previously deselected package virtuoso-opensource.
+               # (Reading database ... 34197 files and directories currently installed.)
+               # Unpacking virtuoso-opensource (from .../virtuoso-opensource_6.1.6_amd64.deb) ...
+               # Setting up virtuoso-opensource (6.1.6) ...
+               # Starting OpenLink Virtuoso Open-Source Edition: The VDBMS server process terminated prematurely
+               # after initializing network connections.
+               # invoke-rc.d: initscript virtuoso-opensource, action "start" failed.
+               # dpkg: error processing virtuoso-opensource (--install):
+               #  subprocess installed post-installation script returned error exit status 104
+               # Processing triggers for ureadahead ...
+               # Errors were encountered while processing:
+               #  virtuoso-opensource
+               # 
+               # cannot:
 
-               java edu.rpi.tw.string.NameFactory --source-id-of http://data.melagrid.org/cowabunga/dude.html
 
 
+
+               #
+               # TODO Sprinkle "access.ttl" files within the csv2rdf4lod conversion root, as mirrors of the upstream CKAN.
+               #
+               # http://data.melagrid.org/cowabunga/dude.html -> data-melagrid-org
+               upstream_ckan_source_id=`java edu.rpi.tw.string.NameFactory --source-id-of $upstream_ckan`
+               target="data/source/$upstream_ckan_source_id"
+               if [ ! -e $target ]; then
+                  echo "You've specified an upstream CKAN from which to mirror dataset listings,"
+                  echo "but Prizms hasn't extracted their access metadata into $target."
+                  echo
+                  read -p "Extract the access metadata fro the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
+                  if [[ "$extract_it" == [yY] ]]; then
+                     echo "TODO: extract from $upstream_ckan"
+                  else
+                     echo "Okay, we won't try to extract access metadata from $target.. Check out the following if you want to do it yourself:"
+                     echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"
+                     echo "This installer will quit now, instead of trying to finish."
+                     exit 1
+                  fi
+               fi
+
+
+
+
+
+
+               echo
+               echo "It appears as though Prizms is not configured to load data into Virtuoso."
+               read -p "Would you like us to help configure Prizms so that it can load data into Virtuoso? [y/n] " -u 1 configure_it
+               echo
+               if [[ "$configure_it" == [yY] ]]; then
+                  echo "TODO"
+                  # TODO: see mapping into apache at https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
+
+                  if [[ `whoami` == "$project_user_name" ]]; then
+                     target="/var/lib/virtuoso/db/virtuoso.ini"
+                     echo "Virtuoso needs permission to access the files in XXX in order to load RDF files efficiently."
+                     echo "This is done by adding XXX to Virtuoso's 'DirsAllowed' variable in $target"
+                     echo "$target currently has 'DirsAllowed' set as:"
+                     echo
+                     grep "DirsAllowed" $target
+                     echo
+                     read -p "Can we add XXX directory to DirsAllowed in $target? [y/n] " -u 1 install_it
+                     echo
+                     if [[ "$install_it" == [yY] ]]; then
+                        echo TODO sudo edit $target
+                     else
+                        echo "Okay, we won't modify $target. See the following:"
+                        echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
+                        echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
+                     fi
+                  fi
+               else
+                  echo "Okay, we won't try to configure Prizms to load data into Virtuoso. Check out the following if you want to do it yourself:"
+                  echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
+                  echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
+               fi
 
 
 

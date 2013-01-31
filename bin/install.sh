@@ -857,11 +857,13 @@ pushd &> /dev/null
                # TODO Sprinkle "access.ttl" files within the csv2rdf4lod conversion root, as mirrors of the upstream CKAN.
                #
                # http://data.melagrid.org/cowabunga/dude.html -> data-melagrid-org
+               echo
+               echo $div
                export CLASSPATH=$CLASSPATH`$PRIZMS_HOME/bin/install/classpaths.sh` 
                upstream_ckan_source_id=`java edu.rpi.tw.string.NameFactory --source-id-of $upstream_ckan`
                target="data/source/$upstream_ckan_source_id"
                if [ ! -e $target ]; then
-                  echo "You've specified an upstream CKAN from which to mirror dataset listings,"
+                  echo "You've specified an upstream CKAN from which to mirror dataset listings ($upstream_ckan),"
                   echo "but Prizms hasn't extracted their access metadata into $target."
                   echo
                   read -p "Extract the access metadata fro the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it

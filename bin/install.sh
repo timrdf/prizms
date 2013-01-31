@@ -720,7 +720,7 @@ pushd &> /dev/null
                echo
                $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO"
                echo
-               read -p "Can we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
+               read -p "Q: Can we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
                echo
                if [[ "$install_them" == [yY] ]]; then
                   touch .before-prizms-installed-dependencies
@@ -757,7 +757,8 @@ pushd &> /dev/null
                echo
                echo $div
                echo "It appears that Virtuoso is installed, but Prizms is not configured to load data into Virtuoso."
-               read -p "Would you like us to help configure Prizms so that it can load data into Virtuoso? [y/n] " -u 1 configure_it
+               echo
+               read -p "Q: Would you like us to help configure Prizms so that it can load data into Virtuoso? [y/n] " -u 1 configure_it
                echo
                if [[ "$configure_it" == [yY] ]]; then
                   echo "TODO"

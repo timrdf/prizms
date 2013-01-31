@@ -716,8 +716,28 @@ pushd &> /dev/null
                #
                echo
                echo $div
+               echo "Prizms uses a variety of third party utilities that we can try to install for you automatically."
+               echo "The following seem to already be installed:"
+               echo
                $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.okay"
-               $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO"
+               
+               echo
+               echo "However, the following do not seem to be installed:"
+               echo
+               $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n --avoid-sudo | grep "^.TODO"
+               echo
+               read -p "Can we try to install the dependencies listed above? [y/n] " -u 1 install_them
+               echo
+               if [[ "$install_them" == [yY] ]]; then
+                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh --avoid-sudo
+               else
+                  echo "Okay, we won't try to install them. Check out the following if you want to do it yourself:"
+                  echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"
+                  echo "This installer will quit now, instead of trying to finish."
+                  exit 1
+               fi
+
+
 
                java edu.rpi.tw.string.NameFactory --source-id-of http://data.melagrid.org/cowabunga/dude.html
 

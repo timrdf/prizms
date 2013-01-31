@@ -865,9 +865,9 @@ pushd &> /dev/null
                target="data/source/$upstream_ckan_source_id"
                if [ ! -e $target ]; then
                   echo "You've specified an upstream CKAN from which to mirror dataset listings ($upstream_ckan),"
-                  echo "but Prizms hasn't extracted their access metadata into $target."
+                  echo "but Prizms hasn't extracted the access metadata into $target."
                   echo
-                  read -p "Extract the access metadata fro the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
+                  read -p "Extract the access metadata from the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
                   if [[ "$extract_it" == [yY] ]]; then
                      echo "TODO: extract from $upstream_ckan"
                   else

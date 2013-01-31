@@ -21,7 +21,7 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo " --repos         | the project's code repository                                        (e.g. git@github.com:jimmccusker/melagrid.git)"
    echo
    echo " --upstream-ckan | [optional] the URL of a CKAN from which to pull dataset listings     (e.g. http://data.melagrid.org)"
-   echo                   : see https://github.com/jimmccusker/twc-healthdata/wiki/Retrieving-CKAN%27s-Dataset-Distribution-Files
+   echo "                 : see https://github.com/jimmccusker/twc-healthdata/wiki/Retrieving-CKAN%27s-Dataset-Distribution-Files"
    echo
    echo " --our-base-uri  | the HTTP namespace for all datasets in the Prizms that we are making (e.g. http://lod.melagrid.org)"
    echo "                 : see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase%3A-name"

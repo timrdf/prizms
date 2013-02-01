@@ -757,7 +757,7 @@ pushd &> /dev/null
                echo
                echo $div
                echo "Prizms uses a variety of third party utilities that we can try to install for you automatically."
-               echo "The following seem to already be installed:"
+               echo "The following utilities seem to already be installed okay:"
                echo
                $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.okay"
               
@@ -791,7 +791,17 @@ pushd &> /dev/null
 
                echo
                echo $div
-               # TODO: look to see if it is actually installed.
+
+               virtuoso_installed="no"
+               if [[ -e '/var/lib/virtuoso/db/virtuoso.ini' && \
+                     -e '/usr/bin/isql-v'                   && \
+                     -e '/etc/init.d/virtuoso-opensource'   && \
+                     -e '/var/lib/virtuoso/db/virtuoso.log' ]]; then
+                  virtuoso_installed="yes"
+               fi
+
+               # TODO: look to see if it is actually not configured.
+
                echo "It appears that Virtuoso is installed, but Prizms is not configured to load data into Virtuoso."
                echo
                read -p "Q: Would you like us to help configure Prizms so that it can load data into Virtuoso? [y/n] " -u 1 configure_it
@@ -800,9 +810,17 @@ pushd &> /dev/null
                   echo "TODO"
                   # TODO: see mapping into apache at https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
 
-                  target="`pwd`/data/source"
-                  if [[ `whoami` == "$project_user_name" ]]; then
+                  #if [[ `whoami` == "$project_user_name" ]]; then
                      target="/var/lib/virtuoso/db/virtuoso.ini"
+               
+                     grep DirsAllowed $target
+                     # ^ e.g. DirsAllowed         = ., /usr/share/virtuoso/vad
+
+                     echo
+                     echo "Change to:"
+                     cat $target | awk -v data_root=$project_user_name/prizms '{if($1 == "DirsAllowed"){print $0","data_root}else{print}}'
+
+
                      echo "Virtuoso needs permission to access the files in XXX in order to load RDF files efficiently."
                      echo "This is done by adding XXX to Virtuoso's 'DirsAllowed' variable in $target"
                      echo "$target currently has 'DirsAllowed' set as:"
@@ -818,7 +836,7 @@ pushd &> /dev/null
                         echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
                         echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
                      fi
-                  fi
+                 # fi
                   
                   # 1111 is the JDBC
                   # 8890 is the web app for it.
@@ -854,6 +872,8 @@ pushd &> /dev/null
                   # TODO: restart apache.
 
                   # We're trying to get to http://aquarius.tw.rpi.edu/projects/melagrid/sparql
+
+                  # Put credentials at ~= /srv/twc-healthdata/config/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh
                else
                   echo "Okay, we won't try to configure Prizms to load data into Virtuoso. Check out the following if you want to do it yourself:"
                   echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"

@@ -820,7 +820,7 @@ pushd &> /dev/null
 
                      echo
                      data_root=`cd; pwd`/$project_user_name/prizms/data/
-                     echo "Virtuoso needs permission to access the files in $data_root"
+                     echo "Prizms needs Virtuoso to have permission to access the files in $data_root"
                      echo "in order to load RDF files efficiently."
                      echo "This is done by adding $data_root to Virtuoso's 'DirsAllowed'"
                      echo

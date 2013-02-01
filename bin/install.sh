@@ -819,7 +819,7 @@ pushd &> /dev/null
                      # ^ e.g. DirsAllowed         = ., /usr/share/virtuoso/vad
 
                      echo
-                     data_root=$project_user_name/prizms
+                     data_root=`cd; pwd`/$project_user_name/prizms
                      echo "Virtuoso needs permission to access the files in $data_root in order to load RDF files efficiently."
                      echo "This is done by adding $data_root to Virtuoso's 'DirsAllowed' variable in $target"
                      echo "$target currently has 'DirsAllowed' set as:"

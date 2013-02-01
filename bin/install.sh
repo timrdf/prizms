@@ -824,7 +824,7 @@ pushd &> /dev/null
                      echo "in order to load RDF files efficiently."
                      echo "This is done by adding $data_root to Virtuoso's 'DirsAllowed'"
                      echo
-                     cat $target | awk -v data_root=$project_user_name/prizms '{if($1 == "DirsAllowed"){print $0", "data_root}else{print}}' | grep "DirsAllowed"
+                     cat $target | awk -v data_root=$data_root '{if($1 == "DirsAllowed"){print $0", "data_root}else{print}}' | grep "DirsAllowed"
                      echo
                      read -p "Q: May we add $data_root to the 'DirsAllowed' setting in $target (as shown above)? [y/n] " -u 1 install_it
                      echo

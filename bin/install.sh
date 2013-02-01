@@ -807,8 +807,6 @@ pushd &> /dev/null
                read -p "Q: Would you like us to help configure Prizms so that it can load data into Virtuoso? [y/n] " -u 1 configure_it
                echo
                if [[ "$configure_it" == [yY] ]]; then
-                  echo "TODO"
-                  # TODO: see mapping into apache at https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
 
                   #if [[ `whoami` == "$project_user_name" ]]; then
                      target="/var/lib/virtuoso/db/virtuoso.ini"
@@ -857,6 +855,7 @@ pushd &> /dev/null
 
 
                   # TODO: add to /etc/apache2/sites-available/std.common
+                  # See mapping into apache at https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
                   #
                   #  <Location /sparql>
                   #      allow from all

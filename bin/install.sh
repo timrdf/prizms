@@ -835,7 +835,6 @@ pushd &> /dev/null
                              sudo mv $target $target.prizms.backup
                         echo sudo mv .`basename $0`.ini $target
                              sudo mv .`basename $0`.ini $target
-                        rm .`basename $0`.ini
                         echo
                         echo "Okay, we added to 'DirsAllowed'. Not it is set as:"
                         echo

@@ -842,6 +842,18 @@ pushd &> /dev/null
                         echo
                         grep DirsAllowed $target
                         echo
+                        echo "Virtuoso needs to be restarted for the setting to take effect, which can be done with:"
+                        echo "   sudo /etc/init.d/virtuoso-opensource restart"
+                        echo
+                        read -p "Restart virtuoso now (with the command above)? [y/n] " -u 1 restart_it
+                        if [[ "$restart_it" == [yY] ]]; then
+                           sudo /etc/init.d/virtuoso-opensource restart
+                        else
+                           echo "Okay, we won't restart virtuoso. But you'll need to restart it to load data from $target."
+                           echo "See:"
+                           echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
+                           echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
+                        fi
                      else
                         echo "Okay, we won't modify $target. See the following:"
                         echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"

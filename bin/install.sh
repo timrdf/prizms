@@ -819,7 +819,7 @@ pushd &> /dev/null
                      # ^ e.g. DirsAllowed         = ., /usr/share/virtuoso/vad
 
                      echo
-                     data_root=`cd; pwd`/$project_user_name/prizms/data/
+                     data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/data/
                      echo "Prizms needs Virtuoso to have permission to access the files in $data_root"
                      echo "in order to load RDF files efficiently."
                      echo "This is done by adding $data_root to Virtuoso's 'DirsAllowed'"
@@ -835,6 +835,7 @@ pushd &> /dev/null
                              sudo mv $target $target.prizms.backup
                         echo sudo mv .`basename $0`.ini $target
                              sudo mv .`basename $0`.ini $target
+                        rm .`basename $0`.ini
                         echo
                         echo "Okay, we added to 'DirsAllowed'. Not it is set as:"
                         echo

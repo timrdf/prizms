@@ -820,13 +820,13 @@ pushd &> /dev/null
 
                      echo
                      data_root=`cd; pwd`/$project_user_name/prizms/data/
-                     echo "Virtuoso needs permission to access the files in $data_root in order to load RDF files efficiently."
-                     echo "This is done by adding $data_root to Virtuoso's 'DirsAllowed' variable in $target"
-                     echo "$target currently has 'DirsAllowed' set as:"
+                     echo "Virtuoso needs permission to access the files in $data_root"
+                     echo "in order to load RDF files efficiently."
+                     echo "This is done by adding $data_root to Virtuoso's 'DirsAllowed'"
                      echo
-                     grep "DirsAllowed" $target
+                     cat $target | awk -v data_root=$project_user_name/prizms '{if($1 == "DirsAllowed"){print $0","data_root}else{print}}' | grep "DirsAllowed"
                      echo
-                     read -p "May we add XXX directory to DirsAllowed in $target? [y/n] " -u 1 install_it
+                     read -p "Q: May we add XXX directory to DirsAllowed in $target? [y/n] " -u 1 install_it
                      echo
                      if [[ "$install_it" == [yY] ]]; then
                         #echo TODO sudo edit $target

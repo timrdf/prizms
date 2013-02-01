@@ -838,7 +838,7 @@ pushd &> /dev/null
                         echo
                         echo "Okay, we added to 'DirsAllowed'. Not it is set as:"
                         echo
-                        cat $target | awk -v data_root=$data_root '{if($1 == "DirsAllowed"){print $0", "data_root}else{print}}' | grep "DirsAllowed"
+                        grep DirsAllowed $target
                         echo
                      else
                         echo "Okay, we won't modify $target. See the following:"

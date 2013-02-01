@@ -835,6 +835,11 @@ pushd &> /dev/null
                              sudo mv $target $target.prizms.backup
                         echo sudo mv .`basename $0`.ini $target
                              sudo mv .`basename $0`.ini $target
+                        echo
+                        echo "Okay, we added to 'DirsAllowed'. Not it is set as:"
+                        echo
+                        cat $target | awk -v data_root=$data_root '{if($1 == "DirsAllowed"){print $0", "data_root}else{print}}' | grep "DirsAllowed"
+                        echo
                      else
                         echo "Okay, we won't modify $target. See the following:"
                         echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"

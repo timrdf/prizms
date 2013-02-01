@@ -811,16 +811,17 @@ pushd &> /dev/null
                   #if [[ `whoami` == "$project_user_name" ]]; then
                      target="/var/lib/virtuoso/db/virtuoso.ini"
                
+                     echo "Virtuoso can only access the directories that are specified in $target's"
+                     echo "'DirsAllowed' setting. If you have an RDF file in some *other* directory, the file may"
+                     echo "not load, or will take longer than it should to load. 'DirsAllowed' is currently set as:"
+                     echo
                      grep DirsAllowed $target
                      # ^ e.g. DirsAllowed         = ., /usr/share/virtuoso/vad
 
                      echo
-                     echo "Change to:"
-                     cat $target | awk -v data_root=$project_user_name/prizms '{if($1 == "DirsAllowed"){print $0","data_root}else{print}}'
-
-
-                     echo "Virtuoso needs permission to access the files in XXX in order to load RDF files efficiently."
-                     echo "This is done by adding XXX to Virtuoso's 'DirsAllowed' variable in $target"
+                     data_root=$project_user_name/prizms
+                     echo "Virtuoso needs permission to access the files in $data_root in order to load RDF files efficiently."
+                     echo "This is done by adding $data_root to Virtuoso's 'DirsAllowed' variable in $target"
                      echo "$target currently has 'DirsAllowed' set as:"
                      echo
                      grep "DirsAllowed" $target
@@ -828,7 +829,8 @@ pushd &> /dev/null
                      read -p "May we add XXX directory to DirsAllowed in $target? [y/n] " -u 1 install_it
                      echo
                      if [[ "$install_it" == [yY] ]]; then
-                        echo TODO sudo edit $target
+                        #echo TODO sudo edit $target
+                        cat $target | awk -v data_root=$project_user_name/prizms '{if($1 == "DirsAllowed"){print $0","data_root}else{print}}'
                      else
                         echo "Okay, we won't modify $target. See the following:"
                         echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"

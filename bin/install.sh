@@ -849,7 +849,7 @@ pushd &> /dev/null
                      fi
                   else
                      echo "($target already has $data_root included in its 'DirsAllowed' setting:)"
-                     echo " $already_set"
+                     echo " `grep 'DirsAllowed' $target`"
                   fi
                   
                   # 1111 is the JDBC

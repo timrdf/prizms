@@ -808,18 +808,21 @@ pushd &> /dev/null
                echo
                if [[ "$configure_it" == [yY] ]]; then
 
-                  #if [[ `whoami` == "$project_user_name" ]]; then
-                     target="/var/lib/virtuoso/db/virtuoso.ini"
+                  target="/var/lib/virtuoso/db/virtuoso.ini"
+                  data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/data/
+                  already_set=`grep 'DirsAllowed' $target | grep -v $data_root`
+
+                  echo "Virtuoso can only access the directories that are specified in $target's"
+                  echo "'DirsAllowed' setting. If you have an RDF file in some *other* directory, the file may"
+                  echo "not load, or will take longer than it should to load."
+                  if [[ -z "$already_set" ]]; then
                
-                     echo "Virtuoso can only access the directories that are specified in $target's"
-                     echo "'DirsAllowed' setting. If you have an RDF file in some *other* directory, the file may"
-                     echo "not load, or will take longer than it should to load. 'DirsAllowed' is currently set as:"
+                     echo "'DirsAllowed' is currently set as:"
                      echo
                      grep DirsAllowed $target
                      # ^ e.g. DirsAllowed         = ., /usr/share/virtuoso/vad
 
                      echo
-                     data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/data/
                      echo "Prizms needs Virtuoso to have permission to access the files in $data_root"
                      echo "in order to load RDF files efficiently."
                      echo "This is done by adding $data_root to Virtuoso's 'DirsAllowed'"
@@ -829,7 +832,6 @@ pushd &> /dev/null
                      read -p "Q: May we add $data_root to the 'DirsAllowed' setting in $target (as shown above)? [y/n] " -u 1 install_it
                      echo
                      if [[ "$install_it" == [yY] ]]; then
-                        #echo TODO sudo edit $target
                         cat $target | awk -v data_root=$data_root '{if($1 == "DirsAllowed"){print $0", "data_root}else{print}}' > .`basename $0`.ini
                         echo sudo mv $target $target.prizms.backup
                              sudo mv $target $target.prizms.backup
@@ -845,7 +847,10 @@ pushd &> /dev/null
                         echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
                         echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
                      fi
-                 # fi
+                  else
+                     echo "($target already has $data_root included in its 'DirsAllowed' setting:)"
+                     echo " $already_set"
+                  fi
                   
                   # 1111 is the JDBC
                   # 8890 is the web app for it.

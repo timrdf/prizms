@@ -826,7 +826,7 @@ pushd &> /dev/null
                      echo
                      cat $target | awk -v data_root=$project_user_name/prizms '{if($1 == "DirsAllowed"){print $0", "data_root}else{print}}' | grep "DirsAllowed"
                      echo
-                     read -p "Q: May we add XXX directory to DirsAllowed in $target? [y/n] " -u 1 install_it
+                     read -p "Q: May we add $data_root to the 'DirsAllowed' setting in $target (as shown above)? [y/n] " -u 1 install_it
                      echo
                      if [[ "$install_it" == [yY] ]]; then
                         #echo TODO sudo edit $target

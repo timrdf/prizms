@@ -266,7 +266,7 @@ fi
 # https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name
 echo
 echo $div
-echo "Prizms names datasets and their entities within a base uri that is given in"
+echo "Prizms names datasets and their entities within a base URI that is given in"
 echo "the CSV2RDF4LOD_BASE_URI environment variable."
 echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name"
 if [ -z "$our_base_uri" ]; then
@@ -760,22 +760,26 @@ pushd &> /dev/null
                echo "The following seem to already be installed:"
                echo
                $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.okay"
-               
-               echo
-               echo "However, the following do not seem to be installed:"
-               echo
-               $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO"
-               echo
-               read -p "Q: May we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
-               echo
-               if [[ "$install_them" == [yY] ]]; then
-                  touch .before-prizms-installed-dependencies
-                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh
-               else
-                  echo "Okay, we won't try to install them. Check out the following if you want to do it yourself:"
-                  echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"
-                  #echo "This installer will quit now, instead of trying to finish."
-                  #exit 1
+              
+               TODO=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO" | grep -v "pydistutils.cfg"`
+               if [ -n "$TODO" ]; then
+                  echo "todo${TODO}todo"
+                  echo
+                  echo "However, the following do not seem to be installed:"
+                  echo
+                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO" | grep -v "pydistutils.cfg"
+                  echo
+                  read -p "Q: May we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
+                  echo
+                  if [[ "$install_them" == [yY] ]]; then
+                     touch .before-prizms-installed-dependencies
+                     $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh
+                  else
+                     echo "Okay, we won't try to install them. Check out the following if you want to do it yourself:"
+                     echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"
+                     #echo "This installer will quit now, instead of trying to finish."
+                     #exit 1
+                  fi
                fi
 
 

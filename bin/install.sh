@@ -830,7 +830,11 @@ pushd &> /dev/null
                      echo
                      if [[ "$install_it" == [yY] ]]; then
                         #echo TODO sudo edit $target
-                        cat $target | awk -v data_root=$project_user_name/prizms '{if($1 == "DirsAllowed"){print $0", "data_root}else{print}}'
+                        cat $target | awk -v data_root=$project_user_name/prizms '{if($1 == "DirsAllowed"){print $0", "data_root}else{print}}' > .`basename $0`.ini
+                        echo sudo mv $target $target.prizms.backup
+                             sudo mv $target $target.prizms.backup
+                        echo sudo mv .`basename $0`.ini $target
+                             sudo mv .`basename $0`.ini $target
                      else
                         echo "Okay, we won't modify $target. See the following:"
                         echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"

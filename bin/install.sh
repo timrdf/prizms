@@ -843,11 +843,14 @@ pushd &> /dev/null
                         grep DirsAllowed $target
                         echo
                         echo "Virtuoso needs to be restarted for the setting to take effect, which can be done with:"
-                        echo "   sudo /etc/init.d/virtuoso-opensource restart"
+                        echo
+                        echo "   sudo /etc/init.d/virtuoso-opensource stop"
+                        echo "   sudo /etc/init.d/virtuoso-opensource start"
                         echo
                         read -p "Restart virtuoso now (with the command above)? [y/n] " -u 1 restart_it
                         if [[ "$restart_it" == [yY] ]]; then
-                           sudo /etc/init.d/virtuoso-opensource restart
+                           sudo /etc/init.d/virtuoso-opensource stop
+                           sudo /etc/init.d/virtuoso-opensource start
                         else
                            echo "Okay, we won't restart virtuoso. But you'll need to restart it to load data from $target."
                            echo "See:"

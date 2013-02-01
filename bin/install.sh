@@ -705,6 +705,52 @@ pushd &> /dev/null
 
 
 
+
+
+
+
+
+               vm_ip=""
+               #
+               # TODO: implement this.
+               # Hack for our pseudo-VMs. This needs to be done before installing virtuoso with install-csv2rdf4lod-dependencies.sh
+               #
+               # vi /etc/hosts
+               # 127.0.0.1    localhost
+               # 192.168.1.45    melagrid melagrid.aquarius.tw.rpi.edu
+               # ->
+               # 192.168.1.45    localhost
+               # 192.168.1.45    melagrid melagrid.aquarius.tw.rpi.edu
+
+               # This issue is partially discussed at:
+               # https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore
+
+               # The following ERROR is fixed by the /etc/hosts change shown above:
+               #
+               # Selecting previously deselected package virtuoso-opensource.
+               # (Reading database ... 34197 files and directories currently installed.)
+               # Unpacking virtuoso-opensource (from .../virtuoso-opensource_6.1.6_amd64.deb) ...
+               # Setting up virtuoso-opensource (6.1.6) ...
+               # Starting OpenLink Virtuoso Open-Source Edition: The VDBMS server process terminated prematurely
+               # after initializing network connections.
+               # invoke-rc.d: initscript virtuoso-opensource, action "start" failed.
+               # dpkg: error processing virtuoso-opensource (--install):
+               #  subprocess installed post-installation script returned error exit status 104
+               # Processing triggers for ureadahead ...
+               # Errors were encountered while processing:
+               #  virtuoso-opensource
+               # 
+               # cannot:
+
+
+
+
+
+
+
+
+
+
                #
                # Install third party utilities (mostly with apt-get and tarball installs).
                #
@@ -733,21 +779,6 @@ pushd &> /dev/null
                fi
 
 
-               # Selecting previously deselected package virtuoso-opensource.
-               # (Reading database ... 34197 files and directories currently installed.)
-               # Unpacking virtuoso-opensource (from .../virtuoso-opensource_6.1.6_amd64.deb) ...
-               # Setting up virtuoso-opensource (6.1.6) ...
-               # Starting OpenLink Virtuoso Open-Source Edition: The VDBMS server process terminated prematurely
-               # after initializing network connections.
-               # invoke-rc.d: initscript virtuoso-opensource, action "start" failed.
-               # dpkg: error processing virtuoso-opensource (--install):
-               #  subprocess installed post-installation script returned error exit status 104
-               # Processing triggers for ureadahead ...
-               # Errors were encountered while processing:
-               #  virtuoso-opensource
-               # 
-               # cannot:
-
 
 
 
@@ -756,6 +787,7 @@ pushd &> /dev/null
 
                echo
                echo $div
+               # TODO: look to see if it is actually installed.
                echo "It appears that Virtuoso is installed, but Prizms is not configured to load data into Virtuoso."
                echo
                read -p "Q: Would you like us to help configure Prizms so that it can load data into Virtuoso? [y/n] " -u 1 configure_it
@@ -764,6 +796,7 @@ pushd &> /dev/null
                   echo "TODO"
                   # TODO: see mapping into apache at https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
 
+                  target="`pwd`/data/source"
                   if [[ `whoami` == "$project_user_name" ]]; then
                      target="/var/lib/virtuoso/db/virtuoso.ini"
                      echo "Virtuoso needs permission to access the files in XXX in order to load RDF files efficiently."
@@ -782,12 +815,46 @@ pushd &> /dev/null
                         echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
                      fi
                   fi
+                  
+                  # 1111 is the JDBC
+                  # 8890 is the web app for it.
+                  # 
+                  # get at conductor from my own laptop:
+                  # ssh -L 8890:localhost:8890 -p 2245 -l jimmccusker aquarius.tw.rpi.edu
+                  #
+                  #                                                   ^ The machine that hosts the VM.
+                  #                                       ^ Your user name.
+                  #                               ^ The port on aquarius that my VM is on.
+                  #                       ^ The port on the VM that Virtuoso serves its SPARQL endpoint.
+                  #             ^ Your machine, e.g. your laptop.
+                  #       ^ The port on your machine that you connect to in order to get to the VM's Virtuoso SPARQL endpoint.
+                  # 
+                  # Now, load up http://localhost:8890/conductor in your laptop's web browser, and you're viewing the VM's service.
+
+                  # add the apache map /sparql to 8890
+
+
+                  # TODO: add to /etc/apache2/sites-available/std.common
+                  #
+                  #  <Location /sparql>
+                  #      allow from all
+                  #      SetHandler None
+                  #      Options +Indexes
+                  #      ProxyPass               http://localhost:8890/sparql
+                  #      ProxyPassReverse        /sparql
+                  #    # ProxyHTMLExtended On
+                  #    # ProxyHTMLURLMap url\(/([^\)]*)\) url(/sparql$1) Rihe
+                  #    # ProxyHTMLURLMap         /sparql /sparql
+                  #    # ProxyHTMLURLMap         http://localhost:8890/sparql /sparql
+                  #  </Location>
+                  # TODO: restart apache.
+
+                  # We're trying to get to http://aquarius.tw.rpi.edu/projects/melagrid/sparql
                else
                   echo "Okay, we won't try to configure Prizms to load data into Virtuoso. Check out the following if you want to do it yourself:"
                   echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
                   echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
                fi
-
 
 
 

@@ -808,6 +808,32 @@ pushd &> /dev/null
                echo
                if [[ "$configure_it" == [yY] ]]; then
 
+                  # 1111 is the JDBC
+                  # 8890 is the web app for it.
+                  # 
+                  # get at conductor from my own laptop:
+                  # ssh -L 8890:localhost:8890 -p 2245 -l jimmccusker aquarius.tw.rpi.edu
+                  #
+                  #                                                   ^ The machine that hosts the VM.
+                  #                                       ^ Your user name.
+                  #                               ^ The port on aquarius that my VM is on.
+                  #                       ^ The port on the VM that Virtuoso serves its SPARQL endpoint.
+                  #             ^ Your machine, e.g. your laptop.
+                  #       ^ The port on your machine that you connect to in order to get to the VM's Virtuoso SPARQL endpoint.
+                  # 
+                  # Now, load up http://localhost:8890/conductor in your laptop's web browser, and you're viewing the VM's service.
+
+                  echo
+                  echo $div
+                  # TODO: Ask for user name and passwrod, set into:
+                  #  ~= /srv/twc-healthdata/config/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh
+
+                  echo
+                  echo $div
+                  # TODO: if u/p is dba/dba, then tell them to change it and how.
+
+                  echo
+                  echo $div
                   target="/var/lib/virtuoso/db/virtuoso.ini"
                   data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/data/
                   already_set=`grep 'DirsAllowed' $target | grep -v $data_root`
@@ -867,21 +893,6 @@ pushd &> /dev/null
                      echo " `grep 'DirsAllowed' $target`"
                   fi
                   
-                  # 1111 is the JDBC
-                  # 8890 is the web app for it.
-                  # 
-                  # get at conductor from my own laptop:
-                  # ssh -L 8890:localhost:8890 -p 2245 -l jimmccusker aquarius.tw.rpi.edu
-                  #
-                  #                                                   ^ The machine that hosts the VM.
-                  #                                       ^ Your user name.
-                  #                               ^ The port on aquarius that my VM is on.
-                  #                       ^ The port on the VM that Virtuoso serves its SPARQL endpoint.
-                  #             ^ Your machine, e.g. your laptop.
-                  #       ^ The port on your machine that you connect to in order to get to the VM's Virtuoso SPARQL endpoint.
-                  # 
-                  # Now, load up http://localhost:8890/conductor in your laptop's web browser, and you're viewing the VM's service.
-
                   # add the apache map /sparql to 8890
 
 
@@ -903,7 +914,6 @@ pushd &> /dev/null
 
                   # We're trying to get to http://aquarius.tw.rpi.edu/projects/melagrid/sparql
 
-                  # Put credentials at ~= /srv/twc-healthdata/config/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh
                else
                   echo "Okay, we won't try to configure Prizms to load data into Virtuoso. Check out the following if you want to do it yourself:"
                   echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"

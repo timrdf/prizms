@@ -702,6 +702,13 @@ pushd &> /dev/null
                   'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_DATA_ROOT' \
                   'some loss'
 
+               # TODO: CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
+
+               # TODO: JENAROOT add to source-me-as-lebot/melagrid
+               # export JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc
+               # export PATH="${PATH}:/home/lebot/opt/apache-jena-2.7.4/bin" in your my-csv2rdf4lod-source-me.sh or .bashrc
+
+
 
                # AS DEVELOPER
                # 
@@ -784,6 +791,10 @@ pushd &> /dev/null
                      echo "We didn't touch your $target, so you'll need to make sure you set the paths correctly each time."
                   fi
                fi
+
+               # TODO: JENAROOT add to source-me-as-lebot/melagrid
+               # export JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc
+               # export PATH="${PATH}:/home/lebot/opt/apache-jena-2.7.4/bin" in your my-csv2rdf4lod-source-me.sh or .bashrc
 
                # End setting the environment variables for project, project user, and developer user.
 
@@ -872,9 +883,9 @@ pushd &> /dev/null
                echo
                $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.okay"
               
-               TODO=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO" | grep -v "pydistutils.cfg"`
-               if [ -n "$TODO" ]; then
-                  echo "todo${TODO}todo"
+               todo=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO" | grep -v "pydistutils.cfg"`
+               if [ -n "$todo" ]; then
+                  echo "todo${todo}todo"
                   echo
                   echo "However, the following do not seem to be installed:"
                   echo
@@ -1079,7 +1090,8 @@ pushd &> /dev/null
                   #
                   # We're trying to get to http://aquarius.tw.rpi.edu/projects/melagrid/sparql
 
-                  # TODO: set CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT (and the VIRTUOSO one?)
+                  # TODO: set CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT
+                  # TODO: set CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT 
 
                fi # end $virtuoso_install
 
@@ -1126,17 +1138,10 @@ pushd &> /dev/null
 
 
 
-               # TODO: Create csv2rdf4lod-source-me-on-melagrid.sh (machine)
-               # TODO WARNING: set JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc
-               # TODO WARNING: set PATH="${PATH}:/home/lebot/opt/apache-jena-2.7.4/bin" in your my-csv2rdf4lod-source-me.sh or .bashrc
-               # TODO: JENAROOT add to source-me-as-lebot/melagrid
 
                # TODO: implement "cr-review-vars.sh"
-               # TODO: CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA and CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID
-               # TODO: CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE
                # TODO: X_GOOGLE_MAPS_API_Key
                # TODO: set up the user-based install that does NOT require sudo. python's easy_install
-               # TODO: CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
 
          
    

@@ -929,6 +929,13 @@ pushd &> /dev/null
                      echo
                      echo "Once the tunnel it set up, you can load http://localhost:8890/conductor to access the VM's conductor."
                   fi
+                  echo
+                  echo "1) log in using the panel on the left."
+                  echo "2) 'System Admin' tab on the top."
+                  echo "3) 'User Accounts' tab on the top."
+                  echo "4) 'Edit' to the right of user 'dba'."
+                  echo "5) Set and confirm the new password, hit 'Save' at the bottom."
+                  echo
                   read -p "Q: Did you change the default password for Virtuoso user 'dba'? [y/n]" -u 1 changed
                   if [[ "$changed" != [yY] ]]; then
                      echo "Okay, we can proceed with a default password, but you should be worried about security issues in the future."

@@ -113,7 +113,38 @@ if [[ "$1" == "--our-source-id" ]]; then
    shift
 fi
 
-
+div="-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
+function change_source_me {
+   echo
+   echo $div
+   target="$1"    #"data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
+   ENVVAR="$2"    #'CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID'; 
+   new_value="$3" #"$our_source_id"
+   purpose="$4"   #"indicate the source identifier for all datasets that it creates on its own"
+   loss="$5"      #"in order for Prizms to create useful Linked Data URIs"
+   echo "Prizms uses the shell environment variable $ENVVAR to $purpose."
+   if [[ -n "$new_value" ]]; then
+      current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target`
+      if [ "$current" != "$new_value" ]; then
+         echo
+         echo "$ENVVAR is currently set to '$current' in $target"
+         read -p "Q: May we change $ENVVAR to $new_value in $target? [y/n] " -u 1 change_it
+         echo
+         if [[ "$change_it" == [yY] ]]; then
+            $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target --change-to $new_value
+            echo "Okay, we changed $target to:"
+            grep "export $ENVVAR=" $target | tail -1
+            added="$added $target"
+         else
+            echo "Okay, we won't change it. You'll need to change it later$loss."
+         fi
+      else
+         echo "($ENVVAR is already correctly set to $new_value in $target)"
+      fi
+   else
+      echo "WARNING: We can't set the $ENVVAR in $target because it is not given."
+   fi
+}
 
 
 echo
@@ -121,7 +152,6 @@ echo "Okay, let's install Prizms!"
 echo "   https://github.com/timrdf/prizms/wiki"
 echo "   https://github.com/timrdf/prizms/wiki/Installing-Prizms"
 
-div="-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
 if [[ -z "$project_user_name" ]]; then
    echo
    echo "First, we need to know about the current user `whoami`."
@@ -590,8 +620,9 @@ pushd &> /dev/null
                echo $div
                target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
                ENVVAR='CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID'; new_value="$our_source_id"
-               echo "Prizms uses the shell environment variable $ENVVAR to"
-               echo "indicate the source identifier for all datasets that it creates on its own."
+               purpose="indicate the source identifier for all datasets that it creates on its own"
+               loss="in order for Prizms to create useful Linked Data URIs"
+               echo "Prizms uses the shell environment variable $ENVVAR to $purpose."
                if [[ -n "$new_value" ]]; then
                   current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target`
                   if [ "$current" != "$new_value" ]; then
@@ -605,7 +636,7 @@ pushd &> /dev/null
                         grep "export $ENVVAR=" $target | tail -1
                         added="$added $target"
                      else
-                        echo "Okay, we won't change it. You'll need to change it in order for Prizms to create useful Linked Data URIs."
+                        echo "Okay, we won't change it. You'll need to change it later$loss."
                      fi
                   else
                      echo "($ENVVAR is already correctly set to $new_value in $target)"
@@ -613,6 +644,15 @@ pushd &> /dev/null
                else
                   echo "WARNING: We can't set the $ENVVAR in $target because it is not given."
                fi
+
+
+               #TODO: CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE="false" 
+
+               # 1) source-me.sh 2) CSV_ 3) new-value 4) 'purpose' 4) 'loss'
+               change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE true 'some purpose' 'some loss'
+
+               #TODO: CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_PTSW="false" 
+               # TODO: CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA
 
 
                # AS PROJECT

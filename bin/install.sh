@@ -755,7 +755,6 @@ pushd &> /dev/null
                   cat .`basename $0`.hosts
                   echo
                   echo "Changing the IP of localhost to the VM's IP should let Virtuoso start up correctly."
-                  echo
                   read -p "Q: May we make the change to $target?" -u 1 change_it
                   if [[ "$change_it" == [yY] ]]; then
                      echo sudo mv $target $target.prizms.bck

@@ -337,8 +337,28 @@ else
 fi
 
 
-# TODO: interview for our-source-id
-# TODO: interview for our-datahub-id
+# https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble
+echo
+echo $div
+echo "Prizms can automatically publish lodcloud-compliant metadata to the CKAN listing at http://datahub.io."
+echo "Enabling this feature allows your Linked Data to be included in the LOD Cloud Diagram."
+echo "See https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble"
+echo "    https://github.com/timrdf/DataFAQs/wiki/CKAN"
+echo "    http://richard.cyganiak.de/2007/10/lod/"
+if [ -z "$our_datahub_id" ]; then
+   echo
+   read -p "Q: What is the URI of this Prizms' dataset on datahub.io (leave blank if none)? http://datahub.io/dataset/" our_datahub_id
+   echo
+   if [ -n "$our_datahub_id" ]; then
+      echo "Okay, we'll publish lodcloud metadata to http://datahub.io/dataset/$our_datahub_id"
+      echo "and store '$our_datahub_id' in CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID"
+   else
+      echo "We won't be able to publish metadata about this installation of Prizms."
+   fi
+else
+   echo "(We'll use the base URI that you already indicated: $our_datahub_id)"
+fi
+
 
 
 echo

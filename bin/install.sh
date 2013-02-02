@@ -970,7 +970,7 @@ pushd &> /dev/null
                      echo "$source_me # $see ">> ~/.bashrc
                      echo
                      echo "Okay, we added it:"
-                     grep ".*source \`pwd\`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh.*" ~/.bashrc
+                     grep "$source_me" ~/.bashrc
                   else
                      echo "We didn't touch your ~/.bashrc, so you'll need to make sure you set the paths correctly each time."
                   fi

@@ -363,7 +363,7 @@ else
 fi
 echo "Your project's Linked Data base URI is:                    $our_base_uri"
 echo "Your project's source-id is:                               $our_source_id"
-echo "Your project's datahub.io dataset identifier is:           $our_dataset_id"
+echo "Your project's datahub.io URI is:                          http://datahub.io/dataset/$our_dataset_id"
 
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`

@@ -920,10 +920,32 @@ pushd &> /dev/null
                   echo
                   echo $div
                   credentials="/etc/prizms/$person_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh"
-                  echo TODO: Ask for user name and passwrod, set into $credentials
-                  #echo "CSV2RDF4LOD_PUBLISH_VIRTUOSO_PORT"
-                  echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME="  > $credentials
-                  echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD=" >> $credentials
+                  echo "Prizms stores Virtuoso credentials outside of version control, so that they are kept from the public." 
+                  if [[ ! -e $credentials ]]; then
+                     read -p "May we set up $credentials to maintain the Virtuoso credentials?" -u 1 do_it
+                     if [[ "$do_it" == [yY] ]]; then
+                        echo sudo mkdir -p `dirname $credentials`
+                             sudo mkdir -p `dirname $credentials`
+                        if [[ -e `dirname $credentials` ]]; then
+                           echo "Prizms uses CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME and CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD to"
+                           echo "authenticate to the Virtuoso database with the isql-v command."
+                           read -p "What is the Virtuoso database username (for isql-v)? (leave empty to default to 'dba') " vuser
+                           read -p "What is the Virtuoso database password (for isql-v)? (leave empty to default to 'dba') " vpw 
+                           if [[ -n "$vuser" ]]; then
+                              echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME='$vuser'" > $credentials
+                           fi
+                           if [[ -n "$vpw" ]]; then
+                              echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD='$vpw'"  >> $credentials
+                           fi
+                           #echo "CSV2RDF4LOD_PUBLISH_VIRTUOSO_PORT"
+                        else
+                           echo "ERROR: could not create `dirname $credentials`"
+                        fi
+                     else
+                        echo "Okay, we won't create $credentials. But we won't be able to use Virtuoso to load RDF data."
+                        echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
+                     fi
+                  fi
 
                   target="data/source/csv2rdf4lod-source-me-credentials.sh"
                   echo "source $credentials" >> $target

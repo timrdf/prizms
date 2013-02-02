@@ -858,8 +858,8 @@ pushd &> /dev/null
                   data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/data/
                   already_set=`grep 'DirsAllowed' $target | grep -v $data_root`
                   echo "Virtuoso can only access the directories that are specified in $target's"
-                  echo "'DirsAllowed' setting. If you have an RDF file in some *other* directory, the file may"
-                  echo "not load, or will take longer than it should to load."
+                  echo "'DirsAllowed' setting. If you have an RDF file in some *other* directory, the file will likely not load,"
+                  echo "or it could take more storage and time to load than it should."
 
                   if [[ -n "$already_set" ]]; then
 

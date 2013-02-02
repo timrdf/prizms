@@ -861,7 +861,6 @@ pushd &> /dev/null
                   echo "'DirsAllowed' setting. If you have an RDF file in some *other* directory, the file may"
                   echo "not load, or will take longer than it should to load."
 
-                  echo set${already_set}set
                   if [[ -n "$already_set" ]]; then
 
                      echo "'DirsAllowed' is currently set as:"
@@ -910,8 +909,7 @@ pushd &> /dev/null
                         echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
                      fi
                   else
-                     echo "($target already has $data_root included in its 'DirsAllowed' setting:)"
-                     echo " `grep 'DirsAllowed' $target`"
+                     echo "($target already has $data_root included in its 'DirsAllowed' setting.)"
                   fi
                   
                   # add the apache map /sparql to 8890

@@ -123,7 +123,8 @@ function change_source_me {
    purpose="$4"   #"indicate the source identifier for all datasets that it creates on its own"
    see="$5"
    loss="$6"      #"in order for Prizms to create useful Linked Data URIs"
-   echo "Prizms uses the shell environment variable $ENVVAR to $purpose."
+   echo "Prizms uses the shell environment variable $ENVVAR"
+   echo "to $purpose."
    for ref in $see; do
       echo "  see $see"
    done

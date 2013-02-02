@@ -652,7 +652,7 @@ pushd &> /dev/null
                #fi
 
                # 1) source-me.sh 2) CSV_ 3) new-value 4) 'purpose' 5) 'see' 6) 'loss'
-               change_source_me $target CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID true \
+               change_source_me $target CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID "$our_source_id" \
                   'indicate the source identifier for all datasets that it creates on its own' \
                   'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
                   'in order for Prizms to create useful Linked Data URIs'

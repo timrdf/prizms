@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install.sh> .
-#
+#3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install.sh>;
+#3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/Installing-Prizms> .
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo
@@ -471,7 +471,12 @@ pushd &> /dev/null
                      done
                   fi
                fi
-              
+             
+
+
+
+ 
+               # FOR PROJECT
                # 
                # Create the project-level environment variables, based on the template created by the csv2rdf4lod-automation installer.
                # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables
@@ -497,9 +502,8 @@ pushd &> /dev/null
                   fi
                fi
 
-
                #
-               # Set the CSV2RDF4LOD_BASE_URI in this user's source-me.sh
+               # Set CSV2RDF4LOD_BASE_URI in the project-level source-me.sh.
                #
                echo
                echo $div
@@ -529,11 +533,8 @@ pushd &> /dev/null
                   echo "WARNING: We can't set the $ENVVAR in $target because it is not given."
                fi
 
-
-
-
                #
-               # Change the CSV2RDF4LOD_CKAN_SOURCE env var to $upstream_ckan.
+               # Set CSV2RDF4LOD_CKAN_SOURCE (to $upstream_ckan) in the project-level source-me.sh.
                #
                if [[ "$upstream_ckan" == http* && -e "$target" ]]; then
                   echo
@@ -582,17 +583,15 @@ pushd &> /dev/null
                   fi # CSV2RDF4LOD_CKAN
                fi
 
-
-
                #
-               # Set CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID in $target
+               # Set CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID (to $our_source_id) in the project-level source-me.sh.
                #
                echo
                echo $div
+               target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
                ENVVAR='CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID'; new_value="$our_source_id"
                echo "Prizms uses the shell environment variable $ENVVAR to"
                echo "indicate the source identifier for all datasets that it creates on its own."
-               target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
                if [[ -n "$new_value" ]]; then
                   current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh $ENVVAR $target`
                   if [ "$current" != "$new_value" ]; then
@@ -616,8 +615,32 @@ pushd &> /dev/null
                fi
 
 
+               # AS PROJECT
+               #
+               # csv2rdf4lod-source-me-as-${project_user_name}.sh is *the* one and only source-me.sh that 
+               # the project name should source when initializing -- particular when from a cronjob.
+               # This is *the* only source-me.sh that should appear in the project user name's ~/.bashrc
+               #
+               # This is created by the developer -- NOT the project user -- and committed to version control.
+               template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
+               target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
+               if [[ ! -e $target ]]; then
+                  cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI='                 > $target
+                  echo "source `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
+                  echo "source `pwd`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
+                  # any others to source?
+
+                  # TODO: set CSV2RDF4LOD_CONVERT_DATA_ROOT (ONLY for project user name, OR? ONLY for machine?)
+
+                  added="$added $target"
+                  echo
+                  echo $div
+                  echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
+               fi
 
 
+
+               # AS DEVELOPER
                # 
                # Create a stub for the user-level environment variables, based on the template available from the csv2rdf4lod-automation.
                # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables-%28considerations-for-a-distributed-workflow%29
@@ -632,7 +655,6 @@ pushd &> /dev/null
                   echo $div
                   echo "There wasn't a source-me.sh for your user name in the data conversion root, so we created one for you at $target"
                fi
-
 
                #
                # Add PATH = PATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$person_user_name.sh
@@ -667,7 +689,6 @@ pushd &> /dev/null
                   fi
                fi
 
-
                #
                # Add CLASSPATH = CLASSPATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$person_user_name.sh
                #
@@ -701,13 +722,19 @@ pushd &> /dev/null
                   fi
                fi
 
+               # End setting the environment variables for project, project user, and developer user.
 
 
 
 
 
 
+               # Start installing dependencies.
 
+               #
+               # We need to check the /etc/hosts before we try to install Virtuoso as a dependency,
+               # otherwise dpkg will fail to build it when called by csv2rdf4lod-automation's install-dependencies.sh.
+               #
                echo
                echo $div
                echo "Virtuoso will have issues if it is on a virtual machine and /etc/hosts's localhost is 127.0.0.1 instead of the VM's IP."
@@ -772,13 +799,6 @@ pushd &> /dev/null
                   echo "(locahost's IP is $localhost_ip; Virtuoso should not have any issues.)"
                fi 
 
-
-
-
-
-
-
-
                #
                # Install third party utilities (mostly with apt-get and tarball installs).
                #
@@ -813,10 +833,6 @@ pushd &> /dev/null
 
 
 
-
-
-
-
                virtuoso_installed="no"
                if [[ -e '/var/lib/virtuoso/db/virtuoso.ini' && \
                      -e '/usr/bin/isql-v'                   && \
@@ -829,7 +845,7 @@ pushd &> /dev/null
                   # 1111 is Virtuoso's default port to access its "JDBC".
                   # 8890 is Virtuoso's default port for its web app admin interface.
                   # 
-                  # If Virtuoso is installed on a VM, get at it's Conductor webapp from your own laptop using something like:
+                  # If Virtuoso is installed on a VM, access it's Conductor webapp from your own laptop using something like:
                   #
                   # ssh -L 8890:localhost:8890 -p 2245 -l smithj aquarius.tw.rpi.edu
                   #
@@ -903,8 +919,15 @@ pushd &> /dev/null
 
                   echo
                   echo $div
-                  echo TODO: Ask for user name and passwrod, set into:
-                  #  ~= /srv/twc-healthdata/config/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh
+                  credentials="/etc/prizms/$person_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh"
+                  echo TODO: Ask for user name and passwrod, set into $credentials
+                  #echo "CSV2RDF4LOD_PUBLISH_VIRTUOSO_PORT"
+                  echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME="  > $credentials
+                  echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD=" >> $credentials
+
+                  target="data/source/csv2rdf4lod-source-me-credentials.sh"
+                  echo "source $credentials" >> $target
+                  target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
 
                   echo
                   echo $div
@@ -979,30 +1002,21 @@ pushd &> /dev/null
 
 
 
-               #
-               # csv2rdf4lod-source-me-as-${project_user_name}.sh is *the* one and only source-me.sh that 
-               # the project name should source when initializing -- particular when from a cronjob.
-               # This is *the* only source-me.sh that should appear in the project user name's ~/.bashrc
-               #
-               template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
-               target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
-               if [[ ! -e $target ]]; then
-                  cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI='                 > $target
-                  echo "source `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
-                  echo "source `pwd`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
-                  # TODO: create as-melagrid.sh to source the others.
-                  added="$added $target"
-                  echo
-                  echo $div
-                  echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
-               fi
-
-               # TODO: remove export CSV2RDF4LOD_HOME="/home/lebot/opt/prizms/repos/csv2rdf4lod-automation" from csv2rdf4lod-source-me-for-melagrid.sh
 
                # TODO: Create csv2rdf4lod-source-me-on-melagrid.sh (machine)
                # TODO WARNING: set JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc
                # TODO WARNING: set PATH="${PATH}:/home/lebot/opt/apache-jena-2.7.4/bin" in your my-csv2rdf4lod-source-me.sh or .bashrc
                # TODO: JENAROOT add to source-me-as-lebot/melagrid
+
+               # TODO: implement "cr-review-vars.sh"
+               # TODO: CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA and CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID
+               # TODO: CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE
+               # TODO: X_GOOGLE_MAPS_API_Key
+               # TODO: set up the user-based install that does NOT require sudo. python's easy_install
+               # TODO: CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
+
+         
+   
 
 
 
@@ -1069,6 +1083,11 @@ pushd &> /dev/null
                # NOTE: setting up the cron should be done on the project user name side, NOT on the person user name side.
 
 
+
+
+
+
+
                #
                # Add all new files to version control.
                #
@@ -1092,13 +1111,6 @@ pushd &> /dev/null
                      echo git push
                   fi
                fi
-
-               # TODO: implement "cr-review-vars.sh"
-               # TODO: CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA and CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID
-               # TODO: CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE
-               # TODO: X_GOOGLE_MAPS_API_Key
-               # TODO: set CSV2RDF4LOD_CONVERT_DATA_ROOT (ONLY for project user name)
-               # TODO: set up the user-based install that does NOT require sudo. python's easy_install
 
             popd &> /dev/null
          fi # if $target_dir e.g. /home/lebot/prizms/melagrid

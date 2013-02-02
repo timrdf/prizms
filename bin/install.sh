@@ -657,12 +657,18 @@ pushd &> /dev/null
                   'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
                   'some loss'
 
-               change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_PTSW false \
-                  'determine if it should announce each newly converted dataset to http://sindice.com/main/submit' \
-                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
+               #change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_PTSW false \
+               #   'determine if it should announce each newly converted dataset to http://sindice.com/main/submit' \
+               #   'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
+               #   'some loss'
+
+               change_source_me $target CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA true \
+                  'determine if it should update its datahub.io CKAN listing for the http://datahub.io/group/lodcloud group' \
+                  'https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble' \
                   'some loss'
 
                # TODO: CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA
+               # TODO: CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID
 
 
                # AS PROJECT

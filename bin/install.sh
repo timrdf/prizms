@@ -129,7 +129,7 @@ function change_source_me {
       echo "  see $see"
    done
    if [[ -n "$new_value" ]]; then
-      current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target`
+      current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target | awk '{print $1}'`
       if [ "$current" != "$new_value" ]; then
          echo
          echo "$ENVVAR is currently set to '$current' in $target"

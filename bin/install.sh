@@ -971,10 +971,22 @@ pushd &> /dev/null
                         echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
                      fi
                   fi
+                  if [[ -e $credentials ]]; then
+                     target="data/source/csv2rdf4lod-source-me-credentials.sh"
+                     echo "$target is a public version controlled script that points to all credentials required for the project."
+                     already_there=`grep $credentials $target`
+                     if [[ -z $already_there ]]; then
+                        echo
+                        read -p "Add 'source $credentials' to $target? [y/n]" -u 1 add_it
+                        echo "source $credentials" >> $target
+                        echo "Added."
+                        added="$added $target"
+                     else
+                        echo "($target already includes $credentials)"
+                     fi
+                  fi
 
-                  target="data/source/csv2rdf4lod-source-me-credentials.sh"
-                  echo "source $credentials" >> $target
-                  target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
+                  #target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
 
                   echo
                   echo $div

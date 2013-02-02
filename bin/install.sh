@@ -651,16 +651,17 @@ pushd &> /dev/null
                   echo "WARNING: We can't set the $ENVVAR in $target because it is not given."
                fi
 
-
-               #TODO: CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE="false" 
-
-               # 1) source-me.sh 2) CSV_ 3) new-value 4) 'purpose' 4) 'loss'
+               # 1) source-me.sh 2) CSV_ 3) new-value 4) 'purpose' 5) 'see' 6) 'loss'
                change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE true \
                   'determine if it should announce each newly converted dataset to http://sindice.com/main/submit' \
                   'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
                   'some loss'
 
-               #TODO: CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_PTSW="false" 
+               change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_PTSW false \
+                  'determine if it should announce each newly converted dataset to http://sindice.com/main/submit' \
+                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
+                  'some loss'
+
                # TODO: CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA
 
 

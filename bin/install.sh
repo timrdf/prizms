@@ -541,33 +541,38 @@ pushd &> /dev/null
                #
                # Set CSV2RDF4LOD_BASE_URI in the project-level source-me.sh.
                #
-               echo
-               echo $div
-               ENVVAR='CSV2RDF4LOD_BASE_URI'; new_value="$our_base_uri"
-               echo "Prizms uses the shell environment variable $ENVVAR to"
-               echo "indicate the Linked Data base URI to use for all datasets that it creates."
-               target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
-               if [[ -n "$new_value" && "$new_value" == http* ]]; then
-                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target`
-                  if [ "$current" != "$new_value" ]; then
-                     echo
-                     echo "$ENVVAR is currently set to '$current' in $target"
-                     read -p "Q: May we change $ENVVAR to $new_value in $target? [y/n] " -u 1 change_it
-                     echo
-                     if [[ "$change_it" == [yY] ]]; then
-                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target --change-to $new_value
-                        echo "Okay, we changed $target to:"
-                        grep "export $ENVVAR=" $target | tail -1
-                        added="$added $target"
-                     else
-                        echo "Okay, we won't change it. You'll need to change it in order for Prizms to create useful Linked Data URIs."
-                     fi
-                  else
-                     echo "($ENVVAR is already correctly set to $new_value in $target)"
-                  fi
-               else
-                  echo "WARNING: We can't set the $ENVVAR in $target because it is not given."
-               fi
+               #echo
+               #echo $div
+               #ENVVAR='CSV2RDF4LOD_BASE_URI'; new_value="$our_base_uri"
+               #echo "Prizms uses the shell environment variable $ENVVAR to"
+               #echo "indicate the Linked Data base URI to use for all datasets that it creates."
+               #target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
+               #if [[ -n "$new_value" && "$new_value" == http* ]]; then
+               #   current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target`
+               #   if [ "$current" != "$new_value" ]; then
+               #      echo
+               #      echo "$ENVVAR is currently set to '$current' in $target"
+               #      read -p "Q: May we change $ENVVAR to $new_value in $target? [y/n] " -u 1 change_it
+               #      echo
+               #      if [[ "$change_it" == [yY] ]]; then
+               #         $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target --change-to $new_value
+               #         echo "Okay, we changed $target to:"
+               #         grep "export $ENVVAR=" $target | tail -1
+               #         added="$added $target"
+               #      else
+               #         echo "Okay, we won't change it. You'll need to change it in order for Prizms to create useful Linked Data URIs."
+               #      fi
+               #   else
+               #      echo "($ENVVAR is already correctly set to $new_value in $target)"
+               #   fi
+               #else
+               #   echo "WARNING: We can't set the $ENVVAR in $target because it is not given."
+               #fi
+
+               change_source_me $target CSV2RDF4LOD_BASE_URI "$our_base_uri" \
+                  'indicate the Linked Data base URI to use for all datasets that it creates' \
+                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name' \
+                  'some loss'
 
                #
                # Set CSV2RDF4LOD_CKAN_SOURCE (to $upstream_ckan) in the project-level source-me.sh.
@@ -622,34 +627,6 @@ pushd &> /dev/null
                #
                # Set CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID (to $our_source_id) in the project-level source-me.sh.
                #
-               #echo
-               #echo $div
-               #target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
-               #ENVVAR='CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID'; new_value="$our_source_id"
-               #purpose="indicate the source identifier for all datasets that it creates on its own"
-               #loss="in order for Prizms to create useful Linked Data URIs"
-               #echo "Prizms uses the shell environment variable $ENVVAR to $purpose."
-               #if [[ -n "$new_value" ]]; then
-               #   current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target`
-               #   if [ "$current" != "$new_value" ]; then
-               #      echo
-               #      echo "$ENVVAR is currently set to '$current' in $target"
-               #      read -p "Q: May we change $ENVVAR to $new_value in $target? [y/n] " -u 1 change_it
-               #      echo
-               #      if [[ "$change_it" == [yY] ]]; then
-               #         $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target --change-to $new_value
-               #         echo "Okay, we changed $target to:"
-               #         grep "export $ENVVAR=" $target | tail -1
-               #         added="$added $target"
-               #      else
-               #         echo "Okay, we won't change it. You'll need to change it later$loss."
-               #      fi
-               #   else
-               #      echo "($ENVVAR is already correctly set to $new_value in $target)"
-               #   fi
-               #else
-               #   echo "WARNING: We can't set the $ENVVAR in $target because it is not given."
-               #fi
 
                # 1) source-me.sh 2) CSV_ 3) new-value 4) 'purpose' 5) 'see' 6) 'loss'
                change_source_me $target CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID "$our_source_id" \

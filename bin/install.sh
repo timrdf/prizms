@@ -753,7 +753,9 @@ pushd &> /dev/null
                   cat $target | awk -v ip=$vm_ip '{if($2=="localhost"){print ip,"localhost"}else{print}}' > .`basename $0`.hosts
                   cat .`basename $0`.hosts
                   echo
-                  read -p "May we make the change to $target?" -u -1 change_it
+                  echo "Changing the IP of localhost to the VM's IP should let Virtuoso start up correctly."
+                  echo
+                  read -p "Q: May we make the change to $target?" -u 1 change_it
                   if [[ "$change_it" == [yY] ]]; then
                      echo sudo mv $target $target.prizms.bck
                           sudo mv $target $target.prizms.bck

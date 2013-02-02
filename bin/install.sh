@@ -920,55 +920,60 @@ pushd &> /dev/null
                   echo
                   echo $div
                   credentials="/etc/prizms/$person_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh"
-                  echo "If you just installed Virtuoso, and haven't changed the default password for the user 'dba',"
-                  echo "you should do that now at http://localhost:8890/conductor."
-                  if [[ -n "$vm_ip" ]]; then
-                     echo "If you installed Virtuoso on a VM, you can access it through an SSN tunnel with something like:"
-                     echo
-                     echo "   ssh -L 8890:localhost:8890 -p 2245 -l smithj aquarius.tw.rpi.edu"
-                     echo
-                     echo "Once the tunnel it set up, you can load http://localhost:8890/conductor to access the VM's conductor."
+                  if [[ -e $credentials ]]; then
+                     vpw=`cr-value-of.sh 'CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD' $credentials`
                   fi
-                  echo
-                  echo "1) Log in using the panel on the left."
-                  echo "2) Click 'System Admin' tab on the top."
-                  echo "3) Click 'User Accounts' tab on the top."
-                  echo "4) Click 'Edit' to the right of user 'dba'."
-                  echo "5) Set and confirm the new password, and hit 'Save' at the bottom."
-                  echo
-                  read -p "Q: Did you change the default password for Virtuoso user 'dba'? [y/n] " -u 1 changed
-                  if [[ "$changed" != [yY] ]]; then
-                     echo "Okay, we can proceed with a default password, but you should be worried about security issues in the future."
-                  fi
-                  echo
-                  echo "Prizms stores Virtuoso credentials outside of version control, so that they are kept from the public." 
-                  if [[ ! -e $credentials ]]; then
+                  if [[ -z "$vpw" ]]; then
+                     echo "If you just installed Virtuoso, and haven't changed the default password for the user 'dba',"
+                     echo "you should do that now at http://localhost:8890/conductor."
+                     if [[ -n "$vm_ip" ]]; then
+                        echo "If you installed Virtuoso on a VM, you can access it through an SSN tunnel with something like:"
+                        echo
+                        echo "   ssh -L 8890:localhost:8890 -p 2245 -l smithj aquarius.tw.rpi.edu"
+                        echo
+                        echo "Once the tunnel it set up, you can load http://localhost:8890/conductor to access the VM's conductor."
+                     fi
                      echo
-                     read -p "Q: May we set up $credentials to maintain the Virtuoso credentials? [y/n] " -u 1 do_it
-                     if [[ "$do_it" == [yY] ]]; then
-                        echo sudo mkdir -p `dirname $credentials`
-                             sudo mkdir -p `dirname $credentials`
-                        if [[ -e `dirname $credentials` ]]; then
-                           echo
-                           echo "Prizms uses CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME and CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD to"
-                           echo "authenticate to the Virtuoso database with the isql-v command."
-                           echo
-                           read -p "Q: What is the Virtuoso database username (for isql-v)? (leave empty to default to 'dba') " vuser
-                           read -p "Q: What is the Virtuoso database password (for isql-v)? (leave empty to default to 'dba') " vpw 
-                           echo
-                           if [[ -n "$vuser" ]]; then
-                              echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME='$vuser'" | sudo tee $credentials
+                     echo "1) Log in using the panel on the left."
+                     echo "2) Click 'System Admin' tab on the top."
+                     echo "3) Click 'User Accounts' tab on the top."
+                     echo "4) Click 'Edit' to the right of user 'dba'."
+                     echo "5) Set and confirm the new password, and hit 'Save' at the bottom."
+                     echo
+                     read -p "Q: Did you change the default password for Virtuoso user 'dba'? [y/n] " -u 1 changed
+                     if [[ "$changed" != [yY] ]]; then
+                        echo "Okay, we can proceed with a default password, but you should be worried about security issues in the future."
+                     fi
+                     echo
+                     echo "Prizms stores Virtuoso credentials outside of version control, so that they are kept from the public." 
+                     if [[ ! -e $credentials ]]; then
+                        echo
+                        read -p "Q: May we set up $credentials to maintain the Virtuoso credentials? [y/n] " -u 1 do_it
+                        if [[ "$do_it" == [yY] ]]; then
+                           echo sudo mkdir -p `dirname $credentials`
+                                sudo mkdir -p `dirname $credentials`
+                           if [[ -e `dirname $credentials` ]]; then
+                              echo
+                              echo "Prizms uses CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME and CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD to"
+                              echo "authenticate to the Virtuoso database with the isql-v command."
+                              echo
+                              read -p "Q: What is the Virtuoso database username (for isql-v)? (leave empty to default to 'dba') " vuser
+                              read -p "Q: What is the Virtuoso database password (for isql-v)? (leave empty to default to 'dba') " vpw 
+                              echo
+                              if [[ -n "$vuser" ]]; then
+                                 echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME='$vuser'" | sudo tee $credentials
+                              fi
+                              if [[ -n "$vpw" ]]; then
+                                 echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD='$vpw'"   | sudo tee -a $credentials
+                              fi
+                              #echo "CSV2RDF4LOD_PUBLISH_VIRTUOSO_PORT"
+                           else
+                              echo "ERROR: could not create `dirname $credentials`"
                            fi
-                           if [[ -n "$vpw" ]]; then
-                              echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD='$vpw'"   | sudo tee -a $credentials
-                           fi
-                           #echo "CSV2RDF4LOD_PUBLISH_VIRTUOSO_PORT"
                         else
-                           echo "ERROR: could not create `dirname $credentials`"
+                           echo "Okay, we won't create $credentials. But we won't be able to use Virtuoso to load RDF data."
+                           echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
                         fi
-                     else
-                        echo "Okay, we won't create $credentials. But we won't be able to use Virtuoso to load RDF data."
-                        echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
                      fi
                   fi
                   if [[ -e $credentials ]]; then
@@ -977,7 +982,7 @@ pushd &> /dev/null
                      already_there=`grep $credentials $target`
                      if [[ -z $already_there ]]; then
                         echo
-                        read -p "Add 'source $credentials' to $target? [y/n]" -u 1 add_it
+                        read -p "Add 'source $credentials' to $target? [y/n] " -u 1 add_it
                         echo "source $credentials" >> $target
                         echo "Added."
                         added="$added $target"

@@ -936,13 +936,14 @@ pushd &> /dev/null
                   echo "4) 'Edit' to the right of user 'dba'."
                   echo "5) Set and confirm the new password, hit 'Save' at the bottom."
                   echo
-                  read -p "Q: Did you change the default password for Virtuoso user 'dba'? [y/n]" -u 1 changed
+                  read -p "Q: Did you change the default password for Virtuoso user 'dba'? [y/n] " -u 1 changed
                   if [[ "$changed" != [yY] ]]; then
                      echo "Okay, we can proceed with a default password, but you should be worried about security issues in the future."
                   fi
                   echo
                   echo "Prizms stores Virtuoso credentials outside of version control, so that they are kept from the public." 
                   if [[ ! -e $credentials ]]; then
+                     echo
                      read -p "Q: May we set up $credentials to maintain the Virtuoso credentials? [y/n]" -u 1 do_it
                      if [[ "$do_it" == [yY] ]]; then
                         echo sudo mkdir -p `dirname $credentials`

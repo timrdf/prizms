@@ -704,9 +704,10 @@ pushd &> /dev/null
 
                # TODO: CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
 
-               # TODO: JENAROOT add to source-me-as-lebot/melagrid
-               # export JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc
-               # export PATH="${PATH}:/home/lebot/opt/apache-jena-2.7.4/bin" in your my-csv2rdf4lod-source-me.sh or .bashrc
+               # TODO: JENAROOT add to source-me-as-melagrid
+               # export JENAROOT=/home/lebot/opt/apache-jena-2.7.4
+               # export PATH="${PATH}:/home/lebot/opt/apache-jena-2.7.4/bin"
+               # Is there a way to get this fro free from the prizms situate class (by it checking to see if ../opt is there?)
 
 
 
@@ -792,7 +793,7 @@ pushd &> /dev/null
                   fi
                fi
 
-               # TODO: JENAROOT add to source-me-as-lebot/melagrid
+               # TODO: JENAROOT add to source-me-as-lebot
                # export JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc
                # export PATH="${PATH}:/home/lebot/opt/apache-jena-2.7.4/bin" in your my-csv2rdf4lod-source-me.sh or .bashrc
 
@@ -882,6 +883,7 @@ pushd &> /dev/null
                echo "The following utilities seem to already be installed okay:"
                echo
                $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.okay"
+               # TODO: set up the user-based install that does NOT require sudo. python's easy_install
               
                todo=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO" | grep -v "pydistutils.cfg"`
                if [ -n "$todo" ]; then
@@ -1065,7 +1067,9 @@ pushd &> /dev/null
                      fi
                   fi
 
-                  #target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
+                  # TODO: X_GOOGLE_MAPS_API_Key
+                  credentials="/etc/prizms/$person_user_name/??triple-store??/google/csv2rdf4lod-source-me-for-googlemap-credentials.sh"
+
 
                   echo
                   echo $div
@@ -1139,9 +1143,6 @@ pushd &> /dev/null
 
 
 
-               # TODO: implement "cr-review-vars.sh"
-               # TODO: X_GOOGLE_MAPS_API_Key
-               # TODO: set up the user-based install that does NOT require sudo. python's easy_install
 
          
    

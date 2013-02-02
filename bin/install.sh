@@ -440,6 +440,7 @@ if [ "$vcs" == "svn" ]; then
 fi
 pushd &> /dev/null
    cd
+   user_home=`pwd`
    echo "Now let's install your development copy of the $project_user_name Prizms."
    echo "(If you already have a working copy there, we'll update it.)"
    echo
@@ -635,9 +636,7 @@ pushd &> /dev/null
                   fi # CSV2RDF4LOD_CKAN
                fi
 
-               #
                # Set CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID (to $our_source_id) in the project-level source-me.sh.
-               #
                change_source_me $target CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID "$our_source_id" \
                   'indicate the source identifier for all datasets that it creates on its own' \
                   'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets' \
@@ -663,7 +662,17 @@ pushd &> /dev/null
                   'https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble' \
                   'some loss'
 
-               # TODO: CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID
+
+               # ON MACHINE
+               #
+               template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-on-yyy.sh"
+               target="data/source/csv2rdf4lod-source-me-on-$project_user_name.sh"
+               if [[ ! -e $target ]]; then
+                  added="$added $target"
+                  echo
+                  echo $div
+                  echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
+               fi
 
 
                # AS PROJECT
@@ -680,15 +689,17 @@ pushd &> /dev/null
                   echo "source `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
                   echo "source `pwd`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
                   # any others to source?
-
-                  # TODO: set CSV2RDF4LOD_CONVERT_DATA_ROOT (ONLY for project user name, OR? ONLY for machine?)
-
+                  echo "export CSV2RDF4LOD_CONVERT_DATA_ROOT=''"                                  >> $target
                   added="$added $target"
                   echo
                   echo $div
                   echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
                fi
-
+               project_data_root="${user_home%/*}/$project_user_name/prizms/data/source"
+               change_source_me $target CSV2RDF4LOD_CONVERT_DATA_ROOT "$project_data_root" \
+                  "indicate the production data directory, from which /var/www and the production SPARQL endpoints are loaded" \
+                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_DATA_ROOT' \
+                  'some loss'
 
 
                # AS DEVELOPER

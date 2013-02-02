@@ -844,15 +844,6 @@ pushd &> /dev/null
 
                   echo
                   echo $div
-                  echo TODO: Ask for user name and passwrod, set into:
-                  #  ~= /srv/twc-healthdata/config/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh
-
-                  echo
-                  echo $div
-                  echo TODO: if u/p is dba/dba, then tell them to change it and how.
-
-                  echo
-                  echo $div
                   target="/var/lib/virtuoso/db/virtuoso.ini"
                   data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/data/
                   already_set=`grep 'DirsAllowed' $target | grep -v $data_root`
@@ -909,16 +900,20 @@ pushd &> /dev/null
                   else
                      echo "($target already has $data_root included in its 'DirsAllowed' setting.)"
                   fi
-                  
-                  #else
-                  #   echo "Okay, we won't try to configure Prizms to load data into Virtuoso. Check out the following if you want to do it yourself:"
-                  #   echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
-                  #   echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
-                  #fi
 
-                  # add the apache map /sparql to 8890
+                  echo
+                  echo $div
+                  echo TODO: Ask for user name and passwrod, set into:
+                  #  ~= /srv/twc-healthdata/config/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh
 
-                  # TODO: add to /etc/apache2/sites-available/std.common
+                  echo
+                  echo $div
+                  echo TODO: if u/p is dba/dba, then tell them to change it and how.
+
+                  echo
+                  echo $div
+                  echo TODO add the apache map /sparql to 8890
+                  # add to /etc/apache2/sites-available/std.common
                   # See mapping into apache at https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
                   #
                   #  <Location /sparql>
@@ -935,8 +930,10 @@ pushd &> /dev/null
                   #
                   # a2enmod ??
                   # service apache2 restart
-
+                  #
                   # We're trying to get to http://aquarius.tw.rpi.edu/projects/melagrid/sparql
+
+                  # TODO: set CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT (and the VIRTUOSO one?)
 
                fi # end $virtuoso_install
 
@@ -968,8 +965,9 @@ pushd &> /dev/null
                   echo "Add this command to your ~/.bashrc? [y/n]"
                   read -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
-                     echo            >> ~/.bashrc
-                     echo $source_me >> ~/.bashrc
+                     see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/Script:-source-me.sh"
+                     echo                     >> ~/.bashrc
+                     echo "$source_me # $see ">> ~/.bashrc
                      echo
                      echo "Okay, we added it:"
                      grep ".*source \`pwd\`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh.*" ~/.bashrc
@@ -1003,6 +1001,7 @@ pushd &> /dev/null
                # TODO: Create csv2rdf4lod-source-me-on-melagrid.sh (machine)
                # TODO WARNING: set JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc
                # TODO WARNING: set PATH="${PATH}:/home/lebot/opt/apache-jena-2.7.4/bin" in your my-csv2rdf4lod-source-me.sh or .bashrc
+               # TODO: JENAROOT add to source-me-as-lebot/melagrid
 
 
 
@@ -1094,15 +1093,11 @@ pushd &> /dev/null
                fi
 
                # TODO: implement "cr-review-vars.sh"
-               # TODO: set CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT (and install one...)
                # TODO: CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA and CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID
                # TODO: CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE
                # TODO: X_GOOGLE_MAPS_API_Key
                # TODO: set CSV2RDF4LOD_CONVERT_DATA_ROOT (ONLY for project user name)
-               # TODO: install csv2rdf4lod-dependencies.
-               # TODO: JENAROOT add to source-me-as-lebot/melagrid
                # TODO: set up the user-based install that does NOT require sudo. python's easy_install
-               # TODO: 5 more -n in install-csv2rdf4lod-depends
 
             popd &> /dev/null
          fi # if $target_dir e.g. /home/lebot/prizms/melagrid

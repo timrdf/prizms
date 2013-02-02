@@ -7,27 +7,32 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo
    echo "usage: `basename $0` [--me <your-URI>] [--my-email <your-email>] [--proj-user <user>] [--repos <code-repo>] "
    echo "                  [--upstream-ckan <ckan>] [--our-base-uri <uri>] [--our-source-id <source-id>]"
+   echo "                  [--our-datahub-id]"
    echo
    echo "This script will determine and use the following parameters to install an instance of Prizms:"
    echo
-   echo " --me            | [optional] the project developer's  URI                              (e.g. http://jsmith.me/foaf#me)"
+   echo " --me             | [optional] the project developer's  URI                              (e.g. http://jsmith.me/foaf#me)"
    echo
-   echo " --my-email      |            the project developer's  email address                    (e.g. me@jsmith.me)"
-   echo "                 : the project developer's (i.e. your) user name (determined by whoami) (e.g. jsmith)"
-   echo "                 : ^- this user will need sudo privileges."
+   echo " --my-email       |            the project developer's  email address                    (e.g. me@jsmith.me)"
+   echo "                  : the project developer's (i.e. your) user name (determined by whoami) (e.g. jsmith)"
+   echo "                  : ^- this user will need sudo privileges."
    echo
-   echo " --proj-user     | the project's                       user name                        (e.g. melagrid)"
+   echo " --proj-user      | the project's                       user name                        (e.g. melagrid)"
    echo
-   echo " --repos         | the project's code repository                                        (e.g. git@github.com:jimmccusker/melagrid.git)"
+   echo " --repos          | the project's code repository                                        (e.g. git@github.com:jimmccusker/melagrid.git)"
    echo
-   echo " --upstream-ckan | [optional] the URL of a CKAN from which to pull dataset listings     (e.g. http://data.melagrid.org)"
-   echo "                 : see https://github.com/jimmccusker/twc-healthdata/wiki/Retrieving-CKAN%27s-Dataset-Distribution-Files"
+   echo " --upstream-ckan  | [optional] the URL of a CKAN from which to pull dataset listings     (e.g. http://data.melagrid.org)"
+   echo "                  : see https://github.com/jimmccusker/twc-healthdata/wiki/Retrieving-CKAN%27s-Dataset-Distribution-Files"
    echo
-   echo " --our-base-uri  | the HTTP namespace for all datasets in the Prizms that we are making (e.g. http://lod.melagrid.org)"
-   echo "                 : see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase%3A-name"
+   echo " --our-base-uri   | the HTTP namespace for all datasets in the Prizms that we are making (e.g. http://lod.melagrid.org)"
+   echo "                  : see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase%3A-name"
    echo
-   echo " --our-source-id | the identifier for *us* as an organization that produces datasets.   (e.g. melagrid-org)"
-   echo "                 : see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase%3A-name"
+   echo " --our-source-id  | the identifier for *us* as an organization that produces datasets.   (e.g. melagrid-org)"
+   echo "                  : see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase%3A-name"
+   echo
+   echo " --our-datahub-id | datahub.io's CKAN identifier for this dataset.                       (e.g. melagrid)"
+   echo "                  : This id is for use within the namespace http://datahub.io/dataset/<our-datahub-id>."
+   echo "                  : see https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble"
    echo
    echo "If the required parameters are not known, the script will ask for them interactively before installing anything."
    echo "The installer will ask permission before performing each install step, so that you know what it's doing."
@@ -108,6 +113,16 @@ our_source_id=""
 if [[ "$1" == "--our-source-id" ]]; then
    if [[ "$2" != --* ]]; then
       our_source_id="$2"
+      shift
+   fi
+   shift
+fi
+
+#
+our_datahub_id=""
+if [[ "$1" == "--our-datahub-id" ]]; then
+   if [[ "$2" != --* ]]; then
+      our_datahub_id="$2"
       shift
    fi
    shift
@@ -322,6 +337,9 @@ else
 fi
 
 
+# TODO: interview for our-source-id
+# TODO: interview for our-datahub-id
+
 
 echo
 echo $div
@@ -345,6 +363,7 @@ else
 fi
 echo "Your project's Linked Data base URI is:                    $our_base_uri"
 echo "Your project's source-id is:                               $our_source_id"
+echo "Your project's datahub.io dataset identifier is:           $our_dataset_id"
 
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
@@ -541,34 +560,6 @@ pushd &> /dev/null
                #
                # Set CSV2RDF4LOD_BASE_URI in the project-level source-me.sh.
                #
-               #echo
-               #echo $div
-               #ENVVAR='CSV2RDF4LOD_BASE_URI'; new_value="$our_base_uri"
-               #echo "Prizms uses the shell environment variable $ENVVAR to"
-               #echo "indicate the Linked Data base URI to use for all datasets that it creates."
-               #target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
-               #if [[ -n "$new_value" && "$new_value" == http* ]]; then
-               #   current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target`
-               #   if [ "$current" != "$new_value" ]; then
-               #      echo
-               #      echo "$ENVVAR is currently set to '$current' in $target"
-               #      read -p "Q: May we change $ENVVAR to $new_value in $target? [y/n] " -u 1 change_it
-               #      echo
-               #      if [[ "$change_it" == [yY] ]]; then
-               #         $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target --change-to $new_value
-               #         echo "Okay, we changed $target to:"
-               #         grep "export $ENVVAR=" $target | tail -1
-               #         added="$added $target"
-               #      else
-               #         echo "Okay, we won't change it. You'll need to change it in order for Prizms to create useful Linked Data URIs."
-               #      fi
-               #   else
-               #      echo "($ENVVAR is already correctly set to $new_value in $target)"
-               #   fi
-               #else
-               #   echo "WARNING: We can't set the $ENVVAR in $target because it is not given."
-               #fi
-
                change_source_me $target CSV2RDF4LOD_BASE_URI "$our_base_uri" \
                   'indicate the Linked Data base URI to use for all datasets that it creates' \
                   'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name' \
@@ -627,8 +618,6 @@ pushd &> /dev/null
                #
                # Set CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID (to $our_source_id) in the project-level source-me.sh.
                #
-
-               # 1) source-me.sh 2) CSV_ 3) new-value 4) 'purpose' 5) 'see' 6) 'loss'
                change_source_me $target CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID "$our_source_id" \
                   'indicate the source identifier for all datasets that it creates on its own' \
                   'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets' \

@@ -121,8 +121,12 @@ function change_source_me {
    ENVVAR="$2"    #'CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID'; 
    new_value="$3" #"$our_source_id"
    purpose="$4"   #"indicate the source identifier for all datasets that it creates on its own"
-   loss="$5"      #"in order for Prizms to create useful Linked Data URIs"
+   see="$5"
+   loss="$6"      #"in order for Prizms to create useful Linked Data URIs"
    echo "Prizms uses the shell environment variable $ENVVAR to $purpose."
+   for ref in $see; do
+      echo "  see $see"
+   done
    if [[ -n "$new_value" ]]; then
       current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target`
       if [ "$current" != "$new_value" ]; then
@@ -650,7 +654,8 @@ pushd &> /dev/null
 
                # 1) source-me.sh 2) CSV_ 3) new-value 4) 'purpose' 4) 'loss'
                change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE true \
-                  'Determine if it should announce each newly converted dataset to http://sindice.com/main/submit' \
+                  'determine if it should announce each newly converted dataset to http://sindice.com/main/submit' \
+                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
                   'some loss'
 
                #TODO: CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_PTSW="false" 

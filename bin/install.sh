@@ -356,7 +356,6 @@ echo "If they're already there, we'll just update them from the latest on github
 $PRIZMS_HOME/bin/install/prizms-dependency-repos.sh
 
 
-echo
 echo $div
 clone='clone'
 pull='pull'

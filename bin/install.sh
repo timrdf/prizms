@@ -668,10 +668,11 @@ pushd &> /dev/null
                template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-on-yyy.sh"
                target="data/source/csv2rdf4lod-source-me-on-$project_user_name.sh"
                if [[ ! -e $target ]]; then
+                  cp $template $target
                   added="$added $target"
                   echo
                   echo $div
-                  echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
+                  echo "There wasn't a source-me.sh for your machine in the data conversion root, so we created one for you at $target"
                fi
 
 

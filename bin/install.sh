@@ -711,7 +711,7 @@ pushd &> /dev/null
 
                echo
                echo $div
-               echo "Virtuoso will have issues if it is on a virtual machine and its localhost is 127.0.0.1 instead of the VM's IP."
+               echo "Virtuoso will have issues if it is on a virtual machine and /etc/hosts localhost is 127.0.0.1 instead of the VM's IP."
                # Hack for our pseudo-VMs. This needs to be done before installing virtuoso with install-csv2rdf4lod-dependencies.sh
                #
                # vi /etc/hosts
@@ -740,11 +740,30 @@ pushd &> /dev/null
                #  virtuoso-opensource
                # 
                # cannot:
-               at_rpi=`grep "tw.rpi.edu" /etc/hosts`
-               vm_ip=`grep "tw.rpi.edu" /etc/hosts | awk '{print $1}'`
-               localhost_ip=`cat /etc/hosts | awk '$2=="localhost"{print $1}'`
-               if [[ -n "$at_rpi" && "$localhost_ip" == "127.0.0.1" ]]; then
-                  echo "TODO: change"
+               target=/etc/hosts
+               localhost_ip=`cat $target | awk '$2=="localhost"{print $1}'`
+               vm_ip=`grep "tw.rpi.edu" $target | awk '{print $1}'`
+               if [[ -n "$vm_ip" && "$localhost_ip" == "127.0.0.1" ]]; then
+                  echo "$target is currently:"
+                  echo
+                  cat $target
+                  echo
+                  echo "We'd like to change the IP of 'localhost' to $vm_pi, resulting in a $target of:"
+                  cat $target | awk -v ip=$vm_ip '{if($2=="localhost"){print ip,"localhost"}else{print}}' > .`basename $0`.hosts
+                  cat .`basename $0`.hosts
+                  echo
+                  read -p "May we make the change to $target?" -u -1 change_it
+                  if [[ "$change_it" == [yY] ]]; then
+                     echo sudo mv $target $target.prizms.bck
+                          sudo mv $target $target.prizms.bck
+                     echo sudo mv .`basename $0`.hosts $target
+                          sudo mv .`basename $0`.hosts $target
+                     echo
+                     echo "We changed $target; it is now:"
+                     cat $target
+                  else
+                     echo "Okay, we won't change $target. But if you try to install Virtuoso and this is a virtual machine, you'll run into issues."
+                  fi
                else
                   echo "(locahost's IP is $localhost_ip; Virtuoso should not have any issues.)"
                fi 

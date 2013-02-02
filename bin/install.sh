@@ -490,7 +490,7 @@ pushd &> /dev/null
                   echo
                   read -p "May we add the environment variables to `pwd`/$target? [y/n] " -u 1 add_them
                   if [[ "$add_them" == [yY] ]]; then
-                     $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh --non-interactive --vars-only > $target
+                     $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh --non-interactive --vars-only | grep -v "^export CSV2RDF4LOD_HOME" > $target
                      added="$added $target"
                   else
                      echo "Okay, but at some point you should create these environment variables. Otherwise, we might not behave as you'd like us to."
@@ -962,17 +962,18 @@ pushd &> /dev/null
                   echo
                   echo $already_there
                else
+                  see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/Script:-source-me.sh"
                   echo "Add this command to your ~/.bashrc? [y/n]"
                   read -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
-                     see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/Script:-source-me.sh"
                      echo                     >> ~/.bashrc
                      echo "$source_me # $see ">> ~/.bashrc
                      echo
                      echo "Okay, we added it:"
                      grep "$source_me" ~/.bashrc
                   else
-                     echo "We didn't touch your ~/.bashrc, so you'll need to make sure you set the paths correctly each time."
+                     echo "We didn't change your ~/.bashrc, so you'll need to make sure you set the paths correctly each time."
+                     echo "See $see"
                   fi
                fi
 
@@ -996,7 +997,7 @@ pushd &> /dev/null
                   echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
                fi
 
-
+               # TODO: remove export CSV2RDF4LOD_HOME="/home/lebot/opt/prizms/repos/csv2rdf4lod-automation" from csv2rdf4lod-source-me-for-melagrid.sh
 
                # TODO: Create csv2rdf4lod-source-me-on-melagrid.sh (machine)
                # TODO WARNING: set JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc

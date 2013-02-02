@@ -340,7 +340,7 @@ fi
 # https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble
 echo
 echo $div
-echo "Prizms can automatically publish lodcloud-compliant metadata to the CKAN listing at http://datahub.io."
+echo "Prizms can automatically publish lodcloud-compliant metadata to a CKAN listing at http://datahub.io."
 echo "Enabling this feature allows your Linked Data to be included in the LOD Cloud Diagram."
 echo "See https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble"
 echo "    https://github.com/timrdf/DataFAQs/wiki/CKAN"
@@ -383,7 +383,7 @@ else
 fi
 echo "Your project's Linked Data base URI is:                    $our_base_uri"
 echo "Your project's source-id is:                               $our_source_id"
-echo "Your project's datahub.io URI is:                          http://datahub.io/dataset/$our_dataset_id"
+echo "Your project's datahub.io URI is:                          http://datahub.io/dataset/$our_datahub_id"
 
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`

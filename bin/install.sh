@@ -766,6 +766,8 @@ pushd &> /dev/null
                   else
                      rm .`basename $0`.hosts
                      echo "Okay, we won't change $target. But if you try to install Virtuoso and this is a virtual machine, you'll run into issues."
+                     echo "See:"
+                     echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
                   fi
                else
                   echo "(locahost's IP is $localhost_ip; Virtuoso should not have any issues.)"
@@ -816,9 +818,6 @@ pushd &> /dev/null
 
 
 
-               echo
-               echo $div
-
                virtuoso_installed="no"
                if [[ -e '/var/lib/virtuoso/db/virtuoso.ini' && \
                      -e '/usr/bin/isql-v'                   && \
@@ -826,49 +825,43 @@ pushd &> /dev/null
                      -e '/var/lib/virtuoso/db/virtuoso.log' ]]; then
                   virtuoso_installed="yes"
                fi
+               if [[ "$virtuoso_installed" == "yes" ]]; then
 
-               # TODO: look to see if it is actually not configured.
-
-               echo "It appears that Virtuoso is installed, but Prizms is not configured to load data into Virtuoso."
-               echo
-               read -p "Q: Would you like us to help configure Prizms so that it can load data into Virtuoso? [y/n] " -u 1 configure_it
-               echo
-               if [[ "$configure_it" == [yY] ]]; then
-
-                  # 1111 is the JDBC
-                  # 8890 is the web app for it.
+                  # 1111 is Virtuoso's default port to access its "JDBC".
+                  # 8890 is Virtuoso's default port for its web app admin interface.
                   # 
-                  # get at conductor from my own laptop:
+                  # If Virtuoso is installed on a VM, get at it's Conductor webapp from your own laptop using something like:
+                  #
                   # ssh -L 8890:localhost:8890 -p 2245 -l tlebo aquarius.tw.rpi.edu
                   #
-                  #                                             ^ The machine that hosts the VM.
-                  #                                       ^ Your user name.
-                  #                               ^ The port on aquarius that my VM is on.
-                  #                       ^ The port on the VM that Virtuoso serves its SPARQL endpoint.
-                  #             ^ Your machine, e.g. your laptop.
-                  #       ^ The port on your machine that you connect to in order to get to the VM's Virtuoso SPARQL endpoint.
+                  #        |    |         |       |       |     ^ The machine that hosts the VM.
+                  #        |    |         |       |       ^ Your user name.
+                  #        |    |         |       ^ The port on aquarius that my VM is on.
+                  #        |    |         ^ The port on the VM that Virtuoso serves its SPARQL endpoint.
+                  #        |    ^ Your machine, e.g. your laptop.
+                  #        ^ The port on your machine that you connect to in order to get to the VM's Virtuoso SPARQL endpoint.
                   # 
-                  # Now, load up http://localhost:8890/conductor in your laptop's web browser, and you're viewing the VM's service.
+                  # Now, load up http://localhost:8890/conductor in your laptop's web browser, and you're viewing the service from the VM.
 
                   echo
                   echo $div
-                  # TODO: Ask for user name and passwrod, set into:
+                  echo TODO: Ask for user name and passwrod, set into:
                   #  ~= /srv/twc-healthdata/config/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh
 
                   echo
                   echo $div
-                  # TODO: if u/p is dba/dba, then tell them to change it and how.
+                  echo TODO: if u/p is dba/dba, then tell them to change it and how.
 
                   echo
                   echo $div
                   target="/var/lib/virtuoso/db/virtuoso.ini"
                   data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/data/
                   already_set=`grep 'DirsAllowed' $target | grep -v $data_root`
-
                   echo "Virtuoso can only access the directories that are specified in $target's"
                   echo "'DirsAllowed' setting. If you have an RDF file in some *other* directory, the file may"
                   echo "not load, or will take longer than it should to load."
-                  if [[ -n "$already_set" ]]; then
+
+                  if [[ -z "$already_set" ]]; then
 
                      echo "'DirsAllowed' is currently set as:"
                      echo
@@ -946,6 +939,7 @@ pushd &> /dev/null
                   echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
                   echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
                fi
+            fi
 
 
 

@@ -133,6 +133,7 @@ function change_source_me {
       if [ "$current" != "$new_value" ]; then
          echo
          echo "$ENVVAR is currently set to '$current' in $target"
+         echo
          read -p "Q: May we change $ENVVAR to $new_value in $target? [y/n] " -u 1 change_it
          echo
          if [[ "$change_it" == [yY] ]]; then

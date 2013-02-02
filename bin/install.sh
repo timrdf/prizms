@@ -812,9 +812,9 @@ pushd &> /dev/null
                   # 8890 is the web app for it.
                   # 
                   # get at conductor from my own laptop:
-                  # ssh -L 8890:localhost:8890 -p 2245 -l jimmccusker aquarius.tw.rpi.edu
+                  # ssh -L 8890:localhost:8890 -p 2245 -l tlebo aquarius.tw.rpi.edu
                   #
-                  #                                                   ^ The machine that hosts the VM.
+                  #                                             ^ The machine that hosts the VM.
                   #                                       ^ Your user name.
                   #                               ^ The port on aquarius that my VM is on.
                   #                       ^ The port on the VM that Virtuoso serves its SPARQL endpoint.

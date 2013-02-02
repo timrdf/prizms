@@ -17,6 +17,7 @@ if [ "$1" == "--help" ]; then
    echo "Set them by executing:"
    echo
    echo "    export PATH=\$PATH\`$me\`"
+   echo $HOME
    exit
 fi
 

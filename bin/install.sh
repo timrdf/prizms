@@ -748,7 +748,7 @@ pushd &> /dev/null
                   echo
                   cat $target
                   echo
-                  echo "We'd like to change the IP of 'localhost' to $vm_pi, resulting in a $target of:"
+                  echo "We'd like to change the IP of 'localhost' to $vm_ip, resulting in a $target of:"
                   echo
                   cat $target | awk -v ip=$vm_ip '{if($2=="localhost"){print ip,"localhost"}else{print}}' > .`basename $0`.hosts
                   cat .`basename $0`.hosts

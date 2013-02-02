@@ -512,14 +512,14 @@ pushd &> /dev/null
                echo "indicate the Linked Data base URI to use for all datasets that it creates."
                target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
                if [[ -n "$new_value" && "$new_value" == http* ]]; then
-                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh $ENVVAR $target`
+                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target`
                   if [ "$current" != "$new_value" ]; then
                      echo
                      echo "$ENVVAR is currently set to '$current' in $target"
                      read -p "Q: May we change $ENVVAR to $new_value in $target? [y/n] " -u 1 change_it
                      echo
                      if [[ "$change_it" == [yY] ]]; then
-                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh $ENVVAR $target --change-to $new_value
+                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target --change-to $new_value
                         echo "Okay, we changed $target to:"
                         grep "export $ENVVAR=" $target | tail -1
                         added="$added $target"
@@ -542,14 +542,14 @@ pushd &> /dev/null
                   echo "Prizms uses the shell environment variable CSV2RDF4LOD_CKAN_SOURCE to"
                   echo "indicate the upstream CKAN from which to pull dataset listings."
 
-                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target`
+                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target`
                   if [ "$current" != "$upstream_ckan" ]; then
                      echo
                      echo "CSV2RDF4LOD_CKAN_SOURCE is currently set to '$current' in $target"
                      read -p "Q: May we change CSV2RDF4LOD_CKAN_SOURCE to $upstream_ckan in $target? [y/n] " -u 1 change_it
                      echo
                      if [[ "$change_it" == [yY] ]]; then
-                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target --change-to $upstream_ckan
+                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target --change-to $upstream_ckan
                         echo "Okay, we changed $target to:"
                         grep 'export CSV2RDF4LOD_CKAN_SOURCE=' $target | tail -1
                         added="$added $target"
@@ -560,9 +560,9 @@ pushd &> /dev/null
                      echo "(CSV2RDF4LOD_CKAN_SOURCE is already correctly set to $upstream_ckan in $target)"
                   fi # CSV2RDF4LOD_CKAN_SOURCE
 
-                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target`
+                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target`
                   if [ "$current" == "$upstream_ckan" ]; then
-                     value=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN' $target`
+                     value=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN' $target`
                      if [ "$value" != "true" ]; then
                         echo
                         echo "Although CSV2RDF4LOD_CKAN_SOURCE is set to $upstream_ckan, we still need to set CSV2RDF4LOD_CKAN to 'true'."
@@ -570,7 +570,7 @@ pushd &> /dev/null
                         read -p "Q: May we change CSV2RDF4LOD_CKAN to 'true' in $target? [y/n] " -u 1 change_it
                         echo
                         if [[ "$change_it" == [yY] ]]; then
-                           $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CKAN' $target --change-to 'true'
+                           $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN' $target --change-to 'true'
                            echo "Okay, we changed $target to:"
                            grep 'export CSV2RDF4LOD_CKAN=' $target | tail -1
                            added="$added $target"
@@ -593,14 +593,14 @@ pushd &> /dev/null
                echo "Prizms uses the shell environment variable $ENVVAR to"
                echo "indicate the source identifier for all datasets that it creates on its own."
                if [[ -n "$new_value" ]]; then
-                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh $ENVVAR $target`
+                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target`
                   if [ "$current" != "$new_value" ]; then
                      echo
                      echo "$ENVVAR is currently set to '$current' in $target"
                      read -p "Q: May we change $ENVVAR to $new_value in $target? [y/n] " -u 1 change_it
                      echo
                      if [[ "$change_it" == [yY] ]]; then
-                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh $ENVVAR $target --change-to $new_value
+                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target --change-to $new_value
                         echo "Okay, we changed $target to:"
                         grep "export $ENVVAR=" $target | tail -1
                         added="$added $target"
@@ -649,7 +649,7 @@ pushd &> /dev/null
                target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
                if [[ ! -e $target ]]; then
                   cp $template $target
-                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/cr-value-of.sh 'CSV2RDF4LOD_CONVERT_PERSON_URI' $target --change-to $person_uri
+                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CONVERT_PERSON_URI' $target --change-to $person_uri
                   added="$added $target"
                   echo
                   echo $div
@@ -921,7 +921,7 @@ pushd &> /dev/null
                   echo $div
                   credentials="/etc/prizms/$person_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh"
                   if [[ -e $credentials ]]; then
-                     vpw=`cr-value-of.sh 'CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD' $credentials`
+                     vpw=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD' $credentials`
                   fi
                   if [[ -z "$vpw" ]]; then
                      echo "If you just installed Virtuoso, and haven't changed the default password for the user 'dba',"
@@ -992,10 +992,6 @@ pushd &> /dev/null
                   fi
 
                   #target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
-
-                  echo
-                  echo $div
-                  echo TODO: if u/p is dba/dba, then tell them to change it and how.
 
                   echo
                   echo $div

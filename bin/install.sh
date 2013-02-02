@@ -711,7 +711,7 @@ pushd &> /dev/null
 
                echo
                echo $div
-               echo "Virtuoso will have issues if it is on a virtual machine and /etc/hosts localhost is 127.0.0.1 instead of the VM's IP."
+               echo "Virtuoso will have issues if it is on a virtual machine and /etc/hosts's localhost is 127.0.0.1 instead of the VM's IP."
                # Hack for our pseudo-VMs. This needs to be done before installing virtuoso with install-csv2rdf4lod-dependencies.sh
                #
                # vi /etc/hosts
@@ -749,6 +749,7 @@ pushd &> /dev/null
                   cat $target
                   echo
                   echo "We'd like to change the IP of 'localhost' to $vm_pi, resulting in a $target of:"
+                  echo
                   cat $target | awk -v ip=$vm_ip '{if($2=="localhost"){print ip,"localhost"}else{print}}' > .`basename $0`.hosts
                   cat .`basename $0`.hosts
                   echo

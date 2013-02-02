@@ -957,10 +957,10 @@ pushd &> /dev/null
                            read -p "Q: What is the Virtuoso database password (for isql-v)? (leave empty to default to 'dba') " vpw 
                            echo
                            if [[ -n "$vuser" ]]; then
-                              sudo echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME='$vuser'" > $credentials
+                              echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME='$vuser'" | sudo tee $credentials
                            fi
                            if [[ -n "$vpw" ]]; then
-                              sudo echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD='$vpw'"  >> $credentials
+                              echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD='$vpw'"   | sudo tee -a $credentials
                            fi
                            #echo "CSV2RDF4LOD_PUBLISH_VIRTUOSO_PORT"
                         else

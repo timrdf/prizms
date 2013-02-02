@@ -920,6 +920,20 @@ pushd &> /dev/null
                   echo
                   echo $div
                   credentials="/etc/prizms/$person_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh"
+                  echo "If you just installed Virtuoso, and haven't changed the default password for the user 'dba',"
+                  echo "you should do that now at http://localhost:8890/conductor."
+                  if [[ -n "$vm_ip" ]]; then
+                     echo "If you installed Virtuoso on a VM, you can access it through an SSN tunnel with something like:"
+                     echo
+                     echo "   ssh -L 8890:localhost:8890 -p 2245 -l smithj aquarius.tw.rpi.edu"
+                     echo
+                     echo "Once the tunnel it set up, you can load http://localhost:8890/conductor to access the VM's conductor."
+                  fi
+                  read -p "Q: Did you change the default password for Virtuoso user 'dba'? [y/n]" -u 1 changed
+                  if [[ "$changed" != [yY] ]]; then
+                     echo "Okay, we can proceed with a default password, but you should be worried about security issues in the future."
+                  fi
+                  echo
                   echo "Prizms stores Virtuoso credentials outside of version control, so that they are kept from the public." 
                   if [[ ! -e $credentials ]]; then
                      read -p "Q: May we set up $credentials to maintain the Virtuoso credentials? [y/n]" -u 1 do_it

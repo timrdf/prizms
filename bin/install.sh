@@ -145,7 +145,7 @@ function change_source_me {
             echo "Okay, we won't change it. You'll need to change it later$loss."
          fi
       else
-         echo "($ENVVAR is already correctly set to $new_value in $target)"
+         echo "($ENVVAR is already correctly set to '$new_value' in $target)"
       fi
    else
       echo "WARNING: We can't set the $ENVVAR in $target because it is not given."

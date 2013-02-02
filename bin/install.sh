@@ -861,7 +861,8 @@ pushd &> /dev/null
                   echo "'DirsAllowed' setting. If you have an RDF file in some *other* directory, the file may"
                   echo "not load, or will take longer than it should to load."
 
-                  if [[ -z "$already_set" ]]; then
+                  echo set${already_set}set
+                  if [[ -n "$already_set" ]]; then
 
                      echo "'DirsAllowed' is currently set as:"
                      echo

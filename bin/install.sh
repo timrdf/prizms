@@ -832,9 +832,9 @@ pushd &> /dev/null
                   # 
                   # If Virtuoso is installed on a VM, get at it's Conductor webapp from your own laptop using something like:
                   #
-                  # ssh -L 8890:localhost:8890 -p 2245 -l tlebo aquarius.tw.rpi.edu
+                  # ssh -L 8890:localhost:8890 -p 2245 -l smithj aquarius.tw.rpi.edu
                   #
-                  #        |    |         |       |       |     ^ The machine that hosts the VM.
+                  #        |    |         |       |       |      ^ The machine that hosts the VM.
                   #        |    |         |       |       ^ Your user name.
                   #        |    |         |       ^ The port on aquarius that my VM is on.
                   #        |    |         ^ The port on the VM that Virtuoso serves its SPARQL endpoint.
@@ -862,7 +862,6 @@ pushd &> /dev/null
                   echo "or -- if it does -- it can take more storage and time than is actually needed to load."
 
                   if [[ -n "$already_set" ]]; then
-
                      echo "'DirsAllowed' is currently set as:"
                      echo
                      grep DirsAllowed $target
@@ -912,8 +911,13 @@ pushd &> /dev/null
                      echo "($target already has $data_root included in its 'DirsAllowed' setting.)"
                   fi
                   
-                  # add the apache map /sparql to 8890
+                  #else
+                  #   echo "Okay, we won't try to configure Prizms to load data into Virtuoso. Check out the following if you want to do it yourself:"
+                  #   echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
+                  #   echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
+                  #fi
 
+                  # add the apache map /sparql to 8890
 
                   # TODO: add to /etc/apache2/sites-available/std.common
                   # See mapping into apache at https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
@@ -929,16 +933,16 @@ pushd &> /dev/null
                   #    # ProxyHTMLURLMap         /sparql /sparql
                   #    # ProxyHTMLURLMap         http://localhost:8890/sparql /sparql
                   #  </Location>
-                  # TODO: restart apache.
+                  #
+                  # a2enmod ??
+                  # service apache2 restart
 
                   # We're trying to get to http://aquarius.tw.rpi.edu/projects/melagrid/sparql
 
-               else
-                  echo "Okay, we won't try to configure Prizms to load data into Virtuoso. Check out the following if you want to do it yourself:"
-                  echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
-                  echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
-               fi
-            fi
+               fi # end $virtuoso_install
+
+
+
 
 
 

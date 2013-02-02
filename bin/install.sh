@@ -758,8 +758,8 @@ pushd &> /dev/null
                   if [[ "$change_it" == [yY] ]]; then
                      echo sudo mv $target $target.prizms.bck
                           sudo mv $target $target.prizms.bck
-                     echo sudo cat .`basename $0`.hosts _ $target
-                          sudo cat .`basename $0`.hosts > $target
+                     echo sudo mv .`basename $0`.hosts $target
+                          sudo mv .`basename $0`.hosts $target
                      echo
                      echo "We changed $target; it is now:"
                      cat $target

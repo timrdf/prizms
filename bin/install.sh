@@ -654,7 +654,7 @@ pushd &> /dev/null
                # 1) source-me.sh 2) CSV_ 3) new-value 4) 'purpose' 5) 'see' 6) 'loss'
                change_source_me $target CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID "$our_source_id" \
                   'indicate the source identifier for all datasets that it creates on its own' \
-                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
+                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets' \
                   'in order for Prizms to create useful Linked Data URIs'
 
                change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE true \
@@ -663,7 +663,7 @@ pushd &> /dev/null
                   'some loss'
 
                change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_PTSW false \
-                  'determine if it should announce each newly converted dataset to http://sindice.com/main/submit' \
+                  'determine if it should announce each newly converted dataset to pingthesemanticweb.com' \
                   'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
                   'some loss'
 

@@ -922,15 +922,16 @@ pushd &> /dev/null
                   credentials="/etc/prizms/$person_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh"
                   echo "Prizms stores Virtuoso credentials outside of version control, so that they are kept from the public." 
                   if [[ ! -e $credentials ]]; then
-                     read -p "May we set up $credentials to maintain the Virtuoso credentials?" -u 1 do_it
+                     read -p "Q: May we set up $credentials to maintain the Virtuoso credentials? [y/n]" -u 1 do_it
                      if [[ "$do_it" == [yY] ]]; then
                         echo sudo mkdir -p `dirname $credentials`
                              sudo mkdir -p `dirname $credentials`
                         if [[ -e `dirname $credentials` ]]; then
+                           echo
                            echo "Prizms uses CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME and CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD to"
                            echo "authenticate to the Virtuoso database with the isql-v command."
-                           read -p "What is the Virtuoso database username (for isql-v)? (leave empty to default to 'dba') " vuser
-                           read -p "What is the Virtuoso database password (for isql-v)? (leave empty to default to 'dba') " vpw 
+                           read -p "Q: What is the Virtuoso database username (for isql-v)? (leave empty to default to 'dba') " vuser
+                           read -p "Q: What is the Virtuoso database password (for isql-v)? (leave empty to default to 'dba') " vpw 
                            if [[ -n "$vuser" ]]; then
                               echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME='$vuser'" > $credentials
                            fi

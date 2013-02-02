@@ -649,7 +649,9 @@ pushd &> /dev/null
                #TODO: CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE="false" 
 
                # 1) source-me.sh 2) CSV_ 3) new-value 4) 'purpose' 4) 'loss'
-               change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE true 'some purpose' 'some loss'
+               change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE true \
+                  'Determine if it should announce each newly converted dataset to http://sindice.com/main/submit' \
+                  'some loss'
 
                #TODO: CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_PTSW="false" 
                # TODO: CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA

@@ -1280,7 +1280,7 @@ pushd &> /dev/null
                      already_there=`crontab -l | grep $target`
                      if [[ -z "$already_there" ]]; then
                         echo "There is a cronjob available at $target, but it is not included in your crontab."
-                        crontab -l > .`basename $0`.crontab
+                        crontab -l 2> /dev/null > .`basename $0`.crontab
                         echo
                         echo "Your crontab is currently:"
                         cat .`basename $0`.crontab

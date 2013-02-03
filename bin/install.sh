@@ -1253,12 +1253,12 @@ pushd &> /dev/null
                echo "and is retrieved by the cronjob itself to determine additional tasks that it should perform."
                echo "The cronjob is run by the user $project_user_name."
                echo "See https://github.com/jimmccusker/twc-healthdata/wiki/Automation"
-               echo
                if [[ -z "$i_am_project_user" ]]; then 
                   # Set up cronjob as cr-cron.sh
                   template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/cr-cron.sh"
                   if [[ -n "$our_source_id" ]]; then
                      if [[ ! -e $target ]]; then
+                        echo
                         read -p "There isn't a $target in your repository, should we add it for you? [y/n] " -u 1 install_it
                         echo
                         if [[ "$install_it" == [yY] ]]; then
@@ -1288,6 +1288,7 @@ pushd &> /dev/null
                      crontab -l 2> /dev/null > $tab
                      already_there=`grep $target $tab`
                      if [[ -z "$already_there" ]]; then
+                        echo
                         echo "There is a cronjob available at $target, but it is not included in your crontab."
                         echo
                         echo "Your crontab is currently:"

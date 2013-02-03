@@ -78,6 +78,11 @@ if [[ "$1" == "--proj-user" ]]; then
    shift
 fi
 
+if [[ "$project_user_name" == `whoami` ]]; then
+   echo "We are `whoami`!"
+   exit
+fi
+
 #
 project_code_repository=""
 if [[ "$1" == "--repos" ]]; then
@@ -1280,20 +1285,26 @@ pushd &> /dev/null
                   fi
                fi
 
-               sudo su - $project_user_name -c 'cd; pwd'
 
-               #read -p "Q: call as project user? [y/n] " -u 1 
-               #if [[ "$push_them" == [yY] ]]; then
-               #   $0 --me                           \
-               #      --my-email                     \
-               #      --proj-user      $project_user_name       \
-               #      --repos          $project_code_repository \
-               #      --upstream-ckan  $upstream_ckan           \
-               #      --our-base-uri   $our_base_uri            \
-               #      --our-source-id  $our_source_id           \
-               #      --our-datahub-id $our_datahub_id
-               #else
-               #fi
+               echo
+               echo $div
+               echo "We've finished setting up your development envrionment."
+               echo "The next step is to set up the $project_user_name's production environment,"
+               echo "which we can do by running this script again as $project_user_name"
+               echo
+               read -p "Q: Set up the production environment as the $project_user_name user? [y/n] " -u 1 as_project
+               if [[ "$as_project" == [yY] ]]; then
+                  sudo su - $project_user_name -c 'cd; pwd'
+                  #$0 --me                           \
+                  #   --my-email                     \
+                  #   --proj-user      $project_user_name       \
+                  #   --repos          $project_code_repository \
+                  #   --upstream-ckan  $upstream_ckan           \
+                  #   --our-base-uri   $our_base_uri            \
+                  #   --our-source-id  $our_source_id           \
+                  #   --our-datahub-id $our_datahub_id
+               else
+               fi
 
             popd &> /dev/null
          fi # if $target_dir e.g. /home/lebot/prizms/melagrid

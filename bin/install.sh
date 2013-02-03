@@ -453,7 +453,12 @@ fi
 pushd &> /dev/null
    cd
    user_home=`pwd`
-   echo "Now let's install your development copy of the $project_user_name Prizms."
+   if [[ -z "$i_am_project_user" ]]; then
+      development="production"
+   else
+      development="development"
+   fi 
+   echo "Now let's install your $development copy of the $project_user_name Prizms."
    echo "(If you already have a working copy there, we'll update it.)"
    echo
    read -p "Q: May we run '$vcs $clone $project_code_repository' from `pwd`/prizms/? [y/n] " -u 1 install_it

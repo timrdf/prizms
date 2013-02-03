@@ -269,7 +269,7 @@ fi
 
 
 # https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_PERSON_URI
-if [[ -n $i_am_project_user ]]; then
+if [[ -z $i_am_project_user ]]; then
    echo
    echo $div
    echo "Prizms can include you in the provenance that it captures."

@@ -1280,11 +1280,8 @@ pushd &> /dev/null
                   fi
                fi
 
-               sudo su $project_user_name
-               cd
-               pwd
-               exit
-               echo "hi"
+               sudo su - $project_user_name -c 'cd; pwd'
+
                #read -p "Q: call as project user? [y/n] " -u 1 
                #if [[ "$push_them" == [yY] ]]; then
                #   $0 --me                           \

@@ -1210,34 +1210,35 @@ pushd &> /dev/null
 
 
 
-               if [[ -z "$i_am_project_user" ]]; then 
 
-                  #
-                  # TODO Sprinkle "access.ttl" files within the csv2rdf4lod conversion root, as mirrors of the upstream CKAN.
-                  #
-                  # http://data.melagrid.org/cowabunga/dude.html -> data-melagrid-org
-                  echo
-                  echo $div
-                  export CLASSPATH=$CLASSPATH`$PRIZMS_HOME/bin/install/classpaths.sh` 
-                  upstream_ckan_source_id=`java edu.rpi.tw.string.NameFactory --source-id-of $upstream_ckan`
-                  target="data/source/$upstream_ckan_source_id"
-                  echo "Prizms can collect and convert datasets that are listed in CKAN instances."
-                  echo "You've specified an upstream CKAN from which to mirror dataset listings ($upstream_ckan),"
-                  echo "but Prizms hasn't extracted the access metadata into $target."
-                  echo
-                  if [[ -n "$upstream_ckan_source_id" && ! -e $target ]]; then
-                     read -p "Extract the access metadata from the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
-                     if [[ "$extract_it" == [yY] ]]; then
-                        mkdir -p $target
-                        pushd $target &> /dev/null
-                           echo cr-create-dataset-dirs-from-ckan.py $upstream_ckan $our_base_uri
-                        popd &> /dev/null
-                     else
-                        echo "Okay, we won't try to extract access metadata from $upstream_ckan. Check out the following if you want to do it yourself:"
-                        echo "  https://github.com/jimmccusker/twc-healthdata/wiki/Mirroring-a-Source-CKAN-Instance"
-                     fi
+               #
+               # TODO Sprinkle "access.ttl" files within the csv2rdf4lod conversion root, as mirrors of the upstream CKAN.
+               #
+               # http://data.melagrid.org/cowabunga/dude.html -> data-melagrid-org
+               echo
+               echo $div
+               export CLASSPATH=$CLASSPATH`$PRIZMS_HOME/bin/install/classpaths.sh` 
+               upstream_ckan_source_id=`java edu.rpi.tw.string.NameFactory --source-id-of $upstream_ckan`
+               target="data/source/$upstream_ckan_source_id"
+               echo "Prizms can collect and convert datasets that are listed in CKAN instances."
+               echo "You've specified an upstream CKAN from which to mirror dataset listings ($upstream_ckan),"
+               echo "but Prizms hasn't extracted the access metadata into $target."
+               echo
+               if [[ -n "$upstream_ckan_source_id" && ! -e $target && z "$i_am_project_user" ]]; then
+                  read -p "Extract the access metadata from the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
+                  if [[ "$extract_it" == [yY] ]]; then
+                     mkdir -p $target
+                     pushd $target &> /dev/null
+                        echo cr-create-dataset-dirs-from-ckan.py $upstream_ckan $our_base_uri
+                     popd &> /dev/null
+                  else
+                     echo "Okay, we won't try to extract access metadata from $upstream_ckan. Check out the following if you want to do it yourself:"
+                     echo "  https://github.com/jimmccusker/twc-healthdata/wiki/Mirroring-a-Source-CKAN-Instance"
                   fi
+               fi
 
+
+               if [[ -z "$i_am_project_user" ]]; then 
 
                   #
                   # Set up cr-cron.sh
@@ -1269,18 +1270,39 @@ pushd &> /dev/null
                   else
                      echo "(WARNING We can't set up $target because we don't know what source-id we should use.)"
                   fi
-               
+                  # Setting up the crontab is done as the project's production user 
+                  # (called recursively at the end of this script) -- NOT on the developer user name.
                else
-
                   echo
                   echo $div
-                  # NOTE: setting up the cron should be done on the project user name side, NOT on the person user name side.
-                  target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
-                  echo "There is a cronjob available at $target"
-                  read -p "Add to crontab? [y/n] " -u 1 install_it
-                  echo $install_it
-                  # TODO: Set project user's crontab.
-
+                  target="`pwd`/data/source/$our_source_id/cr-cron/version/cr-cron.sh"
+                  if [[ -n "$our_source_id" && -e $target ]]; then
+                     already_there=`crontab -l | grep $target`
+                     if [[ -z "$already_there" ]]; then
+                        echo "There is a cronjob available at $target, but it is not included in your crontab."
+                        crontab -l > .`basename $0`.crontab
+                        echo
+                        echo "Your crontab is currently:"
+                        cat .`basename $0`.crontab
+                        echo
+                        # m h  dom mon dow   command
+                        # 14 20 * * * /srv/twc-healthdata/data/source/healthdata-tw-rpi-edu/cr-cron/version/cron.sh
+                        echo "14 20 * * * $target" >> .`basename $0`.crontab
+                        echo ""                    >> .`basename $0`.crontab
+                        echo "We would like to update your crontab so that it is:"
+                        echo
+                        cat .`basename $0`.crontab
+                        echo
+                        read -p "Q: Add to crontab? [y/n] " -u 1 install_it
+                        echo $install_it
+                        # TODO: Set project user's crontab.
+                        rm .`basename $0`.crontab
+                     else
+                        echo "Cannot set up crontab because cronjob $target is not available."
+                     fi
+                  else
+                     echo "Cannot set up crontab because cronjob $target is not available."
+                  fi
                fi # end "I am not project user"
 
 

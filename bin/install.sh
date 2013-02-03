@@ -1245,17 +1245,17 @@ pushd &> /dev/null
                fi
 
 
+               echo
+               echo $div
+               target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
+               echo "Prizms automates dataset updates by regularly invoking $target with cron."
+               echo "$target is maintained using version control, and is retrieved by the cronjob itself to determine"
+               echo "additional tasks that it should perform. The cronjob is run by the user $project_user_name."
+               echo "See https://github.com/jimmccusker/twc-healthdata/wiki/Automation"
+               echo
                if [[ -z "$i_am_project_user" ]]; then 
-
-                  #
-                  # Set up cr-cron.sh
-                  #
-                  echo
-                  echo $div
+                  # Set up cronjob as cr-cron.sh
                   template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/cr-cron.sh"
-                  target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
-                  echo "TODO: talk about the automation"
-                  echo
                   if [[ -n "$our_source_id" ]]; then
                      if [[ ! -e $target ]]; then
                         read -p "There isn't a $target in your repository, should we add it for you? [y/n] " -u 1 install_it
@@ -1280,8 +1280,7 @@ pushd &> /dev/null
                   # Setting up the crontab is done as the project's production user 
                   # (called recursively at the end of this script) -- NOT on the developer user name.
                else
-                  echo
-                  echo $div
+                  # Set up crontab for the cronjob cr-cron.sh
                   target="`pwd`/data/source/$our_source_id/cr-cron/version/cr-cron.sh"
                   if [[ -n "$our_source_id" && -e $target ]]; then
                      tab=.prizms.`basename $0`.crontab

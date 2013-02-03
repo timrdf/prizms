@@ -1384,6 +1384,8 @@ pushd &> /dev/null
                   fi
                fi
 
+               echo
+               echo $div
                if [[ -n $i_am_project_user ]]; then
                   echo "We're all done installing Prizms production environment for the user `whoami`."
                else

@@ -1353,7 +1353,7 @@ pushd &> /dev/null
                   echo $div
                   echo "We've finished setting up your development envrionment."
                   echo "The next step is to set up the $project_user_name's production environment,"
-                  echo "which we can do by running this script again as $project_user_name"
+                  echo "which we can do by running this script again as user $project_user_name"
                   echo
                   read -p "Q: Set up the production environment as the $project_user_name user? [y/n] " -u 1 as_project
                   if [[ "$as_project" == [yY] ]]; then

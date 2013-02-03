@@ -989,13 +989,13 @@ pushd &> /dev/null
                      echo "($target already has $data_root included in its 'DirsAllowed' setting.)"
                   fi
 
-                  echo
-                  echo $div
                   credentials="/etc/prizms/$project_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh"
                   if [[ -e $credentials ]]; then
                      vpw=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD' $credentials`
                   fi
                   if [[ -z "$vpw" ]]; then
+                     echo
+                     echo $div
                      echo "If you just installed Virtuoso, and haven't changed the default password for the user 'dba',"
                      echo "you should do that now at http://localhost:8890/conductor."
                      if [[ -n "$vm_ip" ]]; then

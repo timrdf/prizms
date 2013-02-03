@@ -576,281 +576,280 @@ pushd &> /dev/null
 
 
 
- 
-               # FOR PROJECT
-               # 
-               # Create the project-level environment variables, based on the template created by the csv2rdf4lod-automation installer.
-               # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables
-               #
-               if [[ ! -e data/source/csv2rdf4lod-source-me-for-$project_user_name.sh && \
-                       -e $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/install.sh ]]; then
-                  mv $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/install.sh $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh
-               fi
-               target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
-               if [ -e $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh ]; then
-                  echo
-                  echo $div
-                  echo "Prizms uses the CSV2RDF4LOD_ environment variables that are part of csv2rdf4lod-automation."
-                  echo "These environment variables are used to control how Prizms operates."
-                  echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables"
-                  echo
-                  read -p "May we add the environment variables to `pwd`/$target? [y/n] " -u 1 add_them
-                  if [[ "$add_them" == [yY] ]]; then
-                     $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh --non-interactive --vars-only | grep -v "^export CSV2RDF4LOD_HOME" > $target
-                     added="$added $target"
-                  else
-                     echo "Okay, but at some point you should create these environment variables. Otherwise, we might not behave as you'd like us to."
+               if [[ -z "$i_am_project_user" ]]; then 
+                  # FOR PROJECT
+                  # 
+                  # Create the project-level environment variables, based on the template created by the csv2rdf4lod-automation installer.
+                  # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables
+                  #
+                  if [[ ! -e data/source/csv2rdf4lod-source-me-for-$project_user_name.sh && \
+                          -e $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/install.sh ]]; then
+                     mv $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/install.sh $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh
                   fi
-               fi
-
-               #
-               # Set CSV2RDF4LOD_BASE_URI in the project-level source-me.sh.
-               #
-               change_source_me $target CSV2RDF4LOD_BASE_URI "$our_base_uri" \
-                  'indicate the Linked Data base URI to use for all datasets that it creates' \
-                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name' \
-                  'some loss'
-
-               #
-               # Set CSV2RDF4LOD_CKAN_SOURCE (to $upstream_ckan) in the project-level source-me.sh.
-               #
-               if [[ "$upstream_ckan" == http* && -e "$target" ]]; then
-                  echo
-                  echo $div
-                  echo "Prizms uses the shell environment variable CSV2RDF4LOD_CKAN_SOURCE to"
-                  echo "indicate the upstream CKAN from which to pull dataset listings."
-
-                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target`
-                  if [ "$current" != "$upstream_ckan" ]; then
+                  target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
+                  if [ -e $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh ]; then
                      echo
-                     echo "CSV2RDF4LOD_CKAN_SOURCE is currently set to '$current' in $target"
-                     read -p "Q: May we change CSV2RDF4LOD_CKAN_SOURCE to $upstream_ckan in $target? [y/n] " -u 1 change_it
+                     echo $div
+                     echo "Prizms uses the CSV2RDF4LOD_ environment variables that are part of csv2rdf4lod-automation."
+                     echo "These environment variables are used to control how Prizms operates."
+                     echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables"
                      echo
-                     if [[ "$change_it" == [yY] ]]; then
-                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target --change-to $upstream_ckan
-                        echo "Okay, we changed $target to:"
-                        grep 'export CSV2RDF4LOD_CKAN_SOURCE=' $target | tail -1
+                     read -p "May we add the environment variables to `pwd`/$target? [y/n] " -u 1 add_them
+                     if [[ "$add_them" == [yY] ]]; then
+                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh --non-interactive --vars-only | grep -v "^export CSV2RDF4LOD_HOME" > $target
                         added="$added $target"
                      else
-                        echo "Okay, we won't change it. You'll need to change it in order for Prizms to obtain $upstream_ckan's dataset listing."
+                        echo "Okay, but at some point you should create these environment variables. Otherwise, we might not behave as you'd like us to."
                      fi
-                  else
-                     echo "(CSV2RDF4LOD_CKAN_SOURCE is already correctly set to $upstream_ckan in $target)"
-                  fi # CSV2RDF4LOD_CKAN_SOURCE
+                  fi
 
-                  current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target`
-                  if [ "$current" == "$upstream_ckan" ]; then
-                     value=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN' $target`
-                     if [ "$value" != "true" ]; then
+                  #
+                  # Set CSV2RDF4LOD_BASE_URI in the project-level source-me.sh.
+                  #
+                  change_source_me $target CSV2RDF4LOD_BASE_URI "$our_base_uri" \
+                     'indicate the Linked Data base URI to use for all datasets that it creates' \
+                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name' \
+                     'some loss'
+
+                  #
+                  # Set CSV2RDF4LOD_CKAN_SOURCE (to $upstream_ckan) in the project-level source-me.sh.
+                  #
+                  if [[ "$upstream_ckan" == http* && -e "$target" ]]; then
+                     echo
+                     echo $div
+                     echo "Prizms uses the shell environment variable CSV2RDF4LOD_CKAN_SOURCE to"
+                     echo "indicate the upstream CKAN from which to pull dataset listings."
+
+                     current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target`
+                     if [ "$current" != "$upstream_ckan" ]; then
                         echo
-                        echo "Although CSV2RDF4LOD_CKAN_SOURCE is set to $upstream_ckan, we still need to set CSV2RDF4LOD_CKAN to 'true'."
-                        echo
-                        read -p "Q: May we change CSV2RDF4LOD_CKAN to 'true' in $target? [y/n] " -u 1 change_it
+                        echo "CSV2RDF4LOD_CKAN_SOURCE is currently set to '$current' in $target"
+                        read -p "Q: May we change CSV2RDF4LOD_CKAN_SOURCE to $upstream_ckan in $target? [y/n] " -u 1 change_it
                         echo
                         if [[ "$change_it" == [yY] ]]; then
-                           $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN' $target --change-to 'true'
+                           $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target --change-to $upstream_ckan
                            echo "Okay, we changed $target to:"
-                           grep 'export CSV2RDF4LOD_CKAN=' $target | tail -1
+                           grep 'export CSV2RDF4LOD_CKAN_SOURCE=' $target | tail -1
                            added="$added $target"
                         else
-                           echo "Okay, we won't change CSV2RDF4LOD_CKAN_SOURCE. You'll need to set it to 'true' in order for Prizms to obtain $upstream_ckan's dataset listing."
+                           echo "Okay, we won't change it. You'll need to change it in order for Prizms to obtain $upstream_ckan's dataset listing."
                         fi
                      else
-                        echo "(CSV2RDF4LOD_CKAN        is already correctly set to 'true' in $target)"
+                        echo "(CSV2RDF4LOD_CKAN_SOURCE is already correctly set to $upstream_ckan in $target)"
+                     fi # CSV2RDF4LOD_CKAN_SOURCE
+
+                     current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN_SOURCE' $target`
+                     if [ "$current" == "$upstream_ckan" ]; then
+                        value=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN' $target`
+                        if [ "$value" != "true" ]; then
+                           echo
+                           echo "Although CSV2RDF4LOD_CKAN_SOURCE is set to $upstream_ckan, we still need to set CSV2RDF4LOD_CKAN to 'true'."
+                           echo
+                           read -p "Q: May we change CSV2RDF4LOD_CKAN to 'true' in $target? [y/n] " -u 1 change_it
+                           echo
+                           if [[ "$change_it" == [yY] ]]; then
+                              $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CKAN' $target --change-to 'true'
+                              echo "Okay, we changed $target to:"
+                              grep 'export CSV2RDF4LOD_CKAN=' $target | tail -1
+                              added="$added $target"
+                           else
+                              echo "Okay, we won't change CSV2RDF4LOD_CKAN_SOURCE. You'll need to set it to 'true' in order for Prizms to obtain $upstream_ckan's dataset listing."
+                           fi
+                        else
+                           echo "(CSV2RDF4LOD_CKAN        is already correctly set to 'true' in $target)"
+                        fi
+                     fi # CSV2RDF4LOD_CKAN
+                  fi
+
+                  # Set CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID (to $our_source_id) in the project-level source-me.sh.
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID "$our_source_id" \
+                     'indicate the source identifier for all datasets that it creates on its own' \
+                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets' \
+                     'in order for Prizms to create useful Linked Data URIs'
+
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE true \
+                     'determine if it should announce each newly converted dataset to http://sindice.com/main/submit' \
+                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
+                     'some loss'
+
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_PTSW false \
+                     'determine if it should announce each newly converted dataset to pingthesemanticweb.com' \
+                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
+                     'some loss'
+
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA true \
+                     'determine if it should update its datahub.io CKAN listing for the http://datahub.io/group/lodcloud group' \
+                     'https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble' \
+                     'some loss'
+
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID "$our_datahub_id" \
+                     "indicate which datahub.io CKAN entry to update (i.e. http://datahub.io/dataset/$our_datahub_id) for this installation of Prizms" \
+                     'https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble' \
+                     'some loss'
+
+                  # ON MACHINE
+                  #
+                  template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-on-yyy.sh"
+                  target="data/source/csv2rdf4lod-source-me-on-$project_user_name.sh"
+                  if [[ ! -e $target ]]; then
+                     cp $template $target
+                     added="$added $target"
+                     # TODO: export CSV2RDF4LOD_CONVERT_MACHINE_URI="http://tw.rpi.edu/web/inside/machine/aquarius#melagrid"
+                     echo
+                     echo $div
+                     echo "There wasn't a source-me.sh for your machine in the data conversion root, so we created one for you at $target"
+                  fi
+
+
+                  # AS PROJECT
+                  #
+                  # csv2rdf4lod-source-me-as-${project_user_name}.sh is *the* one and only source-me.sh that 
+                  # the project name should source when initializing -- particular when from a cronjob.
+                  # This is *the* only source-me.sh that should appear in the project user name's ~/.bashrc
+                  #
+                  # This is created by the developer -- NOT the project user -- and committed to version control.
+                  template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
+                  target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
+                  if [[ ! -e $target ]]; then
+                     cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI='                 > $target
+                     echo "source `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
+                     echo "source `pwd`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
+                     # any others to source?
+                     echo "export CSV2RDF4LOD_CONVERT_DATA_ROOT=''"                                  >> $target
+                     added="$added $target"
+                     echo
+                     echo $div
+                     echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
+                  fi
+                  project_data_root="${user_home%/*}/$project_user_name/prizms/data/source"
+                  change_source_me $target CSV2RDF4LOD_CONVERT_DATA_ROOT "$project_data_root" \
+                     "indicate the production data directory, from which /var/www and the production SPARQL endpoints are loaded" \
+                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_DATA_ROOT' \
+                     'some loss'
+
+                  # TODO: CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
+                  # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
+
+                  # TODO export JENAROOT=/home/lebot/opt/apache-jena-2.7.4
+
+                  # NOTE sudo vi /etc/passwd change melagrid to bash
+
+                  # AS DEVELOPER
+                  # 
+                  # Create a stub for the user-level environment variables, based on the template available from the csv2rdf4lod-automation.
+                  # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables-%28considerations-for-a-distributed-workflow%29
+                  # 
+                  template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
+                  target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
+                  if [[ ! -e $target ]]; then
+                     cp $template $target
+                     $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CONVERT_PERSON_URI' $target --change-to $person_uri
+                     added="$added $target"
+                     echo
+                     echo $div
+                     echo "There wasn't a source-me.sh for your user name in the data conversion root, so we created one for you at $target"
+                  fi
+
+
+                  #
+                  # Add PATH = PATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$person_user_name.sh
+                  #
+                  echo
+                  echo $div
+                  set_paths_cmd=`$PRIZMS_HOME/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
+                  echo "The following command adds into your shell's environment the paths that Prizms requires to run its scripts."
+                  echo "Running it multiple times will have no effect, since only the missing paths are added."
+                  echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
+                  echo "The following command should appear in your data/source/csv2rdf4lod-source-me-as-$person_user_name.sh."
+                  echo
+                  echo "    $set_paths_cmd"
+                  target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
+                  already_there=`grep ".*export PATH=.*prizms/bin/install/paths.sh.*" $target`
+                  echo
+                  if [ -n "$already_there" ]; then
+                     echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
+                     echo
+                     echo $already_there
+                  else
+                     read -p "Add this command to your $target? [y/n]" -u 1 install_it
+                     if [[ "$install_it" == [yY] ]]; then
+                        echo $set_paths_cmd >> $target
+                        echo
+                        echo "Okay, we added it:"
+                        grep ".*export PATH=.*prizms/bin/install/paths.sh.*" $target
+                        added="$added $target"
+                     else
+                        echo "We didn't touch your $target, so you'll need to make sure you set the paths correctly each time."
                      fi
-                  fi # CSV2RDF4LOD_CKAN
-               fi
+                  fi
 
-               # Set CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID (to $our_source_id) in the project-level source-me.sh.
-               change_source_me $target CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID "$our_source_id" \
-                  'indicate the source identifier for all datasets that it creates on its own' \
-                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets' \
-                  'in order for Prizms to create useful Linked Data URIs'
-
-               change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE true \
-                  'determine if it should announce each newly converted dataset to http://sindice.com/main/submit' \
-                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
-                  'some loss'
-
-               change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_PTSW false \
-                  'determine if it should announce each newly converted dataset to pingthesemanticweb.com' \
-                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
-                  'some loss'
-
-               change_source_me $target CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA true \
-                  'determine if it should update its datahub.io CKAN listing for the http://datahub.io/group/lodcloud group' \
-                  'https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble' \
-                  'some loss'
-
-               change_source_me $target CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID "$our_datahub_id" \
-                  "indicate which datahub.io CKAN entry to update (i.e. http://datahub.io/dataset/$our_datahub_id) for this installation of Prizms" \
-                  'https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble' \
-                  'some loss'
-
-
-               # ON MACHINE
-               #
-               template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-on-yyy.sh"
-               target="data/source/csv2rdf4lod-source-me-on-$project_user_name.sh"
-               if [[ ! -e $target ]]; then
-                  cp $template $target
-                  added="$added $target"
-                  # TODO: export CSV2RDF4LOD_CONVERT_MACHINE_URI="http://tw.rpi.edu/web/inside/machine/aquarius#melagrid"
+                  #
+                  # Add CLASSPATH = CLASSPATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$person_user_name.sh
+                  #
                   echo
                   echo $div
-                  echo "There wasn't a source-me.sh for your machine in the data conversion root, so we created one for you at $target"
-               fi
+                  set_paths_cmd=`$PRIZMS_HOME/bin/install/classpaths.sh --help | tail -1 | sed 's/^ *//'`
+                  echo "The following command adds into your shell's environment the Java class paths that Prizms requires to run its scripts."
+                  echo "Just like the previous paths.sh command, running this multiple times will have no effect, since only the missing paths are added."
+                  echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
+                  echo "The following command should appear in your data/source/csv2rdf4lod-source-me-as-$person_user_name.sh."
+                  echo
+                  echo "    $set_paths_cmd"
+                  target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
+                  already_there=`grep ".*export CLASSPATH=.*prizms/bin/install/classpaths.sh.*" $target`
+                  echo
+                  if [ -n "$already_there" ]; then
+                     echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
+                     echo
+                     echo $already_there
+                  else
+                     read -p "Add this command to your $target? [y/n]" -u 1 install_it
+                     if [[ "$install_it" == [yY] ]]; then
+                        echo $set_paths_cmd >> $target
+                        echo
+                        echo "Okay, we added it:"
+                        grep ".*export CLASSPATH=.*prizms/bin/install/classpaths.sh.*" $target
+                        added="$added $target"
+                     else
+                        echo "We didn't chande your $target, so you'll need to make sure you set the paths correctly each time."
+                     fi
+                  fi
 
-
-               # AS PROJECT
-               #
-               # csv2rdf4lod-source-me-as-${project_user_name}.sh is *the* one and only source-me.sh that 
-               # the project name should source when initializing -- particular when from a cronjob.
-               # This is *the* only source-me.sh that should appear in the project user name's ~/.bashrc
-               #
-               # This is created by the developer -- NOT the project user -- and committed to version control.
-               template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
-               target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
-               if [[ ! -e $target ]]; then
-                  cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI='                 > $target
-                  echo "source `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
-                  echo "source `pwd`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
-                  # any others to source?
-                  echo "export CSV2RDF4LOD_CONVERT_DATA_ROOT=''"                                  >> $target
-                  added="$added $target"
+                  #
+                  # alias: Developer su'ing to Project user name
+                  #
                   echo
                   echo $div
-                  echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
-               fi
-               project_data_root="${user_home%/*}/$project_user_name/prizms/data/source"
-               change_source_me $target CSV2RDF4LOD_CONVERT_DATA_ROOT "$project_data_root" \
-                  "indicate the production data directory, from which /var/www and the production SPARQL endpoints are loaded" \
-                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_DATA_ROOT' \
-                  'some loss'
-
-               # TODO: CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
-               # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
-
-               # TODO export JENAROOT=/home/lebot/opt/apache-jena-2.7.4
-
-               # NOTE sudo vi /etc/passwd change melagrid to bash
-
-               # AS DEVELOPER
-               # 
-               # Create a stub for the user-level environment variables, based on the template available from the csv2rdf4lod-automation.
-               # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables-%28considerations-for-a-distributed-workflow%29
-               # 
-               template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
-               target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
-               if [[ ! -e $target ]]; then
-                  cp $template $target
-                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CONVERT_PERSON_URI' $target --change-to $person_uri
-                  added="$added $target"
+                  new_command="alias $project_user_name='sudo su $project_user_name'" # e.g. alias hd='sudo su healthdata'
+                  target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
+                  echo "As a developer of this $project_user_name Prizms, you will need to change into the $project_user_name user"
+                  echo "to convert and publish datasets. You can use an alias to this:"
                   echo
-                  echo $div
-                  echo "There wasn't a source-me.sh for your user name in the data conversion root, so we created one for you at $target"
-               fi
-
-               #
-               # Add PATH = PATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$person_user_name.sh
-               #
-               echo
-               echo $div
-               set_paths_cmd=`$PRIZMS_HOME/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
-               echo "The following command adds into your shell's environment the paths that Prizms requires to run its scripts."
-               echo "Running it multiple times will have no effect, since only the missing paths are added."
-               echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
-               echo "The following command should appear in your data/source/csv2rdf4lod-source-me-as-$person_user_name.sh."
-               echo
-               echo "    $set_paths_cmd"
-               target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
-               already_there=`grep ".*export PATH=.*prizms/bin/install/paths.sh.*" $target`
-               echo
-               if [ -n "$already_there" ]; then
-                  echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
+                  echo "   $new_command"
                   echo
-                  echo $already_there
-               else
-                  read -p "Add this command to your $target? [y/n]" -u 1 install_it
-                  if [[ "$install_it" == [yY] ]]; then
-                     echo $set_paths_cmd >> $target
+                  already_there=`grep "$new_command" $target` 
+                  echo
+                  if [ -n "$already_there" ]; then
+                     echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
                      echo
-                     echo "Okay, we added it:"
-                     grep ".*export PATH=.*prizms/bin/install/paths.sh.*" $target
-                     added="$added $target"
+                     echo $already_there
                   else
-                     echo "We didn't touch your $target, so you'll need to make sure you set the paths correctly each time."
+                     read -p "Add this command to your $target? [y/n] " -u 1 install_it
+                     if [[ "$install_it" == [yY] ]]; then
+                        echo $new_command >> $target
+                        echo
+                        echo "Okay, we added it:"
+                        grep "$new_command" $target
+                        added="$added $target"
+                     else
+                        echo "We didn't change your $target, so you'll need to make sure you set the paths correctly each time."
+                     fi
                   fi
-               fi
 
-               #
-               # Add CLASSPATH = CLASSPATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$person_user_name.sh
-               #
-               echo
-               echo $div
-               set_paths_cmd=`$PRIZMS_HOME/bin/install/classpaths.sh --help | tail -1 | sed 's/^ *//'`
-               echo "The following command adds into your shell's environment the Java class paths that Prizms requires to run its scripts."
-               echo "Just like the previous paths.sh command, running this multiple times will have no effect, since only the missing paths are added."
-               echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
-               echo "The following command should appear in your data/source/csv2rdf4lod-source-me-as-$person_user_name.sh."
-               echo
-               echo "    $set_paths_cmd"
-               target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
-               already_there=`grep ".*export CLASSPATH=.*prizms/bin/install/classpaths.sh.*" $target`
-               echo
-               if [ -n "$already_there" ]; then
-                  echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
-                  echo
-                  echo $already_there
-               else
-                  read -p "Add this command to your $target? [y/n]" -u 1 install_it
-                  if [[ "$install_it" == [yY] ]]; then
-                     echo $set_paths_cmd >> $target
-                     echo
-                     echo "Okay, we added it:"
-                     grep ".*export CLASSPATH=.*prizms/bin/install/classpaths.sh.*" $target
-                     added="$added $target"
-                  else
-                     echo "We didn't chande your $target, so you'll need to make sure you set the paths correctly each time."
-                  fi
-               fi
+                  # TODO: JENAROOT add to source-me-as-lebot
+                  # TODO export JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc
 
-               #
-               # alias: Developer su'ing to Project user name
-               #
-               echo
-               echo $div
-               new_command="alias $project_user_name='sudo su $project_user_name'" # e.g. alias hd='sudo su healthdata'
-               target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
-               echo "As a developer of this $project_user_name Prizms, you will need to change into the $project_user_name user"
-               echo "to convert and publish datasets. You can use an alias to this:"
-               echo
-               echo "   $new_command"
-               echo
-               already_there=`grep "$new_command" $target` 
-               echo
-               if [ -n "$already_there" ]; then
-                  echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
-                  echo
-                  echo $already_there
-               else
-                  read -p "Add this command to your $target? [y/n] " -u 1 install_it
-                  if [[ "$install_it" == [yY] ]]; then
-                     echo $new_command >> $target
-                     echo
-                     echo "Okay, we added it:"
-                     grep "$new_command" $target
-                     added="$added $target"
-                  else
-                     echo "We didn't chande your $target, so you'll need to make sure you set the paths correctly each time."
-                  fi
-               fi
-
-
-
-
-               # TODO: JENAROOT add to source-me-as-lebot
-               # TODO export JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc
+               fi # end "I am not project user"
 
                # End setting the environment variables for project, project user, and developer user.
 
@@ -859,304 +858,307 @@ pushd &> /dev/null
 
 
 
-               # Start installing dependencies.
+               if [[ -z "$i_am_project_user" ]]; then 
+                  # Start installing dependencies.
 
-               #
-               # We need to check the /etc/hosts before we try to install Virtuoso as a dependency,
-               # otherwise dpkg will fail to build it when called by csv2rdf4lod-automation's install-dependencies.sh.
-               #
-               echo
-               echo $div
-               echo "Virtuoso will have issues if it is on a virtual machine and /etc/hosts's localhost is 127.0.0.1 instead of the VM's IP."
-               # Hack for our pseudo-VMs. This needs to be done before installing virtuoso with install-csv2rdf4lod-dependencies.sh
-               #
-               # vi /etc/hosts
-               # 127.0.0.1    localhost
-               # 192.168.1.45    melagrid melagrid.aquarius.tw.rpi.edu
-               # ->
-               # 192.168.1.45    localhost
-               # 192.168.1.45    melagrid melagrid.aquarius.tw.rpi.edu
-
-               # This issue is partially discussed at:
-               # https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore
-
-               # The following ERROR is fixed by the /etc/hosts change shown above:
-               #
-               # Selecting previously deselected package virtuoso-opensource.
-               # (Reading database ... 34197 files and directories currently installed.)
-               # Unpacking virtuoso-opensource (from .../virtuoso-opensource_6.1.6_amd64.deb) ...
-               # Setting up virtuoso-opensource (6.1.6) ...
-               # Starting OpenLink Virtuoso Open-Source Edition: The VDBMS server process terminated prematurely
-               # after initializing network connections.
-               # invoke-rc.d: initscript virtuoso-opensource, action "start" failed.
-               # dpkg: error processing virtuoso-opensource (--install):
-               #  subprocess installed post-installation script returned error exit status 104
-               # Processing triggers for ureadahead ...
-               # Errors were encountered while processing:
-               #  virtuoso-opensource
-               # 
-               # cannot:
-               target=/etc/hosts
-               localhost_ip=`cat $target | awk '$2=="localhost"{print $1}'`
-               vm_ip=`grep "tw.rpi.edu" $target | awk '{print $1}'`
-               if [[ -n "$vm_ip" && "$localhost_ip" == "127.0.0.1" ]]; then
-                  echo "$target is currently:"
-                  echo
-                  cat $target
-                  echo
-                  echo "We'd like to change the IP of 'localhost' to $vm_ip, resulting in a $target of:"
-                  echo
-                  cat $target | awk -v ip=$vm_ip '{if($2=="localhost"){print ip,"localhost"}else{print}}' > .`basename $0`.hosts
-                  cat .`basename $0`.hosts
-                  echo
-                  echo "Changing the IP of localhost to the VM's IP should let Virtuoso start up correctly."
-                  read -p "Q: May we make the change to $target?" -u 1 change_it
-                  if [[ "$change_it" == [yY] ]]; then
-                     echo sudo mv $target $target.prizms.bck
-                          sudo mv $target $target.prizms.bck
-                     echo sudo mv .`basename $0`.hosts $target
-                          sudo mv .`basename $0`.hosts $target
-                     echo
-                     echo "We changed $target; it is now:"
-                     cat $target
-                  else
-                     rm .`basename $0`.hosts
-                     echo "Okay, we won't change $target. But if you try to install Virtuoso and this is a virtual machine, you'll run into issues."
-                     echo "See:"
-                     echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
-                  fi
-               else
-                  echo "(locahost's IP is $localhost_ip; Virtuoso should not have any issues.)"
-               fi 
-
-               #
-               # Install third party utilities (mostly with apt-get and tarball installs).
-               #
-               echo
-               echo $div
-               echo "Prizms uses a variety of third party utilities that we can try to install for you automatically."
-               echo "The following utilities seem to already be installed okay:"
-               echo
-               $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.okay"
-               # TODO: set up the user-based install that does NOT require sudo. python's easy_install
-              
-               todo=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO" | grep -v "pydistutils.cfg"`
-               if [ -n "$todo" ]; then
-                  echo "todo${todo}todo"
-                  echo
-                  echo "However, the following do not seem to be installed:"
-                  echo
-                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO" | grep -v "pydistutils.cfg"
-                  echo
-                  read -p "Q: May we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
-                  echo
-                  if [[ "$install_them" == [yY] ]]; then
-                     touch .before-prizms-installed-dependencies
-                     $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh
-                  else
-                     echo "Okay, we won't try to install them. Check out the following if you want to do it yourself:"
-                     echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"
-                     #echo "This installer will quit now, instead of trying to finish."
-                     #exit 1
-                  fi
-               fi
-
-
-
-
-               virtuoso_installed="no"
-               if [[ -e '/var/lib/virtuoso/db/virtuoso.ini' && \
-                     -e '/usr/bin/isql-v'                   && \
-                     -e '/etc/init.d/virtuoso-opensource'   && \
-                     -e '/var/lib/virtuoso/db/virtuoso.log' ]]; then
-                  virtuoso_installed="yes"
-               fi
-               if [[ "$virtuoso_installed" == "yes" ]]; then
-
-                  # 1111 is Virtuoso's default port to access its "JDBC".
-                  # 8890 is Virtuoso's default port for its web app admin interface.
-                  # 
-                  # If Virtuoso is installed on a VM, access it's Conductor webapp from your own laptop using something like:
                   #
-                  # ssh -L 8890:localhost:8890 -p 2245 -l smithj aquarius.tw.rpi.edu
+                  # We need to check the /etc/hosts before we try to install Virtuoso as a dependency,
+                  # otherwise dpkg will fail to build it when called by csv2rdf4lod-automation's install-dependencies.sh.
                   #
-                  #        |    |         |       |       |      ^ The machine that hosts the VM.
-                  #        |    |         |       |       ^ Your user name.
-                  #        |    |         |       ^ The port on aquarius that my VM is on.
-                  #        |    |         ^ The port on the VM that Virtuoso serves its SPARQL endpoint.
-                  #        |    ^ Your machine, e.g. your laptop.
-                  #        ^ The port on your machine that you connect to in order to get to the VM's Virtuoso SPARQL endpoint.
-                  # 
-                  # Now, load up http://localhost:8890/conductor in your laptop's web browser, and you're viewing the service from the VM.
-
                   echo
                   echo $div
-                  target="/var/lib/virtuoso/db/virtuoso.ini"
-                  data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/data/
-                  already_set=`grep 'DirsAllowed' $target | grep -v $data_root`
-                  echo "Virtuoso can only access the directories that are specified in $target's 'DirsAllowed' setting."
-                  echo "If you have an RDF file in some *other* directory, you will not be able to load it into Virtuoso,"
-                  echo "or -- if it does -- it can take more storage and time than is actually needed to load."
+                  echo "Virtuoso will have issues if it is on a virtual machine and /etc/hosts's localhost is 127.0.0.1 instead of the VM's IP."
+                  # Hack for our pseudo-VMs. This needs to be done before installing virtuoso with install-csv2rdf4lod-dependencies.sh
+                  #
+                  # vi /etc/hosts
+                  # 127.0.0.1    localhost
+                  # 192.168.1.45    melagrid melagrid.aquarius.tw.rpi.edu
+                  # ->
+                  # 192.168.1.45    localhost
+                  # 192.168.1.45    melagrid melagrid.aquarius.tw.rpi.edu
 
-                  if [[ -n "$already_set" ]]; then
-                     echo "'DirsAllowed' is currently set as:"
-                     echo
-                     grep DirsAllowed $target
-                     # ^ e.g. DirsAllowed         = ., /usr/share/virtuoso/vad
+                  # This issue is partially discussed at:
+                  # https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore
 
+                  # The following ERROR is fixed by the /etc/hosts change shown above:
+                  #
+                  # Selecting previously deselected package virtuoso-opensource.
+                  # (Reading database ... 34197 files and directories currently installed.)
+                  # Unpacking virtuoso-opensource (from .../virtuoso-opensource_6.1.6_amd64.deb) ...
+                  # Setting up virtuoso-opensource (6.1.6) ...
+                  # Starting OpenLink Virtuoso Open-Source Edition: The VDBMS server process terminated prematurely
+                  # after initializing network connections.
+                  # invoke-rc.d: initscript virtuoso-opensource, action "start" failed.
+                  # dpkg: error processing virtuoso-opensource (--install):
+                  #  subprocess installed post-installation script returned error exit status 104
+                  # Processing triggers for ureadahead ...
+                  # Errors were encountered while processing:
+                  #  virtuoso-opensource
+                  # 
+                  # cannot:
+                  target=/etc/hosts
+                  localhost_ip=`cat $target | awk '$2=="localhost"{print $1}'`
+                  vm_ip=`grep "tw.rpi.edu" $target | awk '{print $1}'`
+                  if [[ -n "$vm_ip" && "$localhost_ip" == "127.0.0.1" ]]; then
+                     echo "$target is currently:"
                      echo
-                     echo "Prizms needs Virtuoso to have permission to access the files in $data_root"
-                     echo "in order to load RDF files efficiently."
-                     echo "This is done by adding $data_root to Virtuoso's 'DirsAllowed'"
+                     cat $target
                      echo
-                     cat $target | awk -v data_root=$data_root '{if($1 == "DirsAllowed"){print $0", "data_root}else{print}}' | grep "DirsAllowed"
+                     echo "We'd like to change the IP of 'localhost' to $vm_ip, resulting in a $target of:"
                      echo
-                     read -p "Q: May we add $data_root to the 'DirsAllowed' setting in $target (as shown above)? [y/n] " -u 1 install_it
+                     cat $target | awk -v ip=$vm_ip '{if($2=="localhost"){print ip,"localhost"}else{print}}' > .`basename $0`.hosts
+                     cat .`basename $0`.hosts
                      echo
-                     if [[ "$install_it" == [yY] ]]; then
-                        cat $target | awk -v data_root=$data_root '{if($1 == "DirsAllowed"){print $0", "data_root}else{print}}' > .`basename $0`.ini
-                        echo sudo mv $target $target.prizms.backup
-                             sudo mv $target $target.prizms.backup
-                        echo sudo mv .`basename $0`.ini $target
-                             sudo mv .`basename $0`.ini $target
+                     echo "Changing the IP of localhost to the VM's IP should let Virtuoso start up correctly."
+                     read -p "Q: May we make the change to $target?" -u 1 change_it
+                     if [[ "$change_it" == [yY] ]]; then
+                        echo sudo mv $target $target.prizms.bck
+                             sudo mv $target $target.prizms.bck
+                        echo sudo mv .`basename $0`.hosts $target
+                             sudo mv .`basename $0`.hosts $target
                         echo
-                        echo "Okay, we added to 'DirsAllowed'. Not it is set as:"
+                        echo "We changed $target; it is now:"
+                        cat $target
+                     else
+                        rm .`basename $0`.hosts
+                        echo "Okay, we won't change $target. But if you try to install Virtuoso and this is a virtual machine, you'll run into issues."
+                        echo "See:"
+                        echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
+                     fi
+                  else
+                     echo "(locahost's IP is $localhost_ip; Virtuoso should not have any issues.)"
+                  fi 
+
+                  #
+                  # Install third party utilities (mostly with apt-get and tarball installs).
+                  #
+                  echo
+                  echo $div
+                  echo "Prizms uses a variety of third party utilities that we can try to install for you automatically."
+                  echo "The following utilities seem to already be installed okay:"
+                  echo
+                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.okay"
+                  # TODO: set up the user-based install that does NOT require sudo. python's easy_install
+                 
+                  todo=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO" | grep -v "pydistutils.cfg"`
+                  if [ -n "$todo" ]; then
+                     echo "todo${todo}todo"
+                     echo
+                     echo "However, the following do not seem to be installed:"
+                     echo
+                     $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO" | grep -v "pydistutils.cfg"
+                     echo
+                     read -p "Q: May we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
+                     echo
+                     if [[ "$install_them" == [yY] ]]; then
+                        touch .before-prizms-installed-dependencies
+                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh
+                     else
+                        echo "Okay, we won't try to install them. Check out the following if you want to do it yourself:"
+                        echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"
+                        #echo "This installer will quit now, instead of trying to finish."
+                        #exit 1
+                     fi
+                  fi
+
+
+
+
+                  virtuoso_installed="no"
+                  if [[ -e '/var/lib/virtuoso/db/virtuoso.ini' && \
+                        -e '/usr/bin/isql-v'                   && \
+                        -e '/etc/init.d/virtuoso-opensource'   && \
+                        -e '/var/lib/virtuoso/db/virtuoso.log' ]]; then
+                     virtuoso_installed="yes"
+                  fi
+                  if [[ "$virtuoso_installed" == "yes" ]]; then
+
+                     # 1111 is Virtuoso's default port to access its "JDBC".
+                     # 8890 is Virtuoso's default port for its web app admin interface.
+                     # 
+                     # If Virtuoso is installed on a VM, access it's Conductor webapp from your own laptop using something like:
+                     #
+                     # ssh -L 8890:localhost:8890 -p 2245 -l smithj aquarius.tw.rpi.edu
+                     #
+                     #        |    |         |       |       |      ^ The machine that hosts the VM.
+                     #        |    |         |       |       ^ Your user name.
+                     #        |    |         |       ^ The port on aquarius that my VM is on.
+                     #        |    |         ^ The port on the VM that Virtuoso serves its SPARQL endpoint.
+                     #        |    ^ Your machine, e.g. your laptop.
+                     #        ^ The port on your machine that you connect to in order to get to the VM's Virtuoso SPARQL endpoint.
+                     # 
+                     # Now, load up http://localhost:8890/conductor in your laptop's web browser, and you're viewing the service from the VM.
+
+                     echo
+                     echo $div
+                     target="/var/lib/virtuoso/db/virtuoso.ini"
+                     data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/data/
+                     already_set=`grep 'DirsAllowed' $target | grep -v $data_root`
+                     echo "Virtuoso can only access the directories that are specified in $target's 'DirsAllowed' setting."
+                     echo "If you have an RDF file in some *other* directory, you will not be able to load it into Virtuoso,"
+                     echo "or -- if it does -- it can take more storage and time than is actually needed to load."
+
+                     if [[ -n "$already_set" ]]; then
+                        echo "'DirsAllowed' is currently set as:"
                         echo
                         grep DirsAllowed $target
+                        # ^ e.g. DirsAllowed         = ., /usr/share/virtuoso/vad
+
                         echo
-                        echo "Virtuoso needs to be restarted for the setting to take effect, which can be done with:"
+                        echo "Prizms needs Virtuoso to have permission to access the files in $data_root"
+                        echo "in order to load RDF files efficiently."
+                        echo "This is done by adding $data_root to Virtuoso's 'DirsAllowed'"
                         echo
-                        echo "   sudo /etc/init.d/virtuoso-opensource stop"
-                        echo "   sudo /etc/init.d/virtuoso-opensource start"
+                        cat $target | awk -v data_root=$data_root '{if($1 == "DirsAllowed"){print $0", "data_root}else{print}}' | grep "DirsAllowed"
                         echo
-                        read -p "Restart virtuoso now (with the command above)? [y/n] " -u 1 restart_it
-                        if [[ "$restart_it" == [yY] ]]; then
-                           sudo /etc/init.d/virtuoso-opensource stop
-                           sudo /etc/init.d/virtuoso-opensource start
+                        read -p "Q: May we add $data_root to the 'DirsAllowed' setting in $target (as shown above)? [y/n] " -u 1 install_it
+                        echo
+                        if [[ "$install_it" == [yY] ]]; then
+                           cat $target | awk -v data_root=$data_root '{if($1 == "DirsAllowed"){print $0", "data_root}else{print}}' > .`basename $0`.ini
+                           echo sudo mv $target $target.prizms.backup
+                                sudo mv $target $target.prizms.backup
+                           echo sudo mv .`basename $0`.ini $target
+                                sudo mv .`basename $0`.ini $target
+                           echo
+                           echo "Okay, we added to 'DirsAllowed'. Not it is set as:"
+                           echo
+                           grep DirsAllowed $target
+                           echo
+                           echo "Virtuoso needs to be restarted for the setting to take effect, which can be done with:"
+                           echo
+                           echo "   sudo /etc/init.d/virtuoso-opensource stop"
+                           echo "   sudo /etc/init.d/virtuoso-opensource start"
+                           echo
+                           read -p "Restart virtuoso now (with the command above)? [y/n] " -u 1 restart_it
+                           if [[ "$restart_it" == [yY] ]]; then
+                              sudo /etc/init.d/virtuoso-opensource stop
+                              sudo /etc/init.d/virtuoso-opensource start
+                           else
+                              echo "Okay, we won't restart virtuoso. But you'll need to restart it to load data from $target."
+                              echo "See:"
+                              echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
+                              echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
+                           fi
                         else
-                           echo "Okay, we won't restart virtuoso. But you'll need to restart it to load data from $target."
-                           echo "See:"
+                           echo "Okay, we won't modify $target. See the following:"
                            echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
                            echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
                         fi
                      else
-                        echo "Okay, we won't modify $target. See the following:"
-                        echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
-                        echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
+                        echo "($target already has $data_root included in its 'DirsAllowed' setting.)"
                      fi
-                  else
-                     echo "($target already has $data_root included in its 'DirsAllowed' setting.)"
-                  fi
 
-                  credentials="/etc/prizms/$project_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh"
-                  if [[ -e $credentials ]]; then
-                     vpw=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD' $credentials`
-                  fi
-                  if [[ -z "$vpw" ]]; then
-                     echo
-                     echo $div
-                     echo "If you just installed Virtuoso, and haven't changed the default password for the user 'dba',"
-                     echo "you should do that now at http://localhost:8890/conductor."
-                     if [[ -n "$vm_ip" ]]; then
-                        echo "If you installed Virtuoso on a VM, you can access it through an SSN tunnel with something like:"
-                        echo
-                        echo "   ssh -L 8890:localhost:8890 -p 2245 -l smithj aquarius.tw.rpi.edu"
-                        echo
-                        echo "Once the tunnel it set up, you can load http://localhost:8890/conductor to access the VM's conductor."
+                     credentials="/etc/prizms/$project_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh"
+                     if [[ -e $credentials ]]; then
+                        vpw=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD' $credentials`
                      fi
-                     echo
-                     echo "1) Log in using the panel on the left."
-                     echo "2) Click 'System Admin' tab on the top."
-                     echo "3) Click 'User Accounts' tab on the top."
-                     echo "4) Click 'Edit' to the right of user 'dba'."
-                     echo "5) Set and confirm the new password, and hit 'Save' at the bottom."
-                     echo
-                     read -p "Q: Did you change the default password for Virtuoso user 'dba'? [y/n] " -u 1 changed
-                     if [[ "$changed" != [yY] ]]; then
-                        echo "Okay, we can proceed with a default password, but you should be worried about security issues in the future."
-                     fi
-                     echo
-                     echo "Prizms stores Virtuoso credentials outside of version control, so that they are kept from the public." 
-                     if [[ ! -e $credentials ]]; then
+                     if [[ -z "$vpw" ]]; then
                         echo
-                        read -p "Q: May we set up $credentials to maintain the Virtuoso credentials? [y/n] " -u 1 do_it
-                        if [[ "$do_it" == [yY] ]]; then
-                           echo sudo mkdir -p `dirname $credentials`
-                                sudo mkdir -p `dirname $credentials`
-                           if [[ -e `dirname $credentials` ]]; then
-                              echo
-                              echo "Prizms uses CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME and CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD to"
-                              echo "authenticate to the Virtuoso database with the isql-v command."
-                              echo
-                              read -p "Q: What is the Virtuoso database username (for isql-v)? (leave empty to default to 'dba') " vuser
-                              read -p "Q: What is the Virtuoso database password (for isql-v)? (leave empty to default to 'dba') " vpw 
-                              echo
-                              if [[ -n "$vuser" ]]; then
-                                 echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME='$vuser'" | sudo tee $credentials
+                        echo $div
+                        echo "If you just installed Virtuoso, and haven't changed the default password for the user 'dba',"
+                        echo "you should do that now at http://localhost:8890/conductor."
+                        if [[ -n "$vm_ip" ]]; then
+                           echo "If you installed Virtuoso on a VM, you can access it through an SSN tunnel with something like:"
+                           echo
+                           echo "   ssh -L 8890:localhost:8890 -p 2245 -l smithj aquarius.tw.rpi.edu"
+                           echo
+                           echo "Once the tunnel it set up, you can load http://localhost:8890/conductor to access the VM's conductor."
+                        fi
+                        echo
+                        echo "1) Log in using the panel on the left."
+                        echo "2) Click 'System Admin' tab on the top."
+                        echo "3) Click 'User Accounts' tab on the top."
+                        echo "4) Click 'Edit' to the right of user 'dba'."
+                        echo "5) Set and confirm the new password, and hit 'Save' at the bottom."
+                        echo
+                        read -p "Q: Did you change the default password for Virtuoso user 'dba'? [y/n] " -u 1 changed
+                        if [[ "$changed" != [yY] ]]; then
+                           echo "Okay, we can proceed with a default password, but you should be worried about security issues in the future."
+                        fi
+                        echo
+                        echo "Prizms stores Virtuoso credentials outside of version control, so that they are kept from the public." 
+                        if [[ ! -e $credentials ]]; then
+                           echo
+                           read -p "Q: May we set up $credentials to maintain the Virtuoso credentials? [y/n] " -u 1 do_it
+                           if [[ "$do_it" == [yY] ]]; then
+                              echo sudo mkdir -p `dirname $credentials`
+                                   sudo mkdir -p `dirname $credentials`
+                              if [[ -e `dirname $credentials` ]]; then
+                                 echo
+                                 echo "Prizms uses CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME and CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD to"
+                                 echo "authenticate to the Virtuoso database with the isql-v command."
+                                 echo
+                                 read -p "Q: What is the Virtuoso database username (for isql-v)? (leave empty to default to 'dba') " vuser
+                                 read -p "Q: What is the Virtuoso database password (for isql-v)? (leave empty to default to 'dba') " vpw 
+                                 echo
+                                 if [[ -n "$vuser" ]]; then
+                                    echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_USERNAME='$vuser'" | sudo tee $credentials
+                                 fi
+                                 if [[ -n "$vpw" ]]; then
+                                    echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD='$vpw'"   | sudo tee -a $credentials
+                                 fi
+                                 #echo "CSV2RDF4LOD_PUBLISH_VIRTUOSO_PORT"
+                              else
+                                 echo "ERROR: could not create `dirname $credentials`"
                               fi
-                              if [[ -n "$vpw" ]]; then
-                                 echo "export CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD='$vpw'"   | sudo tee -a $credentials
-                              fi
-                              #echo "CSV2RDF4LOD_PUBLISH_VIRTUOSO_PORT"
                            else
-                              echo "ERROR: could not create `dirname $credentials`"
+                              echo "Okay, we won't create $credentials. But we won't be able to use Virtuoso to load RDF data."
+                              echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
                            fi
-                        else
-                           echo "Okay, we won't create $credentials. But we won't be able to use Virtuoso to load RDF data."
-                           echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
                         fi
                      fi
-                  fi
-                  if [[ -e $credentials ]]; then
-                     target="data/source/csv2rdf4lod-source-me-credentials.sh"
+                     if [[ -e $credentials ]]; then
+                        target="data/source/csv2rdf4lod-source-me-credentials.sh"
+                        echo
+                        echo $div
+                        echo "$target is a public version controlled script that points to all credentials required for the project."
+                        already_there=`grep $credentials $target`
+                        if [[ -z $already_there ]]; then
+                           echo
+                           read -p "Add 'source $credentials' to $target? [y/n] " -u 1 add_it
+                           echo "source $credentials" >> $target
+                           echo "Added."
+                           added="$added $target"
+                        else
+                           echo "($target already includes $credentials)"
+                        fi
+                     fi
+
+                     # TODO: X_GOOGLE_MAPS_API_Key
+                     credentials="/etc/prizms/$project_user_name/??triple-store??/google/csv2rdf4lod-source-me-for-googlemap-credentials.sh"
+
+
                      echo
                      echo $div
-                     echo "$target is a public version controlled script that points to all credentials required for the project."
-                     already_there=`grep $credentials $target`
-                     if [[ -z $already_there ]]; then
-                        echo
-                        read -p "Add 'source $credentials' to $target? [y/n] " -u 1 add_it
-                        echo "source $credentials" >> $target
-                        echo "Added."
-                        added="$added $target"
-                     else
-                        echo "($target already includes $credentials)"
-                     fi
-                  fi
+                     echo TODO add the apache map /sparql to 8890
+                     # add to /etc/apache2/sites-available/std.common
+                     # See mapping into apache at https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
+                     #
+                     #  <Location /sparql>
+                     #      allow from all
+                     #      SetHandler None
+                     #      Options +Indexes
+                     #      ProxyPass               http://localhost:8890/sparql
+                     #      ProxyPassReverse        /sparql
+                     #    # ProxyHTMLExtended On
+                     #    # ProxyHTMLURLMap url\(/([^\)]*)\) url(/sparql$1) Rihe
+                     #    # ProxyHTMLURLMap         /sparql /sparql
+                     #    # ProxyHTMLURLMap         http://localhost:8890/sparql /sparql
+                     #  </Location>
+                     #
+                     # a2enmod ??
+                     # service apache2 restart
+                     #
+                     # We're trying to get to http://aquarius.tw.rpi.edu/projects/melagrid/sparql
 
-                  # TODO: X_GOOGLE_MAPS_API_Key
-                  credentials="/etc/prizms/$project_user_name/??triple-store??/google/csv2rdf4lod-source-me-for-googlemap-credentials.sh"
+                     # TODO: set CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT
+                     # TODO: set CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT 
 
+                  fi # end $virtuoso_install
 
-                  echo
-                  echo $div
-                  echo TODO add the apache map /sparql to 8890
-                  # add to /etc/apache2/sites-available/std.common
-                  # See mapping into apache at https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
-                  #
-                  #  <Location /sparql>
-                  #      allow from all
-                  #      SetHandler None
-                  #      Options +Indexes
-                  #      ProxyPass               http://localhost:8890/sparql
-                  #      ProxyPassReverse        /sparql
-                  #    # ProxyHTMLExtended On
-                  #    # ProxyHTMLURLMap url\(/([^\)]*)\) url(/sparql$1) Rihe
-                  #    # ProxyHTMLURLMap         /sparql /sparql
-                  #    # ProxyHTMLURLMap         http://localhost:8890/sparql /sparql
-                  #  </Location>
-                  #
-                  # a2enmod ??
-                  # service apache2 restart
-                  #
-                  # We're trying to get to http://aquarius.tw.rpi.edu/projects/melagrid/sparql
+                  # TODO: is logging location set up correctly?
 
-                  # TODO: set CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT
-                  # TODO: set CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT 
-
-               fi # end $virtuoso_install
-
-               # TODO: is logging location set up correctly?
+               fi # end "I am not project user"
 
 
 
@@ -1167,7 +1169,7 @@ pushd &> /dev/null
                #
                echo
                echo $div
-               source_me="source `pwd`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
+               source_me="source `pwd`/data/source/csv2rdf4lod-source-me-as-`whoami`.sh"
                echo "Prizms encapsulates all of the environment variables and PATH setup that is needed within"
                echo "a single source-me.sh script dedicated to the user that needs it. The script is version-controlled"
                echo "so we can manage the environment variables that everybody uses. The single source-me.sh should be the *only*"
@@ -1175,7 +1177,7 @@ pushd &> /dev/null
                echo "source-me.sh that you need to run, and should be placed within your ~/.bashrc."
                echo
                echo "   $source_me"
-               already_there=`grep ".*source \`pwd\`/data/source/csv2rdf4lod-source-me-as-$person_user_name.sh.*" ~/.bashrc`
+               already_there=`grep ".*source \`pwd\`/data/source/csv2rdf4lod-source-me-as-`whoami`.sh.*" ~/.bashrc`
                echo
                if [ -n "$already_there" ]; then
                   echo "It seems that you already have the following in your ~/.bashrc, so we won't offer to add it again:"
@@ -1208,77 +1210,89 @@ pushd &> /dev/null
 
 
 
+               if [[ -z "$i_am_project_user" ]]; then 
 
-               #
-               # TODO Sprinkle "access.ttl" files within the csv2rdf4lod conversion root, as mirrors of the upstream CKAN.
-               #
-               # http://data.melagrid.org/cowabunga/dude.html -> data-melagrid-org
-               echo
-               echo $div
-               export CLASSPATH=$CLASSPATH`$PRIZMS_HOME/bin/install/classpaths.sh` 
-               upstream_ckan_source_id=`java edu.rpi.tw.string.NameFactory --source-id-of $upstream_ckan`
-               target="data/source/$upstream_ckan_source_id"
-               echo "Prizms can collect and convert datasets that are listed in CKAN instances."
-               echo "You've specified an upstream CKAN from which to mirror dataset listings ($upstream_ckan),"
-               echo "but Prizms hasn't extracted the access metadata into $target."
-               echo
-               if [[ -n "$upstream_ckan_source_id" && ! -e $target ]]; then
-                  read -p "Extract the access metadata from the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
-                  if [[ "$extract_it" == [yY] ]]; then
-                     mkdir -p $target
-                     pushd $target &> /dev/null
-                        echo cr-create-dataset-dirs-from-ckan.py $upstream_ckan $our_base_uri
-                     popd &> /dev/null
-                  else
-                     echo "Okay, we won't try to extract access metadata from $upstream_ckan. Check out the following if you want to do it yourself:"
-                     echo "  https://github.com/jimmccusker/twc-healthdata/wiki/Mirroring-a-Source-CKAN-Instance"
-                  fi
-               fi
-
-
-
-               #
-               # Set up cr-cron.sh
-               #
-               echo
-               echo $div
-               template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/cr-cron.sh"
-               target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
-               echo "TODO: talk about the automation"
-               echo
-               if [[ -n "$our_source_id" ]]; then
-                  if [[ ! -e $target ]]; then
-                     read -p "There isn't a $target in your repository, should we add it for you? [y/n] " -u 1 install_it
-                     echo
-                     if [[ "$install_it" == [yY] ]]; then
-                        mkdir -p `dirname $target`
-                        cp $template $target
-                        added="$added $target"
-                        echo "Okay, we added $target"
+                  #
+                  # TODO Sprinkle "access.ttl" files within the csv2rdf4lod conversion root, as mirrors of the upstream CKAN.
+                  #
+                  # http://data.melagrid.org/cowabunga/dude.html -> data-melagrid-org
+                  echo
+                  echo $div
+                  export CLASSPATH=$CLASSPATH`$PRIZMS_HOME/bin/install/classpaths.sh` 
+                  upstream_ckan_source_id=`java edu.rpi.tw.string.NameFactory --source-id-of $upstream_ckan`
+                  target="data/source/$upstream_ckan_source_id"
+                  echo "Prizms can collect and convert datasets that are listed in CKAN instances."
+                  echo "You've specified an upstream CKAN from which to mirror dataset listings ($upstream_ckan),"
+                  echo "but Prizms hasn't extracted the access metadata into $target."
+                  echo
+                  if [[ -n "$upstream_ckan_source_id" && ! -e $target ]]; then
+                     read -p "Extract the access metadata from the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
+                     if [[ "$extract_it" == [yY] ]]; then
+                        mkdir -p $target
+                        pushd $target &> /dev/null
+                           echo cr-create-dataset-dirs-from-ckan.py $upstream_ckan $our_base_uri
+                        popd &> /dev/null
                      else
-                        echo "Okay, we didn't add $target, but your Prizms won't automatically update."
-                        echo "See https://github.com/jimmccusker/twc-healthdata/wiki/Automation"
-                        echo "and https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets"
+                        echo "Okay, we won't try to extract access metadata from $upstream_ckan. Check out the following if you want to do it yourself:"
+                        echo "  https://github.com/jimmccusker/twc-healthdata/wiki/Mirroring-a-Source-CKAN-Instance"
+                     fi
+                  fi
+
+
+                  #
+                  # Set up cr-cron.sh
+                  #
+                  echo
+                  echo $div
+                  template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/cr-cron.sh"
+                  target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
+                  echo "TODO: talk about the automation"
+                  echo
+                  if [[ -n "$our_source_id" ]]; then
+                     if [[ ! -e $target ]]; then
+                        read -p "There isn't a $target in your repository, should we add it for you? [y/n] " -u 1 install_it
+                        echo
+                        if [[ "$install_it" == [yY] ]]; then
+                           mkdir -p `dirname $target`
+                           cp $template $target
+                           added="$added $target"
+                           echo "Okay, we added $target"
+                        else
+                           echo "Okay, we didn't add $target, but your Prizms won't automatically update."
+                           echo "See https://github.com/jimmccusker/twc-healthdata/wiki/Automation"
+                           echo "and https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets"
+                        fi
+                     else
+                        echo "(`pwd`/$target is already set up,"
+                        echo " and is ready for the $project_user_name project user to add to its crontab.)"
                      fi
                   else
-                     echo "(`pwd`/$target is already set up,"
-                     echo " and is ready for the $project_user_name project user to add to its crontab.)"
+                     echo "(WARNING We can't set up $target because we don't know what source-id we should use.)"
                   fi
+               
                else
-                  echo "(WARNING We can't set up $target because we don't know what source-id we should use.)"
-               fi
-               # NOTE: setting up the cron should be done on the project user name side, NOT on the person user name side.
+
+                  echo
+                  echo $div
+                  # NOTE: setting up the cron should be done on the project user name side, NOT on the person user name side.
+                  target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
+                  echo "There is a cronjob available at $target"
+                  read -p "Add to crontab? [y/n] " -u 1 install_it
+                  echo $install_it
+                  # TODO: Set project user's crontab.
+
+               fi # end "I am not project user"
 
 
 
 
-               # TODO: Set project user's crontab.
+
 
 
                #
                # Add all new files to version control.
                #
-               if [ -n "$added" ]; then
+               if [ -n "$added" ]; then # This should never pass when $i_am_project_user, if it does, something above shouldn't changed $added.
                   echo
                   echo $div
                   echo "We just added the following to `pwd`"

@@ -1294,7 +1294,10 @@ pushd &> /dev/null
                echo
                read -p "Q: Set up the production environment as the $project_user_name user? [y/n] " -u 1 as_project
                if [[ "$as_project" == [yY] ]]; then
-                  sudo su - $project_user_name -c "cd; mkdir opt &> /dev/null; cd opt; git clone $project_code_repository"
+                  read_only_project_code_repository=`echo $project_code_repository | sed 's/git@github.com:/git:\/\/github.com\//'`
+                  # ^ e.g. git@github.com:jimmccusker/melagrid.git -> git://github.com/jimmccusker/melagrid.git
+
+                  sudo su - $project_user_name -c "cd; mkdir opt &> /dev/null; cd opt; git clone $read_only_project_code_repository"
                   #$0 --me                           \
                   #   --my-email                     \
                   #   --proj-user      $project_user_name       \

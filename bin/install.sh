@@ -34,7 +34,7 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo "                  : This id is for use within the namespace http://datahub.io/dataset/<our-datahub-id>."
    echo "                  : see https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble"
    echo
-   echo "If the required parameters are not known, the script will ask for them interactively before installing anything."
+   echo "If the required parameters are not provided, the script will ask for them interactively before installing anything."
    echo "The installer will ask permission before performing each install step, so that you know what it's doing."
    echo
    echo "https://github.com/timrdf/prizms/wiki"
@@ -494,8 +494,14 @@ pushd &> /dev/null
                         cat ~$person_user_name/.ssh/id_dsa.pub
                         echo
                         read -p "Q: Finished adding your key? Once you do, we'll try running this install script again. Ready? [y]" finished
-                        $0 --me $person_uri --my-email $user_email --proj-user $project_user_name --repos $project_code_repository \
-                           --upstream-ckan $upstream_ckan --our-source-id $our_source_id
+                        $0 --me             $person_uri              \
+                           --my-email       $user_email              \
+                           --proj-user      $project_user_name       \
+                           --repos          $project_code_repository \
+                           --upstream-ckan  $upstream_ckan           \
+                           --our-base-uri   $our_base_uri            \
+                           --our-source-id  $our_source_id           \
+                           --our-datahub-id $our_datahub_id
                         # ^ Recursive call
                      fi
                   fi
@@ -670,6 +676,7 @@ pushd &> /dev/null
                if [[ ! -e $target ]]; then
                   cp $template $target
                   added="$added $target"
+                  # TODO: export CSV2RDF4LOD_CONVERT_MACHINE_URI="http://tw.rpi.edu/web/inside/machine/aquarius#melagrid"
                   echo
                   echo $div
                   echo "There wasn't a source-me.sh for your machine in the data conversion root, so we created one for you at $target"
@@ -703,10 +710,11 @@ pushd &> /dev/null
                   'some loss'
 
                # TODO: CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
+               # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
 
                # TODO export JENAROOT=/home/lebot/opt/apache-jena-2.7.4
 
-
+               # NOTE sudo vi /etc/passwd change melagrid to bash
 
                # AS DEVELOPER
                # 
@@ -793,14 +801,14 @@ pushd &> /dev/null
                #
                echo
                echo $div
-               su_alias="alias $project_user_name='sudo su $project_user_name'" # e.g. alias hd='sudo su healthdata'
+               new_command="alias $project_user_name='sudo su $project_user_name'" # e.g. alias hd='sudo su healthdata'
                target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
                echo "As a developer of this $project_user_name Prizms, you will need to change into the $project_user_name user"
                echo "to convert and publish datasets. You can use an alias to this:"
                echo
-               echo "   $su_alias"
+               echo "   $new_command"
                echo
-               already_there=`grep "$su_alias" $target` 
+               already_there=`grep "$new_command" $target` 
                echo
                if [ -n "$already_there" ]; then
                   echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
@@ -809,10 +817,10 @@ pushd &> /dev/null
                else
                   read -p "Add this command to your $target? [y/n] " -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
-                     echo $su_alias >> $target
+                     echo $new_command >> $target
                      echo
                      echo "Okay, we added it:"
-                     grep "$su_alias" $target
+                     grep "$new_command" $target
                      added="$added $target"
                   else
                      echo "We didn't chande your $target, so you'll need to make sure you set the paths correctly each time."
@@ -1245,7 +1253,7 @@ pushd &> /dev/null
 
 
 
-
+               # TODO: Set project user's crontab.
 
 
                #
@@ -1271,6 +1279,24 @@ pushd &> /dev/null
                      echo git push
                   fi
                fi
+
+               sudo su $project_user_name
+               cd
+               pwd
+               exit
+               echo "hi"
+               #read -p "Q: call as project user? [y/n] " -u 1 
+               #if [[ "$push_them" == [yY] ]]; then
+               #   $0 --me                           \
+               #      --my-email                     \
+               #      --proj-user      $project_user_name       \
+               #      --repos          $project_code_repository \
+               #      --upstream-ckan  $upstream_ckan           \
+               #      --our-base-uri   $our_base_uri            \
+               #      --our-source-id  $our_source_id           \
+               #      --our-datahub-id $our_datahub_id
+               #else
+               #fi
 
             popd &> /dev/null
          fi # if $target_dir e.g. /home/lebot/prizms/melagrid

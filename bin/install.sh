@@ -1384,8 +1384,12 @@ pushd &> /dev/null
                   fi
                fi
 
-               echo "We're all done installing Prizms!"
-               echo "Now what?"
+               if [[ -n $i_am_project_user ]]; then
+                  echo "We're all done installing Prizms production environment for the user `whoami`."
+               else
+                  echo "We're all done installing Prizms development environment for the user `whoami`."
+                  echo "Now what?"
+               fi
 
             popd &> /dev/null
          fi # if $target_dir e.g. /home/lebot/prizms/melagrid

@@ -762,7 +762,7 @@ pushd &> /dev/null
                      #
                      echo
                      echo $div
-                     set_paths_cmd=`$PRIZMS_HOME/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
+                     set_paths_cmd=`$PRIZMS_HOME/bin/install/paths.sh --help | tail -1 | sed 's/^ *//' | sed "s/\`whoami\`/$user/g"`
                      echo "The following command adds into $your shell environment the paths that Prizms requires to run its scripts."
                      echo "Running it multiple times will have no effect, since only the missing paths are added."
                      echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
@@ -777,7 +777,7 @@ pushd &> /dev/null
                         echo
                         echo $already_there
                      else
-                        read -p "Add this command to $your $target? [y/n]" -u 1 install_it
+                        read -p "Add this command to $your $target? [y/n] " -u 1 install_it
                         if [[ "$install_it" == [yY] ]]; then
                            echo $set_paths_cmd >> $target
                            echo
@@ -794,7 +794,7 @@ pushd &> /dev/null
                      #
                      echo
                      echo $div
-                     set_paths_cmd=`$PRIZMS_HOME/bin/install/classpaths.sh --help | tail -1 | sed 's/^ *//'`
+                     set_paths_cmd=`$PRIZMS_HOME/bin/install/classpaths.sh --help | tail -1 | sed 's/^ *//' | sed "s/\`whoami\`/$user/g"`
                      echo "The following command adds into $your shell environment the Java class paths that Prizms requires to run its scripts."
                      echo "Just like the previous paths.sh command, running this multiple times will have no effect, since only the missing paths are added."
                      echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
@@ -809,7 +809,7 @@ pushd &> /dev/null
                         echo
                         echo $already_there
                      else
-                        read -p "Add this command to $your $target? [y/n]" -u 1 install_it
+                        read -p "Add this command to $your $target? [y/n] " -u 1 install_it
                         if [[ "$install_it" == [yY] ]]; then
                            echo $set_paths_cmd >> $target
                            echo

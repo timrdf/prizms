@@ -1299,6 +1299,9 @@ pushd &> /dev/null
                   # ^ e.g. git@github.com:jimmccusker/melagrid.git -> git://github.com/jimmccusker/melagrid.git
 
                   # Bootstrap the project user with this install script.
+                  echo
+                  echo ${user_home%/*}/$project_user_name/opt/prizms
+                  echo
                   if [[ ! -e ${user_home%/*}/$project_user_name/opt/prizms ]]; then
                      sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone git://github.com/timrdf/prizms.git"
                   else

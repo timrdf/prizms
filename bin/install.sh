@@ -1287,38 +1287,41 @@ pushd &> /dev/null
                fi
 
 
-               echo
-               echo $div
-               echo "We've finished setting up your development envrionment."
-               echo "The next step is to set up the $project_user_name's production environment,"
-               echo "which we can do by running this script again as $project_user_name"
-               echo
-               read -p "Q: Set up the production environment as the $project_user_name user? [y/n] " -u 1 as_project
-               if [[ "$as_project" == [yY] ]]; then
-                  read_only_project_code_repository=`echo $project_code_repository | sed 's/git@github.com:/git:\/\/github.com\//'`
-                  # ^ e.g. git@github.com:jimmccusker/melagrid.git -> git://github.com/jimmccusker/melagrid.git
+               if [[ -z $i_am_project_user ]]; then
+                  # ^ We are currently doing this \/ (avoid the infinite loop)
+                  echo
+                  echo $div
+                  echo "We've finished setting up your development envrionment."
+                  echo "The next step is to set up the $project_user_name's production environment,"
+                  echo "which we can do by running this script again as $project_user_name"
+                  echo
+                  read -p "Q: Set up the production environment as the $project_user_name user? [y/n] " -u 1 as_project
+                  if [[ "$as_project" == [yY] ]]; then
+                     read_only_project_code_repository=`echo $project_code_repository | sed 's/git@github.com:/git:\/\/github.com\//'`
+                     # ^ e.g. git@github.com:jimmccusker/melagrid.git -> git://github.com/jimmccusker/melagrid.git
 
-                  # Bootstrap the project user with this install script.
-                  echo
-                  echo ${user_home%/*}/$project_user_name/opt/prizms
-                  echo
-                  if [[ ! -e ${user_home%/*}/$project_user_name/opt/prizms ]]; then
-                     sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone git://github.com/timrdf/prizms.git"
+                     # Bootstrap the project user with this install script.
+                     echo
+                     echo ${user_home%/*}/$project_user_name/opt/prizms
+                     echo
+                     if [[ ! -e ${user_home%/*}/$project_user_name/opt/prizms ]]; then
+                        sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone git://github.com/timrdf/prizms.git"
+                     else
+                        sudo su - $project_user_name -c "cd opt/prizms; git pull"
+                     fi
+
+                     sudo su - $project_user_name -c "cd; opt/prizms/bin/install.sh                                \
+                                                               --me                                                \
+                                                               --my-email                                          \
+                                                               --proj-user      $project_user_name                 \
+                                                               --repos          $read_only_project_code_repository \
+                                                               --upstream-ckan  $upstream_ckan                     \
+                                                               --our-base-uri   $our_base_uri                      \
+                                                               --our-source-id  $our_source_id                     \
+                                                               --our-datahub-id $our_datahub_id"
                   else
-                     sudo su - $project_user_name -c "cd opt/prizms; git pull"
+                     echo "Okay, we won't set up the production environment."
                   fi
-
-                  sudo su - $project_user_name -c "cd; opt/prizms/bin/install.sh                                \
-                                                            --me                                                \
-                                                            --my-email                                          \
-                                                            --proj-user      $project_user_name                 \
-                                                            --repos          $read_only_project_code_repository \
-                                                            --upstream-ckan  $upstream_ckan                     \
-                                                            --our-base-uri   $our_base_uri                      \
-                                                            --our-source-id  $our_source_id                     \
-                                                            --our-datahub-id $our_datahub_id"
-               else
-                  echo "Okay, we won't set up the production environment."
                fi
 
             popd &> /dev/null

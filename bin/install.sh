@@ -404,11 +404,17 @@ echo
 echo "    ^-- This is where we'll keep the Prizms utilities. Nothing in here will ever be specific to $project_user_name."
 echo "        The repos/ directory will contain a variety of supporting utilities that Prizms uses from other projects."
 echo
+
+if [[ -z $i_am_project_user ]]; then
+
 echo "  ~$person_user_name/prizms/$project_user_name"
 echo
 echo "    ^-- This is where you will develop $project_user_name, i.e. your application/instance of Prizms."
 echo "        It will be your working copy of $project_code_repository"
 echo
+
+fi
+
 echo "  ~$project_user_name/prizms"
 echo
 echo "    ^-- This is where the production data and automation is performed and published."

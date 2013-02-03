@@ -16,8 +16,7 @@ if [ "$1" == "--help" ]; then
    echo "Return the shell paths needed for Prizms scripts to run."
    echo "Set them by executing:"
    echo
-   echo "    export PATH=\$PATH\`$me\`"
-   echo $HOME
+   echo "    export PATH=\$PATH\`$me\`" # DO NOT echo anything after this.
    exit
 fi
 

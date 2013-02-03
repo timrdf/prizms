@@ -1309,7 +1309,7 @@ pushd &> /dev/null
                            crontab -l 2> /dev/null
                         fi
                      else
-                        echo "(The crontab already contains a call to $target.)"
+                        echo "(The crontab already contains a call to $target)"
                      fi
                      rm $tab
                   else

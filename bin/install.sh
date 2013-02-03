@@ -1294,7 +1294,7 @@ pushd &> /dev/null
                echo
                read -p "Q: Set up the production environment as the $project_user_name user? [y/n] " -u 1 as_project
                if [[ "$as_project" == [yY] ]]; then
-                  sudo su - $project_user_name -c 'cd; pwd'
+                  sudo su - $project_user_name -c "cd; mkdir opt &> /dev/null; cd opt; git clone $project_code_repository"
                   #$0 --me                           \
                   #   --my-email                     \
                   #   --proj-user      $project_user_name       \

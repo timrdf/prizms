@@ -78,11 +78,6 @@ if [[ "$1" == "--proj-user" ]]; then
    shift
 fi
 
-if [[ "$project_user_name" == `whoami` ]]; then
-   echo "We are `whoami`!"
-   exit
-fi
-
 #
 project_code_repository=""
 if [[ "$1" == "--repos" ]]; then

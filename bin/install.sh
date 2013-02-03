@@ -1304,6 +1304,7 @@ pushd &> /dev/null
                   #   --our-source-id  $our_source_id           \
                   #   --our-datahub-id $our_datahub_id
                else
+                  echo "Okay, we won't set up the production environment."
                fi
 
             popd &> /dev/null

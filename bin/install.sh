@@ -1300,14 +1300,15 @@ pushd &> /dev/null
                   # Bootstrap the project user with this install script.
                   sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone git://github.com/timrdf/prizms.git"
 
-                  #$0 --me                           \
-                  #   --my-email                     \
-                  #   --proj-user      $project_user_name       \
-                  #   --repos          $project_code_repository \
-                  #   --upstream-ckan  $upstream_ckan           \
-                  #   --our-base-uri   $our_base_uri            \
-                  #   --our-source-id  $our_source_id           \
-                  #   --our-datahub-id $our_datahub_id
+                  sudo su - $project_user_name -c "cd; opt/prizms/bin/install.sh                                \
+                                                            --me                                                \
+                                                            --my-email                                          \
+                                                            --proj-user      $project_user_name                 \
+                                                            --repos          $read_only_project_code_repository \
+                                                            --upstream-ckan  $upstream_ckan                     \
+                                                            --our-base-uri   $our_base_uri                      \
+                                                            --our-source-id  $our_source_id                     \
+                                                            --our-datahub-id $our_datahub_id"
                else
                   echo "Okay, we won't set up the production environment."
                fi

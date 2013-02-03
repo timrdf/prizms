@@ -1297,7 +1297,9 @@ pushd &> /dev/null
                   read_only_project_code_repository=`echo $project_code_repository | sed 's/git@github.com:/git:\/\/github.com\//'`
                   # ^ e.g. git@github.com:jimmccusker/melagrid.git -> git://github.com/jimmccusker/melagrid.git
 
-                  sudo su - $project_user_name -c "cd; mkdir opt &> /dev/null; cd opt; git clone $read_only_project_code_repository"
+                  # Bootstrap the project user with this install script.
+                  sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone git://github.com/timrdf/prizms.git"
+
                   #$0 --me                           \
                   #   --my-email                     \
                   #   --proj-user      $project_user_name       \

@@ -704,10 +704,7 @@ pushd &> /dev/null
 
                # TODO: CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
 
-               # TODO: JENAROOT add to source-me-as-melagrid
-               # export JENAROOT=/home/lebot/opt/apache-jena-2.7.4
-               # export PATH="${PATH}:/home/lebot/opt/apache-jena-2.7.4/bin"
-               # Is there a way to get this fro free from the prizms situate class (by it checking to see if ../opt is there?)
+               # TODO export JENAROOT=/home/lebot/opt/apache-jena-2.7.4
 
 
 
@@ -789,13 +786,12 @@ pushd &> /dev/null
                      grep ".*export CLASSPATH=.*prizms/bin/install/classpaths.sh.*" $target
                      added="$added $target"
                   else
-                     echo "We didn't touch your $target, so you'll need to make sure you set the paths correctly each time."
+                     echo "We didn't chande your $target, so you'll need to make sure you set the paths correctly each time."
                   fi
                fi
 
                # TODO: JENAROOT add to source-me-as-lebot
-               # export JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc
-               # export PATH="${PATH}:/home/lebot/opt/apache-jena-2.7.4/bin" in your my-csv2rdf4lod-source-me.sh or .bashrc
+               # TODO export JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc
 
                # End setting the environment variables for project, project user, and developer user.
 
@@ -995,7 +991,7 @@ pushd &> /dev/null
 
                   echo
                   echo $div
-                  credentials="/etc/prizms/$person_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh"
+                  credentials="/etc/prizms/$project_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh"
                   if [[ -e $credentials ]]; then
                      vpw=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD' $credentials`
                   fi
@@ -1068,7 +1064,7 @@ pushd &> /dev/null
                   fi
 
                   # TODO: X_GOOGLE_MAPS_API_Key
-                  credentials="/etc/prizms/$person_user_name/??triple-store??/google/csv2rdf4lod-source-me-for-googlemap-credentials.sh"
+                  credentials="/etc/prizms/$project_user_name/??triple-store??/google/csv2rdf4lod-source-me-for-googlemap-credentials.sh"
 
 
                   echo

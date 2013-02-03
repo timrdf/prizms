@@ -744,8 +744,7 @@ pushd &> /dev/null
                   echo
                   echo $already_there
                else
-                  echo "Add this command to your $target? [y/n]"
-                  read -u 1 install_it
+                  read -p "Add this command to your $target? [y/n]" -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
                      echo $set_paths_cmd >> $target
                      echo
@@ -777,8 +776,7 @@ pushd &> /dev/null
                   echo
                   echo $already_there
                else
-                  echo "Add this command to your $target? [y/n]"
-                  read -u 1 install_it
+                  read -p "Add this command to your $target? [y/n]" -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
                      echo $set_paths_cmd >> $target
                      echo
@@ -789,6 +787,40 @@ pushd &> /dev/null
                      echo "We didn't chande your $target, so you'll need to make sure you set the paths correctly each time."
                   fi
                fi
+
+               #
+               # alias: Developer su'ing to Project user name
+               #
+               echo
+               echo $div
+               su_alias="alias $project_user_name='sudo su $project_user_name'" # e.g. alias hd='sudo su healthdata'
+               target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
+               echo "As a developer of this $project_user_name Prizms, you will need to change into the $project_user_name user"
+               echo "to convert and publish datasets. You can use an alias to this:"
+               echo
+               echo "   $su_alias"
+               echo
+               already_there=`grep "$su_alias" $target` 
+               echo
+               if [ -n "$already_there" ]; then
+                  echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
+                  echo
+                  echo $already_there
+               else
+                  read -p "Add this command to your $target? [y/n] " -u 1 install_it
+                  if [[ "$install_it" == [yY] ]]; then
+                     echo $su_alias >> $target
+                     echo
+                     echo "Okay, we added it:"
+                     grep "$su_alias" $target
+                     added="$added $target"
+                  else
+                     echo "We didn't chande your $target, so you'll need to make sure you set the paths correctly each time."
+                  fi
+               fi
+
+
+
 
                # TODO: JENAROOT add to source-me-as-lebot
                # TODO export JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc
@@ -1097,6 +1129,7 @@ pushd &> /dev/null
 
                fi # end $virtuoso_install
 
+               # TODO: is logging location set up correctly?
 
 
 

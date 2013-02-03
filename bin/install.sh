@@ -1050,6 +1050,8 @@ pushd &> /dev/null
                   fi
                   if [[ -e $credentials ]]; then
                      target="data/source/csv2rdf4lod-source-me-credentials.sh"
+                     echo
+                     echo $div
                      echo "$target is a public version controlled script that points to all credentials required for the project."
                      already_there=`grep $credentials $target`
                      if [[ -z $already_there ]]; then

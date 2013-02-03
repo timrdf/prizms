@@ -751,69 +751,71 @@ pushd &> /dev/null
                   fi
 
 
-                  #
-                  # Add PATH = PATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$person_user_name.sh
-                  #
-                  echo
-                  echo $div
-                  set_paths_cmd=`$PRIZMS_HOME/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
-                  echo "The following command adds into your shell's environment the paths that Prizms requires to run its scripts."
-                  echo "Running it multiple times will have no effect, since only the missing paths are added."
-                  echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
-                  echo "The following command should appear in your data/source/csv2rdf4lod-source-me-as-$person_user_name.sh."
-                  echo
-                  echo "    $set_paths_cmd"
-                  target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
-                  already_there=`grep ".*export PATH=.*prizms/bin/install/paths.sh.*" $target`
-                  echo
-                  if [ -n "$already_there" ]; then
-                     echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
+                  for user in $person_user_name $project_user_name; do
+                     #
+                     # Add PATH = PATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$user.sh
+                     #
                      echo
-                     echo $already_there
-                  else
-                     read -p "Add this command to your $target? [y/n]" -u 1 install_it
-                     if [[ "$install_it" == [yY] ]]; then
-                        echo $set_paths_cmd >> $target
+                     echo $div
+                     set_paths_cmd=`$PRIZMS_HOME/bin/install/paths.sh --help | tail -1 | sed 's/^ *//'`
+                     echo "The following command adds into your shell's environment the paths that Prizms requires to run its scripts."
+                     echo "Running it multiple times will have no effect, since only the missing paths are added."
+                     echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
+                     echo "The following command should appear in your data/source/csv2rdf4lod-source-me-as-$user.sh."
+                     echo
+                     echo "    $set_paths_cmd"
+                     target="data/source/csv2rdf4lod-source-me-as-$user.sh"
+                     already_there=`grep ".*export PATH=.*prizms/bin/install/paths.sh.*" $target`
+                     echo
+                     if [ -n "$already_there" ]; then
+                        echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
                         echo
-                        echo "Okay, we added it:"
-                        grep ".*export PATH=.*prizms/bin/install/paths.sh.*" $target
-                        added="$added $target"
+                        echo $already_there
                      else
-                        echo "We didn't touch your $target, so you'll need to make sure you set the paths correctly each time."
+                        read -p "Add this command to your $target? [y/n]" -u 1 install_it
+                        if [[ "$install_it" == [yY] ]]; then
+                           echo $set_paths_cmd >> $target
+                           echo
+                           echo "Okay, we added it:"
+                           grep ".*export PATH=.*prizms/bin/install/paths.sh.*" $target
+                           added="$added $target"
+                        else
+                           echo "We didn't touch your $target, so you'll need to make sure you set the paths correctly each time."
+                        fi
                      fi
-                  fi
 
-                  #
-                  # Add CLASSPATH = CLASSPATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$person_user_name.sh
-                  #
-                  echo
-                  echo $div
-                  set_paths_cmd=`$PRIZMS_HOME/bin/install/classpaths.sh --help | tail -1 | sed 's/^ *//'`
-                  echo "The following command adds into your shell's environment the Java class paths that Prizms requires to run its scripts."
-                  echo "Just like the previous paths.sh command, running this multiple times will have no effect, since only the missing paths are added."
-                  echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
-                  echo "The following command should appear in your data/source/csv2rdf4lod-source-me-as-$person_user_name.sh."
-                  echo
-                  echo "    $set_paths_cmd"
-                  target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
-                  already_there=`grep ".*export CLASSPATH=.*prizms/bin/install/classpaths.sh.*" $target`
-                  echo
-                  if [ -n "$already_there" ]; then
-                     echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
+                     #
+                     # Add CLASSPATH = CLASSPATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$user.sh
+                     #
                      echo
-                     echo $already_there
-                  else
-                     read -p "Add this command to your $target? [y/n]" -u 1 install_it
-                     if [[ "$install_it" == [yY] ]]; then
-                        echo $set_paths_cmd >> $target
+                     echo $div
+                     set_paths_cmd=`$PRIZMS_HOME/bin/install/classpaths.sh --help | tail -1 | sed 's/^ *//'`
+                     echo "The following command adds into your shell's environment the Java class paths that Prizms requires to run its scripts."
+                     echo "Just like the previous paths.sh command, running this multiple times will have no effect, since only the missing paths are added."
+                     echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/situate-shell-paths-pattern"
+                     echo "The following command should appear in your data/source/csv2rdf4lod-source-me-as-$user.sh."
+                     echo
+                     echo "    $set_paths_cmd"
+                     target="data/source/csv2rdf4lod-source-me-as-$user.sh"
+                     already_there=`grep ".*export CLASSPATH=.*prizms/bin/install/classpaths.sh.*" $target`
+                     echo
+                     if [ -n "$already_there" ]; then
+                        echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
                         echo
-                        echo "Okay, we added it:"
-                        grep ".*export CLASSPATH=.*prizms/bin/install/classpaths.sh.*" $target
-                        added="$added $target"
+                        echo $already_there
                      else
-                        echo "We didn't chande your $target, so you'll need to make sure you set the paths correctly each time."
+                        read -p "Add this command to your $target? [y/n]" -u 1 install_it
+                        if [[ "$install_it" == [yY] ]]; then
+                           echo $set_paths_cmd >> $target
+                           echo
+                           echo "Okay, we added it:"
+                           grep ".*export CLASSPATH=.*prizms/bin/install/classpaths.sh.*" $target
+                           added="$added $target"
+                        else
+                           echo "We didn't chande your $target, so you'll need to make sure you set the paths correctly each time."
+                        fi
                      fi
-                  fi
+                  done # PATH and CLASSPATH for person and project users.
 
                   #
                   # alias: Developer su'ing to Project user name
@@ -1376,6 +1378,9 @@ pushd &> /dev/null
                      echo "Okay, we won't set up the production environment."
                   fi
                fi
+
+               echo "We're all done installing Prizms!"
+               echo "Now what?"
 
             popd &> /dev/null
          fi # if $target_dir e.g. /home/lebot/prizms/melagrid

@@ -1277,7 +1277,7 @@ pushd &> /dev/null
                   echo $div
                   target="`pwd`/data/source/$our_source_id/cr-cron/version/cr-cron.sh"
                   if [[ -n "$our_source_id" && -e $target ]]; then
-                     tab=.`basename $0`.crontab
+                     tab=.prizms.`basename $0`.crontab
                      crontab -l 2> /dev/null > $tab
                      already_there=`grep $target $tab`
                      if [[ -z "$already_there" ]]; then
@@ -1295,8 +1295,11 @@ pushd &> /dev/null
                         cat $tab
                         echo
                         read -p "Q: Add to crontab? [y/n] " -u 1 install_it
-                        echo $install_it
-                        # TODO: Set project user's crontab.
+                        if [[ $install_it == [yY] ]]; then
+                           crontab $tab
+                           echo "Crontab now set to:"
+                           crontab -l 2> /dev/null
+                        fi
                      else
                         echo "Cannot set up crontab because cronjob $target is not available."
                      fi

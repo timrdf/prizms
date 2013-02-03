@@ -1279,7 +1279,7 @@ pushd &> /dev/null
                   if [[ -n "$our_source_id" && -e $target ]]; then
                      tab=.`basename $0`.crontab
                      crontab -l 2> /dev/null > $tab
-                     already_there=` grep $target`
+                     already_there=`grep $target $tab`
                      if [[ -z "$already_there" ]]; then
                         echo "There is a cronjob available at $target, but it is not included in your crontab."
                         echo
@@ -1297,10 +1297,10 @@ pushd &> /dev/null
                         read -p "Q: Add to crontab? [y/n] " -u 1 install_it
                         echo $install_it
                         # TODO: Set project user's crontab.
-                        rm $tab
                      else
                         echo "Cannot set up crontab because cronjob $target is not available."
                      fi
+                     rm $tab
                   else
                      echo "Cannot set up crontab because cronjob $target is not available."
                   fi

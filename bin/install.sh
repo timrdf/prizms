@@ -458,7 +458,7 @@ pushd &> /dev/null
       prizms="prizms/"
    else
       development="production"
-      prizms=""
+      prizms="prizms/"
    fi 
    echo "Now let's install your $development copy of the $project_user_name Prizms."
    echo "(If you already have a working copy there, we'll update it.)"

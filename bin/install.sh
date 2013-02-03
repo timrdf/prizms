@@ -544,7 +544,7 @@ pushd &> /dev/null
 
                added=''
 
-               if [[ ! -e data/source/ || ! -e lodspeakr/ || ! -e doc/ ]]; then
+               if [[ -z "$i_am_project_user" && ( ! -e data/source/ || ! -e lodspeakr/ || ! -e doc/ ) ]]; then
                   echo
                   echo $div
                   echo "Prizms reuses the directory conventions that csv2rdf4lod-automation uses."

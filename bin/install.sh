@@ -455,18 +455,20 @@ pushd &> /dev/null
    user_home=`pwd`
    if [[ -z "$i_am_project_user" ]]; then
       development="development"
+      prizms=""
    else
       development="production"
+      prizms="prizms/"
    fi 
    echo "Now let's install your $development copy of the $project_user_name Prizms."
    echo "(If you already have a working copy there, we'll update it.)"
    echo
-   read -p "Q: May we run '$vcs $clone $project_code_repository' from `pwd`/prizms/? [y/n] " -u 1 install_it
+   read -p "Q: May we run '$vcs $clone $project_code_repository' from `pwd`/$prizms? [y/n] " -u 1 install_it
    if [[ "$install_it" == [yY] ]]; then
-      if [ ! -e prizms ]; then
+      if [[ -n "$prizms" && ! -e prizms ]]; then
          mkdir prizms
       fi
-      pushd prizms &> /dev/null
+      pushd $prizms &> /dev/null
          target_dir=`basename $project_code_repository`
          target_dir=${target_dir%.*}
 

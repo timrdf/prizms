@@ -1249,8 +1249,9 @@ pushd &> /dev/null
                echo $div
                target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
                echo "Prizms automates dataset updates by regularly invoking $target with cron."
-               echo "$target is maintained using version control, and is retrieved by the cronjob itself to determine"
-               echo "additional tasks that it should perform. The cronjob is run by the user $project_user_name."
+               echo "$target is maintained using version control, and is retrieved by the cronjob itself"
+               echo "to determine additional tasks that it should perform."
+               echo "The cronjob is run by the user $project_user_name."
                echo "See https://github.com/jimmccusker/twc-healthdata/wiki/Automation"
                echo
                if [[ -z "$i_am_project_user" ]]; then 

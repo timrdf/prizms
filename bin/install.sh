@@ -1277,26 +1277,27 @@ pushd &> /dev/null
                   echo $div
                   target="`pwd`/data/source/$our_source_id/cr-cron/version/cr-cron.sh"
                   if [[ -n "$our_source_id" && -e $target ]]; then
-                     already_there=`crontab -l | grep $target`
+                     tab=.`basename $0`.crontab
+                     crontab -l 2> /dev/null > $tab
+                     already_there=` grep $target`
                      if [[ -z "$already_there" ]]; then
                         echo "There is a cronjob available at $target, but it is not included in your crontab."
-                        crontab -l 2> /dev/null > .`basename $0`.crontab
                         echo
                         echo "Your crontab is currently:"
-                        cat .`basename $0`.crontab
+                        cat $tab
                         echo
                         # m h  dom mon dow   command
                         # 14 20 * * * /srv/twc-healthdata/data/source/healthdata-tw-rpi-edu/cr-cron/version/cron.sh
-                        echo "14 20 * * * $target" >> .`basename $0`.crontab
-                        echo ""                    >> .`basename $0`.crontab
+                        echo "14 20 * * * $target" >> $tab
+                        echo ""                    >> $tab
                         echo "We would like to update your crontab so that it is:"
                         echo
-                        cat .`basename $0`.crontab
+                        cat $tab
                         echo
                         read -p "Q: Add to crontab? [y/n] " -u 1 install_it
                         echo $install_it
                         # TODO: Set project user's crontab.
-                        rm .`basename $0`.crontab
+                        rm $tab
                      else
                         echo "Cannot set up crontab because cronjob $target is not available."
                      fi

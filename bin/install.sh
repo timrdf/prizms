@@ -13,6 +13,7 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo "                  [--our-datahub-id]"
    echo
    echo "This script will determine and use the following parameters to install an instance of Prizms:"
+   echo "  (these arguments must be provided in the order listed)"
    echo
    echo " --me             | [optional] the project developer's  URI                              (e.g. http://jsmith.me/foaf#me)"
    echo

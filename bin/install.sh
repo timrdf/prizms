@@ -514,7 +514,6 @@ pushd &> /dev/null
                else
                   echo "We didn't do anything to create an SSH key."
                fi
-               echo "pub: `wc -l $user_home/.ssh/id_dsa.pub`"
                if [ -e $user_home/.ssh/id_dsa.pub ]; then
                   echo "Great! You have a shiny new SSH key."
                   if [ "$vcs" == "git" ]; then
@@ -974,7 +973,6 @@ pushd &> /dev/null
                  
                   todo=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO" | grep -v "pydistutils.cfg"`
                   if [ -n "$todo" ]; then
-                     echo "todo${todo}todo"
                      echo
                      echo "However, the following do not seem to be installed:"
                      echo

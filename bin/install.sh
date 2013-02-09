@@ -1247,7 +1247,10 @@ pushd &> /dev/null
                      echo
                      echo $div
                      target='/etc/apache2/sites-available/std.common'
-                     already_there=`grep 'Location /sparql' $target`
+                     already_there=""
+                     if [ -e $target ]; then
+                        already_there=`grep 'Location /sparql' $target`
+                     fi
                      echo "Some Apache directives (e.g., ProxyPass) need to be set in $target to expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql."
                      if [[ -z "$already_there" ]]; then
                         echo "To expose your Virtuoso server on port 8890 as a URL such as $our_base_uri/sparql,"

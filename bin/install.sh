@@ -520,7 +520,7 @@ pushd &> /dev/null
                      echo "Go add the following to https://github.com/settings/ssh"
                      cat $user_home/.ssh/id_dsa.pub
                      echo
-                     read -p "Q: Finished adding your key? Once you do, we'll try running this install script again. Ready? [y]" finished
+                     read -p "Q: Finished adding your key? Once you do, we'll try running this install script again. Ready? [y] " finished
                      $0 --me             $person_uri              \
                         --my-email       $person_email            \
                         --proj-user      $project_user_name       \

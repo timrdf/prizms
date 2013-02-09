@@ -1268,10 +1268,12 @@ pushd &> /dev/null
                         echo '     ProxyHTMLURLMap         /sparql /sparql'                      >> .prizms-std.common
                         echo '     ProxyHTMLURLMap         http://localhost:8890/sparql /sparql' >> .prizms-std.common
                         echo '  </Location>'                                                     >> .prizms-std.common
+                        cat .prizms-std.common
                         echo
                         read -p "Q: May we append the configuration above into $target? [y/n] " -u 1 install_it
                         if [[ "$install_it" == [yY] ]]; then
-                           cat .prizms-std.common >> $target
+                           echo sudo cat .prizms-std.common >> $target
+                                sudo cat .prizms-std.common >> $target
                            need_apache_restart="yes"
                         fi
                      else

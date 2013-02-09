@@ -1359,7 +1359,7 @@ pushd &> /dev/null
                   fi # end $virtuoso_install
                   rm -f .prizms-std.common
 
-                  # TODO: is logging location set up correctly?
+                  # TODO: is logging location set up correctly? Yes, but verify on next iteration...
 
                fi # end "I am not project user"
 

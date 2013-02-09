@@ -1292,8 +1292,17 @@ pushd &> /dev/null
                      #
                      # We're trying to get to http://aquarius.tw.rpi.edu/projects/melagrid/sparql
 
-                     # TODO: set CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT
-                     # TODO: set CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT 
+                     # Set CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT
+                     change_source_me $target CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT $our_base_uri/sparql \
+                        'permit Prizms to query the data that is has loaded for subsequent processing' \
+                        'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
+                        'some loss'
+
+                     # Set CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT 
+                     change_source_me $target SV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT $our_base_uri/sparql \
+                        'indicate the external URL for the SPARQL endpoint for provenance purposes' \
+                        'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT' \
+                        'will not correctly capture the provenance of named graph loads in the SPARQL endpoint'
 
                   fi # end $virtuoso_install
                   rm -f .prizms-std.common

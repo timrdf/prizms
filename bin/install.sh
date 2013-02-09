@@ -1428,7 +1428,7 @@ pushd &> /dev/null
                   echo "but Prizms hasn't extracted the access metadata into $target."
                   if [[ -n "$upstream_ckan_source_id" && ! -e $target && -z "$i_am_project_user" ]]; then
                      echo
-                     read -p "Extract the access metadata from the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
+                     read -p "Q: May we extract the access metadata from the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
                      if [[ "$extract_it" == [yY] ]]; then
                         mkdir -p $target
                         pushd $target &> /dev/null

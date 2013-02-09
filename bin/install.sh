@@ -493,7 +493,7 @@ pushd &> /dev/null
                fi
             fi
 
-            if [[ ! -e ~$person_user_name/.ssh/id_dsa.pub && ! -e ~$person_user_name/.ssh/id_rsa.pub ]]; then
+            if [[ ! -e $user_home/.ssh/id_dsa.pub && ! -e $user_home/.ssh/id_rsa.pub ]]; then
                echo
                echo "GitHub requires that you have an SSH key and that it be registered with them."
                echo "You don't have a ~$person_user_name/.ssh/id_dsa.pub or ~$person_user_name/.ssh/id_rsa.pub,"

@@ -193,7 +193,7 @@ if [[ -z "$project_user_name" ]]; then
       echo
       echo $div
       echo "Okay, `whoami` isn't your project's user name."
-      read -p "Q: Is `whoami` _your_ user name? (y/n) "-u 1 it_is
+      read -p "Q: Is `whoami` _your_ user name? (y/n) " -u 1 it_is
       if [[ $it_is == [yY] ]]; then
          # https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
          person_user_name=`whoami`

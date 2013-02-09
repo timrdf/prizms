@@ -496,8 +496,14 @@ pushd &> /dev/null
                   git config --global user.email $person_email
                fi
             fi
+
             if [[ ! -e ~$person_user_name/.ssh/id_dsa.pub && ! -e ~$person_user_name/.ssh/id_rsa.pub ]]; then
-               read -p "Q: You don't have a ~$person_user_name/.ssh/id_dsa.pub or ~$person_user_name/.ssh/id_rsa.pub; do you want to set one up now? [y/n] " genkey
+               echo "Github requires that you have an SSH key and that it be registered with them."
+               echo "You don't have a ~$person_user_name/.ssh/id_dsa.pub or ~$person_user_name/.ssh/id_rsa.pub"
+               echo
+               echo "    ssh-keygen -t dsa -C ${person_email:-'your-email-address'}"
+               echo
+               read -p "Q: Would you like to create an SSH key now (with the command above)? [y/n] " genkey
                if [[ "$genkey" == [yY] ]]; then
                   if [ -z "$person_email" ]; then
                      read -p "Q: We need your email address to set up an SSH key. What is it? " person_email
@@ -510,7 +516,7 @@ pushd &> /dev/null
                else
                   echo "We didn't do anything to create an SSH key."
                fi
-               wc -l ~$person_user_name/.ssh/id_dsa.pub
+               echo "pub: `wc -l ~$person_user_name/.ssh/id_dsa.pub`"
                if [ -e ~$person_user_name/.ssh/id_dsa.pub ]; then
                   echo "Great! You have a shiny new SSH key."
                   if [ "$vcs" == "git" ]; then

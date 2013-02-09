@@ -1201,8 +1201,8 @@ pushd &> /dev/null
                      for module in $modules; do
                         #already_there=`dpkg -l | grep $module`
                         #if [[ -z "$already_there" ]]; then
-                        echo "To expose your Virtuoso server on port 8890 as a URL such as $our_base_uri/sparql,"
-                        echo "the $module module needs to be enabled, which can be done with the following command:"
+                        echo "The Apache2 module $module needs to be enabled to expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql."
+                        echo "The $module module needs to be enabled, which can be done with the following command:"
                         echo
                         echo "sudo a2enmod $module"
                         echo

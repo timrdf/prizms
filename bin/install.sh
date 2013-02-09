@@ -497,7 +497,7 @@ pushd &> /dev/null
                fi
             fi
             if [[ ! -e ~$person_user_name/.ssh/id_dsa.pub && ! -e ~$person_user_name/.ssh/id_rsa.pub ]]; then
-               read -p "Q: You don't have a ~$person_user_name/.ssh/id_dsa.pub or id_rsa.pub; do you want to set one up now? [y/n] " genkey
+               read -p "Q: You don't have a ~$person_user_name/.ssh/id_dsa.pub or ~$person_user_name/.ssh/id_rsa.pub; do you want to set one up now? [y/n] " genkey
                if [[ "$genkey" == [yY] ]]; then
                   if [ -z "$person_email" ]; then
                      read -p "Q: We need your email address to set up an SSH key. What is it? " person_email

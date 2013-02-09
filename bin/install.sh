@@ -1467,6 +1467,7 @@ pushd &> /dev/null
                         if [[ "$install_it" == [yY] ]]; then
                            mkdir -p `dirname $target`
                            cp $template $target
+                           chmod +x $target
                            added="$added $target"
                            echo "Okay, we added $target"
                         else
@@ -1499,8 +1500,9 @@ pushd &> /dev/null
                         echo
                         # m h  dom mon dow   command
                         # 14 20 * * * /srv/twc-healthdata/data/source/healthdata-tw-rpi-edu/cr-cron/version/cron.sh
-                        echo "14 20 * * * $target" >> $tab
-                        echo ""                    >> $tab
+                        echo "# m h  dom mon dow   command" >> $tab
+                        echo "14 20 * * * $target"          >> $tab
+                        echo ""                             >> $tab
                         echo "We would like to update your crontab so that it is:"
                         echo
                         cat $tab

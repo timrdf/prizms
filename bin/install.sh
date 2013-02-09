@@ -1187,10 +1187,10 @@ pushd &> /dev/null
                            echo
                            echo "sudo apt-get install $package"
                            echo
-                           read -p "Q: May we install the module above using the command above? [y/n]" -u 1 install_it
+                           read -p "Q: May we install the module above using the command above? [y/n] " -u 1 install_it
                            if [[ "$install_it" == [yY] ]]; then
-                              echo sudo apt-get install libapache2-mod-proxy-html
-                                   sudo apt-get install libapache2-mod-proxy-html
+                              echo sudo apt-get install $package
+                                   sudo apt-get install $package
                            fi
                         fi
                      done
@@ -1202,14 +1202,14 @@ pushd &> /dev/null
                         already_there=`dpkg -l | grep $module`
                         if [[ -z "$already_there" ]]; then
                            echo "To expose your Virtuoso server on port 8890 as a URL such as $our_base_uri/sparql,"
-                           echo "the $module module needs to be installed, which can be done with the following command:"
+                           echo "the $module module needs to be enabled, which can be done with the following command:"
                            echo
                            echo "sudo a2enmod $module"
                            echo
-                           read -p "Q: May we install the module above using the command above? [y/n]" -u 1 install_it
+                           read -p "Q: May we enable the module above using the command above? [y/n] " -u 1 install_it
                            if [[ "$install_it" == [yY] ]]; then
-                              echo sudo apt-get install libapache2-mod-proxy-html
-                                   sudo apt-get install libapache2-mod-proxy-html
+                              echo sudo a2enmod $module
+                                   sudo a2enmod $module
                            fi
                         fi
                      done

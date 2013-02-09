@@ -156,6 +156,9 @@ function change_source_me {
       echo "  see $see"
    done
    if [[ -n "$new_value" ]]; then
+      if [[ -z "`grep $ENVVAR $target`" ]]; then
+         echo "export $ENVVAR=''" >> $target
+      fi
       current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target | awk '{print $1}'`
       if [ "$current" != "$new_value" ]; then
          echo
@@ -753,8 +756,6 @@ pushd &> /dev/null
                      echo "source `pwd`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
                      # any others to source?
                      echo "export CSV2RDF4LOD_CONVERT_DATA_ROOT=''"                                  >> $target
-                     echo "export CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES=''"                          >> $target
-                     echo "export CSV2RDF4LOD_PUBLISH_VARWWW_ROOT=''"                                >> $target
                      added="$added $target"
                      echo
                      echo $div

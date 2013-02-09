@@ -491,7 +491,7 @@ pushd &> /dev/null
                echo
                echo "   git config --global user.email $person_email"
                echo
-               read -p "Q: May we set your git user.email setting to $person_email using the command above? " -u 1 set_it
+               read -p "Q: May we set your git user.email setting to $person_email using the command above? [y/n] " -u 1 set_it
                if [[ "$set_it" == [yY] ]]; then
                   git config --global user.email $person_email
                fi

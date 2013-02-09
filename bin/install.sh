@@ -1300,7 +1300,7 @@ pushd &> /dev/null
                         'some loss'
 
                      # Set CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT 
-                     change_source_me $target SV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT $our_base_uri/sparql \
+                     change_source_me $target CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT $our_base_uri/sparql \
                         'indicate the external URL for the SPARQL endpoint for provenance purposes' \
                         'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT' \
                         'will not correctly capture the provenance of named graph loads in the SPARQL endpoint'

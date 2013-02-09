@@ -17,8 +17,8 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo " --me             | [optional] the project developer's  URI                              (e.g. http://jsmith.me/foaf#me)"
    echo
    echo " --my-email       |            the project developer's  email address                    (e.g. me@jsmith.me)"
-   echo "                  : the project developer's (i.e. your) user name (determined by whoami) (e.g. jsmith)"
-   echo "                  : ^- this user will need sudo privileges."
+   echo "                  : This email will be used to create an SSH key (if none exists; with your confirmation)"
+   echo "                  : This email will be set as git's user.email setting (with your confirmation)"
    echo
    echo " --proj-user      | the project's                       user name                        (e.g. melagrid)"
    echo
@@ -536,6 +536,10 @@ pushd &> /dev/null
                echo "(You have a .ssh/*.pub; be sure to register it with GitHub. See https://help.github.com/articles/generating-ssh-keys)"
             fi
 
+            # When the project user:
+            # Your configuration specifies to merge with the ref 'master'
+            # from the remote, but no such ref was fetched.
+
             echo
             touch .before_clone
             $vcs $clone $project_code_repository
@@ -599,6 +603,7 @@ pushd &> /dev/null
                fi
              
 
+               # TODO: add .gitignore with "*" in data/source
 
 
                if [[ -z "$i_am_project_user" ]]; then 
@@ -990,6 +995,7 @@ pushd &> /dev/null
                         #exit 1
                      fi
                   fi
+                  rm -f .before-prizms-installed-dependencies
 
 
 

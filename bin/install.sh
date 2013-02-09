@@ -752,8 +752,8 @@ pushd &> /dev/null
                   target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
                   if [[ ! -e $target ]]; then
                      cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI='                                              > $target
-                     echo "source `pwd | sed "s/\`whoami\`/$user/g"`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
-                     echo "source `pwd | sed "s/\`whoami\`/$user/g"`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
+                     echo "source `pwd | sed "s/\`whoami\`/$project_user_name/g"`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
+                     echo "source `pwd | sed "s/\`whoami\`/$project_user_name/g"`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
                      # any others to source?
                      added="$added $target"
                      echo

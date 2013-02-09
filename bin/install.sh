@@ -427,7 +427,6 @@ echo "        Automation will trigger on those essential bits to organize, descr
 echo "        To make changes in here, push into $project_code_repository from any working copy (e.g. ~$person_user_name/prizms/$project_user_name)"
 
 #if [[ -z "$i_am_project_user" && `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == "no" ]]; then
-echo ${user_home%/*}/$project_user_name
 if [[ -z "$i_am_project_user" && ! -e ${user_home%/*}/$project_user_name ]]; then
    echo
    echo $div

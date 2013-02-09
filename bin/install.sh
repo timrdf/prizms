@@ -1176,7 +1176,7 @@ pushd &> /dev/null
                      need_apache_restart=""
                      packages='libapache2-mod-proxy-html'
                      for package in $packages; do
-                        echo "The package $package is required to expose your Virtuoso server on port 8890 as a URL such as $our_base_uri/sparql."
+                        echo "The package $package is required to expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql."
                         already_there=`dpkg -l | grep $package` # See what is available: apt-cache search libapache2-mod
                         if [[ -z "$already_there" ]]; then
                            echo "The $package package needs to be installed, which can be done with the following command:"

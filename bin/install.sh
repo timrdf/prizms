@@ -257,8 +257,10 @@ echo "Prizms can pull dataset listings from an installation of CKAN,"
 echo "which can make it easier to gather the datasets that you'd like to integrate."
 echo "It's fine not to pull from a CKAN, so if you don't want to, just leave this blank."
 if [ -z "$upstream_ckan" ]; then
-   read -p "Q: Would you like your Prizms to pull dataset listings from a installation of CKAN?" -u 1 upstream_ckan
-   if [ -n "$upstream_ckan" ]; then
+   echo
+   read -p "Q: Would you like your Prizms to pull dataset listings from an installation of CKAN? [y/n] " -u 1 upstream_ckan
+   if [[ -n "$upstream_ckan" || "$upstream_ckan" = [nN] ]]; then
+      upstream_ckan=''
       echo "Okay, we'll pull dataset listings from the CKAN $upstream_ckan"
    else
       echo "Okay, we won't bother with CKAN listings."
@@ -481,54 +483,64 @@ pushd &> /dev/null
             rm .before_clone
             echo
 
+            if [[ -z "`git config --get user.email`" && -n "$person_email" ]]; then
+               echo
+               echo $div
+               echo "We can set your email address in your global git configuration using the following command."
+               echo "Doing so will associate your commits to your github account, instead of attributing them to a user named after your machine."
+               echo
+               echo "   git config --global user.email $person_email"
+               echo
+               read -p "Q: May we set your git user.email setting to $person_email using the command above? " -u 1 set_it
+               if [[ "$set_it" == [yY] ]];
+                  git config --global user.email $person_email
+               fi
+            fi
+            if [[ ! -e ~$person_user_name/.ssh/id_dsa.pub && ! -e ~$person_user_name/.ssh/id_rsa.pub ]]; then
+               read -p "Q: You don't have a ~$person_user_name/.ssh/id_dsa.pub or id_rsa.pub; do you want to set one up now? [y/n] " genkey
+               if [[ "$genkey" == [yY] ]]; then
+                  if [ -z "$person_email" ]; then
+                     read -p "Q: We need your email address to set up an SSH key. What is it? " person_email
+                  else
+                     echo ssh-keygen -t dsa -C $person_email
+                          ssh-keygen -t dsa -C $person_email
+                  else
+                     echo "WARNING `basename $0` needs an email address to set up an SSH key."
+                  fi
+               else
+                  echo "We didn't do anything to create an SSH key."
+               fi
+               if [ -e ~$person_user_name/.ssh/id_dsa.pub ]; then
+                  echo "Great! You have a shiny new SSH key."
+                  if [ "$vcs" == "git" ]; then
+                     echo "Go add the following to https://github.com/settings/ssh"
+                     cat ~$person_user_name/.ssh/id_dsa.pub
+                     echo
+                     read -p "Q: Finished adding your key? Once you do, we'll try running this install script again. Ready? [y]" finished
+                     $0 --me             $person_uri              \
+                        --my-email       $person_email            \
+                        --proj-user      $project_user_name       \
+                        --repos          $project_code_repository \
+                        --upstream-ckan  $upstream_ckan           \
+                        --our-base-uri   $our_base_uri            \
+                        --our-source-id  $our_source_id           \
+                        --our-datahub-id $our_datahub_id
+                     # ^ Recursive call
+                  fi
+               fi
+            else
+               echo "WARNING `basename $0`: ~$person_user_name/.ssh/id_dsa.pub exists, so we won't touch it."
+               echo "Please set up your ssh key for $project_code_repository and run this install script again."
+               echo "See https://help.github.com/articles/generating-ssh-keys"
+            fi
+
+            # TODO: this didn't trigger on Joanne, relax this condition.
             if [ "$status" -eq 128 ]; then
 
                echo "It seems that you didn't have permissions to $clone $project_code_repository"
                echo "GitHub requires an ssh key to check out a writeable working clone"
                echo "See https://help.github.com/articles/generating-ssh-keys"
                echo
-
-               if [ ! -e ~$person_user_name/.ssh/id_dsa.pub ]; then
-                  read -p "Q: You don't have a ~$person_user_name/.ssh/id_dsa.pub; do you want to set one up now? [y/n] " timbo
-                  if [[ "$timbo" == [yY] ]]; then
-                     if [ -z "$user_email" ]; then
-                        read -p "Q: We need your email address to set up an SSH key. What is it? " user_email
-                     fi
-                     if [ -n "$user_email" ]; then
-                        #echo git config --global user.email $user_email
-                        #     git config --global user.email $user_email
-
-                        echo ssh-keygen -t dsa -C $user_email
-                             ssh-keygen -t dsa -C $user_email
-                     else
-                        echo "WARNING `basename $0` needs an email address to set up an SSH key."
-                     fi
-                  else
-                     echo "We didn't do anything to create an SSH key."
-                  fi
-                  if [ -e ~$person_user_name/.ssh/id_dsa.pub ]; then
-                     echo "Great! You have a shiny new SSH key."
-                     if [ "$vcs" == "git" ]; then
-                        echo "Go add the following to https://github.com/settings/ssh"
-                        cat ~$person_user_name/.ssh/id_dsa.pub
-                        echo
-                        read -p "Q: Finished adding your key? Once you do, we'll try running this install script again. Ready? [y]" finished
-                        $0 --me             $person_uri              \
-                           --my-email       $user_email              \
-                           --proj-user      $project_user_name       \
-                           --repos          $project_code_repository \
-                           --upstream-ckan  $upstream_ckan           \
-                           --our-base-uri   $our_base_uri            \
-                           --our-source-id  $our_source_id           \
-                           --our-datahub-id $our_datahub_id
-                        # ^ Recursive call
-                     fi
-                  fi
-               else
-                  echo "WARNING `basename $0`: ~$person_user_name/.ssh/id_dsa.pub exists, so we won't touch it."
-                  echo "Please set up your ssh key for $project_code_repository and run this install script again."
-                  echo "See https://help.github.com/articles/generating-ssh-keys"
-               fi
 
             elif [ "$status" -ne 0 ]; then
                echo "We're not sure what happended; $vcs returned $status"
@@ -1138,7 +1150,10 @@ pushd &> /dev/null
                      echo
                      echo $div
                      echo TODO add the apache map /sparql to 8890
-                     # add to /etc/apache2/sites-available/std.common
+
+                     # sudo a2enmod proxy
+                     # sudo a2enmod proxy_http        # TODO: both of these needed?
+                     #
                      # See mapping into apache at https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
                      #
                      #  <Location /sparql>
@@ -1153,8 +1168,8 @@ pushd &> /dev/null
                      #    # ProxyHTMLURLMap         http://localhost:8890/sparql /sparql
                      #  </Location>
                      #
-                     # a2enmod ??
-                     # service apache2 restart
+                     # add to /etc/apache2/sites-available/std.common
+                     # sudo service apache2 restart
                      #
                      # We're trying to get to http://aquarius.tw.rpi.edu/projects/melagrid/sparql
 

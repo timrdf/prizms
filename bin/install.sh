@@ -518,7 +518,7 @@ pushd &> /dev/null
                   echo "Great! You have a shiny new SSH key."
                   if [ "$vcs" == "git" ]; then
                      echo "Go add the following to https://github.com/settings/ssh"
-                     cat ~$person_user_name/.ssh/id_dsa.pub
+                     cat $user_home/.ssh/id_dsa.pub
                      echo
                      read -p "Q: Finished adding your key? Once you do, we'll try running this install script again. Ready? [y]" finished
                      $0 --me             $person_uri              \

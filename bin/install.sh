@@ -760,7 +760,7 @@ pushd &> /dev/null
                      echo $div
                      echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
                   fi
-                  project_data_root="${user_home%/*}/$project_user_name/prizms/data/source"
+                  project_data_root="${user_home%/*}/$project_user_name/prizms/$target_dir/data/source"
                   change_source_me $target CSV2RDF4LOD_CONVERT_DATA_ROOT "$project_data_root" \
                      "indicate the production data directory, from which /var/www and the production SPARQL endpoints are loaded" \
                      'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_DATA_ROOT' \

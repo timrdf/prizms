@@ -603,7 +603,16 @@ pushd &> /dev/null
                fi
              
 
-               # TODO: add .gitignore with "*" in data/source
+               # Add .gitignore with "*" in data/source/.gitignore
+               target="data/source/.gitignore"
+               if [[ ! -e $target && -z "$i_am_project_user" ]]; then
+                  echo "It's a good practice to include a .gitignore in your data/source directory, so that you do not accidentally commit and push large data files into your repository."
+                  read -p "Q: May we add $target? [y/n] " -u 1 make_it
+                  if [[ "$make_it" == [yY] ]]; then
+                     echo "*" > $target
+                     added="$added data/source/.gitignore"
+                  fi
+               fi
 
 
                if [[ -z "$i_am_project_user" ]]; then 

@@ -1195,7 +1195,6 @@ pushd &> /dev/null
                         echo
                      done
 
-                     echo
                      echo $div
                      # sudo a2enmod proxy
                      # sudo a2enmod proxy_http        # TODO: both of these needed?

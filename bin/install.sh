@@ -549,7 +549,6 @@ pushd &> /dev/null
             rm .before_clone
             echo
 
-            # TODO: this didn't trigger on Joanne, relax this condition.
             if [ "$status" -eq 128 ]; then
                echo "It seems that you didn't have permissions to $clone $project_code_repository"
                echo "GitHub requires an ssh key to check out a writeable working clone"
@@ -789,11 +788,15 @@ pushd &> /dev/null
 
 
                   for user in $person_user_name $project_user_name; do
+
+                     target="data/source/csv2rdf4lod-source-me-as-$user.sh"
+
                      if [[ "$person_username" == `whoami` ]]; then
                         your="your"
                      else
                         your="$project_user_name's"
                      fi
+
                      #
                      # Add PATH = PATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$user.sh
                      #
@@ -806,7 +809,6 @@ pushd &> /dev/null
                      echo "The following command should appear in $your data/source/csv2rdf4lod-source-me-as-$user.sh."
                      echo
                      echo "    $set_paths_cmd"
-                     target="data/source/csv2rdf4lod-source-me-as-$user.sh"
                      already_there=`grep ".*export PATH=.*prizms/bin/install/paths.sh.*" $target`
                      echo
                      if [ -n "$already_there" ]; then
@@ -838,7 +840,6 @@ pushd &> /dev/null
                      echo "The following command should appear in $your data/source/csv2rdf4lod-source-me-as-$user.sh."
                      echo
                      echo "    $set_paths_cmd"
-                     target="data/source/csv2rdf4lod-source-me-as-$user.sh"
                      already_there=`grep ".*export CLASSPATH=.*prizms/bin/install/classpaths.sh.*" $target`
                      echo
                      if [ -n "$already_there" ]; then
@@ -857,7 +858,38 @@ pushd &> /dev/null
                            echo "We didn't $change $your $target, so you'll need to make sure you set the paths correctly each time."
                         fi
                      fi
-                  done # PATH and CLASSPATH for person and project users.
+
+                     # TODO export JENAROOT=/home/lebot/opt/apache-jena-2.7.4 to data/source/csv2rdf4lod-source-me-as-$user.sh
+                     echo
+                     echo $div
+                     set_paths_cmd="export JENAROOT=todo"
+                     echo "Apache Jena requires the shell environent variable JENAROOT to be set."
+                     echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Apache-Jena"
+                     echo "The following command should appear in $your data/source/csv2rdf4lod-source-me-as-$user.sh."
+                     echo
+                     echo "    $set_paths_cmd"
+                     already_there=`grep "^$set_paths_cmd" $target`
+                     echo
+                     if [ -n "$already_there" ]; then
+                        echo "It seems that you already have the following in $your $target, so we won't offer to add it again:"
+                        echo
+                        echo $already_there
+                     else
+                        read -p "Add this command to $your $target? [y/n] " -u 1 install_it
+                        if [[ "$install_it" == [yY] ]]; then
+                           echo $set_paths_cmd >> $target
+                           echo
+                           echo "Okay, we added it:"
+                           grep "^$set_paths_command" $target
+                           added="$added $target"
+                        else
+                           echo "We didn't $change $your $target, so you'll need to make sure you set the paths correctly each time."
+                        fi
+                     fi
+
+                  done # PATH, CLASSPATH, and JENAROOT for person and project users.
+
+                  # Do settings that apply to the person and not the project user:
 
                   #
                   # alias: Developer su'ing to Project user name
@@ -888,10 +920,6 @@ pushd &> /dev/null
                         echo "We didn't change your $target, so you'll need to make sure you set the paths correctly each time."
                      fi
                   fi
-
-                  # TODO: JENAROOT add to source-me-as-lebot
-                  # TODO export JENAROOT=/home/lebot/opt/apache-jena-2.7.4 in your my-csv2rdf4lod-source-me.sh or .bashrc
-
                fi # end "I am not project user"
 
                # End setting the environment variables for project, project user, and developer user.

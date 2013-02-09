@@ -1295,7 +1295,7 @@ pushd &> /dev/null
                      # Set CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT
                      change_source_me $target CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT $our_base_uri/sparql \
                         'permit Prizms to query the data that is has loaded for subsequent processing' \
-                        'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
+                        'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables' \
                         'some loss'
 
                      # Set CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT 

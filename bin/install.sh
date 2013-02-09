@@ -541,7 +541,9 @@ pushd &> /dev/null
             touch .before_clone
             $vcs $clone $project_code_repository
             status=$?
-            echo "(BTW, $vcs $clone returned $status)"
+            if [[ "$status" -ne 0 ]]; then
+               echo "(BTW, $vcs $clone returned $status)"
+            fi
             dir=`find . -mindepth 1 -maxdepth 1 -type d -newer .before_clone`
             rm .before_clone
             echo

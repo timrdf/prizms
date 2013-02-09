@@ -479,7 +479,7 @@ pushd &> /dev/null
          target_dir=${target_dir%.*}
 
          if [ ! -e $target_dir ]; then
-            if [[ -z "`git config --get user.email`" && -n "$person_email" ]]; then
+            if [[ -z "`git config --get user.email`" && -n "$person_email" && -z "$i_am_project_user" ]]; then
                echo
                echo $div
                echo "We can set your email address in your global git configuration using the following command."
@@ -494,7 +494,7 @@ pushd &> /dev/null
             fi
 
             echo "GitHub requires that you have an SSH key and that it be registered with them."
-            if [[ ! -e $user_home/.ssh/id_dsa.pub && ! -e $user_home/.ssh/id_rsa.pub ]]; then
+            if [[ ! -e $user_home/.ssh/id_dsa.pub && ! -e $user_home/.ssh/id_rsa.pub && -z "$i_am_project_user" ]]; then
                echo
                echo "You don't have a ~$person_user_name/.ssh/id_dsa.pub or ~$person_user_name/.ssh/id_rsa.pub,"
                echo "which could be creating using the following command:"

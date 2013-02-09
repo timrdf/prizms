@@ -1433,6 +1433,7 @@ pushd &> /dev/null
                         mkdir -p $target
                         pushd $target &> /dev/null
                            echo cr-create-dataset-dirs-from-ckan.py $upstream_ckan $our_base_uri
+                                cr-create-dataset-dirs-from-ckan.py $upstream_ckan $our_base_uri
                         popd &> /dev/null
                      else
                         echo "Okay, we won't try to extract access metadata from $upstream_ckan. Check out the following if you want to do it yourself:"

@@ -1245,6 +1245,7 @@ pushd &> /dev/null
                      #  </Location>
                      target='/etc/apache2/sites-available/std.common'
                      already_there=`grep 'Location /sparql' $target`
+                     echo "Some Apache directives (e.g., ProxyPass) need to be set in $target to expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql."
                      if [[ -z "$already_there" ]]; then
                         echo "To expose your Virtuoso server on port 8890 as a URL such as $our_base_uri/sparql,"
                         echo "the following apache configuration needs to be set in $target:"
@@ -1267,6 +1268,8 @@ pushd &> /dev/null
                            cat .prizms-std.common >> $target
                            need_apache_restart="yes"
                         fi
+                     else
+                        echo "($target already contains the ProxyPath directives)"
                      fi
 
                      # add to /etc/apache2/sites-available/std.common

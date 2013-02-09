@@ -1289,8 +1289,9 @@ pushd &> /dev/null
                         fi
                      fi
 
-                     #
                      # We're trying to get to http://aquarius.tw.rpi.edu/projects/melagrid/sparql
+
+                     target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
 
                      # Set CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT
                      change_source_me $target CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT $our_base_uri/sparql \

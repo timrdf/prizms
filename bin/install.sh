@@ -755,7 +755,6 @@ pushd &> /dev/null
                      echo "source `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
                      echo "source `pwd`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
                      # any others to source?
-                     echo "export CSV2RDF4LOD_CONVERT_DATA_ROOT=''"                                  >> $target
                      added="$added $target"
                      echo
                      echo $div
@@ -899,6 +898,11 @@ pushd &> /dev/null
                            echo "We didn't $change $your $target, so you'll need to make sure you set the paths correctly each time."
                         fi
                      fi
+
+                     change_source_me $target CSV2RDF4LOD_HOME "$PRIZMS_HOME/repos/csv2rdf4lod-automation" \
+                        "Ensure that all of the csv2rdf4lod-automation scripts can call each other." \
+                        'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-not-set' \
+                        'unable to invoke some scripts'
 
                   done # PATH, CLASSPATH, and JENAROOT for person and project users.
 

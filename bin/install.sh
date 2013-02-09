@@ -200,12 +200,12 @@ if [[ -z "$project_user_name" ]]; then
          echo "Okay, your user name is $person_user_name."
          echo
          echo $div
-         echo "Prizms should be installed to a user name created specifically for the project."
+         echo "Prizms should be installed to a user name on this machine created specifically for the project."
          read -p "Q: Does your project have a user name yet? (y/n) " -u 1 it_does
          if [[ $it_does == [yY] ]]; then
             read -p "Q: What is the user name of your project? " -u 1 project_user_name
-            if [ ! -e ~$project_user_name ]; then
-               echo "ERROR: ~$project_user_name does not exist."
+            if [ ! -e ${user_home%/*}/$project_user_name ]; then
+               echo "ERROR: ${user_home%/*}/$project_user_name does not exist."
             else 
                echo "Okay, your project's user name is: $project_user_name"
             fi
@@ -475,14 +475,6 @@ pushd &> /dev/null
          target_dir=${target_dir%.*}
 
          if [ ! -e $target_dir ]; then
-            echo
-            touch .before_clone
-            $vcs $clone $project_code_repository
-            status=$?
-            dir=`find . -mindepth 1 -maxdepth 1 -type d -newer .before_clone`
-            rm .before_clone
-            echo
-
             if [[ -z "`git config --get user.email`" && -n "$person_email" ]]; then
                echo
                echo $div
@@ -540,6 +532,15 @@ pushd &> /dev/null
                echo "Please set up your ssh key for $project_code_repository and run this install script again."
                echo "See https://help.github.com/articles/generating-ssh-keys"
             fi
+
+            echo
+            touch .before_clone
+            $vcs $clone $project_code_repository
+            status=$?
+            echo "(BTW, $vcs $clone returned $status)"
+            dir=`find . -mindepth 1 -maxdepth 1 -type d -newer .before_clone`
+            rm .before_clone
+            echo
 
             # TODO: this didn't trigger on Joanne, relax this condition.
             if [ "$status" -eq 128 ]; then

@@ -1082,7 +1082,7 @@ pushd &> /dev/null
                      echo
                      echo $div
                      target="/var/lib/virtuoso/db/virtuoso.ini"
-                     data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/data/
+                     data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/$target_dir/data/
                      already_set=`grep 'DirsAllowed' $target | grep -v $data_root`
                      echo "Virtuoso can only access the directories that are specified in $target's 'DirsAllowed' setting."
                      echo "If you have an RDF file in some *other* directory, you will not be able to load it into Virtuoso,"

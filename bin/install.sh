@@ -1243,6 +1243,8 @@ pushd &> /dev/null
                      #     ProxyHTMLURLMap         /sparql /sparql
                      #     ProxyHTMLURLMap         http://localhost:8890/sparql /sparql
                      #  </Location>
+                     echo
+                     echo $div
                      target='/etc/apache2/sites-available/std.common'
                      already_there=`grep 'Location /sparql' $target`
                      echo "Some Apache directives (e.g., ProxyPass) need to be set in $target to expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql."

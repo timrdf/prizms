@@ -862,7 +862,7 @@ pushd &> /dev/null
                      # TODO export JENAROOT=/home/lebot/opt/apache-jena-2.7.4 to data/source/csv2rdf4lod-source-me-as-$user.sh
                      echo
                      echo $div
-                     set_paths_cmd="export JENAROOT=todo"
+                     set_paths_cmd="export JENAROOT=`pwd`"
                      echo "Apache Jena requires the shell environent variable JENAROOT to be set."
                      echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Apache-Jena"
                      echo "The following command should appear in $your data/source/csv2rdf4lod-source-me-as-$user.sh."

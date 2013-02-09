@@ -493,9 +493,9 @@ pushd &> /dev/null
                fi
             fi
 
+            echo "GitHub requires that you have an SSH key and that it be registered with them."
             if [[ ! -e $user_home/.ssh/id_dsa.pub && ! -e $user_home/.ssh/id_rsa.pub ]]; then
                echo
-               echo "GitHub requires that you have an SSH key and that it be registered with them."
                echo "You don't have a ~$person_user_name/.ssh/id_dsa.pub or ~$person_user_name/.ssh/id_rsa.pub,"
                echo "which could be creating using the following command:"
                echo
@@ -534,9 +534,7 @@ pushd &> /dev/null
                   fi
                fi
             else
-               echo "WARNING `basename $0`: ~$person_user_name/.ssh/id_dsa.pub exists, so we won't touch it."
-               echo "Please set up your ssh key for $project_code_repository and run this install script again."
-               echo "See https://help.github.com/articles/generating-ssh-keys"
+               echo "(You have a .ssh/*.pub; be sure to register it with GitHub. See https://help.github.com/articles/generating-ssh-keys)"
             fi
 
             echo

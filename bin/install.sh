@@ -1435,7 +1435,7 @@ pushd &> /dev/null
                            echo cr-create-dataset-dirs-from-ckan.py $upstream_ckan/api $our_base_uri
                                 cr-create-dataset-dirs-from-ckan.py $upstream_ckan/api $our_base_uri
                            for access in `find . -name access.ttl`; do
-                              added="$added $target/$access"
+                              added="$added $target/${access#./}"
                            done
                         popd &> /dev/null
                      else

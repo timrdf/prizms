@@ -765,8 +765,6 @@ pushd &> /dev/null
                   # TODO: CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
                   # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
 
-                  # TODO export JENAROOT=/home/lebot/opt/apache-jena-2.7.4
-
                   # NOTE sudo vi /etc/passwd change melagrid to bash
 
                   # AS DEVELOPER
@@ -858,7 +856,7 @@ pushd &> /dev/null
                         fi
                      fi
 
-                     # TODO JENAROOT to data/source/csv2rdf4lod-source-me-as-$user.sh
+                     # JENAROOT to data/source/csv2rdf4lod-source-me-as-$user.sh
                      echo
                      echo $div
                      echo ${PRIZMS_HOME%/*}
@@ -1226,7 +1224,7 @@ pushd &> /dev/null
 
                      echo $div
                      # sudo a2enmod proxy
-                     # sudo a2enmod proxy_http        # TODO: both of these needed?
+                     # sudo a2enmod proxy_http
                      modules='proxy_http' # 'proxy' is enabled when proxy_http is enabled.
                      for module in $modules; do
                         #already_there=`dpkg -l | grep $module`

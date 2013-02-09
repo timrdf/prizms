@@ -3,7 +3,7 @@
 #3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install.sh>;
 #3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/Installing-Prizms> .
 
-user_home=(cd &> /dev/null && `pwd`)
+user_home=$(cd && echo ${PWD})
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo

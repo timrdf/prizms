@@ -1173,10 +1173,47 @@ pushd &> /dev/null
 
                      echo
                      echo $div
+               
                      echo TODO add the apache map /sparql to 8890
+
+                     # See what is available: apt-cache search libapache2-mod
+
+                     packages='libapache2-mod-proxy-html'
+                     for package in $packages; do
+                        already_there=`dpkg -l | grep $package`
+                        if [[ -z "$already_there" ]]; then
+                           echo "To expose your Virtuoso server on port 8890 as a URL such as $our_base_uri/sparql,"
+                           echo "the $package package needs to be installed, which can be done with the following command:"
+                           echo
+                           echo "sudo apt-get install $package"
+                           echo
+                           read -p "Q: May we install the module above using the command above? [y/n]" -u 1 install_it
+                           if [[ "$install_it" == [yY] ]]; then
+                              echo sudo apt-get install libapache2-mod-proxy-html
+                                   sudo apt-get install libapache2-mod-proxy-html
+                           fi
+                        fi
+                     done
 
                      # sudo a2enmod proxy
                      # sudo a2enmod proxy_http        # TODO: both of these needed?
+                     modules='proxy proxy_http'
+                     for module in $modules; do
+                        already_there=`dpkg -l | grep $module`
+                        if [[ -z "$already_there" ]]; then
+                           echo "To expose your Virtuoso server on port 8890 as a URL such as $our_base_uri/sparql,"
+                           echo "the $module module needs to be installed, which can be done with the following command:"
+                           echo
+                           echo "sudo a2enmod $module"
+                           echo
+                           read -p "Q: May we install the module above using the command above? [y/n]" -u 1 install_it
+                           if [[ "$install_it" == [yY] ]]; then
+                              echo sudo apt-get install libapache2-mod-proxy-html
+                                   sudo apt-get install libapache2-mod-proxy-html
+                           fi
+                        fi
+                     done
+
                      #
                      # See mapping into apache at https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
                      #
@@ -1192,6 +1229,21 @@ pushd &> /dev/null
                      #    # ProxyHTMLURLMap         http://localhost:8890/sparql /sparql
                      #  </Location>
                      #
+                     # This works on melagrid:
+                     #
+                     #  <Location /sparql>
+                     #     allow from all
+                     #     SetHandler None
+                     #     Options +Indexes
+                     #     ProxyPass               http://localhost:8890/sparql
+                     #     ProxyPassReverse        /sparql
+                     #     ProxyHTMLExtended On
+                     #    #ProxyHTMLEnable         On
+                     #     ProxyHTMLURLMap url\(/([^\)]*)\) url(/sparql$1) Rihe
+                     #     ProxyHTMLURLMap         /sparql /sparql
+                     #     ProxyHTMLURLMap         http://localhost:8890/sparql /sparql
+                     #  </Location>
+
                      # add to /etc/apache2/sites-available/std.common
                      # sudo service apache2 restart
                      #

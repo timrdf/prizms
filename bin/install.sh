@@ -3,6 +3,8 @@
 #3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install.sh>;
 #3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/Installing-Prizms> .
 
+user_home=(cd &> /dev/null && `pwd`)
+
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo
    echo "usage: `basename $0` [--me <your-URI>] [--my-email <your-email>] [--proj-user <user>] [--repos <code-repo>] "

@@ -900,7 +900,7 @@ pushd &> /dev/null
                      fi
 
                      # Set CSV2RDF4LOD_HOME
-                     change_source_me $target CSV2RDF4LOD_HOME "$PRIZMS_HOME/repos/csv2rdf4lod-automation" \
+                     change_source_me $target CSV2RDF4LOD_HOME "`echo $PRIZMS_HOME/repos/csv2rdf4lod-automation | sed "s/\`whoami\`/$user/g"`" \
                         "Ensure that all of the csv2rdf4lod-automation scripts can call each other." \
                         'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-not-set' \
                         'unable to invoke some scripts'

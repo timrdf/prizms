@@ -859,7 +859,6 @@ pushd &> /dev/null
                   echo "to convert and publish datasets. You can use an alias to this:"
                   echo
                   echo "   $new_command"
-                  echo
                   already_there=`grep "$new_command" $target` 
                   echo
                   if [ -n "$already_there" ]; then

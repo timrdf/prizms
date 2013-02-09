@@ -1197,21 +1197,21 @@ pushd &> /dev/null
 
                      # sudo a2enmod proxy
                      # sudo a2enmod proxy_http        # TODO: both of these needed?
-                     modules='proxy proxy_http'
+                     modules='proxy_http' # 'proxy' is enabled when proxy_http is enabled.
                      for module in $modules; do
-                        already_there=`dpkg -l | grep $module`
-                        if [[ -z "$already_there" ]]; then
-                           echo "To expose your Virtuoso server on port 8890 as a URL such as $our_base_uri/sparql,"
-                           echo "the $module module needs to be enabled, which can be done with the following command:"
-                           echo
-                           echo "sudo a2enmod $module"
-                           echo
-                           read -p "Q: May we enable the module above using the command above? [y/n] " -u 1 install_it
-                           if [[ "$install_it" == [yY] ]]; then
-                              echo sudo a2enmod $module
-                                   sudo a2enmod $module
-                           fi
+                        #already_there=`dpkg -l | grep $module`
+                        #if [[ -z "$already_there" ]]; then
+                        echo "To expose your Virtuoso server on port 8890 as a URL such as $our_base_uri/sparql,"
+                        echo "the $module module needs to be enabled, which can be done with the following command:"
+                        echo
+                        echo "sudo a2enmod $module"
+                        echo
+                        read -p "Q: May we enable the module above using the command above? [y/n] " -u 1 install_it
+                        if [[ "$install_it" == [yY] ]]; then
+                           echo sudo a2enmod $module
+                                sudo a2enmod $module
                         fi
+                        #fi
                      done
 
                      #

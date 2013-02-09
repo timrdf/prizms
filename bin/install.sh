@@ -1272,7 +1272,7 @@ pushd &> /dev/null
                      fi
 
                      # add to /etc/apache2/sites-available/std.common
-                     if [[ -n "$need_apache_restart" == "yes" ]]; then
+                     if [[ -n "$need_apache_restart" ]]; then
                         echo "Since we've made some changes to apache, we need to restart it so they take effect."
                         echo
                         echo sudo service apache2 restart

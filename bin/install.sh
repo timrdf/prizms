@@ -83,6 +83,8 @@ if [[ "$1" == "--proj-user" ]]; then
    shift
 fi
 
+project_home=${user_home%/*}/$project_user_name
+
 i_am_project_user=""
 if [[ "$project_user_name" == `whoami` ]]; then
    i_am_project_user="yes"
@@ -762,8 +764,17 @@ pushd &> /dev/null
                      'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_DATA_ROOT' \
                      'some loss'
 
-                  # TODO: CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
-                  # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES true \
+                     "enable publishing RDF dump files to the htdocs directory, so they may be used to load the SPARQL endpoint" \
+                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables' \
+                     'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
+
+                  if [[ `value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target` == "true" ]]; then
+                     change_source_me $target CSV2RDF4LOD_PUBLISH_VARWWW_ROOT "/var/www" \
+                        "indicate the htdocs directory to publish RDF dump files to, which are used to load the SPARQL endpoint" \
+                        'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT' \
+                        'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
+                  fi
 
                   # NOTE sudo vi /etc/passwd change melagrid to bash
 

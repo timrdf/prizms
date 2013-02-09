@@ -751,7 +751,7 @@ pushd &> /dev/null
                   template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
                   target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
                   if [[ ! -e $target ]]; then
-                     cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI='                                              > $target
+                     cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI='                                                           > $target
                      echo "source `pwd | sed "s/\`whoami\`/$project_user_name/g"`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
                      echo "source `pwd | sed "s/\`whoami\`/$project_user_name/g"`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
                      # any others to source?
@@ -797,6 +797,7 @@ pushd &> /dev/null
                   fi
 
 
+                  # For both DEVELOPER and PROJECT USER
                   for user in $person_user_name $project_user_name; do
 
                      target="data/source/csv2rdf4lod-source-me-as-$user.sh"

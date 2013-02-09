@@ -753,6 +753,8 @@ pushd &> /dev/null
                      echo "source `pwd`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
                      # any others to source?
                      echo "export CSV2RDF4LOD_CONVERT_DATA_ROOT=''"                                  >> $target
+                     echo "export CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES=''"                          >> $target
+                     echo "export CSV2RDF4LOD_PUBLISH_VARWWW_ROOT=''"                                >> $target
                      added="$added $target"
                      echo
                      echo $div

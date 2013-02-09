@@ -504,8 +504,8 @@ pushd &> /dev/null
                   else
                      echo ssh-keygen -t dsa -C $person_email
                           ssh-keygen -t dsa -C $person_email
-                  else
-                     echo "WARNING `basename $0` needs an email address to set up an SSH key."
+                  #else
+                  #   echo "WARNING `basename $0` needs an email address to set up an SSH key."
                   fi
                else
                   echo "We didn't do anything to create an SSH key."

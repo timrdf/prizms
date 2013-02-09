@@ -1292,7 +1292,7 @@ pushd &> /dev/null
                      # TODO: set CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT 
 
                   fi # end $virtuoso_install
-                  rm .prizms-std.common
+                  rm -f .prizms-std.common
 
                   # TODO: is logging location set up correctly?
 

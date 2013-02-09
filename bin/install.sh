@@ -201,9 +201,9 @@ if [[ -z "$project_user_name" ]]; then
          echo
          echo $div
          echo "Prizms should be installed to a user name created specifically for the project."
-         read -p "Q: Does your project have a user name yet? (y/n) "-u 1 it_does
+         read -p "Q: Does your project have a user name yet? (y/n) " -u 1 it_does
          if [[ $it_does == [yY] ]]; then
-            read -p "Q: What is the user name of your project? "-u 1 project_user_name
+            read -p "Q: What is the user name of your project? " -u 1 project_user_name
             if [ ! -e ~$project_user_name ]; then
                echo "ERROR: ~$project_user_name does not exist."
             else 

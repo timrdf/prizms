@@ -185,7 +185,7 @@ echo "   https://github.com/timrdf/prizms/wiki/Installing-Prizms"
 if [[ -z "$project_user_name" ]]; then
    echo
    echo "First, we need to know about the current user `whoami`."
-   read -p "Q: Is `whoami` your project's user name? (y/n) " -u 1 it_is
+   read -p "Q: Is `whoami` your project's user name? [y/n] " -u 1 it_is
    if [[ $it_is == [yY] ]]; then
       project_user_name=`whoami`
       echo "Your project's user name is: $project_user_name"
@@ -197,7 +197,7 @@ if [[ -z "$project_user_name" ]]; then
       echo
       echo $div
       echo "Okay, `whoami` isn't your project's user name."
-      read -p "Q: Is `whoami` _your_ user name? (y/n) " -u 1 it_is
+      read -p "Q: Is `whoami` _your_ user name? [y/n] " -u 1 it_is
       if [[ $it_is == [yY] ]]; then
          # https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT
          person_user_name=`whoami`
@@ -205,7 +205,7 @@ if [[ -z "$project_user_name" ]]; then
          echo
          echo $div
          echo "Prizms should be installed to a user name on this machine created specifically for the project."
-         read -p "Q: Does your project have a user name yet? (y/n) " -u 1 it_does
+         read -p "Q: Does your project have a user name yet? [y/n] " -u 1 it_does
          if [[ $it_does == [yY] ]]; then
             read -p "Q: What is the user name of your project? " -u 1 project_user_name
             if [ ! -e ${user_home%/*}/$project_user_name ]; then
@@ -545,21 +545,16 @@ pushd &> /dev/null
             touch .before_clone
             $vcs $clone $project_code_repository
             status=$?
-            if [[ "$status" -ne 0 ]]; then
-               echo "(BTW, $vcs $clone returned $status)"
-            fi
             dir=`find . -mindepth 1 -maxdepth 1 -type d -newer .before_clone`
             rm .before_clone
             echo
 
             # TODO: this didn't trigger on Joanne, relax this condition.
             if [ "$status" -eq 128 ]; then
-
                echo "It seems that you didn't have permissions to $clone $project_code_repository"
                echo "GitHub requires an ssh key to check out a writeable working clone"
                echo "See https://help.github.com/articles/generating-ssh-keys"
                echo
-
             elif [ "$status" -ne 0 ]; then
                echo "We're not sure what happended; $vcs returned $status"
             else
@@ -958,7 +953,7 @@ pushd &> /dev/null
                      cat .`basename $0`.hosts
                      echo
                      echo "Changing the IP of localhost to the VM's IP should let Virtuoso start up correctly."
-                     read -p "Q: May we make the change to $target?" -u 1 change_it
+                     read -p "Q: May we make the change to $target? [y/n] " -u 1 change_it
                      if [[ "$change_it" == [yY] ]]; then
                         echo sudo mv $target $target.prizms.bck
                              sudo mv $target $target.prizms.bck
@@ -1236,8 +1231,7 @@ pushd &> /dev/null
                   echo $already_there
                else
                   see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/Script:-source-me.sh"
-                  echo "Add this command to your ~/.bashrc? [y/n]"
-                  read -u 1 install_it
+                  read -p "Add this command to your ~/.bashrc? [y/n]" -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
                      echo                     >> ~/.bashrc
                      echo "$source_me # $see ">> ~/.bashrc
@@ -1444,6 +1438,10 @@ pushd &> /dev/null
                   echo "Now what?"
                fi
 
+               # TODO: Add descriptions of the github and ckan I to what the prizms offers as linked data. 
+               # Use that same kind of file as the parameter to the install. 
+               # Organize it into a versioned dataset (just like everything else).
+
             popd &> /dev/null
          fi # if $target_dir e.g. /home/lebot/prizms/melagrid
       popd &> /dev/null
@@ -1475,7 +1473,7 @@ for package in php5 php5-cli php5-sqlite php5-curl sqlite3; do
    if [[ -n "$not_installed" ]]; then
       echo $TODO sudo apt-get install $package
       if [[ "$dryrun" != "true" ]]; then
-         read -p "$package (Dependency for LODSPeaKr) is not shown in dpkg; install it with command above? (y/N) " -u 1 install_it
+         read -p "$package (Dependency for LODSPeaKr) is not shown in dpkg; install it with command above? [y/n] " -u 1 install_it
          if [[ "$install_it" == [yY] ]]; then
             sudo apt-get install $package
          fi  
@@ -1488,7 +1486,7 @@ done
 echo
 echo "~~~~ ~~~~"
 echo "sudo a2enmod rewrite"
-read -p "LODSPeaKr requires HTTP rewrite. Enable it with the command above? (y/N) " -u 1 install_it
+read -p "LODSPeaKr requires HTTP rewrite. Enable it with the command above? [y/n] " -u 1 install_it
 if [[ "$install_it" == [yY] ]]; then
    sudo a2enmod rewrite
 fi
@@ -1499,7 +1497,7 @@ echo 'https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-U
 echo "  /etc/apache2/sites-enabled/000-default must 'AllowOverride All' for <Directory /var/www/>"
 echo
 echo "sudo service apache2 restart"
-read -p "Please edit 000-default to AllowOverride All, THEN type 'y' to restart apache, or just type 'N' to skip this. (y/N) " -u 1 install_it
+read -p "Please edit 000-default to AllowOverride All, THEN type 'y' to restart apache, or just type 'N' to skip this. [y/n] " -u 1 install_it
 if [[ "$install_it" == [yY] ]]; then
    echo "~~~~ ~~~~"
    echo "Dependency for LODSPeaKr:"

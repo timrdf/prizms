@@ -1190,7 +1190,7 @@ pushd &> /dev/null
                               need_apache_restart="yes"
                            fi
                         else
-                           echo "(it appears that $package is already installed)"
+                           echo "($package is already installed)"
                         fi
                         echo
                      done

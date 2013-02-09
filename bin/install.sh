@@ -510,6 +510,7 @@ pushd &> /dev/null
                else
                   echo "We didn't do anything to create an SSH key."
                fi
+               wc -l ~$person_user_name/.ssh/id_dsa.pub
                if [ -e ~$person_user_name/.ssh/id_dsa.pub ]; then
                   echo "Great! You have a shiny new SSH key."
                   if [ "$vcs" == "git" ]; then

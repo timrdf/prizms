@@ -4,6 +4,7 @@
 #3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/Installing-Prizms> .
 
 user_home=$(cd && echo ${PWD})
+me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo
@@ -521,14 +522,14 @@ pushd &> /dev/null
                      cat $user_home/.ssh/id_dsa.pub
                      echo
                      read -p "Q: Finished adding your key? Once you do, we'll try running this install script again. Ready? [y] " finished
-                     $0 --me             $person_uri              \
-                        --my-email       $person_email            \
-                        --proj-user      $project_user_name       \
-                        --repos          $project_code_repository \
-                        --upstream-ckan  $upstream_ckan           \
-                        --our-base-uri   $our_base_uri            \
-                        --our-source-id  $our_source_id           \
-                        --our-datahub-id $our_datahub_id
+                     $me --me             $person_uri              \
+                         --my-email       $person_email            \
+                         --proj-user      $project_user_name       \
+                         --repos          $project_code_repository \
+                         --upstream-ckan  $upstream_ckan           \
+                         --our-base-uri   $our_base_uri            \
+                         --our-source-id  $our_source_id           \
+                         --our-datahub-id $our_datahub_id
                      # ^ Recursive call
                   fi
                fi

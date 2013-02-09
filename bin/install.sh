@@ -1178,6 +1178,7 @@ pushd &> /dev/null
 
                      # See what is available: apt-cache search libapache2-mod
 
+                     need_apache_restart=""
                      packages='libapache2-mod-proxy-html'
                      for package in $packages; do
                         already_there=`dpkg -l | grep $package`
@@ -1191,6 +1192,7 @@ pushd &> /dev/null
                            if [[ "$install_it" == [yY] ]]; then
                               echo sudo apt-get install $package
                                    sudo apt-get install $package
+                              need_apache_restart="yes"
                            fi
                         fi
                      done
@@ -1243,9 +1245,46 @@ pushd &> /dev/null
                      #     ProxyHTMLURLMap         /sparql /sparql
                      #     ProxyHTMLURLMap         http://localhost:8890/sparql /sparql
                      #  </Location>
+                     target='/etc/apache2/sites-available/std.common'
+                     already_there=`grep 'Location /sparql' $target`
+                     if [[ -z "$already_there" ]]; then
+                        echo "To expose your Virtuoso server on port 8890 as a URL such as $our_base_uri/sparql,"
+                        echo "the following apache configuration needs to be set in $target:"
+                        echo
+                        echo '  <Location /sparql>'                                               > .prizms-std.common
+                        echo '     allow from all'                                               >> .prizms-std.common
+                        echo '     SetHandler None'                                              >> .prizms-std.common
+                        echo '     Options +Indexes'                                             >> .prizms-std.common
+                        echo '     ProxyPass               http://localhost:8890/sparql'         >> .prizms-std.common
+                        echo '     ProxyPassReverse        /sparql'                              >> .prizms-std.common
+                        echo '     ProxyHTMLExtended On'                                         >> .prizms-std.common
+                        echo '    #ProxyHTMLEnable         On'                                   >> .prizms-std.common
+                        echo '     ProxyHTMLURLMap url\(/([^\)]*)\) url(/sparql$1) Rihe'         >> .prizms-std.common
+                        echo '     ProxyHTMLURLMap         /sparql /sparql'                      >> .prizms-std.common
+                        echo '     ProxyHTMLURLMap         http://localhost:8890/sparql /sparql' >> .prizms-std.common
+                        echo '  </Location>'                                                     >> .prizms-std.common
+                        echo
+                        read -p "Q: May we append the configuration above into $target? [y/n] " -u 1 install_it
+                        if [[ "$install_it" == [yY] ]]; then
+                           cat .prizms-std.common >> $target
+                           need_apache_restart="yes"
+                        fi
+                     fi
 
                      # add to /etc/apache2/sites-available/std.common
-                     # sudo service apache2 restart
+                     if [[ -n "$need_apache_restart" == "yes" ]]; then
+                        echo "Since we've made some changes to apache, we need to restart it so they take effect."
+                        echo
+                        echo sudo service apache2 restart
+                        echo
+                        read -p "May we restart apache using the command above? [y/n] " -u 1 restart_it
+                        if [[ "$restart_it" == [yY] ]]; then
+                           echo sudo service apache2 restart
+                                sudo service apache2 restart
+                           need_apache_restart=""
+                        fi
+                     fi
+
                      #
                      # We're trying to get to http://aquarius.tw.rpi.edu/projects/melagrid/sparql
 
@@ -1253,6 +1292,7 @@ pushd &> /dev/null
                      # TODO: set CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT 
 
                   fi # end $virtuoso_install
+                  rm .prizms-std.common
 
                   # TODO: is logging location set up correctly?
 

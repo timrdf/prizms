@@ -1272,8 +1272,8 @@ pushd &> /dev/null
                         echo
                         read -p "Q: May we append the configuration above into $target? [y/n] " -u 1 install_it
                         if [[ "$install_it" == [yY] ]]; then
-                           echo sudo cat .prizms-std.common >> $target
-                                sudo cat .prizms-std.common >> $target
+                           echo cat .prizms-std.common | sudo tee -a $target
+                                cat .prizms-std.common | sudo tee -a $target
                            need_apache_restart="yes"
                         fi
                      else

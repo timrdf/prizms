@@ -899,6 +899,7 @@ pushd &> /dev/null
                         fi
                      fi
 
+                     # Set CSV2RDF4LOD_HOME
                      change_source_me $target CSV2RDF4LOD_HOME "$PRIZMS_HOME/repos/csv2rdf4lod-automation" \
                         "Ensure that all of the csv2rdf4lod-automation scripts can call each other." \
                         'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-not-set' \

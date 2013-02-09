@@ -426,7 +426,8 @@ echo "        The essential bits will be pulled read-only from $project_code_rep
 echo "        Automation will trigger on those essential bits to organize, describe, retrieve, convert, and publish your Linked Data."
 echo "        To make changes in here, push into $project_code_repository from any working copy (e.g. ~$person_user_name/prizms/$project_user_name)"
 
-if [[ -z "$i_am_project_user" && `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == "no" ]]; then
+#if [[ -z "$i_am_project_user" && `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == "no" ]]; then
+if [[ -z "$i_am_project_user" && ! -e ${user_home%/*}/$project_user_name ]]; then
    echo
    echo $div
    read -p "Create user $project_user_name? [y/n] " -u 1 install_project_user

@@ -1173,17 +1173,11 @@ pushd &> /dev/null
 
                      echo
                      echo $div
-               
-                     echo TODO add the apache map /sparql to 8890
-
-                     # See what is available: apt-cache search libapache2-mod
-
                      need_apache_restart=""
                      packages='libapache2-mod-proxy-html'
                      for package in $packages; do
-                        echo
                         echo "The package $package is required to expose your Virtuoso server on port 8890 as a URL such as $our_base_uri/sparql."
-                        already_there=`dpkg -l | grep $package`
+                        already_there=`dpkg -l | grep $package` # See what is available: apt-cache search libapache2-mod
                         if [[ -z "$already_there" ]]; then
                            echo "The $package package needs to be installed, which can be done with the following command:"
                            echo
@@ -1198,6 +1192,7 @@ pushd &> /dev/null
                         else
                            echo "(it appears that $package is already installed)"
                         fi
+                        echo
                      done
 
                      # sudo a2enmod proxy

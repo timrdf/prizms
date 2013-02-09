@@ -1254,20 +1254,24 @@ pushd &> /dev/null
                upstream_ckan_source_id=`java edu.rpi.tw.string.NameFactory --source-id-of $upstream_ckan`
                target="data/source/$upstream_ckan_source_id"
                echo "Prizms can collect and convert datasets that are listed in CKAN instances."
-               echo "You've specified an upstream CKAN from which to mirror dataset listings ($upstream_ckan),"
-               echo "but Prizms hasn't extracted the access metadata into $target."
-               if [[ -n "$upstream_ckan_source_id" && ! -e $target && -z "$i_am_project_user" ]]; then
-                  echo
-                  read -p "Extract the access metadata from the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
-                  if [[ "$extract_it" == [yY] ]]; then
-                     mkdir -p $target
-                     pushd $target &> /dev/null
-                        echo cr-create-dataset-dirs-from-ckan.py $upstream_ckan $our_base_uri
-                     popd &> /dev/null
-                  else
-                     echo "Okay, we won't try to extract access metadata from $upstream_ckan. Check out the following if you want to do it yourself:"
-                     echo "  https://github.com/jimmccusker/twc-healthdata/wiki/Mirroring-a-Source-CKAN-Instance"
+               if [[ -n "$upstream_ckan" ]]; then
+                  echo "You've specified an upstream CKAN from which to mirror dataset listings ($upstream_ckan),"
+                  echo "but Prizms hasn't extracted the access metadata into $target."
+                  if [[ -n "$upstream_ckan_source_id" && ! -e $target && -z "$i_am_project_user" ]]; then
+                     echo
+                     read -p "Extract the access metadata from the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
+                     if [[ "$extract_it" == [yY] ]]; then
+                        mkdir -p $target
+                        pushd $target &> /dev/null
+                           echo cr-create-dataset-dirs-from-ckan.py $upstream_ckan $our_base_uri
+                        popd &> /dev/null
+                     else
+                        echo "Okay, we won't try to extract access metadata from $upstream_ckan. Check out the following if you want to do it yourself:"
+                        echo "  https://github.com/jimmccusker/twc-healthdata/wiki/Mirroring-a-Source-CKAN-Instance"
+                     fi
                   fi
+               else
+                  echo "(You are not using an upstream CKAN; call this installer with argument --upstream-ckan if you want to)"
                fi
 
 
@@ -1392,9 +1396,11 @@ pushd &> /dev/null
                      echo ${user_home%/*}/$project_user_name/opt/prizms
                      echo
                      if [[ ! -e ${user_home%/*}/$project_user_name/opt/prizms ]]; then
-                        sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone git://github.com/timrdf/prizms.git"
+                        echo sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone git://github.com/timrdf/prizms.git"
+                             sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone git://github.com/timrdf/prizms.git"
                      else
-                        sudo su - $project_user_name -c "cd opt/prizms; git pull"
+                        echo sudo su - $project_user_name -c "cd opt/prizms; git pull"
+                             sudo su - $project_user_name -c "cd opt/prizms; git pull"
                      fi
 
                      sudo su - $project_user_name -c "cd; opt/prizms/bin/install.sh                                \

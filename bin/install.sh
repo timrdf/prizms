@@ -3,6 +3,7 @@
 #3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install.sh>;
 #3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/Installing-Prizms> .
 
+PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 user_home=$(cd && echo ${PWD})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
@@ -397,8 +398,6 @@ echo "Your project's Linked Data base URI is:                    $our_base_uri"
 echo "Your project's source-id is:                               $our_source_id"
 echo "Your project's datahub.io URI is:                          http://datahub.io/dataset/$our_datahub_id"
 
-PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
-me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
 echo
 echo $div
@@ -859,9 +858,11 @@ pushd &> /dev/null
                         fi
                      fi
 
-                     # TODO export JENAROOT=/home/lebot/opt/apache-jena-2.7.4 to data/source/csv2rdf4lod-source-me-as-$user.sh
+                     # TODO JENAROOT to data/source/csv2rdf4lod-source-me-as-$user.sh
                      echo
                      echo $div
+                     echo ${PRIZMS_HOME%/*}
+                     find ${PRIZMS_HOME%/*} -type d -name "apache-jena*" # /home/lebot/opt/apache-jena-2.7.4
                      set_paths_cmd="export JENAROOT=`pwd`"
                      echo "Apache Jena requires the shell environent variable JENAROOT to be set."
                      echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Apache-Jena"

@@ -1381,7 +1381,7 @@ pushd &> /dev/null
                   echo
                   read -p "Q: ^--- Since we modified these files to your working copy of $project_code_repository, let's add, commit, and push them, okay? [y/n] " -u 1 push_them
                   if [[ "$push_them" == [yY] ]]; then
-                     git add $added
+                     git add -f $added
                      git commit -m 'During install: added stub directories and readme files.'
                      git push
                   else

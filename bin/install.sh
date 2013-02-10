@@ -1028,11 +1028,11 @@ pushd &> /dev/null
                   echo "The following utilities seem to already be installed okay:"
                   echo
                   $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.okay"
-                  $PRIZMS_HOME/repos/DataFAQs/bin/bin/install-datafaqs-dependencies.sh -n                   | grep "^.okay"
+                  $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh -n                       | grep "^.okay"
                   # TODO: set up the user-based install that does NOT require sudo. python's easy_install
                  
                   todo=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO" | grep -v "pydistutils.cfg"`
-                  todo=$todo`$PRIZMS_HOME/repos/DataFAQs/bin/bin/install-datafaqs-dependencies.sh -n              | grep "^.TODO" | grep -v "pydistutils.cfg"`
+                  todo=$todo`$PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh -n                  | grep "^.TODO" | grep -v "pydistutils.cfg"`
                   if [ -n "$todo" ]; then
                      echo
                      echo "However, the following do not seem to be installed:"

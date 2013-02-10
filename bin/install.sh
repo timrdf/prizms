@@ -1422,7 +1422,7 @@ pushd &> /dev/null
                      echo
                      echo sudo ln -s $www/services $PROJECT_PRIZMS_HOME/repos/DataFAQs/services
                      echo
-                     read -p "May we link the DataFAQs services from your htdocs directory?" -u -1 link_it
+                     read -p "May we link the DataFAQs services from your htdocs directory?" -u 1 link_it
                      if [[ "$link_it" == [yY] ]]; then
                         echo sudo ln -s $www/services $PROJECT_PRIZMS_HOME/repos/DataFAQs/services
                              sudo ln -s $www/services $PROJECT_PRIZMS_HOME/repos/DataFAQs/services

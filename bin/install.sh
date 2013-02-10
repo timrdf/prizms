@@ -1416,7 +1416,7 @@ pushd &> /dev/null
                if [[ -d "$www" ]]; then
                   ls $www
                   pwd # /home/lebot/prizms/melagrid
-                  echo $PRIZMS_HOME
+                  echo $PRIZMS_HOME | sed "s/\`whoami\`/$user/g"
                fi
 
                #

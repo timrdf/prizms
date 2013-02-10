@@ -183,7 +183,7 @@ function change_source_me {
 }
 
 function offer_install_aptget {
-   restart=""
+   restart=0
    packages="$1"
    reason="$2"
    for package in $packages; do
@@ -199,7 +199,7 @@ function offer_install_aptget {
          if [[ "$install_it" == [yY] ]]; then
             echo sudo apt-get install $package
                  sudo apt-get install $package
-            restart="yes"
+            restart=1
          fi
       else
          echo "($package is already installed)"

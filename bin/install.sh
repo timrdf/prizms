@@ -1415,8 +1415,21 @@ pushd &> /dev/null
                echo "Prizms deploys DataFAQs services from the htdocs directory, which is current $www"
                if [[ -d "$www" ]]; then
                   ls $www
-                  pwd # /home/lebot/prizms/melagrid
-                  echo $PROJECT_PRIZMS_HOME
+                  pwd                       # /home/lebot/prizms/melagrid
+                  echo $PROJECT_PRIZMS_HOME # /home/melagrid/opt/prizms
+                                            # /home/melagrid/opt/prizms/repos/DataFAQs/services
+                  if [[ ! -e $www/services ]]; then
+                     echo
+                     echo sudo ln -s $www/services $PROJECT_PRIZMS_HOME/repos/DataFAQs/services
+                     echo
+                     read -p "May we link the DataFAQs services from your htdocs directory?" -u -1 link_it
+                     if [[ "$link_it" == [yY] ]]; then
+                        echo sudo ln -s $www/services $PROJECT_PRIZMS_HOME/repos/DataFAQs/services
+                             sudo ln -s $www/services $PROJECT_PRIZMS_HOME/repos/DataFAQs/services
+                     else
+                        echo "Okay, we won't link the DataFAQs services into your htdocs directory."
+                     fi
+                  fi
                fi
 
                #

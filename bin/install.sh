@@ -1248,35 +1248,11 @@ pushd &> /dev/null
                      credentials="/etc/prizms/$project_user_name/??triple-store??/google/csv2rdf4lod-source-me-for-googlemap-credentials.sh"
 
 
+                     echo
+                     echo $div
                      offer_install_aptget \
                         'libapache2-mod-proxy-html' \
                         "expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
-
-                     #echo
-                     #echo $div
-                     #need_apache_restart=""
-                     #packages="libapache2-mod-proxy-html"
-                     #reason="expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
-                     #for package in $packages; do
-                     #   echo "The package $package is required to"
-                     #   echo "$to."
-                     #   already_there=`dpkg -l | grep $package` # See what is available: apt-cache search libapache2-mod
-                     #   if [[ -z "$already_there" ]]; then
-                     #      echo "The $package package needs to be installed, which can be done with the following command:"
-                     #      echo
-                     #      echo "sudo apt-get install $package"
-                     #      echo
-                     #      read -p "Q: May we install the package above using the command above? [y/n] " -u 1 install_it
-                     #      if [[ "$install_it" == [yY] ]]; then
-                     #         echo sudo apt-get install $package
-                     #              sudo apt-get install $package
-                     #         need_apache_restart="yes"
-                     #      fi
-                     #   else
-                     #      echo "($package is already installed)"
-                     #   fi
-                     #   echo
-                     #done
 
                      echo $div
                      # sudo a2enmod proxy
@@ -1404,7 +1380,7 @@ pushd &> /dev/null
                #
                # DataFAQs services via mod_python
                #
-               need_apache_restart=`offer_install_aptget 
+               need_apache_restart=`offer_install_aptget \
                                        'libapache2-mod-python' \
                                        "expose DataFAQs services through Apache at $our_base_uri/services/sadi"`
                if [[ -n "$need_apache_restart" ]]; then

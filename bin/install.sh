@@ -1038,7 +1038,7 @@ pushd &> /dev/null
                      echo "However, the following do not seem to be installed:"
                      echo
                      $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO" | grep -v "pydistutils.cfg"
-                     $PRIZMS_HOME/repos/DataFAQs/bin/bin/install-datafaqs-dependencies.sh                   -n | grep "^.TODO" | grep -v "pydistutils.cfg"
+                     $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       -n | grep "^.TODO" | grep -v "pydistutils.cfg"
                      echo
                      read -p "Q: May we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
                      echo

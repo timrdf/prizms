@@ -1409,8 +1409,10 @@ pushd &> /dev/null
                   fi
                fi
 
+               echo
+               echo $div
                www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
-   
+               echo "Prizms deploys DataFAQs services from the htdocs directory, which is current $www"
                if [[ -d "$www" ]]; then
                   ls $www
                fi

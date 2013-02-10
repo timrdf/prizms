@@ -1380,6 +1380,8 @@ pushd &> /dev/null
                #
                # DataFAQs services via mod_python
                #
+               echo
+               echo $div
                offer_install_aptget \
                   'libapache2-mod-python' \
                   "expose DataFAQs services through Apache at $our_base_uri/services/sadi"
@@ -1388,17 +1390,18 @@ pushd &> /dev/null
                   echo
                   echo sudo a2enmod python
                   echo
-                  read -p "May we enable mod_python using the command above? [y/n] " -u 1 enable_it
+                  read -p "Q: May we enable mod_python using the command above? [y/n] " -u 1 enable_it
                   if [[ "$enable_it" == [yY] ]]; then
                      echo sudo a2enmod python
                           sudo a2enmod python
                   fi
+                  # TODO: what if it was already installed, but not enabled?
 
                   echo "Since we've made some changes to apache, we need to restart it so they take effect."
                   echo
                   echo sudo service apache2 restart
                   echo
-                  read -p "May we restart apache using the command above? [y/n] " -u 1 restart_it
+                  read -p "Q: May we restart apache using the command above? [y/n] " -u 1 restart_it
                   if [[ "$restart_it" == [yY] ]]; then
                      echo sudo service apache2 restart
                           sudo service apache2 restart
@@ -1406,7 +1409,11 @@ pushd &> /dev/null
                   fi
                fi
 
-
+               www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
+   
+               if [[ -d "$www" ]]; then
+                  ls $www
+               fi
 
                #
                # Add source data/source/csv2rdf4lod-source-me-as-$person_user_name.sh to ~/.bashrc

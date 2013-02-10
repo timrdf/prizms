@@ -84,6 +84,7 @@ if [[ "$1" == "--proj-user" ]]; then
 fi
 
 project_home=${user_home%/*}/$project_user_name
+PROJECTS_PRIZMS_HOME=`$PRIZMS_HOME | sed "s/\`whoami\`/$project_user_name/g"`
 
 i_am_project_user=""
 if [[ "$project_user_name" == `whoami` ]]; then
@@ -1416,7 +1417,7 @@ pushd &> /dev/null
                if [[ -d "$www" ]]; then
                   ls $www
                   pwd # /home/lebot/prizms/melagrid
-                  echo $PRIZMS_HOME | sed "s/`whoami`/$project_user_name/g"
+                  echo $PROJECTS_PRIZMS_HOME
                fi
 
                #

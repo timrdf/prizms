@@ -182,6 +182,32 @@ function change_source_me {
    fi
 }
 
+function offer_install_aptget {
+   restart=""
+   packages="$1"
+   reason="$2"
+   for package in $packages; do
+      echo "The package $package is required to"
+      echo "$to."
+      already_there=`dpkg -l | grep $package` # See what is available: apt-cache search libapache2-mod
+      if [[ -z "$already_there" ]]; then
+         echo "The $package package needs to be installed, which can be done with the following command:"
+         echo
+         echo "sudo apt-get install $package"
+         echo
+         read -p "Q: May we install the package above using the command above? [y/n] " -u 1 install_it
+         if [[ "$install_it" == [yY] ]]; then
+            echo sudo apt-get install $package
+                 sudo apt-get install $package
+            restart="yes"
+         fi
+      else
+         echo "($package is already installed)"
+      fi
+      echo
+   done
+   return $restart
+}
 
 echo
 echo "Okay, let's install Prizms!"
@@ -1222,29 +1248,35 @@ pushd &> /dev/null
                      credentials="/etc/prizms/$project_user_name/??triple-store??/google/csv2rdf4lod-source-me-for-googlemap-credentials.sh"
 
 
-                     echo
-                     echo $div
-                     need_apache_restart=""
-                     packages='libapache2-mod-proxy-html'
-                     for package in $packages; do
-                        echo "The package $package is required to expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql."
-                        already_there=`dpkg -l | grep $package` # See what is available: apt-cache search libapache2-mod
-                        if [[ -z "$already_there" ]]; then
-                           echo "The $package package needs to be installed, which can be done with the following command:"
-                           echo
-                           echo "sudo apt-get install $package"
-                           echo
-                           read -p "Q: May we install the module above using the command above? [y/n] " -u 1 install_it
-                           if [[ "$install_it" == [yY] ]]; then
-                              echo sudo apt-get install $package
-                                   sudo apt-get install $package
-                              need_apache_restart="yes"
-                           fi
-                        else
-                           echo "($package is already installed)"
-                        fi
-                        echo
-                     done
+                     offer_install_aptget 
+                        'libapache2-mod-proxy-html' \
+                        "expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
+
+                     #echo
+                     #echo $div
+                     #need_apache_restart=""
+                     #packages="libapache2-mod-proxy-html"
+                     #reason="expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
+                     #for package in $packages; do
+                     #   echo "The package $package is required to"
+                     #   echo "$to."
+                     #   already_there=`dpkg -l | grep $package` # See what is available: apt-cache search libapache2-mod
+                     #   if [[ -z "$already_there" ]]; then
+                     #      echo "The $package package needs to be installed, which can be done with the following command:"
+                     #      echo
+                     #      echo "sudo apt-get install $package"
+                     #      echo
+                     #      read -p "Q: May we install the package above using the command above? [y/n] " -u 1 install_it
+                     #      if [[ "$install_it" == [yY] ]]; then
+                     #         echo sudo apt-get install $package
+                     #              sudo apt-get install $package
+                     #         need_apache_restart="yes"
+                     #      fi
+                     #   else
+                     #      echo "($package is already installed)"
+                     #   fi
+                     #   echo
+                     #done
 
                      echo $div
                      # sudo a2enmod proxy
@@ -1368,6 +1400,35 @@ pushd &> /dev/null
                fi # end "I am not project user"
 
 
+
+               #
+               # DataFAQs services via mod_python
+               #
+               need_apache_restart=`offer_install_aptget 
+                                       'libapache2-mod-python' \
+                                       "expose DataFAQs services through Apache at $our_base_uri/services/sadi"`
+               if [[ -n "$need_apache_restart" ]]; then
+                  echo "Since we've installed a new Apache module, we need to enable it."
+                  echo
+                  echo sudo a2enmod python
+                  echo
+                  read -p "May we enable mod_python using the command above? [y/n] " -u 1 enable_it
+                  if [[ "$enable_it" == [yY] ]]; then
+                     echo sudo a2enmod python
+                          sudo a2enmod python
+                  fi
+
+                  echo "Since we've made some changes to apache, we need to restart it so they take effect."
+                  echo
+                  echo sudo service apache2 restart
+                  echo
+                  read -p "May we restart apache using the command above? [y/n] " -u 1 restart_it
+                  if [[ "$restart_it" == [yY] ]]; then
+                     echo sudo service apache2 restart
+                          sudo service apache2 restart
+                     need_apache_restart=""
+                  fi
+               fi
 
 
 

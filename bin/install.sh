@@ -1412,15 +1412,14 @@ pushd &> /dev/null
                echo
                echo $div
                www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
-               echo "Prizms deploys DataFAQs services from the htdocs directory, which is current $www"
+               echo "Prizms deploys DataFAQs services by linking to them from within the htdocs directory, which is currently $www"
                if [[ -d "$www" ]]; then
-                  ls $www
-                  pwd                       # /home/lebot/prizms/melagrid
-                  echo $PROJECT_PRIZMS_HOME # /home/melagrid/opt/prizms
-                                            # /home/melagrid/opt/prizms/repos/DataFAQs/services
+                  #pwd                       # /home/lebot/prizms/melagrid
+                  #echo $PROJECT_PRIZMS_HOME # /home/melagrid/opt/prizms
+                                             # /home/melagrid/opt/prizms/repos/DataFAQs/services
                   if [[ ! -e $www/services ]]; then
                      echo
-                     echo sudo ln -s $www/services $PROJECT_PRIZMS_HOME/repos/DataFAQs/services
+                     echo "   sudo ln -s $www/services $PROJECT_PRIZMS_HOME/repos/DataFAQs/services"
                      echo
                      read -p "May we link the DataFAQs services from your htdocs directory?" -u 1 link_it
                      if [[ "$link_it" == [yY] ]]; then

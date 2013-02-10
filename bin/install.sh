@@ -1419,12 +1419,12 @@ pushd &> /dev/null
                                              # /home/melagrid/opt/prizms/repos/DataFAQs/services
                   if [[ ! -e $www/services ]]; then
                      echo
-                     echo "   sudo ln -s $www/services $PROJECT_PRIZMS_HOME/repos/DataFAQs/services"
+                     echo "   sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services"
                      echo
                      read -p "Q: May we link the DataFAQs services from your htdocs directory using the command above? [y/n] " -u 1 link_it
                      if [[ "$link_it" == [yY] ]]; then
-                        echo sudo ln -s $www/services $PROJECT_PRIZMS_HOME/repos/DataFAQs/services
-                             sudo ln -s $www/services $PROJECT_PRIZMS_HOME/repos/DataFAQs/services
+                        echo sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services
+                             sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services
                      else
                         echo "Okay, we won't link the DataFAQs services into your htdocs directory."
                      fi

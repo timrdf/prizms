@@ -1248,7 +1248,7 @@ pushd &> /dev/null
                      credentials="/etc/prizms/$project_user_name/??triple-store??/google/csv2rdf4lod-source-me-for-googlemap-credentials.sh"
 
 
-                     offer_install_aptget 
+                     offer_install_aptget \
                         'libapache2-mod-proxy-html' \
                         "expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
 

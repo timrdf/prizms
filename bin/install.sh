@@ -428,7 +428,7 @@ echo "Your project's source-id is:                               $our_source_id"
 echo "Your project's datahub.io URI is:                          http://datahub.io/dataset/$our_datahub_id"
 
 project_home=${user_home%/*}/$project_user_name
-PROJECT_PRIZMS_HOME=`$PRIZMS_HOME | sed "s/\`whoami\`/$project_user_name/g"`
+PROJECT_PRIZMS_HOME=`echo $PRIZMS_HOME | sed "s/\`whoami\`/$project_user_name/g"`
 
 echo
 echo $div

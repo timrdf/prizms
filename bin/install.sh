@@ -1383,7 +1383,7 @@ pushd &> /dev/null
                need_apache_restart=`offer_install_aptget \
                                        'libapache2-mod-python' \
                                        "expose DataFAQs services through Apache at $our_base_uri/services/sadi"`
-               if [[ -n "$need_apache_restart" ]]; then
+               if [[ "$need_apache_restart" != 0 ]]; then
                   echo "Since we've installed a new Apache module, we need to enable it."
                   echo
                   echo sudo a2enmod python

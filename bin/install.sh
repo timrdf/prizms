@@ -1416,7 +1416,7 @@ pushd &> /dev/null
                if [[ -d "$www" ]]; then
                   ls $www
                   pwd # /home/lebot/prizms/melagrid
-                  echo $PROJECTS_PRIZMS_HOME
+                  echo $PROJECT_PRIZMS_HOME
                fi
 
                #

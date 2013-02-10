@@ -1045,6 +1045,7 @@ pushd &> /dev/null
                      if [[ "$install_them" == [yY] ]]; then
                         touch .before-prizms-installed-dependencies
                         $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh
+                        $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh
                      else
                         echo "Okay, we won't try to install them. Check out the following if you want to do it yourself:"
                         echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"

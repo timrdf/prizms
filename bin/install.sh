@@ -1415,6 +1415,7 @@ pushd &> /dev/null
                echo "Prizms deploys DataFAQs services from the htdocs directory, which is current $www"
                if [[ -d "$www" ]]; then
                   ls $www
+                  pwd
                fi
 
                #

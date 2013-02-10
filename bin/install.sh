@@ -188,7 +188,7 @@ function offer_install_aptget {
    reason="$2"
    for package in $packages; do
       echo "The package $package is required to"
-      echo "$to."
+      echo "$reason."
       already_there=`dpkg -l | grep $package` # See what is available: apt-cache search libapache2-mod
       if [[ -z "$already_there" ]]; then
          echo "The $package package needs to be installed, which can be done with the following command:"

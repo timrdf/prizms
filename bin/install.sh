@@ -83,9 +83,6 @@ if [[ "$1" == "--proj-user" ]]; then
    shift
 fi
 
-project_home=${user_home%/*}/$project_user_name
-PROJECTS_PRIZMS_HOME=`$PRIZMS_HOME | sed "s/\`whoami\`/$project_user_name/g"`
-
 i_am_project_user=""
 if [[ "$project_user_name" == `whoami` ]]; then
    i_am_project_user="yes"
@@ -430,6 +427,8 @@ echo "Your project's Linked Data base URI is:                    $our_base_uri"
 echo "Your project's source-id is:                               $our_source_id"
 echo "Your project's datahub.io URI is:                          http://datahub.io/dataset/$our_datahub_id"
 
+project_home=${user_home%/*}/$project_user_name
+PROJECT_PRIZMS_HOME=`$PRIZMS_HOME | sed "s/\`whoami\`/$project_user_name/g"`
 
 echo
 echo $div

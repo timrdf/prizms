@@ -941,6 +941,11 @@ pushd &> /dev/null
                         'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-not-set' \
                         'unable to invoke some scripts'
 
+                     if [[ ! -e $user_home/.vim/syntax/n3.vim ]]; then
+                        echo "TODO: we can add syntax highlighting to vi."
+                        # TODO: mkdir -p ~/.vim/syntax; curl -L 'http://www.vim.org/scripts/download_script.php?src_id=6882' > ~/.vim/syntax/n3.vim
+                     fi
+
                   done # PATH, CLASSPATH, and JENAROOT for person and project users.
 
 

@@ -1434,6 +1434,15 @@ pushd &> /dev/null
                   echo "TODO: sudo a2enmod env"
                   # enable envars:
                   # sudo a2enmod env
+                  echo "Since we've installed a new Apache module, we need to enable it."
+                  echo
+                  echo sudo a2enmod env
+                  echo
+                  read -p "Q: May we enable the Apache env module using the command above? [y/n] " -u 1 enable_it
+                  if [[ "$enable_it" == [yY] ]]; then
+                     echo sudo a2enmod env
+                          sudo a2enmod env
+                  fi
                fi
 
                if [[ -n "$i_am_project_user" ]]; then
@@ -1690,9 +1699,9 @@ pushd &> /dev/null
                echo $div
                if [[ -n $i_am_project_user ]]; then
                   echo "We're all done installing Prizms production environment for the user `whoami`."
-                  echo "TODO: sudo service apache2 restart"
                else
                   echo "We're all done installing Prizms development environment for the user `whoami`."
+                  echo "TODO: sudo service apache2 restart (since the project user set up an .htaccess?)"
                   echo "Now what?"
                fi
 

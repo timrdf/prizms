@@ -762,20 +762,47 @@ pushd &> /dev/null
                      'https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble' \
                      'some loss'
 
-                  #
-                  # Set DATAFAQS_BASE_URI in the project-level source-me.sh.
-                  #
+                  # Set DATAFAQS_HOME in the project-level source-me.sh.
                   target="data/faqs/datafaqs-source-me.sh"
+                  change_source_me $target DATAFAQS_HOME "$PRIZMS_HOME/repos/DataFAQs" \
+                     'find the scripts that DataFAQs needs to run' \
+                     'https://github.com/timrdf/DataFAQs/wiki/DATAFAQS-environment-variables' \
+                     'running DataFAQs will fail'
+
+                  # Set DATAFAQS_BASE_URI in the project-level source-me.sh.
                   change_source_me $target DATAFAQS_BASE_URI "$our_base_uri" \
                      'situate the URIs created by DataFAQs within a namespace that we control' \
                      'https://github.com/timrdf/DataFAQs/wiki/DATAFAQS-environment-variables' \
                      'URIs will not be valid Linked Data'
 
-                  change_source_me $target DATAFAQS_HOME "$PRIZMS_HOME/repos/DataFAQs" \
-                     'find the scripts that DataFAQs needs to run' \
+                  # DATAFAQS_PROVENANCE_CODE_RAW_BASE  beginning part of:
+                  #   https://raw.github.com/timrdf/DataFAQs/master/services/sadi/faqt/datascape/size.py
+                  #                                                 services/sadi/faqt/datascape <------- "servicePath"
+                  #
+                  # DATAFAQS_PROVENANCE_CODE_PAGE_BASE beginning part of:
+                  #   https://github.com/timrdf/DataFAQs/blob/master/services/sadi/faqt/datascape/size.py
+                  #                                                                               size <-- "serviceNameText"
+                  #
+                  # bin/install/prizms-dependency-repos.sh encapsulates       'git://github.com/timrdf/DataFAQs.git' 
+                  #
+                  # Note: if we generalize which DataFAQs repository we use, 
+                  #       we need to changebin/install/prizms-dependency-repos.sh AND 
+                  #       the two hard-coded values below:
+
+                  # Set DATAFAQS_PROVENANCE_CODE_RAW_BASE in the project-level source-me.sh.
+                  change_source_me $target DATAFAQS_PROVENANCE_CODE_RAW_BASE 'https://raw.github.com/timrdf/DataFAQs/master' \
+                     'situate the URIs created by DataFAQs within a namespace that we control' \
                      'https://github.com/timrdf/DataFAQs/wiki/DATAFAQS-environment-variables' \
-                     'running DataFAQs will fail'
- 
+                     'URIs will not be valid Linked Data'
+
+                  # Set DATAFAQS_PROVENANCE_CODE_PAGE_BASE in the project-level source-me.sh.
+                  change_source_me $target DATAFAQS_PROVENANCE_CODE_PAGE_BASE 'https://github.com/timrdf/DataFAQs/blob/master' \
+                     'situate the URIs created by DataFAQs within a namespace that we control' \
+                     'https://github.com/timrdf/DataFAQs/wiki/DATAFAQS-environment-variables' \
+                     'URIs will not be valid Linked Data'
+
+
+
                   # ON MACHINE
                   # (machine-level source-me.sh)
                   #

@@ -1432,31 +1432,6 @@ pushd &> /dev/null
                fi
 
                if [[ -n "$i_am_project_user" ]]; then
-                  echo
-                  echo $div
-                  echo "Prizms exposes a directory of python SADI services through Apache, which needs to know what implementation should handle the invocation."
-                  target="$PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess"
-                  if [[ ! -e $target ]]; then
-                     echo "$target does not exist, but it should contain the following directives to enable the SADI services:"
-                     echo
-                     echo "SetHandler mod_python"                                         > .prizms-sadi-htaccess
-                     echo "PythonHandler sadi"                                           >> .prizms-sadi-htaccess
-                     # SetEnv X_CKAN_API_Key    9a88ae62-6a4e-4c59-a2bb-05266615e601 # This needs 'sudo a2enmod env' to take affect. # see http://httpd.apache.org/docs/2.2/mod/mod_env.html
-                     echo "SetEnv DATAFAQS_BASE_URI http://aquarius.tw.rpi.edu/projects" >> .prizms-sadi-htaccess
-                     cat .prizms-sadi-htaccess
-                     echo
-                     read -p "Q: may we install the directives above into $target? [y/n] " -u 1 install_it
-                     if [[ "$install_it" == [yY] ]]; then
-                        mv .prizms-sadi-htaccess $target
-                     else
-                        echo "Okay, we won't update $target."
-                     fi
-                  else
-                     echo "($PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess already exists, so mod_python should be configured to use sadi handler)"
-                  fi
-                  rm -f .prizms-sadi-htaccess
-
-               else
                   # This is needed to enable the SetEnv command in the $PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess below.
                   echo "TODO: sudo a2enmod env"
                   # enable envars:
@@ -1471,18 +1446,45 @@ pushd &> /dev/null
                           sudo a2enmod env
                   fi
 
-                  echo "TODO: Need to enable FollowSymLinks"
-                  # lebot@datafaqs:/var/www/services$ sudo vi /etc/apache2/sites-enabled/000-default
-                  # make sure have:
+
+                  # AllowOverride None -> AllowOverride All
+                  echo "TODO: Need to permit AllowOverride All"
+
+                  # Change to 'All' in
+                  # /etc/apache2/sites-enabled/000-default
                   #    <Directory /var/www/>
                   #       Options Indexes FollowSymLinks MultiViews
                   #       AllowOverride All
 
-                   
                   # restart apache:
                   # sudo service apache2 restart
 
                   # tail -f /var/log/apache2/error.log
+               else
+                  echo
+                  echo $div
+                  echo "Prizms exposes a directory of python SADI services through Apache, which needs to know what implementation should handle the invocation."
+                  target="$PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess"
+                  if [[ ! -e $target ]]; then
+                     echo "$target does not exist, but it should contain the following directives to enable the SADI services:"
+                     echo
+                     echo "SetHandler mod_python"                                         > .prizms-sadi-htaccess
+                     echo "PythonHandler sadi"                                           >> .prizms-sadi-htaccess
+                     # SetEnv X_CKAN_API_Key     # This needs 'sudo a2enmod env' to take affect. # see http://httpd.apache.org/docs/2.2/mod/mod_env.html
+                     echo "SetEnv DATAFAQS_BASE_URI http://aquarius.tw.rpi.edu/projects" >> .prizms-sadi-htaccess
+                     cat .prizms-sadi-htaccess
+                     echo
+                     read -p "Q: May we install the directives above into $target? [y/n] " -u 1 install_it
+                     if [[ "$install_it" == [yY] ]]; then
+                        mv .prizms-sadi-htaccess $target
+                     else
+                        echo "Okay, we won't update $target."
+                     fi
+                  else
+                     echo "($PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess already exists, so mod_python should be configured to use sadi handler)"
+                  fi
+                  rm -f .prizms-sadi-htaccess
+
                fi
 
 

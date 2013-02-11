@@ -643,7 +643,10 @@ pushd &> /dev/null
                fi
 
 
+               # Set shell environment variable values in source-me.sh's.
                if [[ -z "$i_am_project_user" ]]; then 
+                  # Done by development user, NOT project user.
+
                   # FOR PROJECT
                   # 
                   # Create the project-level environment variables, based on the template created by the csv2rdf4lod-automation installer.
@@ -671,7 +674,7 @@ pushd &> /dev/null
                   fi
 
                   #
-                  # Set CSV2RDF4LOD_BASE_URI in the project-level source-me.sh.
+                  # Set CSV2RDF4LOD_BASE_URI (to $our_base_uri) in the project-level source-me.sh.
                   #
                   change_source_me $target CSV2RDF4LOD_BASE_URI "$our_base_uri" \
                      'indicate the Linked Data base URI to use for all datasets that it creates' \
@@ -734,27 +737,40 @@ pushd &> /dev/null
                      'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets' \
                      'in order for Prizms to create useful Linked Data URIs'
 
+                  # Set CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE (to 'true') in the project-level source-me.sh.
                   change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_SINDICE true \
                      'determine if it should announce each newly converted dataset to http://sindice.com/main/submit' \
                      'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
                      'some loss'
 
+                  # Set CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_PTSW (to 'false') in the project-level source-me.sh.
                   change_source_me $target CSV2RDF4LOD_PUBLISH_ANNOUNCE_TO_PTSW false \
                      'determine if it should announce each newly converted dataset to pingthesemanticweb.com' \
                      'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Ping-the-Semantic-Web' \
                      'some loss'
 
+                  # Set CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA  (to 'true') in the project-level source-me.sh.
                   change_source_me $target CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA true \
                      'determine if it should update its datahub.io CKAN listing for the http://datahub.io/group/lodcloud group' \
                      'https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble' \
                      'some loss'
 
+                  # Set CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID (to $our_datahub_id) in the project-level source-me.sh.
                   change_source_me $target CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID "$our_datahub_id" \
                      "indicate which datahub.io CKAN entry to update (i.e. http://datahub.io/dataset/$our_datahub_id) for this installation of Prizms" \
                      'https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble' \
                      'some loss'
 
+                  #
+                  # Set DATAFAQS_BASE_URI in the project-level source-me.sh.
+                  #
+                  change_source_me $target DATAFAQS_BASE_URI "$our_base_uri" \
+                     'situate the URIs created by DataFAQs within a namespace that we control' \
+                     'https://github.com/timrdf/DataFAQs/wiki/DATAFAQS-environment-variables' \
+                     'URIs will not be valid Linked Data'
+ 
                   # ON MACHINE
+                  # (machine-level source-me.sh)
                   #
                   template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-on-yyy.sh"
                   target="data/source/csv2rdf4lod-source-me-on-$project_user_name.sh"
@@ -768,47 +784,9 @@ pushd &> /dev/null
                   fi
 
 
-                  # AS PROJECT
-                  #
-                  # csv2rdf4lod-source-me-as-${project_user_name}.sh is *the* one and only source-me.sh that 
-                  # the project name should source when initializing -- particular when from a cronjob.
-                  # This is *the* only source-me.sh that should appear in the project user name's ~/.bashrc
-                  #
-                  # This is created by the developer -- NOT the project user -- and committed to version control.
-                  template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
-                  target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
-                  if [[ ! -e $target ]]; then
-                     cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI='                                                           > $target
-                     echo "source `pwd | sed "s/\`whoami\`/$project_user_name/g"`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
-                     echo "source `pwd | sed "s/\`whoami\`/$project_user_name/g"`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
-                     # any others to source?
-                     added="$added $target"
-                     echo
-                     echo $div
-                     echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
-                  fi
-                  project_data_root="${user_home%/*}/$project_user_name/prizms/$target_dir/data/source"
-                  change_source_me $target CSV2RDF4LOD_CONVERT_DATA_ROOT "$project_data_root" \
-                     "indicate the production data directory, from which /var/www and the production SPARQL endpoints are loaded" \
-                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_DATA_ROOT' \
-                     'some loss'
-
-                  change_source_me $target CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES true \
-                     "enable publishing RDF dump files to the htdocs directory, so they may be used to load the SPARQL endpoint" \
-                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables' \
-                     'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
-
-                  if [[ `value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target` == "true" ]]; then
-                     change_source_me $target CSV2RDF4LOD_PUBLISH_VARWWW_ROOT "/var/www" \
-                        "indicate the htdocs directory to publish RDF dump files to, which are used to load the SPARQL endpoint" \
-                        'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT' \
-                        'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
-                  fi
-
-                  # NOTE sudo vi /etc/passwd change melagrid to bash
-
                   # AS DEVELOPER
-                  # 
+                  # (developer-user-level source-me.sh)
+                  #
                   # Create a stub for the user-level environment variables, based on the template available from the csv2rdf4lod-automation.
                   # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables-%28considerations-for-a-distributed-workflow%29
                   # 
@@ -823,8 +801,36 @@ pushd &> /dev/null
                      echo "There wasn't a source-me.sh for your user name in the data conversion root, so we created one for you at $target"
                   fi
 
+                  # alias: Developer su'ing to Project user name
+                  echo
+                  echo $div
+                  new_command="alias $project_user_name='sudo su $project_user_name'" # e.g. alias hd='sudo su healthdata'
+                  target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
+                  echo "As a developer of this $project_user_name Prizms, you will need to change into the $project_user_name user"
+                  echo "to convert and publish datasets. You can use an alias to this:"
+                  echo
+                  echo "   $new_command"
+                  already_there=`grep "$new_command" $target` 
+                  echo
+                  if [ -n "$already_there" ]; then
+                     echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
+                     echo
+                     echo $already_there
+                  else
+                     read -p "Add this command to your $target? [y/n] " -u 1 install_it
+                     if [[ "$install_it" == [yY] ]]; then
+                        echo $new_command >> $target
+                        echo
+                        echo "Okay, we added it:"
+                        grep "$new_command" $target
+                        added="$added $target"
+                     else
+                        echo "We didn't change your $target, so you'll need to make sure you set the paths correctly each time."
+                     fi
+                  fi
 
-                  # For both DEVELOPER and PROJECT USER
+
+                  # AS both DEVELOPER and PROJECT USER
                   for user in $person_user_name $project_user_name; do
 
                      target="data/source/csv2rdf4lod-source-me-as-$user.sh"
@@ -935,38 +941,51 @@ pushd &> /dev/null
 
                   done # PATH, CLASSPATH, and JENAROOT for person and project users.
 
-                  # Do settings that apply to the person and not the project user:
 
+                  # AS PROJECT
+                  # (project-user-level source-me.sh)
                   #
-                  # alias: Developer su'ing to Project user name
+                  # csv2rdf4lod-source-me-as-${project_user_name}.sh is *the* one and only source-me.sh that 
+                  # the project name should source when initializing -- particular when from a cronjob.
+                  # This is *the* only source-me.sh that should appear in the project user name's ~/.bashrc
                   #
-                  echo
-                  echo $div
-                  new_command="alias $project_user_name='sudo su $project_user_name'" # e.g. alias hd='sudo su healthdata'
-                  target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
-                  echo "As a developer of this $project_user_name Prizms, you will need to change into the $project_user_name user"
-                  echo "to convert and publish datasets. You can use an alias to this:"
-                  echo
-                  echo "   $new_command"
-                  already_there=`grep "$new_command" $target` 
-                  echo
-                  if [ -n "$already_there" ]; then
-                     echo "It seems that you already have the following in your $target, so we won't offer to add it again:"
+                  # This is created by the developer -- NOT the project user -- and committed to version control.
+                  template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
+                  target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
+                  if [[ ! -e $target ]]; then
+                     cat $template | grep -v 'export CSV2RDF4LOD_CONVERT_PERSON_URI='                                                           > $target
+                     echo "source `pwd | sed "s/\`whoami\`/$project_user_name/g"`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh" >> $target
+                     echo "source `pwd | sed "s/\`whoami\`/$project_user_name/g"`/data/source/csv2rdf4lod-source-me-credentials.sh"            >> $target
+                     # any others to source?
+                     added="$added $target"
                      echo
-                     echo $already_there
-                  else
-                     read -p "Add this command to your $target? [y/n] " -u 1 install_it
-                     if [[ "$install_it" == [yY] ]]; then
-                        echo $new_command >> $target
-                        echo
-                        echo "Okay, we added it:"
-                        grep "$new_command" $target
-                        added="$added $target"
-                     else
-                        echo "We didn't change your $target, so you'll need to make sure you set the paths correctly each time."
-                     fi
+                     echo $div
+                     echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
                   fi
+                  project_data_root="${user_home%/*}/$project_user_name/prizms/$target_dir/data/source"
+                  change_source_me $target CSV2RDF4LOD_CONVERT_DATA_ROOT "$project_data_root" \
+                     "indicate the production data directory, from which /var/www and the production SPARQL endpoints are loaded" \
+                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_DATA_ROOT' \
+                     'some loss'
+
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES true \
+                     "enable publishing RDF dump files to the htdocs directory, so they may be used to load the SPARQL endpoint" \
+                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables' \
+                     'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
+
+                  if [[ `value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target` == "true" ]]; then
+                     change_source_me $target CSV2RDF4LOD_PUBLISH_VARWWW_ROOT "/var/www" \
+                        "indicate the htdocs directory to publish RDF dump files to, which are used to load the SPARQL endpoint" \
+                        'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT' \
+                        'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
+                  fi
+
+                  # ^^ NOTE sudo vi /etc/passwd change melagrid to bash
+
                fi # end "I am not project user"
+
+
+
 
                # End setting the environment variables for project, project user, and developer user.
 

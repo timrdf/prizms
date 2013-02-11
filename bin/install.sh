@@ -802,6 +802,25 @@ pushd &> /dev/null
                      'URIs will not be valid Linked Data'
 
 
+                  # Repeat the three above for /etc/apache2/envvars
+                  echo
+                  echo $div
+                  target='/etc/apache2/envvars'
+                  echo "Prizms includes additional PROV-O assertions about SADI services in the description they return upon HTTP GET requests"
+                  change_source_me $target DATAFAQS_BASE_URI "$our_base_uri" \
+                     'situate the URIs created by DataFAQs within a namespace that we control' \
+                     'https://github.com/timrdf/DataFAQs/wiki/DATAFAQS-environment-variables' \
+                     'URIs will not be valid Linked Data'
+                  change_source_me $target DATAFAQS_PROVENANCE_CODE_RAW_BASE 'https://raw.github.com/timrdf/DataFAQs/master' \
+                     'situate the URIs created by DataFAQs within a namespace that we control' \
+                     'https://github.com/timrdf/DataFAQs/wiki/DATAFAQS-environment-variables' \
+                     'URIs will not be valid Linked Data'
+                  change_source_me $target DATAFAQS_PROVENANCE_CODE_PAGE_BASE 'https://github.com/timrdf/DataFAQs/blob/master' \
+                     'situate the URIs created by DataFAQs within a namespace that we control' \
+                     'https://github.com/timrdf/DataFAQs/wiki/DATAFAQS-environment-variables' \
+                     'URIs will not be valid Linked Data'
+
+
 
                   # ON MACHINE
                   # (machine-level source-me.sh)

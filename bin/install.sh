@@ -1435,15 +1435,22 @@ pushd &> /dev/null
                   echo
                   echo $div
                   echo "Prizms exposes a directory of python SADI services through Apache, which needs to know what implementation should handle the invocation."
-                  if [[ ! -e $PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess ]]; then
-                     echo "$PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess does not exist."
+                  target="$PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess"
+                  if [[ ! -e $target ]]; then
+                     echo "$target does not exist, but it should contain the following directives to enable the SADI services:"
                      echo
-                     # lebot@datafaqs:/var/www/services$ sudo vi /opt/DataFAQs/services/sadi/.htaccess
                      echo "SetHandler mod_python"                                         > .prizms-sadi-htaccess
                      echo "PythonHandler sadi"                                           >> .prizms-sadi-htaccess
                      # SetEnv X_CKAN_API_Key    9a88ae62-6a4e-4c59-a2bb-05266615e601 # This needs 'sudo a2enmod env' to take affect. # see http://httpd.apache.org/docs/2.2/mod/mod_env.html
                      echo "SetEnv DATAFAQS_BASE_URI http://aquarius.tw.rpi.edu/projects" >> .prizms-sadi-htaccess
                      cat .prizms-sadi-htaccess
+                     echo
+                     read -p "Q: may we install the directives above into $target? [y/n] " -u 1 install_it
+                     if [[ "$install_it" == [yY] ]]; then
+                        mv .prizms-sadi-htaccess $target
+                     else
+                        echo "Okay, we won't update $target."
+                     fi
                   else
                      echo "($PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess already exists, so mod_python should be configured to use sadi handler)"
                   fi

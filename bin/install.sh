@@ -607,7 +607,7 @@ pushd &> /dev/null
                   echo "For more, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Directory-Conventions"
                   echo
                   echo `pwd`/data/source/
-                  echo `pwd`/data/faqs/
+                  echo `pwd`/data/faqs/example-1
                   echo `pwd`/lodspeakr/
                   echo `pwd`/doc/
                   echo

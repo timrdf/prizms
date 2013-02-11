@@ -1431,7 +1431,7 @@ pushd &> /dev/null
                   fi
                fi
 
-               if [[ -n "$i_am_project_user" ]]; then
+               if [[ -z "$i_am_project_user" ]]; then
                   # Apache module 'env' is needed to enable the SetEnv command in the 
                   # $PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess below.
                   # enable envars:

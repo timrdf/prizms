@@ -1439,10 +1439,10 @@ pushd &> /dev/null
                      echo "$PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess does not exist."
                      echo
                      # lebot@datafaqs:/var/www/services$ sudo vi /opt/DataFAQs/services/sadi/.htaccess
-                     echo "SetHandler mod_python"  > .prizms-sadi-htaccess
-                     echo "PythonHandler sadi"    >> .prizms-sadi-htaccess
+                     echo "SetHandler mod_python"                                         > .prizms-sadi-htaccess
+                     echo "PythonHandler sadi"                                           >> .prizms-sadi-htaccess
                      # SetEnv X_CKAN_API_Key    9a88ae62-6a4e-4c59-a2bb-05266615e601 # This needs 'sudo a2enmod env' to take affect. # see http://httpd.apache.org/docs/2.2/mod/mod_env.html
-                     echo "SetEnv DATAFAQS_BASE_URI http://aquarius.tw.rpi.edu/projects"
+                     echo "SetEnv DATAFAQS_BASE_URI http://aquarius.tw.rpi.edu/projects" >> .prizms-sadi-htaccess
                      cat .prizms-sadi-htaccess
                   else
                      echo "($PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess already exists, so mod_python should be configured to use sadi handler)"

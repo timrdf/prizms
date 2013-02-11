@@ -1429,20 +1429,6 @@ pushd &> /dev/null
                         echo "Okay, we won't link the DataFAQs services into your htdocs directory."
                      fi
                   fi
-
-                  # This is needed to enable the SetEnv command in the $PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess below.
-                  echo "TODO: sudo a2enmod env"
-                  # enable envars:
-                  # sudo a2enmod env
-                  echo "Since we've installed a new Apache module, we need to enable it."
-                  echo
-                  echo sudo a2enmod env
-                  echo
-                  read -p "Q: May we enable the Apache env module using the command above? [y/n] " -u 1 enable_it
-                  if [[ "$enable_it" == [yY] ]]; then
-                     echo sudo a2enmod env
-                          sudo a2enmod env
-                  fi
                fi
 
                if [[ -n "$i_am_project_user" ]]; then
@@ -1462,6 +1448,20 @@ pushd &> /dev/null
                      echo "($PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess already exists, so mod_python should be configured to use sadi handler)"
                   fi
                   rm -f .prizms-sadi-htaccess
+
+                  # This is needed to enable the SetEnv command in the $PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess below.
+                  echo "TODO: sudo a2enmod env"
+                  # enable envars:
+                  # sudo a2enmod env
+                  echo "Since we've installed a new Apache module, we need to enable it."
+                  echo
+                  echo sudo a2enmod env
+                  echo
+                  read -p "Q: May we enable the Apache env module using the command above? [y/n] " -u 1 enable_it
+                  if [[ "$enable_it" == [yY] ]]; then
+                     echo sudo a2enmod env
+                          sudo a2enmod env
+                  fi
                else
                   echo "TODO: Need to enable FollowSymLinks"
                   # lebot@datafaqs:/var/www/services$ sudo vi /etc/apache2/sites-enabled/000-default

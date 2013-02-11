@@ -1449,6 +1449,7 @@ pushd &> /dev/null
                   fi
                   rm -f .prizms-sadi-htaccess
 
+               else
                   # This is needed to enable the SetEnv command in the $PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess below.
                   echo "TODO: sudo a2enmod env"
                   # enable envars:
@@ -1462,7 +1463,7 @@ pushd &> /dev/null
                      echo sudo a2enmod env
                           sudo a2enmod env
                   fi
-               else
+
                   echo "TODO: Need to enable FollowSymLinks"
                   # lebot@datafaqs:/var/www/services$ sudo vi /etc/apache2/sites-enabled/000-default
                   # make sure have:

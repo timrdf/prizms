@@ -770,6 +770,11 @@ pushd &> /dev/null
                      'situate the URIs created by DataFAQs within a namespace that we control' \
                      'https://github.com/timrdf/DataFAQs/wiki/DATAFAQS-environment-variables' \
                      'URIs will not be valid Linked Data'
+
+                  change_source_me $target DATAFAQS_HOME "$PRIZMS_HOME/repos/DataFAQs" \
+                     'find the scripts that DataFAQs needs to run' \
+                     'https://github.com/timrdf/DataFAQs/wiki/DATAFAQS-environment-variables' \
+                     'running DataFAQs will fail'
  
                   # ON MACHINE
                   # (machine-level source-me.sh)
@@ -944,6 +949,15 @@ pushd &> /dev/null
                      if [[ ! -e $user_home/.vim/syntax/n3.vim ]]; then
                         echo "TODO: we can add syntax highlighting to vi."
                         # TODO: mkdir -p ~/.vim/syntax; curl -L 'http://www.vim.org/scripts/download_script.php?src_id=6882' > ~/.vim/syntax/n3.vim
+      
+                        # add to ~/.vim/filetype.vim :
+
+                        #" RDF Notation 3 Syntax
+                        #    augroup filetypedetect
+                        #        au BufNewFile,BufRead *.n3  setfiletype n3
+                        #        au BufNewFile,BufRead *.ttl  setfiletype n3
+                        #        au BufNewFile,BufRead *.trig  setfiletype n3
+                        #    augroup END 
                      fi
 
                   done # PATH, CLASSPATH, and JENAROOT for person and project users.

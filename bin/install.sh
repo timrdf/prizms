@@ -598,7 +598,7 @@ pushd &> /dev/null
 
                added=''
 
-               if [[ -z "$i_am_project_user" && ( ! -e data/source/ || ! -e lodspeakr/ || ! -e doc/ || ! -e data/faqt-brick/ ) ]]; then
+               if [[ -z "$i_am_project_user" && ( ! -e data/source/ || ! -e lodspeakr/ || ! -e doc/ || ! -e data/faqs/ ) ]]; then
                   echo
                   echo $div
                   echo "Prizms reuses the directory conventions that csv2rdf4lod-automation uses."
@@ -618,7 +618,7 @@ pushd &> /dev/null
                         mkdir -p data
                         cp -R $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/* data/
                      fi
-                     for directory in data/faqt-brick doc lodspeakr; do
+                     for directory in data/faqs doc lodspeakr; do
                         if [ ! -e $directory ]; then
                            added="$added $directory"
                            echo "Creating `pwd`/$directory"

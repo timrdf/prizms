@@ -764,6 +764,7 @@ pushd &> /dev/null
                   #
                   # Set DATAFAQS_BASE_URI in the project-level source-me.sh.
                   #
+                  target="data/faqs/datafaqs-source-me.sh"
                   change_source_me $target DATAFAQS_BASE_URI "$our_base_uri" \
                      'situate the URIs created by DataFAQs within a namespace that we control' \
                      'https://github.com/timrdf/DataFAQs/wiki/DATAFAQS-environment-variables' \

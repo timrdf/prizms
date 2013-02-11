@@ -1432,8 +1432,8 @@ pushd &> /dev/null
                fi
 
                if [[ -n "$i_am_project_user" ]]; then
-                  # This is needed to enable the SetEnv command in the $PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess below.
-                  echo "TODO: sudo a2enmod env"
+                  # Apache module 'env' is needed to enable the SetEnv command in the 
+                  # $PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess below.
                   # enable envars:
                   # sudo a2enmod env
                   echo "Since we've installed a new Apache module, we need to enable it."
@@ -1446,9 +1446,9 @@ pushd &> /dev/null
                           sudo a2enmod env
                   fi
 
-
                   # AllowOverride None -> AllowOverride All
-                  echo "TODO: Need to permit AllowOverride All"
+                  target='/etc/apache2/sites-enabled/000-default'
+                  echo "TODO: Need to permit AllowOverride All in $target"
 
                   # Change to 'All' in
                   # /etc/apache2/sites-enabled/000-default
@@ -1468,7 +1468,8 @@ pushd &> /dev/null
                   if [[ ! -e $target ]]; then
                      echo "$target does not exist, but it should contain the following directives to enable the SADI services:"
                      echo
-                     echo "SetHandler mod_python"                                         > .prizms-sadi-htaccess
+                     echo "Options -MultiViews"                                           > .prizms-sadi-htaccess
+                     echo "SetHandler mod_python"                                        >> .prizms-sadi-htaccess
                      echo "PythonHandler sadi"                                           >> .prizms-sadi-htaccess
                      # SetEnv X_CKAN_API_Key     # This needs 'sudo a2enmod env' to take affect. # see http://httpd.apache.org/docs/2.2/mod/mod_env.html
                      echo "SetEnv DATAFAQS_BASE_URI http://aquarius.tw.rpi.edu/projects" >> .prizms-sadi-htaccess
@@ -1480,13 +1481,28 @@ pushd &> /dev/null
                      else
                         echo "Okay, we won't update $target."
                      fi
+                     # TODO: set envvars in /etc/apache2/envvars as:
+                     # export X_CKAN_API_Key=aabbcc
                   else
                      echo "($PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess already exists, so mod_python should be configured to use sadi handler)"
                   fi
                   rm -f .prizms-sadi-htaccess
-
                fi
-
+  
+ 
+               echo
+               echo $div
+               target='/etc/apache2/envvars'
+               already_there=`grep X_CKAN_API_Key $target`
+               echo "Prizms uses some SADI services that write to the CKAN at http://datahub.io, which requires an API key."
+               echo "Since the SADI services access the X_CKAN_API_Key environment variable and are invoked through Apache,"
+               echo "the Apache environment variable X_CKAN_API_Key needs to be set in $target."
+               if [[ -z "$already_there" ]]; then
+                  echo "set X_CKAN_API_Key in $target."
+                  read -p "^^ todo... [y/n] " -u 1 add_it
+               else
+                  echo "(X_CKAN_API_Key is already set in $target)"
+               fi
 
 
 

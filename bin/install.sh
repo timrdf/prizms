@@ -1684,6 +1684,19 @@ pushd &> /dev/null
                      echo "Okay, we won't install LODSPeaKr at $www/lodspeakr."
                   fi
                fi
+               if [[ ! -e $www/lodspeakr/settings.inc ]]; then
+                  echo
+                  echo "$www/lodspeakr was created, but not configured with settings.inc"
+                  echo
+                  read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
+                  if [[ "$install_it" ]]; then
+                     pushd $www &> /dev/null
+                        ./install.sh `pwd`
+                     popd &> /dev/null
+                  else
+                     echo "Okay, we won't configure LODSPeaKr at $www/lodspeakr."
+                  fi
+               fi
                if [[ -e $www/lodspeakr ]]; then
                   enable_apache_module 'rewrite' 'run LODSPeaKr'
                fi

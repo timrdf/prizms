@@ -1406,24 +1406,24 @@ pushd &> /dev/null
                         "expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
 
                      echo $div
+                     enable_apache_module 'proxy_http' "expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
+                     # Replaced with teh call above:
                      # sudo a2enmod proxy
                      # sudo a2enmod proxy_http
-                     modules='proxy_http' # 'proxy' is enabled when proxy_http is enabled.
-                     for module in $modules; do
-                        #already_there=`dpkg -l | grep $module`
-                        #if [[ -z "$already_there" ]]; then
-                        echo "The Apache2 module $module needs to be enabled to expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql."
-                        echo "The $module module needs to be enabled, which can be done with the following command:"
-                        echo
-                        echo "sudo a2enmod $module"
-                        echo
-                        read -p "Q: May we enable the module above using the command above? [y/n] " -u 1 install_it
-                        if [[ "$install_it" == [yY] ]]; then
-                           echo sudo a2enmod $module
-                                sudo a2enmod $module
-                        fi # use: enable_apache_module 'proxy_http' 'expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql'
-                        #fi
-                     done
+                     #modules='proxy_http' # 'proxy' is enabled when proxy_http is enabled.
+                     #for module in $modules; do
+                     #   echo "The Apache2 module $module needs to be enabled to expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql."
+                     #   echo "The $module module needs to be enabled, which can be done with the following command:"
+                     #   echo
+                     #   echo "sudo a2enmod $module"
+                     #   echo
+                     #   read -p "Q: May we enable the module above using the command above? [y/n] " -u 1 install_it
+                     #   if [[ "$install_it" == [yY] ]]; then
+                     #      echo sudo a2enmod $module
+                     #           sudo a2enmod $module
+                     #   fi # use: 
+                     #   #fi
+                     #done
 
                      #
                      # See mapping into apache at https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
@@ -1537,26 +1537,29 @@ pushd &> /dev/null
                   'libapache2-mod-python' \
                   "expose DataFAQs services through Apache at $our_base_uri/services/sadi"
                if [[ $? != 0 ]]; then
-                  echo "Since we've installed a new Apache module, we need to enable it."
-                  echo
-                  echo sudo a2enmod python
-                  echo
-                  read -p "Q: May we enable mod_python using the command above? [y/n] " -u 1 enable_it
-                  if [[ "$enable_it" == [yY] ]]; then
-                     echo sudo a2enmod python
-                          sudo a2enmod python
-                  fi # use: enable_apache_module 'python' 'run DataFAQs SADI services'
+                  enable_apache_module 'python' 'run DataFAQs SADI services'
+                  #echo "Since we've installed a new Apache module, we need to enable it."
+                  #echo
+                  #echo sudo a2enmod python
+                  #echo
+                  #read -p "Q: May we enable mod_python using the command above? [y/n] " -u 1 enable_it
+                  #if [[ "$enable_it" == [yY] ]]; then
+                  #   echo sudo a2enmod python
+                  #        sudo a2enmod python
+                  #fi # use: 
                   # TODO: what if it was already installed, but not enabled?
 
-                  echo "Since we've made some changes to apache, we need to restart it so they take effect."
-                  echo
-                  echo sudo service apache2 restart
-                  echo
-                  read -p "Q: May we restart apache using the command above? [y/n] " -u 1 restart_it
-                  if [[ "$restart_it" == [yY] ]]; then
+                  if [[ $? != 0 ]]; then
+                     echo "Since we've made some changes to apache, we need to restart it so they take effect."
+                     echo
                      echo sudo service apache2 restart
-                          sudo service apache2 restart
-                     need_apache_restart=""
+                     echo
+                     read -p "Q: May we restart apache using the command above? [y/n] " -u 1 restart_it
+                     if [[ "$restart_it" == [yY] ]]; then
+                        echo sudo service apache2 restart
+                             sudo service apache2 restart
+                        need_apache_restart=""
+                     fi
                   fi
                fi
 
@@ -1587,15 +1590,16 @@ pushd &> /dev/null
                   # $PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess below.
                   # enable envars:
                   # sudo a2enmod env
-                  echo "Since we've installed a new Apache module, we need to enable it."
-                  echo
-                  echo sudo a2enmod env
-                  echo
-                  read -p "Q: May we enable the Apache env module using the command above? [y/n] " -u 1 enable_it
-                  if [[ "$enable_it" == [yY] ]]; then
-                     echo sudo a2enmod env
-                          sudo a2enmod env
-                  fi # use enable_apache_module 'env' 'enable DataFAQs provenance'
+                  use enable_apache_module 'env' 'enable DataFAQs provenance'
+                  #echo "Since we've installed a new Apache module, we need to enable it."
+                  #echo
+                  #echo sudo a2enmod env
+                  #echo
+                  #read -p "Q: May we enable the Apache env module using the command above? [y/n] " -u 1 enable_it
+                  #if [[ "$enable_it" == [yY] ]]; then
+                  #   echo sudo a2enmod env
+                  #        sudo a2enmod env
+                  #fi # 
 
                   # AllowOverride None -> AllowOverride All
                   target='/etc/apache2/sites-enabled/000-default'

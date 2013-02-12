@@ -1691,7 +1691,7 @@ pushd &> /dev/null
                   read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
                   if [[ "$install_it" ]]; then
                      pushd $www/lodspeakr &> /dev/null
-                        ./install.sh `pwd`
+                        sudo ./install.sh `pwd`
                      popd &> /dev/null
                   else
                      echo "Okay, we won't configure LODSPeaKr at $www/lodspeakr."

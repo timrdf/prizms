@@ -1654,52 +1654,55 @@ pushd &> /dev/null
 
 
 
-               #
-               # LODSPeaKr
-               #
-               echo
-               echo $div
-               echo "Prizms uses LODSPeaKr to serve its RDF as Linked Data, and to serve the corresponding human-web pages."
-               echo
-               offer_install_aptget "curl php5-cli php5 php5-sqlite php5-curl git sqlite3" 'run LODSPeaKr'
-               www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
-               echo
-               echo $div
-               echo "LODSPeaKr lives within the htdocs directory ($www),"
-               echo "while your $project_user_name Prizms will maintain the model/views within"
-               echo "the version-controlled repository ($project_code_repository)." 
-               echo
-               if [[ ! -e $www/lodspeakr ]]; then
-                  echo "$www/lodspeakr is not set up yet."
+               if [[ -z "$i_am_project_user" ]]; then
+                  #
+                  # LODSPeaKr
+                  #
                   echo
-                  read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
-                  if [[ "$install_it" ]]; then
-                     pushd $www &> /dev/null
-                        sudo bash < <(curl -sL http://lodspeakr.org/install)
-                        # Question 1: http://lod.melagrid.org
-                        # Question 2: <accept default>
-                        # Question 3: http://lod.melagrid.org/sparql
-                     popd &>/dev/null
-                  else
-                     echo "Okay, we won't install LODSPeaKr at $www/lodspeakr."
+                  echo $div
+                  echo "Prizms uses LODSPeaKr to serve its RDF as Linked Data, and to serve the corresponding human-web pages."
+                  echo
+                  offer_install_aptget "curl php5-cli php5 php5-sqlite php5-curl git sqlite3" 'run LODSPeaKr'
+                  www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
+                  echo
+                  echo $div
+                  echo "LODSPeaKr lives within the htdocs directory ($www),"
+                  echo "while your $project_user_name Prizms will maintain the model/views within"
+                  echo "the version-controlled repository ($project_code_repository)." 
+                  echo
+                  if [[ ! -e $www/lodspeakr ]]; then
+                     echo "$www/lodspeakr is not set up yet."
+                     echo
+                     read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
+                     if [[ "$install_it" ]]; then
+                        pushd $www &> /dev/null
+                           sudo bash < <(curl -sL http://lodspeakr.org/install)
+                           # Question 1: http://lod.melagrid.org
+                           # Question 2: <accept default>
+                           # Question 3: http://lod.melagrid.org/sparql
+                        popd &>/dev/null
+                     else
+                        echo "Okay, we won't install LODSPeaKr at $www/lodspeakr."
+                     fi
+                  fi
+                  if [[ ! -e $www/lodspeakr/settings.inc.php ]]; then
+                     echo
+                     echo "$www/lodspeakr was created, but not configured with settings.inc.php"
+                     echo
+                     read -p "Q: Would you like to configure LODSPeaKr now? [y/n] " -u 1 install_it
+                     if [[ "$install_it" ]]; then
+                        pushd $www/lodspeakr &> /dev/null
+                           sudo ./install.sh `pwd`
+                        popd &> /dev/null
+                     else
+                        echo "Okay, we won't configure LODSPeaKr at $www/lodspeakr."
+                     fi
+                  fi
+                  if [[ -e $www/lodspeakr ]]; then
+                     enable_apache_module 'rewrite' 'run LODSPeaKr'
                   fi
                fi
-               if [[ ! -e $www/lodspeakr/settings.inc ]]; then
-                  echo
-                  echo "$www/lodspeakr was created, but not configured with settings.inc"
-                  echo
-                  read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
-                  if [[ "$install_it" ]]; then
-                     pushd $www/lodspeakr &> /dev/null
-                        sudo ./install.sh `pwd`
-                     popd &> /dev/null
-                  else
-                     echo "Okay, we won't configure LODSPeaKr at $www/lodspeakr."
-                  fi
-               fi
-               if [[ -e $www/lodspeakr ]]; then
-                  enable_apache_module 'rewrite' 'run LODSPeaKr'
-               fi
+
       
 
 

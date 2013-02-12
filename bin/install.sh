@@ -207,6 +207,28 @@ function offer_install_aptget {
    return $installed
 }
 
+function enable_apache_module {
+   enabled=0
+   modules="$1"
+   reason="$2"
+   for module in $modules; do
+      #if [[ -z "$already_there" ]]; then # TODO: Figure out if it's already installed.
+      echo "The Apache2 module $module needs to be enabled to"
+      echo "$reason."
+      echo "The $module module needs to be enabled, which can be done with the following command:"
+      echo
+      echo "sudo a2enmod $module"
+      echo
+      read -p "Q: May we enable the module above using the command above? [y/n] " -u 1 install_it
+      if [[ "$install_it" == [yY] ]]; then
+         echo sudo a2enmod $module
+              sudo a2enmod $module
+      fi
+      #fi
+   done
+   return $enabled
+}
+
 echo
 echo "Okay, let's install Prizms!"
 echo "   https://github.com/timrdf/prizms/wiki"
@@ -1394,7 +1416,7 @@ pushd &> /dev/null
                         if [[ "$install_it" == [yY] ]]; then
                            echo sudo a2enmod $module
                                 sudo a2enmod $module
-                        fi
+                        fi # use: enable_apache_module 'proxy_http' 'expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql'
                         #fi
                      done
 
@@ -1518,7 +1540,7 @@ pushd &> /dev/null
                   if [[ "$enable_it" == [yY] ]]; then
                      echo sudo a2enmod python
                           sudo a2enmod python
-                  fi
+                  fi # use: enable_apache_module 'python' 'run DataFAQs SADI services'
                   # TODO: what if it was already installed, but not enabled?
 
                   echo "Since we've made some changes to apache, we need to restart it so they take effect."
@@ -1568,7 +1590,7 @@ pushd &> /dev/null
                   if [[ "$enable_it" == [yY] ]]; then
                      echo sudo a2enmod env
                           sudo a2enmod env
-                  fi
+                  fi # use enable_apache_module 'env' 'enable DataFAQs provenance'
 
                   # AllowOverride None -> AllowOverride All
                   target='/etc/apache2/sites-enabled/000-default'
@@ -1638,6 +1660,7 @@ pushd &> /dev/null
                echo
                echo $div
                echo "Prizms uses LODSPeaKr to serve its RDF as Linked Data, and to serve the corresponding human-web pages."
+               echo
                offer_install_aptget "curl php5-cli php5 php5-sqlite php5-curl git sqlite3" 'run LODSPeaKr'
                www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
                echo
@@ -1645,18 +1668,26 @@ pushd &> /dev/null
                echo "LODSPeaKr lives within the htdocs directory ($www),"
                echo "while your $project_user_name Prizms will maintain the model/views within"
                echo "the version-controlled repository ($project_code_repository)." 
+               echo
                if [[ ! -e $www/lodspeakr ]]; then
                   echo "$www/lodspeakr is not set up yet."
+                  echo
                   read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
                   if [[ "$install_it" ]]; then
                      pushd $www &> /dev/null
                         sudo bash < <(curl -sL http://lodspeakr.org/install)
+                        # Question 1: http://lod.melagrid.org
+                        # Question 2: <accept default>
+                        # Question 3: http://lod.melagrid.org/sparql
                      popd &>/dev/null
                   else
                      echo "Okay, we won't install LODSPeaKr at $www/lodspeakr."
                   fi
                fi
-
+               if [[ -e $www/lodspeakr ]]; then
+                  enable_apache_module 'rewrite' 'run LODSPeaKr'
+               fi
+      
 
 
                #
@@ -1912,6 +1943,3 @@ if [[ "$install_it" == [yY] ]]; then
    echo "Dependency for LODSPeaKr:"
    sudo service apache2 restart
 fi
-
-
-# TODO: Datafaqs.

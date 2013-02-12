@@ -229,6 +229,8 @@ function enable_apache_module {
          else
             enabled=1
          fi
+      else
+         echo "(module $module is already enabled: $already_enabled)"
       fi
    done
    return $enabled

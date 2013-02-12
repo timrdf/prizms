@@ -1637,9 +1637,11 @@ pushd &> /dev/null
                #
                echo
                echo $div
+               echo "Prizms uses LODSPeaKr to serve its RDF as Linked Data, and to serve the corresponding human-web pages."
                offer_install_aptget "curl php5-cli php5 php5-sqlite php5-curl git sqlite3" 'run LODSPeaKr'
                www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
-               echo "Prizms uses LODSPeaKr to serve its RDF as Linked Data, and to serve the corresponding human-web pages."
+               echo
+               echo $div
                echo "LODSPeaKr lives within the htdocs directory ($www),"
                echo "while your $project_user_name Prizms will maintain the model/views within"
                echo "the version-controlled repository ($project_code_repository)." 
@@ -1648,7 +1650,7 @@ pushd &> /dev/null
                   read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
                   if [[ "$install_it" ]]; then
                      pushd $www &> /dev/null
-                        bash < <(curl -sL http://lodspeakr.org/install)
+                        sudo bash < <(curl -sL http://lodspeakr.org/install)
                      popd &>/dev/null
                   else
                      echo "Okay, we won't install LODSPeaKr at $www/lodspeakr."

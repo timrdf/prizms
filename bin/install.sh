@@ -181,7 +181,7 @@ function change_source_me {
 }
 
 function offer_install_aptget {
-   restart=0
+   installed=0
    packages="$1"
    reason="$2"
    for package in $packages; do
@@ -197,14 +197,14 @@ function offer_install_aptget {
          if [[ "$install_it" == [yY] ]]; then
             echo sudo apt-get install $package
                  sudo apt-get install $package
-            restart=1
+            installed=1
          fi
       else
          echo "($package is already installed)"
       fi
       echo
    done
-   return $restart
+   return $installed
 }
 
 echo
@@ -524,6 +524,8 @@ pushd &> /dev/null
                fi
             fi
 
+            echo
+            echo $div
             echo "GitHub requires that you have an SSH key and that it be registered with them."
             if [[ ! -e $user_home/.ssh/id_dsa.pub && ! -e $user_home/.ssh/id_rsa.pub && -z "$i_am_project_user" ]]; then
                echo
@@ -531,6 +533,10 @@ pushd &> /dev/null
                echo "which could be creating using the following command:"
                echo
                echo "    ssh-keygen -t dsa -C ${person_email:-'your-email-address'}"
+               echo
+               echo "(If you prefer to set up SSH keys on your own or reuse existing keys, feel free to kill this installer,"
+               echo " go set them up, and rerun this installer using the same arguments as you just used."
+               echo " The installer checks for ~/.ssh/*.pub and will skip this step if it sees them there.)"
                echo
                read -p "Q: Would you like to create an SSH key now (using the command above)? [y/n] " genkey
                if [[ "$genkey" == [yY] ]]; then
@@ -1051,8 +1057,39 @@ pushd &> /dev/null
 
                fi # end "I am not project user"
 
-
-
+               #
+               # Add source data/source/csv2rdf4lod-source-me-as-$person_user_name.sh to ~/.bashrc
+               #
+               echo
+               echo $div
+               source_me="source `pwd`/data/source/csv2rdf4lod-source-me-as-`whoami`.sh"
+               echo "Prizms encapsulates all of the environment variables and PATH setup that is needed within"
+               echo "a single source-me.sh script dedicated to the user that needs it. The script is version-controlled"
+               echo "so we can manage the environment variables that everybody uses. The single source-me.sh should be the *only*"
+               echo "source-me.sh that is called from your ~/.bashrc. The following command is the only"
+               echo "source-me.sh that you need to run, and should be placed within your ~/.bashrc."
+               echo
+               echo "   $source_me"
+               already_there=`grep ".*source \`pwd\`/data/source/csv2rdf4lod-source-me-as-\`whoami\`.sh.*" ~/.bashrc`
+               echo
+               if [ -n "$already_there" ]; then
+                  echo "It seems that you already have the following in your ~/.bashrc, so we won't offer to add it again:"
+                  echo
+                  echo $already_there
+               else
+                  see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/Script:-source-me.sh"
+                  read -p "Add this command to your ~/.bashrc? [y/n]" -u 1 install_it
+                  if [[ "$install_it" == [yY] ]]; then
+                     echo                     >> ~/.bashrc
+                     echo "$source_me # $see ">> ~/.bashrc
+                     echo
+                     echo "Okay, we added it:"
+                     grep "$source_me" ~/.bashrc
+                  else
+                     echo "We didn't change your ~/.bashrc, so you'll need to make sure you set the paths correctly each time."
+                     echo "See $see"
+                  fi
+               fi
 
                # End setting the environment variables for project, project user, and developer user.
 
@@ -1593,40 +1630,30 @@ pushd &> /dev/null
 
 
 
+
+
                #
-               # Add source data/source/csv2rdf4lod-source-me-as-$person_user_name.sh to ~/.bashrc
+               # LODSPeaKr
                #
                echo
                echo $div
-               source_me="source `pwd`/data/source/csv2rdf4lod-source-me-as-`whoami`.sh"
-               echo "Prizms encapsulates all of the environment variables and PATH setup that is needed within"
-               echo "a single source-me.sh script dedicated to the user that needs it. The script is version-controlled"
-               echo "so we can manage the environment variables that everybody uses. The single source-me.sh should be the *only*"
-               echo "source-me.sh that is called from your ~/.bashrc. The following command is the only"
-               echo "source-me.sh that you need to run, and should be placed within your ~/.bashrc."
-               echo
-               echo "   $source_me"
-               already_there=`grep ".*source \`pwd\`/data/source/csv2rdf4lod-source-me-as-\`whoami\`.sh.*" ~/.bashrc`
-               echo
-               if [ -n "$already_there" ]; then
-                  echo "It seems that you already have the following in your ~/.bashrc, so we won't offer to add it again:"
-                  echo
-                  echo $already_there
-               else
-                  see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/Script:-source-me.sh"
-                  read -p "Add this command to your ~/.bashrc? [y/n]" -u 1 install_it
-                  if [[ "$install_it" == [yY] ]]; then
-                     echo                     >> ~/.bashrc
-                     echo "$source_me # $see ">> ~/.bashrc
-                     echo
-                     echo "Okay, we added it:"
-                     grep "$source_me" ~/.bashrc
+               offer_install_aptget "curl php5-cli php5 php5-sqlite php5-curl git sqlite3" 'run LODSPeaKr'
+               www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
+               echo "Prizms uses LODSPeaKr to serve its RDF as Linked Data, and to serve the corresponding human-web pages."
+               echo "LODSPeaKr lives within the htdocs directory ($www),"
+               echo "while your $project_user_name Prizms will maintain the model/views within"
+               echo "the version-controlled repository ($project_code_repository)." 
+               if [[ ! -e $www/lodspeakr ]]; then
+                  echo "$www/lodspeakr is not set up yet."
+                  read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
+                  if [[ "$install_it" ]]; then
+                     pushd $www &> /dev/null
+                        bash < <(curl -sL http://lodspeakr.org/install)
+                     popd &>/dev/null
                   else
-                     echo "We didn't change your ~/.bashrc, so you'll need to make sure you set the paths correctly each time."
-                     echo "See $see"
+                     echo "Okay, we won't install LODSPeaKr at $www/lodspeakr."
                   fi
                fi
-
 
 
 

@@ -1408,7 +1408,6 @@ pushd &> /dev/null
                         "expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
 
                      echo $div
-                     echo PROXY HTTP
                      enable_apache_module 'proxy_http' "expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
                      # Replaced with teh call above:
                      # sudo a2enmod proxy

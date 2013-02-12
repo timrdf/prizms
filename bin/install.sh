@@ -212,19 +212,22 @@ function enable_apache_module {
    modules="$1"
    reason="$2"
    for module in $modules; do
-      #if [[ -z "$already_there" ]]; then # TODO: Figure out if it's already installed.
-      echo "The Apache2 module $module needs to be enabled to"
-      echo "$reason."
-      echo "The $module module needs to be enabled, which can be done with the following command:"
-      echo
-      echo "sudo a2enmod $module"
-      echo
-      read -p "Q: May we enable the module above using the command above? [y/n] " -u 1 install_it
-      if [[ "$install_it" == [yY] ]]; then
-         echo sudo a2enmod $module
-              sudo a2enmod $module
+      already_enabled=`sudo a2enmod $module | grep 'already enabled'`
+      if [[ -z "$already_enabled" ]]; then
+         echo "The Apache2 module $module needs to be enabled to"
+         echo "$reason."
+         echo "The $module module needs to be enabled, which can be done with the following command:"
+         echo
+         echo "sudo a2enmod $module"
+         echo
+         read -p "Q: May we enable the module above using the command above? [y/n] " -u 1 install_it
+         if [[ "$install_it" != [yY] ]]; then
+            sudo a2dismod $module # We just enabled it (to check), and they dont' want it enabled.
+         #else
+         #   echo sudo a2enmod $module
+         #        sudo a2enmod $module
+         fi
       fi
-      #fi
    done
    return $enabled
 }

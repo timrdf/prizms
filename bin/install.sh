@@ -223,9 +223,9 @@ function enable_apache_module {
          echo
          echo "sudo a2enmod $module"
          echo
-         read -p "Q: May we enable the module above using the command above? [y/n] " -u 1 install_it
-         if [[ "$install_it" != [yY] ]]; then
-            sudo a2dismod $module # We just enabled it (to check), and they dont' want it enabled.
+         read -p "Q: May we enable the module above using the command above? [y/n] " -u 1 enable_it
+         if [[ "$enable_it" != [yY] ]]; then
+            sudo a2dismod $module # We just enabled it (to check), but they don't want it enabled.
          else
             enabled=1
          fi

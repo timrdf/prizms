@@ -1720,6 +1720,7 @@ pushd &> /dev/null
                      # AllowOverride must be 'All':
                      # cat /etc/apache2/sites-enabled/000-default | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1
                   fi
+                  # TODO: remove the index.html file
                fi
 
       

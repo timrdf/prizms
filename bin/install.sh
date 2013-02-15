@@ -1601,6 +1601,7 @@ pushd &> /dev/null
                   read -p "Q: May we create $www/source with the command above? [y/n] " -u 1 create_it
                   echo
                   if [[ "$create_it" == [yY] ]]; then
+                     sudo mkdir -p $www/source
                   else
                      echo "Okay, we won't create $www/source, but you won't be able to publish RDF dump files or load the SPARQL endpoint."
                   fi

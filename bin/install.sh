@@ -1790,7 +1790,7 @@ pushd &> /dev/null
                      echo "We need to put lodspeakr into version control, which can be done with the following commands."
                      echo
                      echo "   sudo mv $www/lodspeakr/components `pwd`/lodspeakr/"
-                     echo "   sudo ln -s `pwd`/lodspeakr/components $www/lodspeakr/components"
+                     echo "   sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components"
                      echo
                      if [[ ! -e lodspeakr/components ]]; then
                         read -p "Q: May we move $www/lodspeakr/components to `pwd`/lodspeakr/components using the commands above?" -u 1 move_it

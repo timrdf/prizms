@@ -1785,7 +1785,7 @@ pushd &> /dev/null
                   echo $div
                   echo "Prizms maintains the LODSPeaKr components under version control ($project_code_repository)"
                   echo "See https://github.com/alangrafu/lodspeakr/wiki/Develop-your-own-components-in-a-different-repository"
-                  if [[ ! -h $www/lodspeakr/components && 'false' == 'true' ]]; then # Is not an alias. # TODO: and it points to within our github clone...
+                  if [[ ! -h $www/lodspeakr/components ]]; then # Is not an alias. # TODO: and it points to within our github clone...
                      echo
                      echo "We need to put lodspeakr into version control, which can be done with the following commands."
                      echo

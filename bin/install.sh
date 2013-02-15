@@ -1796,7 +1796,7 @@ pushd &> /dev/null
                         read -p "Q: May we move $www/lodspeakr/components to `pwd`/lodspeakr/components using the commands above?" -u 1 move_it
                         if [[ "$move_it" == [yY] ]]; then
                            sudo mv $www/lodspeakr/components `pwd`/lodspeakr/
-                           sudo ln -s `pwd`/lodspeakr/components $www/lodspeakr/components
+                           sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components
                         else
                            echo "Okay, we won't include lodspeakr/components into version control."
                         fi 

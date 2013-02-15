@@ -1588,6 +1588,7 @@ pushd &> /dev/null
                fi
 
 
+               # No need to avoid when $i_am_project_user, since the directory would already be created by the developer's invocation of the installer.
                echo 
                echo $div
                www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
@@ -1616,7 +1617,7 @@ pushd &> /dev/null
                   echo
                   echo "   sudo chown -R melagrid:melagrid $www/source"
                   echo
-                  read -p "Q: May we create $www/source with the command above? [y/n] " -u 1 create_it
+                  read -p "Q: May we change ownership of $www/source with the command above? [y/n] " -u 1 create_it
                   echo
                   if [[ "$create_it" == [yY] ]]; then
                      sudo chown -R melagrid:melagrid $www/source

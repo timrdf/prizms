@@ -1786,17 +1786,29 @@ pushd &> /dev/null
                   echo "Prizms maintains the LODSPeaKr components under version control ($project_code_repository)"
                   echo "See https://github.com/alangrafu/lodspeakr/wiki/Develop-your-own-components-in-a-different-repository"
                   if [[ ! -h $www/lodspeakr/components ]]; then # Is not an alias. # TODO: and it points to within our github clone...
-                     echo
-                     echo "We need to put lodspeakr into version control, which can be done with the following commands."
-                     echo
-                     echo "   sudo mv $www/lodspeakr/components `pwd`/lodspeakr/"
-                     echo "   sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components"
-                     echo
-                     if [[ ! -e lodspeakr/components ]]; then
+                     if [[ -d $www/lodspeakr/components && ! -e lodspeakr/components ]]; then
+                        echo
+                        echo "We need to put lodspeakr into version control, which can be done with the following commands."
+                        echo
+                        echo "   sudo mv $www/lodspeakr/components `pwd`/lodspeakr/"
+                        echo "   sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components"
+                        echo
                         read -p "Q: May we move $www/lodspeakr/components to `pwd`/lodspeakr/components using the commands above? [y/n] " -u 1 move_it
                         if [[ "$move_it" == [yY] ]]; then
                            sudo mv $www/lodspeakr/components `pwd`/lodspeakr/
                            added="$added lodspeakr/components"
+                           sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components
+                        else
+                           echo "Okay, we won't include lodspeakr/components into version control."
+                        fi 
+                     elif [[ ! -e $www/lodspeakr/components && -d lodspeakr/components ]]; then
+                        echo
+                        echo "We link $www/lodspeakr/components to the version-controlled directory `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components"
+                        echo
+                        echo "   sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components"
+                        echo
+                        read -p "Q: May we move $www/lodspeakr/components to `pwd`/lodspeakr/components using the commands above? [y/n] " -u 1 move_it
+                        if [[ "$move_it" == [yY] ]]; then
                            sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components
                         else
                            echo "Okay, we won't include lodspeakr/components into version control."

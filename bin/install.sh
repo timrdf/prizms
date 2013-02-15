@@ -1612,6 +1612,7 @@ pushd &> /dev/null
                      -n "$project_user_name" ]]; then
                   echo
                   echo "$www/source is currently owned by `stat --format=%U $www/source`, but it should be owned by $project_user_name."
+                  echo "The correct ownership can be set using the following command."
                   echo
                   echo "   sudo chown -R melagrid:melagrid $www/source"
                   echo

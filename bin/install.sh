@@ -1776,15 +1776,33 @@ pushd &> /dev/null
 
                      # /var/www$ sudo chmod -R g+w lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php; sudo chgrp -R www-data lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php
                   fi
+
+
                   # TODO: remove the index.html file
+
 
                   echo
                   echo $div
                   echo "Prizms maintains the LODSPeaKr components under version control ($project_code_repository)"
                   echo "See https://github.com/alangrafu/lodspeakr/wiki/Develop-your-own-components-in-a-different-repository"
-                  if [[ ! -h $www/lodspeakr/components ]]; then # TODO: and it points to within our github clone...
+                  if [[ ! -h $www/lodspeakr/components ]]; then # Is not an alias. # TODO: and it points to within our github clone...
                      echo
-                     echo "we need to put lodspeakr into version control"
+                     echo "We need to put lodspeakr into version control, which can be done with the following commands."
+                     echo
+                     echo "   sudo mv $www/lodspeakr/components `pwd`/lodspeakr/"
+                     echo "   sudo ln -s `pwd`/lodspeakr/components $www/lodspeakr/components"
+                     echo
+                     if [[ ! -e lodspeakr/components ]]; then
+                        read -p "Q: May we move $www/lodspeakr/components to `pwd`/lodspeakr/components using the commands above?" -u 1 move_it
+                        if [[ "$move_it" == [yY] ]]; then
+                           sudo mv $www/lodspeakr/components `pwd`/lodspeakr/
+                           sudo ln -s `pwd`/lodspeakr/components $www/lodspeakr/components
+                        else
+                           echo "Okay, we won't include lodspeakr/components into version control."
+                        fi 
+                     else
+                        echo "Whah?! not sure why $www/lodspeakr/components is not an alias, and lodspeakr/components already exists."
+                     fi
                   else
                      echo "(LODSPeaKr is already under version control)" 
                   fi

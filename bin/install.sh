@@ -1587,6 +1587,26 @@ pushd &> /dev/null
                   fi
                fi
 
+
+               echo 
+               echo $div
+               www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
+               echo "Prizms publishes RDF dump files into the htdoc directory, which is currently set to $www"
+               if [[ ! -e $www/source ]]; then
+                  echo
+                  echo "$www/source does not exist, but can be made with the following command:"
+                  echo
+                  echo "   sudo mkdir -p $www/source"
+                  echo
+                  read -p "Q: May we create $www/source with the command above? [y/n] " -u 1 create_it
+                  echo
+                  if [[ "$create_it" == [yY] ]]; then
+                  else
+                     echo "Okay, we won't create $www/source, but you won't be able to publish RDF dump files or load the SPARQL endpoint."
+                  fi
+               fi
+
+
                if [[ -z "$i_am_project_user" ]]; then
                   # Apache module 'env' is needed to enable the SetEnv command in the 
                   # $PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess below.
@@ -1663,7 +1683,7 @@ pushd &> /dev/null
 
 
 
-
+               # TODO: add source ../csv2rdf4lod-source-me-for-melagrid.sh to as-lebot.sh
 
                if [[ -z "$i_am_project_user" ]]; then
                   #
@@ -1692,6 +1712,8 @@ pushd &> /dev/null
                      read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
                      if [[ "$install_it" ]]; then
                         pushd $www &> /dev/null
+                           # bash -s http://server/baseurl http://example.org/namespace/ http://server/sparql  < <(curl -sL http://lodspeakr.org/install)
+                           # see https://github.com/alangrafu/lodspeakr/wiki/Installation#wiki-automatic
                            sudo bash < <(curl -sL http://lodspeakr.org/install)
                            # Question 1: http://lod.melagrid.org
                            # Question 2: <accept default>
@@ -1716,9 +1738,12 @@ pushd &> /dev/null
                   fi
                   if [[ -e $www/lodspeakr/settings.inc.php ]]; then
                      enable_apache_module 'rewrite' 'run LODSPeaKr'
+                     # enable_apache_module 'php5' 'run LODSPeaKr'
 
                      # AllowOverride must be 'All':
                      # cat /etc/apache2/sites-enabled/000-default | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1
+
+                     # /var/www$ sudo chmod -R g+w lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php; sudo chgrp -R www-data lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php
                   fi
                   # TODO: remove the index.html file
                fi

@@ -1729,12 +1729,13 @@ pushd &> /dev/null
                   echo $div
                   echo "Prizms uses LODSPeaKr to serve its RDF as Linked Data, and to serve the corresponding human-web pages."
                   echo
-                  offer_install_aptget "curl"        'run LODSPeaKr'
-                  offer_install_aptget "php5-cli"    'run LODSPeaKr'
-                  offer_install_aptget "php5"        'run LODSPeaKr'
-                  offer_install_aptget "php5-sqlite" 'run LODSPeaKr'
-                  offer_install_aptget "php5-curl"   'run LODSPeaKr'
-                  offer_install_aptget "sqlite3"     'run LODSPeaKr'
+                  offer_install_aptget "curl php5-cli php5 php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
+                  #offer_install_aptget "curl"        'run LODSPeaKr'
+                  #offer_install_aptget "php5-cli"    'run LODSPeaKr'
+                  #offer_install_aptget "php5"        'run LODSPeaKr'
+                  #offer_install_aptget "php5-sqlite" 'run LODSPeaKr'
+                  #offer_install_aptget "php5-curl"   'run LODSPeaKr'
+                  #offer_install_aptget "sqlite3"     'run LODSPeaKr'
                   www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
                   echo
                   echo $div

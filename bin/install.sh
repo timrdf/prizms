@@ -1591,7 +1591,8 @@ pushd &> /dev/null
                echo 
                echo $div
                www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
-               echo "Prizms publishes RDF dump files into the htdoc directory, which is currently set to $www"
+               echo "Prizms publishes RDF dump files into the htdoc directory, which is currently set to $www."
+               echo "$www/source should be owned by the project user $project_user_name."
                if [[ ! -e $www/source ]]; then
                   echo
                   echo "$www/source does not exist, but can be made with the following command:"
@@ -1604,6 +1605,22 @@ pushd &> /dev/null
                      sudo mkdir -p $www/source
                   else
                      echo "Okay, we won't create $www/source, but you won't be able to publish RDF dump files or load the SPARQL endpoint."
+                  fi
+               fi
+               if [[ -e $www/source                                         && \
+                     `stat --format=%U $www/source` != "$project_user_name" && \
+                     -n "$project_user_name" ]]; then
+                  echo
+                  echo "$www/source is currently owned by `stat --format=%U $www/source`, but it should be owned by $project_user_name."
+                  echo
+                  echo "   sudo chown -R melagrid:melagrid $www/source"
+                  echo
+                  read -p "Q: May we create $www/source with the command above? [y/n] " -u 1 create_it
+                  echo
+                  if [[ "$create_it" == [yY] ]]; then
+                     sudo chown -R melagrid:melagrid $www/source
+                  else
+                     echo "Okay, we won't change the owner of $www/source, but you won't be able to publish RDF dump files or load the SPARQL endpoint."
                   fi
                fi
 

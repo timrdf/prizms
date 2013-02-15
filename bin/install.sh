@@ -1785,7 +1785,7 @@ pushd &> /dev/null
                   echo $div
                   echo "Prizms maintains the LODSPeaKr components under version control ($project_code_repository)"
                   echo "See https://github.com/alangrafu/lodspeakr/wiki/Develop-your-own-components-in-a-different-repository"
-                  if [[ ! -h $www/lodspeakr/components ]]; then # Is not an alias. # TODO: and it points to within our github clone...
+                  if [[ ! -h $www/lodspeakr/components && 'false' == 'true' ]]; then # Is not an alias. # TODO: and it points to within our github clone...
                      echo
                      echo "We need to put lodspeakr into version control, which can be done with the following commands."
                      echo
@@ -1793,7 +1793,7 @@ pushd &> /dev/null
                      echo "   sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components"
                      echo
                      if [[ ! -e lodspeakr/components ]]; then
-                        read -p "Q: May we move $www/lodspeakr/components to `pwd`/lodspeakr/components using the commands above?" -u 1 move_it
+                        read -p "Q: May we move $www/lodspeakr/components to `pwd`/lodspeakr/components using the commands above? [y/n] " -u 1 move_it
                         if [[ "$move_it" == [yY] ]]; then
                            sudo mv $www/lodspeakr/components `pwd`/lodspeakr/
                            added="$added lodspeakr/components"

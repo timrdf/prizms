@@ -1082,7 +1082,10 @@ pushd &> /dev/null
                         'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
                   fi
 
-                  # ^^ NOTE sudo vi /etc/passwd change melagrid to bash
+                  # NOTE sudo vi /etc/passwd change melagrid to bash
+
+
+                  # CSV2RDF4LOD_PUBLISH_VIRTUOSO and CSV2RDF4LOD_PUBLISH_SUBSET_SAMPLES are set below, after we know that Virtuoso is installed.
 
                fi # end "I am not project user"
 
@@ -1521,11 +1524,25 @@ pushd &> /dev/null
                         'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT' \
                         'will not correctly capture the provenance of named graph loads in the SPARQL endpoint'
 
-                  fi # end $virtuoso_install
-                  rm -f .prizms-std.common
+                  fi # end $virtuoso_installed
+
+                  target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
+
+                  # set CSV2RDF4LOD_PUBLISH_VIRTUOSO true
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_VIRTUOSO true \
+                     "enable loading the RDF dump files in the htdocs directory ($www/source) into the SPARQL endpoint" \
+                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore' \
+                     'unable to load the SPARQL endpoint'
+
+                  # set CSV2RDF4LOD_PUBLISH_SUBSET_SAMPLES true
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_SUBSET_SAMPLES true \
+                     "enable loading the *small* sample portions of the full RDF dump files into the SPARQL endpoint" \
+                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables' \
+                     'unable to load the SPARQL endpoint with samples of the RDF that you created'
 
                   # TODO: is logging location set up correctly? Yes, but verify on next iteration...
 
+                  rm -f .prizms-std.common
                fi # end "I am not project user"
 
 
@@ -1625,7 +1642,6 @@ pushd &> /dev/null
                      echo "Okay, we won't change the owner of $www/source, but you won't be able to publish RDF dump files or load the SPARQL endpoint."
                   fi
                fi
-
 
                if [[ -z "$i_am_project_user" ]]; then
                   # Apache module 'env' is needed to enable the SetEnv command in the 

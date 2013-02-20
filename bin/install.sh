@@ -168,7 +168,9 @@ function change_source_me {
             $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target --change-to $new_value
             echo "Okay, we changed $target to:"
             grep "export $ENVVAR=" $target | tail -1
-            added="$added $target"
+            if [[ ! $target =~ /etc.* ]]; then
+               added="$added $target"
+            fi
          else
             echo "Okay, we won't change it. You'll need to change it later$loss."
          fi

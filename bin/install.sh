@@ -991,36 +991,6 @@ pushd &> /dev/null
                         fi
                      fi
 
-                     # JENAROOT to data/source/csv2rdf4lod-source-me-as-$user.sh
-                     echo
-                     echo $div
-                     echo ${PRIZMS_HOME%/*}
-                     find ${PRIZMS_HOME%/*} -type d -name "apache-jena*" # /home/lebot/opt/apache-jena-2.7.4
-                     set_paths_cmd="export JENAROOT=`find ${PRIZMS_HOME%/*} -type d -name "apache-jena*" | tail -1 | sed "s/\`whoami\`/$user/g"`"
-                     echo "Apache Jena requires the shell environent variable JENAROOT to be set."
-                     echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Apache-Jena"
-                     echo "The following command should appear in $your data/source/csv2rdf4lod-source-me-as-$user.sh."
-                     echo
-                     echo "    $set_paths_cmd"
-                     already_there=`grep "^$set_paths_cmd" $target`
-                     echo
-                     if [ -n "$already_there" ]; then
-                        echo "It seems that you already have the following in $your $target, so we won't offer to add it again:"
-                        echo
-                        echo $already_there
-                     else
-                        read -p "Add this command to $your $target? [y/n] " -u 1 install_it
-                        if [[ "$install_it" == [yY] ]]; then
-                           echo $set_paths_cmd >> $target
-                           echo
-                           echo "Okay, we added it:"
-                           grep "^$set_paths_command" $target
-                           added="$added $target"
-                        else
-                           echo "We didn't $change $your $target, so you'll need to make sure you set the paths correctly each time."
-                        fi
-                     fi
-
                      # Set CSV2RDF4LOD_HOME
                      change_source_me $target CSV2RDF4LOD_HOME "`echo $PRIZMS_HOME/repos/csv2rdf4lod-automation | sed "s/\`whoami\`/$user/g"`" \
                         "Ensure that all of the csv2rdf4lod-automation scripts can call each other." \
@@ -1400,6 +1370,41 @@ pushd &> /dev/null
                         fi
                      fi
 
+                     # AS both DEVELOPER and PROJECT USER (after dependencies were installed).
+                     for user in $person_user_name $project_user_name; do
+
+                        # JENAROOT to data/source/csv2rdf4lod-source-me-as-$user.sh
+                        echo
+                        echo $div
+                        echo ${PRIZMS_HOME%/*}
+                        find ${PRIZMS_HOME%/*} -type d -name "apache-jena*" # /home/lebot/opt/apache-jena-2.7.4
+                        set_paths_cmd="export JENAROOT=`find ${PRIZMS_HOME%/*} -type d -name "apache-jena*" | tail -1 | sed "s/\`whoami\`/$user/g"`"
+                        echo "Apache Jena requires the shell environent variable JENAROOT to be set."
+                        echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Apache-Jena"
+                        echo "The following command should appear in $your data/source/csv2rdf4lod-source-me-as-$user.sh."
+                        echo
+                        echo "    $set_paths_cmd"
+                        already_there=`grep "^$set_paths_cmd" $target`
+                        echo
+                        if [ -n "$already_there" ]; then
+                           echo "It seems that you already have the following in $your $target, so we won't offer to add it again:"
+                           echo
+                           echo $already_there
+                        else
+                           read -p "Add this command to $your $target? [y/n] " -u 1 install_it
+                           if [[ "$install_it" == [yY] ]]; then
+                              echo $set_paths_cmd >> $target
+                              echo
+                              echo "Okay, we added it:"
+                              grep "^$set_paths_command" $target
+                              added="$added $target"
+                           else
+                              echo "We didn't $change $your $target, so you'll need to make sure you set the paths correctly each time."
+                           fi
+                        fi
+
+                     done
+
                      # TODO: X_GOOGLE_MAPS_API_Key
                      credentials="/etc/prizms/$project_user_name/??triple-store??/google/csv2rdf4lod-source-me-for-googlemap-credentials.sh"
 
@@ -1609,7 +1614,7 @@ pushd &> /dev/null
                echo 
                echo $div
                www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
-               echo "Prizms publishes RDF dump files into the htdoc directory, which is currently set to $www."
+               echo "Prizms publishes RDF dump files into the htdocs directory, which is currently set to $www."
                echo "$www/source should be owned by the project user $project_user_name."
                if [[ ! -e $www/source ]]; then
                   echo

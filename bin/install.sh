@@ -1627,9 +1627,9 @@ pushd &> /dev/null
                echo 
                echo $div
                www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
-               echo "Prizms publishes RDF dump files into the htdocs directory, which is currently set to $www."
-               echo "$www/source should be owned by the project user $project_user_name."
+               echo "Prizms publishes RDF dump files into the htdocs directory, which is currently set to \"$www.\""
                if [[ -n "$www" ]]; then
+                  echo "$www/source should be owned by the project user $project_user_name."
                   if [[ ! -e $www/source ]]; then
                      echo
                      echo "$www/source does not exist, but can be made with the following command:"
@@ -1662,7 +1662,7 @@ pushd &> /dev/null
                      fi
                   fi
                else
-                  echo "WARNING: could not find value of CSV2RDF4LOD_PUBLISH_VARWWW_ROOT in data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
+                  echo "WARNING: could not find value of CSV2RDF4LOD_PUBLISH_VARWWW_ROOT (found $www) in data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
                   if [[ ! -e data/source/csv2rdf4lod-source-me-as-$project_user_name.sh ]]; then
                      echo "Perhaps there is an issue pushing your changes to $project_code_repository ?"
                   fi

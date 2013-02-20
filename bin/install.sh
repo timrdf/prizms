@@ -1651,12 +1651,12 @@ pushd &> /dev/null
                      echo "$www/source is currently owned by `stat --format=%U $www/source`, but it should be owned by $project_user_name."
                      echo "The correct ownership can be set using the following command."
                      echo
-                     echo "   sudo chown -R melagrid:melagrid $www/source"
+                     echo "   sudo chown -R $project_user_name:$project_user_name $www/source"
                      echo
                      read -p "Q: May we change ownership of $www/source with the command above? [y/n] " -u 1 create_it
                      echo
                      if [[ "$create_it" == [yY] ]]; then
-                        sudo chown -R melagrid:melagrid $www/source
+                        sudo chown -R $project_user_name:$project_user_name $www/source
                      else
                         echo "Okay, we won't change the owner of $www/source, but you won't be able to publish RDF dump files or load the SPARQL endpoint."
                      fi

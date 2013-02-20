@@ -1674,7 +1674,7 @@ pushd &> /dev/null
                   # $PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess below.
                   # enable envars:
                   # sudo a2enmod env
-                  use enable_apache_module 'env' 'enable DataFAQs provenance'
+                  enable_apache_module 'env' 'enable DataFAQs provenance'
                   #echo "Since we've installed a new Apache module, we need to enable it."
                   #echo
                   #echo sudo a2enmod env

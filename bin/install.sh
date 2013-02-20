@@ -1627,36 +1627,44 @@ pushd &> /dev/null
                www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
                echo "Prizms publishes RDF dump files into the htdocs directory, which is currently set to $www."
                echo "$www/source should be owned by the project user $project_user_name."
-               if [[ ! -e $www/source ]]; then
-                  echo
-                  echo "$www/source does not exist, but can be made with the following command:"
-                  echo
-                  echo "   sudo mkdir -p $www/source"
-                  echo
-                  read -p "Q: May we create $www/source with the command above? [y/n] " -u 1 create_it
-                  echo
-                  if [[ "$create_it" == [yY] ]]; then
-                     sudo mkdir -p $www/source
-                  else
-                     echo "Okay, we won't create $www/source, but you won't be able to publish RDF dump files or load the SPARQL endpoint."
+               if [[ -n "$www" ]]; then
+                  if [[ ! -e $www/source ]]; then
+                     echo
+                     echo "$www/source does not exist, but can be made with the following command:"
+                     echo
+                     echo "   sudo mkdir -p $www/source"
+                     echo
+                     read -p "Q: May we create $www/source with the command above? [y/n] " -u 1 create_it
+                     echo
+                     if [[ "$create_it" == [yY] ]]; then
+                        sudo mkdir -p $www/source
+                     else
+                        echo "Okay, we won't create $www/source, but you won't be able to publish RDF dump files or load the SPARQL endpoint."
+                     fi
                   fi
-               fi
-               if [[ -e $www/source                                         && \
-                     `stat --format=%U $www/source` != "$project_user_name" && \
-                     -n "$project_user_name" ]]; then
-                  echo
-                  echo "$www/source is currently owned by `stat --format=%U $www/source`, but it should be owned by $project_user_name."
-                  echo "The correct ownership can be set using the following command."
-                  echo
-                  echo "   sudo chown -R melagrid:melagrid $www/source"
-                  echo
-                  read -p "Q: May we change ownership of $www/source with the command above? [y/n] " -u 1 create_it
-                  echo
-                  if [[ "$create_it" == [yY] ]]; then
-                     sudo chown -R melagrid:melagrid $www/source
-                  else
-                     echo "Okay, we won't change the owner of $www/source, but you won't be able to publish RDF dump files or load the SPARQL endpoint."
+                  if [[ -e $www/source                                         && \
+                        `stat --format=%U $www/source` != "$project_user_name" && \
+                        -n "$project_user_name" ]]; then
+                     echo
+                     echo "$www/source is currently owned by `stat --format=%U $www/source`, but it should be owned by $project_user_name."
+                     echo "The correct ownership can be set using the following command."
+                     echo
+                     echo "   sudo chown -R melagrid:melagrid $www/source"
+                     echo
+                     read -p "Q: May we change ownership of $www/source with the command above? [y/n] " -u 1 create_it
+                     echo
+                     if [[ "$create_it" == [yY] ]]; then
+                        sudo chown -R melagrid:melagrid $www/source
+                     else
+                        echo "Okay, we won't change the owner of $www/source, but you won't be able to publish RDF dump files or load the SPARQL endpoint."
+                     fi
                   fi
+               else
+                  echo "WARNING: could not find value of CSV2RDF4LOD_PUBLISH_VARWWW_ROOT in data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
+                  if [[ ! -e data/source/csv2rdf4lod-source-me-as-$project_user_name.sh ]]; then
+                     echo "Perhaps there is an issue pushing your changes to $project_code_repository ?"
+                  fi
+                  read -p "Press any key to continue." -u 1
                fi
 
                if [[ -z "$i_am_project_user" ]]; then
@@ -1728,7 +1736,7 @@ pushd &> /dev/null
                echo "the Apache environment variable X_CKAN_API_Key needs to be set in $target."
                if [[ -z "$already_there" ]]; then
                   echo "set X_CKAN_API_Key in $target."
-                  read -p "^^ todo... [y/n] " -u 1 add_it
+                  read -p "Do nothing? (needs to be implemented)^^ todo... [y/n] " -u 1 add_it
                else
                   echo "(X_CKAN_API_Key is already set in $target)"
                fi

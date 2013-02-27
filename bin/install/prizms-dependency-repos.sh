@@ -5,8 +5,10 @@
 #
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+   echo
    echo "usage: `basename $0` [-n]"
-   echo "  Retrieves the dependency code repositories (e.g. csv2rdf4lod-automation, lodspeakr, DataFAQs)."
+   echo
+   echo "  Retrieves the dependency code repositories (e.g. csv2rdf4lod-automation, lodspeakr, DataFAQs, vsr)."
    exit
 fi
 
@@ -19,7 +21,8 @@ fi
 
 pushd $PRIZMS_HOME/repos &> /dev/null
    for repos in git://github.com/timrdf/csv2rdf4lod-automation.git \
-                git://github.com/timrdf/DataFAQs.git; do
+                git://github.com/timrdf/DataFAQs.git \
+                git://github.com/timrdf/vsr.git; do
       echo
       directory=`basename $repos`
       directory=${directory%.*}

@@ -4,6 +4,7 @@
 #3>    prov:wasDerivedFrom <https://github.com/timrdf/DataFAQs/blob/master/bin/df-situate-paths.sh> .
 #
 # Usage:
+#
 #   export PATH=$PATH`$DATAFAQS_HOME/bin/df-situate-paths.sh`
 #   (can be repeated indefinitely, once paths are in PATH, nothing is returned.)
 
@@ -57,13 +58,20 @@ fi
 #   missing=$missing$DATAFAQS_HOME/bin/util/virtuoso
 #fi
 
-if [ -e $HOME/repos/csv2rdf4lod-automation/bin/util/cr-situate-paths.sh ]; then
-   missing=$missing`$HOME/repos/csv2rdf4lod-automation/bin/util/cr-situate-paths.sh`
-fi
+for situate in $HOME/repos/csv2rdf4lod-automation/bin/util/cr-situate-paths.sh \
+               $HOME/repos/vsr/src/vsr-situate-paths.sh                        \
+               $HOME/repos/DataFAQs/bin/df-situate-paths.sh ; do
+   missing=$missing`$situate`
+done
 
-if [ -e $HOME/repos/DataFAQs/bin/df-situate-paths.sh ]; then
-   missing=$missing`$HOME/repos/DataFAQs/bin/df-situate-paths.sh`
-fi
+# Replaced by for loop above:
+#if [ -e $HOME/repos/csv2rdf4lod-automation/bin/util/cr-situate-paths.sh ]; then
+#   missing=$missing`$HOME/repos/csv2rdf4lod-automation/bin/util/cr-situate-paths.sh`
+#fi
+#
+#if [ -e $HOME/repos/DataFAQs/bin/df-situate-paths.sh ]; then
+#   missing=$missing`$HOME/repos/DataFAQs/bin/df-situate-paths.sh`
+#fi
 
 echo $missing
 

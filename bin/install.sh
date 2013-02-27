@@ -884,6 +884,7 @@ pushd &> /dev/null
                   target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
                   if [[ ! -e $target ]]; then
                      cp $template $target
+                     echo "source `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"              >> $target
                      $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CONVERT_PERSON_URI' $target --change-to $person_uri
                      added="$added $target"
                      echo
@@ -1086,7 +1087,7 @@ pushd &> /dev/null
                   echo $already_there
                else
                   see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/Script:-source-me.sh"
-                  read -p "Add this command to your ~/.bashrc? [y/n]" -u 1 install_it
+                  read -p "Add this command to your ~/.bashrc? [y/n] " -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
                      echo                     >> ~/.bashrc
                      echo "$source_me # $see ">> ~/.bashrc

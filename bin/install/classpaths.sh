@@ -34,15 +34,24 @@ missing=""
 #   fi
 #done
 
+for situate in $HOME/repos/csv2rdf4lod-automation/bin/util/cr-situate-classpaths.sh \
+               $HOME/repos/vsr/src/vsr-situate-classpaths.sh; do
+   missing=$missing`$situate`
+done
 
-if [ -e $HOME/repos/csv2rdf4lod-automation/bin/util/cr-situate-classpaths.sh ]; then
-   missing=$missing`$HOME/repos/csv2rdf4lod-automation/bin/util/cr-situate-classpaths.sh`
-fi
+# replaced by for loop above:
+#if [ -e $HOME/repos/csv2rdf4lod-automation/bin/util/cr-situate-classpaths.sh ]; then
+#   missing=$missing`$HOME/repos/csv2rdf4lod-automation/bin/util/cr-situate-classpaths.sh`
+#fi
 
 # TODO: if/when DataFAQs has its own jars, include them here:
-
 #if [ -e $HOME/repos/DataFAQs/bin/df-situate-paths.sh ]; then
 #   missing=$missing`$HOME/repos/DataFAQs/bin/df-situate-paths.sh`
+#fi
+
+# replaced by for loop above:
+#if [ -e $HOME/repos/vsr/src/vsr-situate-classpaths.sh ]; then
+#   missing=$missing`$HOME/repos/vsr/src/vsr-situate-classpaths.sh`
 #fi
 
 echo $missing

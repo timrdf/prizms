@@ -29,10 +29,6 @@ if [ ! `which prizms-dependency-repos.sh` ]; then
 fi
 
 if [[ ! `which tdbloader` ]]; then
-   if [ -n "$missing" ]; then
-      missing=$missing":"
-   fi
-
    # When HOME is                  /home/lebot/opt/prizms
    # csv2rdf4lod installer creates /home/lebot/opt/apache-jena-2.7.4
    # and PATH needs to add         /home/lebot/opt/apache-jena-2.7.4/bin
@@ -40,7 +36,10 @@ if [[ ! `which tdbloader` ]]; then
    opt=`dirname $HOME`
    jenaroot=`find $opt -type d -name "apache-jena*"`
 
-   missing=$missing$jenaroot/bin
+   if [[ -n "$missing" && -n "$jenaroot" && -e "$jenaroot" ]]; then
+      missing=$missing":"
+      missing=$missing$jenaroot/bin
+   fi
 fi
 
 

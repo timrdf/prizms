@@ -912,6 +912,7 @@ pushd &> /dev/null
                      echo $div
                      echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
                   fi
+
                   project_data_root="${user_home%/*}/$project_user_name/prizms/$target_dir/data/source" # TODO: reconcile - what does this impact?
                   change_source_me $target CSV2RDF4LOD_CONVERT_DATA_ROOT "$project_data_root" \
                      "indicate the production data directory, from which /var/www and the production SPARQL endpoints are loaded" \
@@ -923,12 +924,12 @@ pushd &> /dev/null
                      'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables' \
                      'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
 
-                  if [[ `value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target` == "true" ]]; then
-                     change_source_me $target CSV2RDF4LOD_PUBLISH_VARWWW_ROOT "/var/www" \
-                        "indicate the htdocs directory to publish RDF dump files to, which are used to load the SPARQL endpoint" \
-                        'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT' \
-                        'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
-                  fi
+                  #if [[ `value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target` == "true" ]]; then
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_VARWWW_ROOT "/var/www" \
+                     "indicate the htdocs directory to publish RDF dump files to, which are used to load the SPARQL endpoint" \
+                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT' \
+                     'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
+                  #fi
 
 
                   # AS DEVELOPER
@@ -1662,10 +1663,12 @@ pushd &> /dev/null
                      fi
                   fi
                else
+                  echo
                   echo "WARNING: could not find value of CSV2RDF4LOD_PUBLISH_VARWWW_ROOT (found $www) in `pwd`/data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
                   if [[ ! -e data/source/csv2rdf4lod-source-me-as-$project_user_name.sh ]]; then
                      echo "Perhaps there is an issue pushing your changes to $project_code_repository ?"
                   fi
+                  echo
                   read -p "Press any key to continue." -u 1
                fi
 

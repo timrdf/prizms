@@ -155,7 +155,7 @@ function change_source_me {
    done
    if [[ -n "$new_value" ]]; then
       if [[ -z "`grep $ENVVAR $target`" ]]; then
-         echo "export $ENVVAR=''" >> $target
+         echo "export $ENVVAR=''" | sudo tee -a $target
       fi
       current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target | awk '{print $1}'`
       if [ "$current" != "$new_value" ]; then

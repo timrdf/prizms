@@ -1808,7 +1808,22 @@ pushd &> /dev/null
                   fi
 
 
-                  # TODO: remove the index.html file
+                  echo
+                  echo $div
+                  echo "Prizms does not need the index.html in the htdocs directory, since it uses lodspeakr"
+                  if [[ -e $www/index.html ]]; then
+                     echo
+                     echo "mv $www/index.html $www/it.works"
+                     echo
+                     read -p "Q: May we mv the default index.html out of LODSPeaKr's way using the command above? [y/n] " -u 1 move_it
+                     if [[ "$move_it" == [yY] ]]; then
+                        sudo mv $www/index.html $www/it.works
+                     else
+                        echo "Okay, we won't move it. But the site will not work."
+                     fi
+                  else
+                     echo "(the $www/index.html is not there, so it's not in lodspeakr's way.)"
+                  fi
 
 
                   echo

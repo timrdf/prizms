@@ -56,7 +56,7 @@ pushd $PRIZMS_HOME/lodspeakrs &> /dev/null
          echo git init $directory
               git init $directory
          pushd $directory &> /dev/null
-            git remote add –f origin $repos
+            git remote add origin $repos
             git config core.sparsecheckout true
             echo lodspeakr >> .git/info/sparse-checkout
             git pull origin master

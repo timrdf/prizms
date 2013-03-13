@@ -47,9 +47,7 @@ popd &> /dev/null
 # https://github.com/timrdf/prizms/issues/12
 #
 pushd $PRIZMS_HOME/lodspeakrs &> /dev/null
-   for repos in git://github.com/jimmccusker/twc-healthdata.git \
-
-                ; do
+   for repos in git://github.com/jimmccusker/twc-healthdata.git ; do
       echo
       directory=`basename $repos`
       directory=${directory%.*}

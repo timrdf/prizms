@@ -19,6 +19,10 @@ if [ ! -e $PRIZMS_HOME/repos ]; then
    mkdir -p $PRIZMS_HOME/repos
 fi
 
+if [ ! -e $PRIZMS_HOME/lodspeakrs ]; then
+   mkdir -p $PRIZMS_HOME/lodspeakrs
+fi
+
 pushd $PRIZMS_HOME/repos &> /dev/null
    for repos in git://github.com/timrdf/csv2rdf4lod-automation.git \
                 git://github.com/timrdf/DataFAQs.git \
@@ -26,13 +30,42 @@ pushd $PRIZMS_HOME/repos &> /dev/null
       echo
       directory=`basename $repos`
       directory=${directory%.*}
+      echo $directory...
       if [ ! -e $directory ]; then
          echo git clone $repos
               git clone $repos
       else
-         echo $directory...
          pushd $directory &> /dev/null
             git pull
+         popd &> /dev/null
+      fi
+   done
+   echo
+popd &> /dev/null
+
+#
+# https://github.com/timrdf/prizms/issues/12
+#
+pushd $PRIZMS_HOME/lodspeakrs &> /dev/null
+   for repos in git://github.com/jimmccusker/twc-healthdata.git \
+
+                ; do
+      echo
+      directory=`basename $repos`
+      directory=${directory%.*}
+      echo $directory...
+      if [ ! -e $directory ]; then
+         echo git init $repos
+              git init $repos
+         pushd $directory &> /dev/null
+            git remote add –f origin $repos
+            git config core.sparsecheckout true
+            echo lodspeakr/ >> .git/info/sparse-checkout
+            git pull origin master
+         popd
+      else
+         pushd $directory &> /dev/null
+            git pull origin master
          popd &> /dev/null
       fi
    done

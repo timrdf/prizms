@@ -635,7 +635,7 @@ pushd &> /dev/null
 
                added=''
 
-               if [[ -z "$i_am_project_user" &&                                                                    \
+               if [[ -z "$i_am_project_user" && \
                     ( ! -e data/source/ || ! -e lodspeakr/ || ! -e doc/ || ! -e 'data/faqs/example-1/faqt-brick' ) ]]; then
                   echo
                   echo $div
@@ -656,7 +656,7 @@ pushd &> /dev/null
                         mkdir -p data
                         cp -R $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/* data/
                      fi
-                     for directory in 'data/faqs/example-1/faqt-brick' doc lodspeakr; do
+                     for directory in doc lodspeakr 'data/faqs/example-1/faqt-brick' ; do
                         if [ ! -e $directory ]; then
                            added="$added $directory"
                            echo "Creating `pwd`/$directory"
@@ -1189,7 +1189,8 @@ pushd &> /dev/null
                   $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.okay"
                   $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh -n                       | grep "^.okay"
                   # TODO: set up the user-based install that does NOT require sudo. python's easy_install
-                 
+                
+                  # TODO: vsr2grf.sh requires 1.7 => 'sudo apt-get install openjdk-7-jre' 
                   todo=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO" | grep -v "pydistutils.cfg"`
                   todo=$todo`$PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh -n                  | grep "^.TODO" | grep -v "pydistutils.cfg"`
                   if [ -n "$todo" ]; then
@@ -1432,7 +1433,7 @@ pushd &> /dev/null
 
                      echo $div
                      enable_apache_module 'proxy_http' "expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
-                     # Replaced with teh call above:
+                     # Replaced with the call above:
                      # sudo a2enmod proxy
                      # sudo a2enmod proxy_http
                      #modules='proxy_http' # 'proxy' is enabled when proxy_http is enabled.
@@ -1452,6 +1453,7 @@ pushd &> /dev/null
 
                      #
                      # See mapping into apache at https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
+                     # NOTE: replaced by new config below.
                      #
                      #  <Location /sparql>
                      #      allow from all
@@ -1479,9 +1481,23 @@ pushd &> /dev/null
                      #     ProxyHTMLURLMap         /sparql /sparql
                      #     ProxyHTMLURLMap         http://localhost:8890/sparql /sparql
                      #  </Location>
+                     # 
+                     # This works on ieeevis VM, and replaced these ^^
+                     #
+                     #  # https://scm.escience.rpi.edu/trac/ticket/1502#comment:5
+                     #  ProxyTimeout 1800
+                     #  ProxyRequests Off
+                     #  ProxyPass /sparql http://localhost:8890/sparql
+                     #  <Location /sparql>
+                     #          ProxyPassReverse /
+                     #          RequestHeader unset Accept-Encoding
+                     #          Order allow,deny
+                     #          allow from all
+                     #  </Location>
+
                      echo
                      echo $div
-                     target='/etc/apache2/sites-available/std.common'
+                     target='/etc/apache2/sites-available/std.common' # TODO: replace this with /etc/apache2/sites-available/default
                      already_there=""
                      if [ -e $target ]; then
                         already_there=`grep 'Location /sparql' $target`
@@ -1527,6 +1543,9 @@ pushd &> /dev/null
                            need_apache_restart=""
                         fi
                      fi
+
+                     # Added the following to /etc/vservers/.httpd/ieeevis.conf
+                     # Redirect permanent /projects/ieeevis /projects/ieeevis/
 
                      # We're trying to get to http://aquarius.tw.rpi.edu/projects/melagrid/sparql
 
@@ -1759,7 +1778,7 @@ pushd &> /dev/null
                   echo $div
                   echo "Prizms uses LODSPeaKr to serve its RDF as Linked Data, and to serve the corresponding human-web pages."
                   echo
-                  offer_install_aptget "curl php5-cli php5 php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
+                  offer_install_aptget "curl apache2 php5-cli php5 php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
                   www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
                   echo
                   echo $div

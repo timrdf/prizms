@@ -53,8 +53,8 @@ pushd $PRIZMS_HOME/lodspeakrs &> /dev/null
       directory=${directory%.*}
       echo $directory...
       if [ ! -e $directory ]; then
-         echo git init $repos
-              git init $repos
+         echo git init $directory
+              git init $directory
          pushd $directory &> /dev/null
             git remote add –f origin $repos
             git config core.sparsecheckout true

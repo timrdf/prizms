@@ -53,17 +53,21 @@ pushd $PRIZMS_HOME/lodspeakrs &> /dev/null
       directory=${directory%.*}
       echo $directory...
       if [ ! -e $directory ]; then
-         echo git init $directory
-              git init $directory
-         pushd $directory &> /dev/null
-            git remote add origin $repos
-            git config core.sparsecheckout true
-            echo lodspeakr >> .git/info/sparse-checkout
-            git pull origin master
-         popd
+         echo git clone $repos
+              git clone $repos
+         #echo git init $directory # sparse causes 'origin' conflict with the prizms repository.
+         #     git init $directory
+         #pushd $directory &> /dev/null
+         #   echo git remote add -f origin $repos
+         #        git remote add -f origin $repos
+         #   git config core.sparsecheckout true
+         #   echo lodspeakr >> .git/info/sparse-checkout
+         #   git pull origin master
+         #popd
       else
          pushd $directory &> /dev/null
-            git pull origin master
+            git pull
+            #git pull origin master
          popd &> /dev/null
       fi
    done

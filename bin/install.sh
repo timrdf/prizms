@@ -24,12 +24,11 @@ if [[ "$0" == "bash" ]]; then
       fi
       if [[ `which git` ]]; then
          echo
-         echo mkdir -p opt
-         mkdir -p opt
+         echo mkdir -p `pwd`/opt
+         mkdir -p `pwd`/opt
          cd opt
          echo git clone git://github.com/timrdf/prizms.git
          git clone git://github.com/timrdf/prizms.git
-         echo
          prizms/bin/install.sh --help
          echo "See https://github.com/timrdf/prizms/wiki/Installing-Prizms"
       fi

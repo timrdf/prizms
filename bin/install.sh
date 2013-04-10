@@ -3,12 +3,12 @@
 #3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install.sh>;
 #3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/Installing-Prizms> .
 
+$0 --help
+exit
+
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 user_home=$(cd && echo ${PWD})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
-
-$0 --help
-exit
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo

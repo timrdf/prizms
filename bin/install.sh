@@ -11,8 +11,15 @@ if [[ "$0" == "bash" ]]; then
    echo
    if [[ "$install_it" == [yY] ]]; then
       if [[ `which git` ]]; then
-         mkdir -p opt; cd opt
-         git clone git://github.com/timrdf/prizms.git
+         echo mkdir -p opt
+         mkdir -p opt
+         pushd opt &> /dev/null
+            echo git clone git://github.com/timrdf/prizms.git
+            git clone git://github.com/timrdf/prizms.git
+         popd &> /dev/null
+         prizms/bin/install.sh --help
+         echo
+         echo "See https://github.com/timrdf/prizms/wiki/Installing-Prizms"
       else
          echo "We need git to bootstrap Prizms' installation. Try installing it with sudo apt-get install git"
       fi

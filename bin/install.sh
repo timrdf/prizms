@@ -202,7 +202,7 @@ else
       if [[ -n "$new_value" ]]; then
          if [[ -z "`grep $ENVVAR $target 2> /dev/null`" ]]; then
             sudo=""
-            if [[ `stat --format=%U $target` == `whoami` ]]; then
+            if [[ -e "$target" && `stat --format=%U $target` == `whoami` ]]; then
                sudo="sudo"
             fi
             echo "export $ENVVAR=''" | $sudo tee -a $target

@@ -11,6 +11,19 @@ if [[ "$0" == "bash" ]]; then
    echo
    if [[ "$install_it" == [yY] ]]; then
       if [[ `which git` ]]; then
+         echo
+         echo "We need git to bootstrap Prizms' installation."
+         echo "git can be installed on Ubuntu with the command:"
+         echo
+         echo "  sudo apt-get install git"
+         echo
+         read -p "Q: Try to install git with the command above? [y/n] " -u 1 install_it
+         echo
+         if [[ "$install_it" == [yY] ]]; then
+            sudo apt-get install git
+         fi
+      fi
+      if [[ `which git` ]]; then
          echo mkdir -p opt
          mkdir -p opt
          pushd opt &> /dev/null
@@ -20,8 +33,6 @@ if [[ "$0" == "bash" ]]; then
          prizms/bin/install.sh --help
          echo
          echo "See https://github.com/timrdf/prizms/wiki/Installing-Prizms"
-      else
-         echo "We need git to bootstrap Prizms' installation. Try installing it with sudo apt-get install git"
       fi
    else
       echo "Okay, we won't do anything." 

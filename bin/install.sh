@@ -145,7 +145,7 @@ else
    #
    upstream_ckan=""
    if [[ "$1" == "--upstream-ckan" ]]; then
-      if [[ "$2" != --* && "$2" != "none" ]]; then
+      if [[ "$2" != --* ]]; then
          upstream_ckan="$2"
          shift
       else
@@ -367,7 +367,7 @@ else
    echo "Prizms can pull dataset listings from an installation of CKAN,"
    echo "which can make it easier to gather the datasets that you'd like to integrate."
    echo "It's fine not to pull from a CKAN, so if you don't want to, just leave this blank."
-   if [ -z "$upstream_ckan" ]; then
+   if [[ -z "$upstream_ckan" ]]; then
       echo
       read -p "Q: Would you like your Prizms to pull dataset listings from an installation of CKAN? [y/n] " -u 1 upstream_ckan
       if [[ -n "$upstream_ckan" || "$upstream_ckan" = [nN] ]]; then
@@ -495,7 +495,7 @@ else
    echo "Your user name is:                                         $person_user_name"
    echo "Your project's user name is (or will be):                  $project_user_name"
    echo "Your project's code repository ($vcs) is:                   $project_code_repository"
-   if [ -n "$upstream_ckan" ]; then
+   if [[ -n "$upstream_ckan" && "$upstream_ckan" != "none" ]]; then
       echo "Your project will pull dataset listings from the CKAN at:  $upstream_ckan"  
    else
       echo "Your project won't pull dataset listings from a CKAN (for now)."

@@ -29,10 +29,10 @@ if [[ "$0" == "bash" ]]; then
          pushd opt &> /dev/null
             echo git clone git://github.com/timrdf/prizms.git
             git clone git://github.com/timrdf/prizms.git
+            echo
+            prizms/bin/install.sh --help
+            echo "See https://github.com/timrdf/prizms/wiki/Installing-Prizms"
          popd &> /dev/null
-         prizms/bin/install.sh --help
-         echo
-         echo "See https://github.com/timrdf/prizms/wiki/Installing-Prizms"
       fi
    else
       echo "Okay, we won't do anything." 

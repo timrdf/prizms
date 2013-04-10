@@ -32,7 +32,10 @@ if [[ "$0" == "bash" ]]; then
          cd opt
          echo git clone git://github.com/timrdf/prizms.git
          git clone git://github.com/timrdf/prizms.git
-         prizms/bin/install.sh --help
+         echo
+         echo
+         echo "Prizms bootstrap is installed. Run:"
+         echo "  opt/prizms/bin/install.sh"
       fi
    else
       echo "Okay, we won't do anything." 

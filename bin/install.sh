@@ -3,7 +3,7 @@
 #3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install.sh>;
 #3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/Installing-Prizms> .
 
-$0 --help
+echo $PWD
 exit
 
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})

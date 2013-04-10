@@ -10,7 +10,7 @@ if [[ "$0" == "bash" ]]; then
    read -p "Q: Bootstrap Prizms installation at `pwd`/opt/prizms? [y/n] " -u 1 install_it
    echo
    if [[ "$install_it" == [yY] ]]; then
-      if [[ `which git` ]]; then
+      if [[ ! `which git` ]]; then
          echo
          echo "We need git to bootstrap Prizms' installation."
          echo "git can be installed on Ubuntu with the command:"

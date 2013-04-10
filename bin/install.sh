@@ -200,11 +200,11 @@ else
          echo "  see $see"
       done
       sudo=""
+      if [[ $target =~ /etc.* || ( -e "$target" && `stat --format=%U $target` != `whoami` ) ]]; then
+         sudo="sudo"
+      fi
       if [[ -n "$new_value" ]]; then
          if [[ -z "`grep $ENVVAR $target 2> /dev/null`" ]]; then
-            if [[ $target =~ /etc.* || ( -e "$target" && `stat --format=%U $target` != `whoami` ) ]]; then
-               sudo="sudo"
-            fi
             echo "export $ENVVAR=''" | $sudo tee -a $target
          fi
          current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target | awk '{print $1}'`

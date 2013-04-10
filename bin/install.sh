@@ -7,6 +7,9 @@ PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 user_home=$(cd && echo ${PWD})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
+$0 --help
+exit
+
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo
    echo "usage: `basename $0` [--me <your-URI>] [--my-email <your-email>] [--proj-user <user>] [--repos <code-repo>] "
@@ -1418,6 +1421,7 @@ pushd &> /dev/null
                               echo "We didn't $change $your $target, so you'll need to make sure you set the paths correctly each time."
                            fi
                         fi
+                        # TODO: this needed as stopgap: export PATH=$PATH:$JENAROOT/bin
 
                      done
 
@@ -1585,6 +1589,7 @@ pushd &> /dev/null
                fi # end "I am not project user"
 
 
+               # TODO: VSR_PROVENANCE='true' in source-me.sh
 
                #
                # DataFAQs services via mod_python
@@ -1826,6 +1831,21 @@ pushd &> /dev/null
                      # /var/www$ sudo chmod -R g+w lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php; sudo chgrp -R www-data lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php
                   fi
 
+                  # TODO: the following need to be updated if --our-base-uri becomes e.g. http://ieeevis.tw.rpi.edu
+                  # $conf['endpoint']['local'] = 'http://aquarius.tw.rpi.edu/projects/ieeevis/sparql';
+                  # $conf['basedir'] = 'http://aquarius.tw.rpi.edu/projects/ieeevis/';
+                  # $conf['ns']['local']   = 'http://aquarius.tw.rpi.edu/projects/ieeevis/';
+
+                  # TODO: if /var/www/lodspeakr/settings.inc.php exists and is not a soft link to /home/ieeevis/prizms/ieeevis/lodspeakr
+                  # move the file and make the soft link.
+
+
+                  # TODO: if /home/ieeevis/prizms/ieeevis/lodspeakr/components/static/img/logo.png does not exist, say to add it.
+
+                  # TODO add to settings.inc.php to cherry pick others' lodspeakr components
+                  # see https://github.com/timrdf/prizms/issues/12
+
+                  # TODO: stop /home/lebot/prizms/ieeevis/lodspeakr/components/* from being owned by root.
 
                   echo
                   echo $div

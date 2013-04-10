@@ -1792,6 +1792,7 @@ else
                         echo "PythonHandler sadi"                                           >> .prizms-sadi-htaccess
                         # SetEnv X_CKAN_API_Key     # This needs 'sudo a2enmod env' to take affect. # see http://httpd.apache.org/docs/2.2/mod/mod_env.html
                         echo "SetEnv DATAFAQS_BASE_URI http://aquarius.tw.rpi.edu/projects" >> .prizms-sadi-htaccess
+                        # TODO: hard coded URI here; naughty
                         cat .prizms-sadi-htaccess
                         echo
                         read -p "Q: May we install the directives above into $target? [y/n] " -u 1 install_it
@@ -1847,7 +1848,7 @@ else
                         echo "$www/lodspeakr is not set up yet."
                         echo
                         read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
-                        if [[ "$install_it" ]]; then
+                        if [[ "$install_it" == [yY] ]]; then
                            pushd $www &> /dev/null
                               # bash -s http://server/baseurl http://example.org/namespace/ http://server/sparql  < <(curl -sL http://lodspeakr.org/install)
                               # see https://github.com/alangrafu/lodspeakr/wiki/Installation#wiki-automatic
@@ -1906,7 +1907,7 @@ else
                         echo
                         echo "mv $www/index.html $www/it.works"
                         echo
-                        read -p "Q: May we mv the default index.html out of LODSPeaKr's way using the command above? [y/n] " -u 1 move_it
+                        read -p "Q: May we move the default index.html out of LODSPeaKr's way using the command above? [y/n] " -u 1 move_it
                         if [[ "$move_it" == [yY] ]]; then
                            sudo mv $www/index.html $www/it.works
                         else
@@ -1970,7 +1971,7 @@ else
                   upstream_ckan_source_id=`java edu.rpi.tw.string.NameFactory --source-id-of $upstream_ckan`
                   target="data/source/$upstream_ckan_source_id"
                   echo "Prizms can collect and convert datasets that are listed in CKAN instances."
-                  if [[ -n "$upstream_ckan" ]]; then
+                  if [[ -n "$upstream_ckan" && "$upstream_ckan" != "none" ]]; then
                      echo "You've specified an upstream CKAN from which to mirror dataset listings ($upstream_ckan),"
                      echo "but Prizms hasn't extracted the access metadata into $target."
                      if [[ -n "$upstream_ckan_source_id" && -z "$i_am_project_user" ]]; then

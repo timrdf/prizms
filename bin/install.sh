@@ -33,7 +33,6 @@ if [[ "$0" == "bash" ]]; then
          echo git clone git://github.com/timrdf/prizms.git
          git clone git://github.com/timrdf/prizms.git
          echo
-         echo
          echo "Prizms bootstrap is installed. Run:"
          echo "  opt/prizms/bin/install.sh"
       fi

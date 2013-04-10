@@ -8,22 +8,22 @@ if [[ "$0" == "bash" ]]; then
    # bash < <(curl -sL http://purl.org/twc/install/prizms | grep -v "^#..bin/bash$")
    cd
    read -p "Q: Bootstrap Prizms installation at `pwd`/opt/prizms? [y/n] " -u 1 install_it
-   echo
    if [[ "$install_it" == [yY] ]]; then
       if [[ ! `which git` ]]; then
          echo
          echo "We need git to bootstrap Prizms' installation."
          echo "git can be installed on Ubuntu with the command:"
          echo
-         echo "  sudo apt-get install git"
+         echo "  sudo apt-get install git-core"
          echo
          read -p "Q: Try to install git with the command above? [y/n] " -u 1 install_it
          echo
          if [[ "$install_it" == [yY] ]]; then
-            sudo apt-get install git
+            sudo apt-get install git-core
          fi
       fi
       if [[ `which git` ]]; then
+         echo
          echo mkdir -p opt
          mkdir -p opt
          pushd opt &> /dev/null

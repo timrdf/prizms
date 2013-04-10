@@ -2198,4 +2198,6 @@ if [[ "$install_it" == [yY] ]]; then
    echo "Dependency for LODSPeaKr:"
    sudo service apache2 restart
 fi
+else
+   echo no
 fi

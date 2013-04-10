@@ -536,7 +536,8 @@ else
    echo "        To make changes in here, push into $project_code_repository from any working copy (e.g. ~$person_user_name/prizms/$project_user_name)"
 
    #if [[ -z "$i_am_project_user" && `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == "no" ]]; then
-   if [[ -z "$i_am_project_user" && ! -e ${user_home%/*}/$project_user_name ]]; then
+   #if [[ -z "$i_am_project_user" && ! -e ${user_home%/*}/$project_user_name ]]; then
+   if [[ -z "$i_am_project_user" && `grep "^${$project_user_name}:" /etc/passwd` ]]; then
       echo
       echo $div
       echo ${user_home%/*}/$project_user_name

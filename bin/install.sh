@@ -41,7 +41,7 @@ if [[ "$0" == "bash" ]]; then
    fi
 fi
 
-if [[ $0 =~ *prizms/bin/install.sh ]]; then
+if [[ $0 =~ "*prizms/bin/install.sh" ]]; then
 
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 user_home=$(cd && echo ${PWD})

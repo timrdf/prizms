@@ -200,8 +200,12 @@ else
          echo "  see $see"
       done
       if [[ -n "$new_value" ]]; then
-         if [[ -z "`grep $ENVVAR $target`" ]]; then
-            echo "export $ENVVAR=''" | sudo tee -a $target
+         if [[ -z "`grep $ENVVAR $target 2> /dev/null`" ]]; then
+            sudo=""
+            if [[ `stat --format=%U $target` == `whoami` ]]; then
+               sudo="sudo"
+            fi
+            echo "export $ENVVAR=''" | $sudo tee -a $target
          fi
          current=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target | awk '{print $1}'`
          if [ "$current" != "$new_value" ]; then
@@ -542,10 +546,6 @@ else
       echo $div
       echo ${user_home%/*}/$project_user_name
       read -p "Q: Create user $project_user_name? [y/n] " -u 1 install_project_user
-      # TODO:
-      # Create user lodcloud? [y/n] y
-      # INFO project-user.sh: lodcloud already exists; not trying to add or modify.
-
       if [[ "$install_project_user" == [yY] ]]; then
          $PRIZMS_HOME/bin/install/project-user.sh $project_user_name
       else
@@ -636,6 +636,8 @@ else
                      echo "We didn't do anything to create an SSH key."
                   fi
                   if [ -e $user_home/.ssh/id_dsa.pub ]; then
+                     echo
+                     echo $div
                      echo "Great! You have a shiny new SSH key."
                      if [ "$vcs" == "git" ]; then
                         echo "Go add the following to https://github.com/settings/ssh"

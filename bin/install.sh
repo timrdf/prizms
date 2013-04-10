@@ -4,6 +4,7 @@
 #3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/Installing-Prizms> .
 
 echo $PWD
+echo $0
 exit
 
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})

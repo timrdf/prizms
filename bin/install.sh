@@ -41,7 +41,7 @@ if [[ "$0" == "bash" ]]; then
    fi
 fi
 
-if [[ ${0%prizms/bin/install.sh} != $0 ]]; then
+if [[ ${0%install.sh} != $0 ]]; then # $0 is 'bash' etc when bootstrapping, it is the path of the script otherwise.
 
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 user_home=$(cd && echo ${PWD})

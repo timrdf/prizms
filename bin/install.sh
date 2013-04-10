@@ -88,9 +88,9 @@ else
       exit
    fi
 
-   echo $PRIZMS_HOME
-   echo $user_home
-   echo $me
+   #echo $PRIZMS_HOME
+   #echo $user_home
+   #echo $me
 
    # The parameters that we need to find out
 

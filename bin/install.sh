@@ -145,9 +145,11 @@ else
    #
    upstream_ckan=""
    if [[ "$1" == "--upstream-ckan" ]]; then
-      if [[ "$2" != --* ]]; then
+      if [[ "$2" != --* && "$2" != "none" ]]; then
          upstream_ckan="$2"
          shift
+      else
+         upstream_ckan="none"
       fi
       shift
    fi

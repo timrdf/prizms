@@ -539,7 +539,12 @@ else
    if [[ -z "$i_am_project_user" && ! -e ${user_home%/*}/$project_user_name ]]; then
       echo
       echo $div
-      read -p "Create user $project_user_name? [y/n] " -u 1 install_project_user
+      echo ${user_home%/*}/$project_user_name
+      read -p "Q: Create user $project_user_name? [y/n] " -u 1 install_project_user
+      # TODO:
+      # Create user lodcloud? [y/n] y
+      # INFO project-user.sh: lodcloud already exists; not trying to add or modify.
+
       if [[ "$install_project_user" == [yY] ]]; then
          $PRIZMS_HOME/bin/install/project-user.sh $project_user_name
       else
@@ -607,7 +612,7 @@ else
                if [[ ! -e $user_home/.ssh/id_dsa.pub && ! -e $user_home/.ssh/id_rsa.pub && -z "$i_am_project_user" ]]; then
                   echo
                   echo "You don't have a ~$person_user_name/.ssh/id_dsa.pub or ~$person_user_name/.ssh/id_rsa.pub,"
-                  echo "which could be creating using the following command:"
+                  echo "which could be created using the following command:"
                   echo
                   echo "    ssh-keygen -t dsa -C ${person_email:-'your-email-address'}"
                   echo
@@ -619,11 +624,12 @@ else
                   if [[ "$genkey" == [yY] ]]; then
                      if [ -z "$person_email" ]; then
                         read -p "Q: We need your email address to set up an SSH key. What is it? " person_email
-                     else
+                     fi
+                     if [ -n "$person_email" ]; then
                         echo ssh-keygen -t dsa -C $person_email
                              ssh-keygen -t dsa -C $person_email
-                     #else
-                     #   echo "WARNING `basename $0` needs an email address to set up an SSH key."
+                     else
+                        echo "WARNING `basename $0` needs an email address to set up an SSH key."
                      fi
                   else
                      echo "We didn't do anything to create an SSH key."

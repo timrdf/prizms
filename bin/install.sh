@@ -199,9 +199,9 @@ else
       for ref in $see; do
          echo "  see $see"
       done
+      sudo=""
       if [[ -n "$new_value" ]]; then
          if [[ -z "`grep $ENVVAR $target 2> /dev/null`" ]]; then
-            sudo=""
             if [[ $target =~ /etc.* || ( -e "$target" && `stat --format=%U $target` == `whoami` ) ]]; then
                sudo="sudo"
             fi
@@ -215,7 +215,7 @@ else
             read -p "Q: May we change $ENVVAR to '$new_value' in $target? [y/n] " -u 1 change_it
             echo
             if [[ "$change_it" == [yY] ]]; then
-               $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target --change-to $new_value
+               $sudo $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh $ENVVAR $target --change-to $new_value
                echo "Okay, we changed $target to:"
                grep "export $ENVVAR=" $target | tail -1
                if [[ ! $target =~ /etc.* ]]; then

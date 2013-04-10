@@ -39,11 +39,13 @@ if [[ "$0" == "bash" ]]; then
    fi
 fi
 
+if [[ $0 =~ *prizms/bin/install.sh ]]; then
+
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 user_home=$(cd && echo ${PWD})
 me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
-if [[ "$1" == "--help" || "$1" == "-h" || ! $0 =~ *prizms/bin/install.sh ]]; then
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo
    echo "usage: `basename $0` [--me <your-URI>] [--my-email <your-email>] [--proj-user <user>] [--repos <code-repo>] "
    echo "                  [--upstream-ckan <ckan>] [--our-base-uri <uri>] [--our-source-id <source-id>]"
@@ -2193,4 +2195,5 @@ if [[ "$install_it" == [yY] ]]; then
    echo "~~~~ ~~~~"
    echo "Dependency for LODSPeaKr:"
    sudo service apache2 restart
+fi
 fi

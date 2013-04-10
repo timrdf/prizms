@@ -3,9 +3,24 @@
 #3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install.sh>;
 #3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/Installing-Prizms> .
 
-echo $PWD
-echo $0
-exit
+if [[ "$0" == "bash" ]]; then
+   # Invoked with bootstrap install command:
+   # bash < <(curl -sL http://purl.org/twc/install/prizms | grep -v "^#..bin/bash$")
+   cd
+   read -p "Q: Bootstrap Prizms installation at `pwd`/opt/prizms? [y/n] " -u 1 install_it
+   echo
+   if [[ "$install_it" == [yY] ]]; then
+      if [[ `which git` ]]; then
+         mkdir -p opt; cd opt
+         git clone git://github.com/timrdf/prizms.git
+      else
+         echo "We need git to bootstrap Prizms' installation. Try installing it with sudo apt-get install git"
+      fi
+   else
+      echo "Okay, we won't do anything." 
+   fi
+   exit
+fi
 
 PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
 user_home=$(cd && echo ${PWD})

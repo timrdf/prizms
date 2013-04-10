@@ -27,6 +27,7 @@ if [[ "$0" == "bash" ]]; then
       if [[ `which git` ]]; then
          echo
          echo mkdir -p `pwd`/opt
+         echo
          mkdir -p `pwd`/opt
          cd opt
          echo git clone git://github.com/timrdf/prizms.git

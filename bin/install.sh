@@ -528,7 +528,7 @@ else
 
    fi
 
-   echo "  ~$project_user_name/prizms"
+   echo "  ~$project_user_name/prizms/$project_user_name"
    echo
    echo "    ^-- This is where the production data and automation is performed and published."
    echo "        The essential bits will be pulled read-only from $project_code_repository"

@@ -3,6 +3,8 @@
 #3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install.sh>;
 #3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/Installing-Prizms> .
 
+echo $0
+
 if [[ "$0" == "bash" ]]; then
    # Invoked with bootstrap install command:
    # bash < <(curl -sL http://purl.org/twc/install/prizms | grep -v "^#..bin/bash$")

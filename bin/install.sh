@@ -541,7 +541,7 @@ else
 
    #if [[ -z "$i_am_project_user" && `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == "no" ]]; then
    #if [[ -z "$i_am_project_user" && ! -e ${user_home%/*}/$project_user_name ]]; then
-   if [[ -z "$i_am_project_user" && `grep "^${project_user_name}:" /etc/passwd` ]]; then
+   if [[ -z "$i_am_project_user" && ! `grep "^${project_user_name}:" /etc/passwd` ]]; then
       echo
       echo $div
       echo ${user_home%/*}/$project_user_name

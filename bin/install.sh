@@ -1861,7 +1861,7 @@ else
                            echo "Okay, we won't install LODSPeaKr at $www/lodspeakr."
                         fi
                      fi
-                     if [[ ! -e $www/lodspeakr/settings.inc.php ]]; then
+                     if [[ -e $www/lodspeakr && ! -e $www/lodspeakr/settings.inc.php ]]; then
                         echo
                         echo "$www/lodspeakr was created, but not configured with settings.inc.php"
                         echo
@@ -2147,11 +2147,15 @@ else
                      echo "We're all done installing Prizms development environment for the user `whoami`."
                      echo "TODO: sudo service apache2 restart (since the project user set up an .htaccess?)"
                      echo "Now what?"
+                     echo "* Check out the data site $our_base_uri"
+                     echo "* Check out the SPARQL endpoint $our_base_uri/sparql..."
+                     echo "* Start committing DCAT and eparams into github repository ..."
                   fi
 
                   # TODO: Add descriptions of the github and ckan I to what the prizms offers as linked data. 
                   # Use that same kind of file as the parameter to the install. 
                   # Organize it into a versioned dataset (just like everything else).
+                  # TODO: change /var/www/robots.txt to permit agent to crawl it.
 
                popd &> /dev/null
             fi # if $target_dir e.g. /home/lebot/prizms/melagrid

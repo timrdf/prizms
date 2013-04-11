@@ -2056,7 +2056,6 @@ else
                            echo "We would like to update your crontab so that it is:"
                            echo
                            cat $tab
-                           echo
                            read -p "Q: Add to crontab? [y/n] " -u 1 install_it
                            if [[ $install_it == [yY] ]]; then
                               crontab $tab

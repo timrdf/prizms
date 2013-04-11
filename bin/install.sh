@@ -2166,8 +2166,8 @@ else
                      echo $div
                      echo "Now what?"
                      echo "* Check out the data site $our_base_uri/"
-                     echo "* Check out the SPARQL endpoint $our_base_uri/sparql..."
-                     echo "* Start committing DCAT and eparams into github repository $repos"
+                     echo "* Check out the SPARQL endpoint $our_base_uri/sparql"
+                     echo "* Start committing DCAT and eparams into github repository $project_code_repository"
                   fi
 
                   # TODO: Add descriptions of the github and ckan I to what the prizms offers as linked data. 

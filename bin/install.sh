@@ -2163,6 +2163,7 @@ else
                      echo "We're all done installing Prizms development environment for the user `whoami`."
                      echo "(Do we need to 'sudo service apache2 restart' since the project user set up an .htaccess?)"
                      echo
+                     echo $div
                      echo "Now what?"
                      echo "* Check out the data site $our_base_uri/"
                      echo "* Check out the SPARQL endpoint $our_base_uri/sparql..."

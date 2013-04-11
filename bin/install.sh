@@ -1638,6 +1638,23 @@ else
                      # TODO: is logging location set up correctly? Yes, but verify on next iteration...
 
                      rm -f .prizms-std.common
+
+
+
+
+
+                     # TODO: root@datafaqstest:/etc/apache2# vi sites-enabled/000-default
+                    ## https://scm.escience.rpi.edu/trac/ticket/1502#comment:5
+                    #ProxyTimeout 1800
+                    #ProxyRequests Off
+                    #ProxyPass /sadi-services http://localhost:8080/sadi-services
+                    #<Location /sadi-services>
+                    #        ProxyPassReverse /
+                    #        RequestHeader unset Accept-Encoding
+                    #        Order allow,deny
+                    #        allow from all
+                    #</Location>
+
                   fi # end "I am not project user"
 
 
@@ -2144,11 +2161,12 @@ else
                      echo "We're all done installing Prizms production environment for the user `whoami`."
                   else
                      echo "We're all done installing Prizms development environment for the user `whoami`."
-                     echo "TODO: sudo service apache2 restart (since the project user set up an .htaccess?)"
+                     echo "(Do we need to 'sudo service apache2 restart' since the project user set up an .htaccess?)"
+                     echo
                      echo "Now what?"
-                     echo "* Check out the data site $our_base_uri"
+                     echo "* Check out the data site $our_base_uri/"
                      echo "* Check out the SPARQL endpoint $our_base_uri/sparql..."
-                     echo "* Start committing DCAT and eparams into github repository ..."
+                     echo "* Start committing DCAT and eparams into github repository $repos"
                   fi
 
                   # TODO: Add descriptions of the github and ckan I to what the prizms offers as linked data. 

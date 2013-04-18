@@ -2002,6 +2002,7 @@ else
                      read -p "Q: May we permit automated agents by renaming the file with the command above? [y/n] " -u 1 rename_it
                      if [[ "$rename_it" == [yY] ]]; then
                         sudo mv $www/robots.txt $www/permit.robots.txt
+                        sudo touch $www/robots.txt
                         if [[ ! -e $www/robots.txt ]]; then
                            echo "($www/robots.txt renamed)"
                         else

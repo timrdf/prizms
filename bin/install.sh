@@ -1538,7 +1538,7 @@ else
                         #     ProxyHTMLURLMap         http://localhost:8890/sparql /sparql
                         #  </Location>
                         # 
-                        # This works on ieeevis VM, and replaced these ^^
+                        # This works on ieeevis VM, and replaced these ^^ (TODO: even newer one to work along side sadi-services https://scm.escience.rpi.edu/trac/ticket/1612#comment:2)
                         #
                         #  # https://scm.escience.rpi.edu/trac/ticket/1502#comment:5
                         #  ProxyTimeout 1800
@@ -1643,17 +1643,31 @@ else
 
 
 
-                     # TODO: root@datafaqstest:/etc/apache2# vi sites-enabled/000-default
-                    ## https://scm.escience.rpi.edu/trac/ticket/1502#comment:5
+
+                    # TODO
+                    # https://scm.escience.rpi.edu/trac/ticket/1502#comment:5 (sparql only)
+                    # https://scm.escience.rpi.edu/trac/ticket/1612#comment:2 (sparql AND sadi-services)
                     #ProxyTimeout 1800
                     #ProxyRequests Off
-                    #ProxyPass /sadi-services http://localhost:8080/sadi-services
-                    #<Location /sadi-services>
-                    #        ProxyPassReverse /
-                    #        RequestHeader unset Accept-Encoding
+                    #ProxyPass /sparql http://localhost:8890/sparql
+                    #ProxyPassReverse /sparql http://localhost:8890/sparql
+                    #<Location /sparql>
                     #        Order allow,deny
                     #        allow from all
+                    #        ProxyHTMLURLMap / /sparql/ c
+                    #        SetOutputFilter proxy-html
                     #</Location>
+                    #
+                    #ProxyPass /sadi-services http://localhost:8080/sadi-services
+                    #ProxyPassReverse /sadi-services http://localhost:8080/sadi-services
+                    #<Location /sadi-services>
+                    #        Order allow,deny
+                    #        allow from all
+                    #        ProxyHTMLURLMap / /sparql/ c
+                    #        ProxyHTMLURLMap http://localhost:8080/ /
+                    #        SetOutputFilter proxy-html
+                    #</Location>
+
 
                   fi # end "I am not project user"
 
@@ -1975,7 +1989,30 @@ else
                      fi
                   fi # not $i_am_project_user
 
-         
+        
+                  # robots.txt
+                  echo
+                  echo $div
+                  echo "Prizms nodes are more useful when automated agents are permitted to crawl and index the data on its site."
+                  echo "$our_base_uri/robots.txt needs to permit web agents to crawl the site, which can be done by renaming the file with:."
+                  echo
+                  echo "   mv $www/robots.txt $www/permit.robots.txt"
+                  echo
+                  if [[ -e $www/robots.txt && `grep 'Disallow: /' $www/robots.txt` ]]; then
+                     read -p "Q: May we permit automated agents by renaming the file with the command above? [y/n] " -u 1 rename_it
+                     if [[ "$rename_it" == [yY] ]]; then
+                        sudo mv $www/robots.txt $www/permit.robots.txt
+                        if [[ ! -e $www/robots.txt ]]; then
+                           echo "($www/robots.txt renamed)"
+                        else
+                           echo "(WARNING: could not rename $www/robots.txt)"
+                        fi
+                     else
+                        echo "We didn't change $www/robots.txt"
+                     fi 
+                  else
+                     echo "($www/robots.txt appears to permit automated agents)"
+                  fi
 
 
                   #

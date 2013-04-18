@@ -2021,12 +2021,12 @@ else
                   # Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml
                   echo
                   echo $div
-                  echo "Automated web agents can use the 'Sitemap:' attribute of $our_base_uri/robots.txt"
+                  echo "Automated web agents can use the 'Sitemap:' directive of $our_base_uri/robots.txt"
                   echo "to keep the data in Prizms in sync with their indexing. The robots.txt directive is:"
                   echo
                   echo "Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml"
                   echo
-                  if [[ -e $www/robots.txt && ! `grep "^Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml$"` ]]; then
+                  if [[ -e $www/robots.txt && ! `grep "^Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml$" $www/robots.txt` ]]; then
                      read -p "Q: Add the Sitemap directive to $www/robots.txt? [y/n] " -u 1 add_it
                      if [[ "$add_it" == [yY] ]]; then
                         echo "Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml" | sudo tee $www/robots.txt

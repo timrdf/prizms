@@ -2015,6 +2015,27 @@ else
                      echo "($www/robots.txt appears to permit automated agents)"
                   fi
 
+                  # TODO: 
+                  # $www/robots.txt
+                  # Sitemap: http://ieeevis.tw.rpi.edu/source/ieeevis-tw-rpi-edu/file/cr-sitemap/version/latest/conversion/sitemap.xml
+                  # Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml
+                  echo
+                  echo $div
+                  echo "Automated web agents can use the 'Sitemap:' attribute of $our_base_uri/robots.txt"
+                  echo "to keep the data in Prizms in sync with their indexing. The robots.txt directive is:"
+                  echo
+                  echo "Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml"
+                  echo
+                  if [[ -e $www/robots.txt && ! `grep "^Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml$"` ]]; then
+                     read -p "Q: Add the Sitemap directive to $www/robots.txt? [y/n] " -u 1 add_it
+                     if [[ "$add_it" == [yY] ]]; then
+                        echo "Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml" | sudo tee $www/robots.txt
+                     else
+                        echo "We didn't change $www/robots.txt"
+                     fi
+                  else
+                     echo "($www/robots.txt seems to contain the right Sitemap directive.)"
+                  fi
 
                   #
                   # Sprinkle "access.ttl" files within the csv2rdf4lod conversion root, as mirrors of the upstream CKAN.
@@ -2127,7 +2148,7 @@ else
                   fi # end "I am not project user"
 
 
-
+                  # TODO: add warning if more than one "cr-cron.sh" in crontab
 
                   #
                   # Add all new files to version control.
@@ -2211,7 +2232,6 @@ else
                   # TODO: Add descriptions of the github and ckan I to what the prizms offers as linked data. 
                   # Use that same kind of file as the parameter to the install. 
                   # Organize it into a versioned dataset (just like everything else).
-                  # TODO: change /var/www/robots.txt to permit agent to crawl it.
 
                popd &> /dev/null
             fi # if $target_dir e.g. /home/lebot/prizms/melagrid

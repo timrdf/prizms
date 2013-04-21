@@ -662,7 +662,6 @@ else
                # When the project user:
                # Your configuration specifies to merge with the ref 'master'
                # from the remote, but no such ref was fetched.
-
                echo
                touch .before_clone
                $vcs $clone $project_code_repository
@@ -684,6 +683,16 @@ else
             fi
             if [ -e $target_dir ]; then
                pushd $target_dir &> /dev/null
+
+                  echo "$me --me             $person_uri              \\" >  .refresh-prizms-installation
+                  #echo "    --my-email       $person_email            \\" >> .refresh-prizms-installation
+                  echo "    --proj-user      $project_user_name       \\" >> .refresh-prizms-installation
+                  echo "    --repos          $project_code_repository \\" >> .refresh-prizms-installation
+                  echo "    --upstream-ckan  $upstream_ckan           \\" >> .refresh-prizms-installation
+                  echo "    --our-base-uri   $our_base_uri            \\" >> .refresh-prizms-installation
+                  echo "    --our-source-id  $our_source_id           \\" >> .refresh-prizms-installation
+                  echo "    --our-datahub-id $our_datahub_id"             >> .refresh-prizms-installation
+
                   echo
                   echo "$project_code_repository is already ${clone}'d into $target_dir; ${pull}'ing it..."
                   $vcs $pull

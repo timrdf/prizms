@@ -684,16 +684,19 @@ else
             if [ -e $target_dir ]; then
                pushd $target_dir &> /dev/null
 
-                  echo "#!/bin/bash"                                       > .refresh-prizms-installation
-                  echo "$me \\"                                           >> .refresh-prizms-installation
-                  echo "    --me             $person_uri              \\" >> .refresh-prizms-installation
+                  echo "#!/bin/bash"                                           > .refresh-prizms-installation
+                  echo "if [[ \"\$1\" == "pull" ]]; then"                     >> .refresh-prizms-installation
+                  echo "   pushd /home/lebot/opt/prizms; git pull; popd"      >> .refresh-prizms-installation
+                  echo "fi"                                                   >> .refresh-prizms-installation
+                  echo "$me \\"                                               >> .refresh-prizms-installation
+                  echo "    --me             $person_uri              \\"     >> .refresh-prizms-installation
                   #echo "    --my-email       $person_email            \\" >> .refresh-prizms-installation
-                  echo "    --proj-user      $project_user_name       \\" >> .refresh-prizms-installation
-                  echo "    --repos          $project_code_repository \\" >> .refresh-prizms-installation
-                  echo "    --upstream-ckan  $upstream_ckan           \\" >> .refresh-prizms-installation
-                  echo "    --our-base-uri   $our_base_uri            \\" >> .refresh-prizms-installation
-                  echo "    --our-source-id  $our_source_id           \\" >> .refresh-prizms-installation
-                  echo "    --our-datahub-id $our_datahub_id"             >> .refresh-prizms-installation
+                  echo "    --proj-user      $project_user_name       \\"     >> .refresh-prizms-installation
+                  echo "    --repos          $project_code_repository \\"     >> .refresh-prizms-installation
+                  echo "    --upstream-ckan  $upstream_ckan           \\"     >> .refresh-prizms-installation
+                  echo "    --our-base-uri   $our_base_uri            \\"     >> .refresh-prizms-installation
+                  echo "    --our-source-id  $our_source_id           \\"     >> .refresh-prizms-installation
+                  echo "    --our-datahub-id $our_datahub_id"                 >> .refresh-prizms-installation
                   chmod +x .refresh-prizms-installation
 
                   echo

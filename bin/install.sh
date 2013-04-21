@@ -684,7 +684,8 @@ else
             if [ -e $target_dir ]; then
                pushd $target_dir &> /dev/null
 
-                  echo "$me --me             $person_uri              \\" >  .refresh-prizms-installation
+                  echo "$me \\"                                            > .refresh-prizms-installation
+                  echo "    --me             $person_uri              \\" >> .refresh-prizms-installation
                   #echo "    --my-email       $person_email            \\" >> .refresh-prizms-installation
                   echo "    --proj-user      $project_user_name       \\" >> .refresh-prizms-installation
                   echo "    --repos          $project_code_repository \\" >> .refresh-prizms-installation

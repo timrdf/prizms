@@ -21,7 +21,7 @@ if [[ ${0%install.sh} == $0 ]]; then # $0 is 'bash' etc when bootstrapping, it i
             read -p "Q: Try to install git with the command above? [y/n] " -u 1 install_it
             echo
             if [[ "$install_it" == [yY] ]]; then
-               sudo apt-get install git-core < "y"
+               sudo apt-get install git-core < <(echo 'y')
             fi
          fi
          if [[ `which git` ]]; then

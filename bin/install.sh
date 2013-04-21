@@ -1114,23 +1114,31 @@ else
                            'unable to invoke some scripts'
 
                         if [[ ! -e $user_home/.vim/syntax/n3.vim ]]; then
-                           echo "TODO: we can add syntax highlighting to vi."
-                           # TODO: mkdir -p ~/.vim/syntax; curl -L 'http://www.vim.org/scripts/download_script.php?src_id=6882' > ~/.vim/syntax/n3.vim
-         
-                           # add to ~/.vim/filetype.vim :
+                           echo "The n3.vim configuration can enable syntax highlighting for the Turtle syntax. TODO: we can add syntax highlighting to vi."
+                           echo "see http://www.vim.org/scripts/script.php?script_id=944 for details to see how to modify:"
+                           echo
+                           echo "  $user_home/.vim/syntax/n3.vim and"
+                           echo "  $user_home/.vim/filetype.vim"
+                           echo
+                           read -p "Q: Enable syntax highlighting in vi with n3.vim? [y/n] " -u 1 install_it
+                           if [[ "$install_it" == [yY] ]]; then
+                              mkdir -p $user_home/.vim/syntax
+                              curl -L 'http://www.vim.org/scripts/download_script.php?src_id=6882' > $user_home/.vim/syntax/n3.vim
 
-                           #" RDF Notation 3 Syntax
-                           #    augroup filetypedetect
-                           #        au BufNewFile,BufRead *.n3  setfiletype n3
-                           #        au BufNewFile,BufRead *.ttl  setfiletype n3
-                           #        au BufNewFile,BufRead *.trig  setfiletype n3
-                           #    augroup END 
+                              echo " RDF Notation 3 Syntax"                                        > $user_home/.vim/filetype.vim
+                              echo "    augroup filetypedetect"                                   >> $user_home/.vim/filetype.vim
+                              echo "        au BufNewFile,BufRead *.n3  setfiletype n3"           >> $user_home/.vim/filetype.vim
+                              echo "        au BufNewFile,BufRead *.ttl  setfiletype n3"          >> $user_home/.vim/filetype.vim
+                              echo "        au BufNewFile,BufRead *.trig  setfiletype n3"         >> $user_home/.vim/filetype.vim
+                              echo "    augroup END "                                             >> $user_home/.vim/filetype.vim
+                           else
+                              echo "Okay, we didn't change anything."
+                           fi
                         fi
-
                      done # PATH, CLASSPATH, and JENAROOT for person and project users.
 
 
-                     # NOTE sudo vi /etc/passwd change melagrid to bash
+                     # NOTE sudo vi /etc/passwd change <project-user>'s shell from /bin/sh to /bin/bash
 
 
                      # CSV2RDF4LOD_PUBLISH_VIRTUOSO and CSV2RDF4LOD_PUBLISH_SUBSET_SAMPLES are set below, after we know that Virtuoso is installed.
@@ -1261,7 +1269,6 @@ else
                      $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh -n                       | grep "^.okay"
                      # TODO: set up the user-based install that does NOT require sudo. python's easy_install
                    
-                     # TODO: vsr2grf.sh requires 1.7 => 'sudo apt-get install openjdk-7-jre' 
                      todo=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n | grep "^.TODO" | grep -v "pydistutils.cfg"`
                      todo=$todo`$PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh -n                  | grep "^.TODO" | grep -v "pydistutils.cfg"`
                      if [ -n "$todo" ]; then
@@ -1489,7 +1496,7 @@ else
                                  echo "We didn't $change $your $target, so you'll need to make sure you set the paths correctly each time."
                               fi
                            fi
-                           # TODO: this needed as stopgap: export PATH=$PATH:$JENAROOT/bin
+                           # was(?) needed as stopgap: export PATH=$PATH:$JENAROOT/bin
 
                         done
 
@@ -1569,7 +1576,7 @@ else
 
                         echo
                         echo $div
-                        target='/etc/apache2/sites-available/std.common' # TODO: replace this with /etc/apache2/sites-available/default
+                        target='/etc/apache2/sites-enabled/000-default' # TODO: replace this with /etc/apache2/sites-available/default
                         already_there=""
                         if [ -e $target ]; then
                            already_there=`grep 'Location /sparql' $target`
@@ -1654,11 +1661,6 @@ else
                      # TODO: is logging location set up correctly? Yes, but verify on next iteration...
 
                      rm -f .prizms-std.common
-
-
-
-
-
 
                     # TODO
                     # https://scm.escience.rpi.edu/trac/ticket/1502#comment:5 (sparql only)
@@ -1876,7 +1878,7 @@ else
 
                   if [[ -z "$i_am_project_user" ]]; then
                      #
-                     # LODSPeaKr
+                     # LODSPeaKr: https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu
                      #
                      echo
                      echo $div
@@ -1928,23 +1930,25 @@ else
                         enable_apache_module 'rewrite' 'run LODSPeaKr'
                         enable_apache_module 'php5'    'run LODSPeaKr'
 
-                        # TODO:
-                        # AllowOverride must be 'All':
+                        # TODO: AllowOverride must be 'All':
                         # cat /etc/apache2/sites-enabled/000-default | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1
 
                         # /var/www$ sudo chmod -R g+w lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php; sudo chgrp -R www-data lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php
                      fi
+
 
                      # TODO: the following need to be updated if --our-base-uri becomes e.g. http://ieeevis.tw.rpi.edu
                      # $conf['endpoint']['local'] = 'http://aquarius.tw.rpi.edu/projects/ieeevis/sparql';
                      # $conf['basedir'] = 'http://aquarius.tw.rpi.edu/projects/ieeevis/';
                      # $conf['ns']['local']   = 'http://aquarius.tw.rpi.edu/projects/ieeevis/';
 
+
                      # TODO: if /var/www/lodspeakr/settings.inc.php exists and is not a soft link to /home/ieeevis/prizms/ieeevis/lodspeakr
                      # move the file and make the soft link.
 
 
                      # TODO: if /home/ieeevis/prizms/ieeevis/lodspeakr/components/static/img/logo.png does not exist, say to add it.
+
 
                      # TODO add to settings.inc.php to cherry pick others' lodspeakr components
                      # see https://github.com/timrdf/prizms/issues/12
@@ -2008,9 +2012,35 @@ else
                      else
                         echo "(LODSPeaKr is already under version control)" 
                      fi
+
+                     # TODO: change $lodspk['title'] = 'LODSPeaKr'; in settings.inc.php
+
+
+
+                     # TODO: multiple users development site: https://github.com/timrdf/prizms/issues/16
+                     # http://httpd.apache.org/docs/2.2/mod/mod_userdir.html
+                     # http://lofd.tw.rpi.edu/~lebot/index.html
+                     #      git pull lofd
+                     #cd public_html
+                     #bash << lodspk
+                     #*CONFIGURE*
+                     #rm -r components
+                     #ln -s ../lofd/lodspeakr/components
+                     # Alvaro: I could add a new command in the automation part to indicate where your already existing components will be
+
+
+
+
+                     # TODO: link in existing projects' lodspeakrs https://github.com/timrdf/prizms/issues/12
+                     # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
+                     #
+                     # lofd@lofd:~/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components$ find . -mindepth 2 -maxdepth 2
+                     # =>
+                     # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
+                     # $conf['components']['services'][] = '/home/alvaro/previousproject2/lodspeakr/components/services/myService';
+
                   fi # not $i_am_project_user
 
-        
                   # robots.txt
                   echo
                   echo $div
@@ -2036,7 +2066,6 @@ else
                      echo "($www/robots.txt appears to permit automated agents)"
                   fi
 
-                  # TODO: 
                   # $www/robots.txt
                   # Sitemap: http://ieeevis.tw.rpi.edu/source/ieeevis-tw-rpi-edu/file/cr-sitemap/version/latest/conversion/sitemap.xml
                   # Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml

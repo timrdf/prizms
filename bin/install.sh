@@ -684,7 +684,8 @@ else
             if [ -e $target_dir ]; then
                pushd $target_dir &> /dev/null
 
-                  echo "$me \\"                                            > .refresh-prizms-installation
+                  echo "#!/bin/bash"                                       > .refresh-prizms-installation
+                  echo "$me \\"                                           >> .refresh-prizms-installation
                   echo "    --me             $person_uri              \\" >> .refresh-prizms-installation
                   #echo "    --my-email       $person_email            \\" >> .refresh-prizms-installation
                   echo "    --proj-user      $project_user_name       \\" >> .refresh-prizms-installation
@@ -693,6 +694,7 @@ else
                   echo "    --our-base-uri   $our_base_uri            \\" >> .refresh-prizms-installation
                   echo "    --our-source-id  $our_source_id           \\" >> .refresh-prizms-installation
                   echo "    --our-datahub-id $our_datahub_id"             >> .refresh-prizms-installation
+                  chmod +x .refresh-prizms-installation
 
                   echo
                   echo "$project_code_repository is already ${clone}'d into $target_dir; ${pull}'ing it..."

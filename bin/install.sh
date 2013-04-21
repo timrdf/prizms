@@ -740,7 +740,8 @@ else
                      echo
                      read -p "Q: May we add $target? [y/n] " -u 1 make_it
                      if [[ "$make_it" == [yY] ]]; then
-                        echo "*" > $target
+                        echo "*"                             > $target
+                        echo ".refresh-prizms-installation" >> $target
                         added="$added data/source/.gitignore"
                      fi
                   fi

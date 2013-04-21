@@ -1998,7 +1998,7 @@ else
                   echo
                   echo $div
                   echo "Prizms nodes are more useful when automated agents are permitted to crawl and index the data on its site."
-                  echo "$our_base_uri/robots.txt needs to permit web agents to crawl the site, which can be done by renaming the file with:."
+                  echo "$our_base_uri/robots.txt needs to permit web agents to crawl the site, which can be done by renaming the file with:"
                   echo
                   echo "   mv $www/robots.txt $www/permit.robots.txt"
                   echo
@@ -2030,7 +2030,8 @@ else
                   echo
                   echo "Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml"
                   echo
-                  if [[ -e $www/robots.txt && ! `grep "^Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml$" $www/robots.txt` ]]; then
+                  if [[ ! -e $www/robots.txt || \
+                          -e $www/robots.txt && ! `grep "^Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml$" $www/robots.txt` ]]; then
                      read -p "Q: Add the Sitemap directive to $www/robots.txt? [y/n] " -u 1 add_it
                      if [[ "$add_it" == [yY] ]]; then
                         echo "Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml" | sudo tee $www/robots.txt

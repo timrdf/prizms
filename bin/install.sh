@@ -2198,7 +2198,7 @@ else
                      # ^ We are currently doing this \/ (avoid the infinite loop)
                      echo
                      echo $div
-                     echo "We've finished setting up your development envrionment."
+                     echo "We've finished setting up your development environment."
                      echo "The next step is to set up the $project_user_name's production environment,"
                      echo "which we can do by running this script again as user $project_user_name"
                      echo

@@ -1878,14 +1878,15 @@ else
                      if [[ ! -e $www/lodspeakr ]]; then
                         echo "$www/lodspeakr is not set up yet. It can be installed with the command:"
                         echo
-                        echo "   sudo bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql chown=$project_user_name < <(curl -sL http://lodspeakr.org/install)"
+                        echo " sudo bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql chown=$project_user_name < <(curl -sL http://lodspeakr.org/install)"
                         echo
                         read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
                         if [[ "$install_it" == [yY] ]]; then
                            pushd $www &> /dev/null
                               # bash -s http://server/baseurl http://example.org/namespace/ http://server/sparql  < <(curl -sL http://lodspeakr.org/install)
                               # see https://github.com/alangrafu/lodspeakr/wiki/Installation#wiki-automatic
-                              sudo bash < <(curl -sL http://lodspeakr.org/install)
+                              #sudo bash < <(curl -sL http://lodspeakr.org/install)
+                              sudo bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql chown=$project_user_name < <(curl -sL http://lodspeakr.org/install)
                               # Question 1: http://lod.melagrid.org
                               # Question 2: <accept default>
                               # Question 3: http://lod.melagrid.org/sparql

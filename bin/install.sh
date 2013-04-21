@@ -1878,7 +1878,7 @@ else
                      if [[ ! -e $www/lodspeakr ]]; then
                         echo "$www/lodspeakr is not set up yet. It can be installed with the command:"
                         echo
-                        echo "   sudo bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql < <(curl -sL http://lodspeakr.org/install)"
+                        echo "   sudo bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql chown=$project_user_name < <(curl -sL http://lodspeakr.org/install)"
                         echo
                         read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
                         if [[ "$install_it" == [yY] ]]; then

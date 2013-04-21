@@ -34,7 +34,7 @@ if [[ ${0%install.sh} == $0 ]]; then # $0 is 'bash' etc when bootstrapping, it i
             git clone git://github.com/timrdf/prizms.git
             echo
             echo "Prizms bootstrap is installed. Run:"
-            echo "  opt/prizms/bin/install.sh"
+            echo "  opt/prizms/bin/install.sh --help"
          fi
       else
          echo "Okay, we won't do anything." 
@@ -1876,7 +1876,9 @@ else
                      echo "the version-controlled repository ($project_code_repository)." 
                      echo
                      if [[ ! -e $www/lodspeakr ]]; then
-                        echo "$www/lodspeakr is not set up yet."
+                        echo "$www/lodspeakr is not set up yet. It can be installed with the command:"
+                        echo
+                        echo "   sudo bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql < <(curl -sL http://lodspeakr.org/install)"
                         echo
                         read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
                         if [[ "$install_it" == [yY] ]]; then

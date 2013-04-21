@@ -1835,8 +1835,7 @@ else
                         echo "SetHandler mod_python"                                        >> .prizms-sadi-htaccess
                         echo "PythonHandler sadi"                                           >> .prizms-sadi-htaccess
                         # SetEnv X_CKAN_API_Key     # This needs 'sudo a2enmod env' to take affect. # see http://httpd.apache.org/docs/2.2/mod/mod_env.html
-                        echo "SetEnv DATAFAQS_BASE_URI http://aquarius.tw.rpi.edu/projects" >> .prizms-sadi-htaccess
-                        # TODO: hard coded URI here; naughty
+                        echo "SetEnv DATAFAQS_BASE_URI http://aquarius.tw.rpi.edu/projects" >> .prizms-sadi-htaccess # TODO: hard coded URI here; naughty
                         cat .prizms-sadi-htaccess
                         echo
                         read -p "Q: May we install the directives above into $target? [y/n] " -u 1 install_it
@@ -1924,7 +1923,7 @@ else
                      fi
                      if [[ -e $www/lodspeakr/settings.inc.php ]]; then
                         enable_apache_module 'rewrite' 'run LODSPeaKr'
-                        # enable_apache_module 'php5' 'run LODSPeaKr'
+                        enable_apache_module 'php5'    'run LODSPeaKr'
 
                         # AllowOverride must be 'All':
                         # cat /etc/apache2/sites-enabled/000-default | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1
@@ -2198,6 +2197,17 @@ else
                      # ^ We are currently doing this \/ (avoid the infinite loop)
                      echo
                      echo $div
+                     echo "Since we've made some changes to apache, we need to restart it so they take effect."
+                     echo
+                     echo sudo service apache2 restart
+                     echo
+                     read -p "Q: May we restart apache using the command above? [y/n] " -u 1 restart_it
+                     if [[ "$restart_it" == [yY] ]]; then
+                        sudo service apache2 restart
+                     fi
+
+                     echo
+                     echo $div
                      echo "We've finished setting up your development environment."
                      echo "The next step is to set up the $project_user_name's production environment,"
                      echo "which we can do by running this script again as user $project_user_name"
@@ -2239,7 +2249,6 @@ else
                      echo "We're all done installing Prizms production environment for the user `whoami`."
                   else
                      echo "We're all done installing Prizms development environment for the user `whoami`."
-                     echo "(Do we need to 'sudo service apache2 restart' since the project user set up an .htaccess?)"
                      echo
                      echo $div
                      echo "Now what?"

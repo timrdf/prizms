@@ -1870,7 +1870,7 @@ else
 
 
 
-                  # TODO: add source ../csv2rdf4lod-source-me-for-melagrid.sh to as-lebot.sh
+                  # TODO: add source ../csv2rdf4lod-source-me-for-<project>.sh to as-<developer>.sh
 
                   if [[ -z "$i_am_project_user" ]]; then
                      #
@@ -1946,8 +1946,6 @@ else
                      # TODO add to settings.inc.php to cherry pick others' lodspeakr components
                      # see https://github.com/timrdf/prizms/issues/12
 
-                     # TODO: stop /home/lebot/prizms/ieeevis/lodspeakr/components/* from being owned by root.
-
                      echo
                      echo $div
                      echo "Prizms does not need the index.html in the htdocs directory, since it uses lodspeakr"
@@ -1976,12 +1974,15 @@ else
                            echo "We need to put lodspeakr into version control, which can be done with the following commands."
                            echo
                            echo "   sudo mv $www/lodspeakr/components `pwd`/lodspeakr/"
+                           echo "   sudo chown -R `stat --format=%U:%G ~/` `pwd`/lodspeakr/components"
                            echo "   sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components"
                            echo
                            read -p "Q: May we move $www/lodspeakr/components to `pwd`/lodspeakr/components using the commands above? [y/n] " -u 1 move_it
                            if [[ "$move_it" == [yY] ]]; then
+                              
                               sudo mv $www/lodspeakr/components `pwd`/lodspeakr/
                               added="$added lodspeakr/components"
+                              sudo chown -R `stat --format=%U:%G ~/` `pwd`/lodspeakr/components
                               sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components
                            else
                               echo "Okay, we won't include lodspeakr/components into version control."

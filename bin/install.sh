@@ -239,7 +239,7 @@ else
       for package in $packages; do
          echo "The package $package is required to"
          echo "$reason."
-         already_there=`dpkg -l | grep $package` # See what is available: apt-cache search libapache2-mod
+         already_there=`dpkg -l | grep " $package "` # See what is available: apt-cache search libapache2-mod
          if [[ -z "$already_there" ]]; then
             echo "The $package package needs to be installed, which can be done with the following command:"
             echo
@@ -1882,7 +1882,7 @@ else
                      echo $div
                      echo "Prizms uses LODSPeaKr to serve its RDF as Linked Data, and to serve the corresponding human-web pages."
                      echo
-                     offer_install_aptget "curl apache2 php5-cli php5 php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
+                     offer_install_aptget "curl apache2 php5 php5-cli php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
                      www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
                      echo
                      echo $div
@@ -1928,6 +1928,7 @@ else
                         enable_apache_module 'rewrite' 'run LODSPeaKr'
                         enable_apache_module 'php5'    'run LODSPeaKr'
 
+                        # TODO:
                         # AllowOverride must be 'All':
                         # cat /etc/apache2/sites-enabled/000-default | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1
 

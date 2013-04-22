@@ -1121,13 +1121,15 @@ else
                            'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-not-set' \
                            'unable to invoke some scripts'
 
+                        echo
+                        echo $div
+                        echo "The n3.vim configuration can enable syntax highlighting for the Turtle syntax. TODO: we can add syntax highlighting to vi."
+                        echo "see http://www.vim.org/scripts/script.php?script_id=944 for details to see how to modify:"
+                        echo
+                        echo "  $user_home/.vim/syntax/n3.vim and"
+                        echo "  $user_home/.vim/filetype.vim"
+                        echo
                         if [[ ! -e $user_home/.vim/syntax/n3.vim ]]; then
-                           echo "The n3.vim configuration can enable syntax highlighting for the Turtle syntax. TODO: we can add syntax highlighting to vi."
-                           echo "see http://www.vim.org/scripts/script.php?script_id=944 for details to see how to modify:"
-                           echo
-                           echo "  $user_home/.vim/syntax/n3.vim and"
-                           echo "  $user_home/.vim/filetype.vim"
-                           echo
                            read -p "Q: Enable syntax highlighting in vi with n3.vim? [y/n] " -u 1 install_it
                            if [[ "$install_it" == [yY] ]]; then
                               mkdir -p $user_home/.vim/syntax
@@ -1142,6 +1144,8 @@ else
                            else
                               echo "Okay, we didn't change anything."
                            fi
+                        else
+                           echo "(vi Turtle syntax highlighting seems to be already installed)"
                         fi
                      done # PATH, CLASSPATH, and JENAROOT for person and project users.
 

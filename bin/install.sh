@@ -2297,16 +2297,16 @@ else
 
                   if [[ -z $i_am_project_user ]]; then
                      # ^ We are currently doing this \/ (avoid the infinite loop)
-                     echo
-                     echo $div
-                     echo "Since we've made some changes to apache, we need to restart it so they take effect."
-                     echo
-                     echo sudo service apache2 restart
-                     echo
-                     read -p "Q: May we restart apache using the command above? [y/n] " -u 1 restart_it
-                     if [[ "$restart_it" == [yY] ]]; then
-                        sudo service apache2 restart
-                     fi
+                     #echo
+                     #echo $div
+                     #echo "Since we've made some changes to apache, we need to restart it so they take effect."
+                     #echo
+                     #echo sudo service apache2 restart
+                     #echo
+                     #read -p "Q: May we restart apache using the command above? [y/n] " -u 1 restart_it
+                     #if [[ "$restart_it" == [yY] ]]; then
+                     #   sudo service apache2 restart
+                     #fi
 
                      echo
                      echo $div

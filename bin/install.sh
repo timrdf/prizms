@@ -2032,13 +2032,13 @@ else
                      # TODO: multiple users development site: https://github.com/timrdf/prizms/issues/16
                      echo
                      echo $div
-                     echo "Prizms permits development of its LODSPeaKr within developers' namespaces (e.g. $our_base_uri/~$person_user_name)"
-                     echo "This allows developers to prototype data views before committing it to the production site (e.g. $our_base_uri)"
+                     echo "Prizms permits development of its LODSPeaKr within developers' namespaces (e.g. $our_base_uri/~$person_user_name)."
+                     echo "This allows developers to prototype data views before committing them to the production site (e.g. $our_base_uri)."
                      echo "Once finished, developers commit their code to $project_code_repository and the $project_user_name user pulls it to deploy at $our_base_uri."
                      echo
                      enable_apache_module 'userdir' "run development clones of the $project_user_name Prizm's LODSPeaKr"  
                      echo
-                     echo "The Prizms LODSPeaKr development clone should exist within $user_home/public_html"
+                     echo "Your Prizms LODSPeaKr development clone should exist within $user_home/public_html"
                      echo
                      if [[ ! -e $user_home/public_html ]]; then
                         read -p "Q: Make directory $user_home/public_html ? [y/n] " -u 1 make_it
@@ -2052,9 +2052,10 @@ else
                         # mkdir  ~/public_html; echo "hi" > ~/public_html/hi.txt
                         # http://lofd.tw.rpi.edu/~lebot/hi.txt
                         pushd $user_home/public_html &> /dev/null
-                           comps=$user_home/prizms/$project_user_name/lodspeakr
-                           echo sudo bash -s components=$comps -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql < <(curl -sL http://lodspeakr.org/install)
-                           # bash -s components=/location/of/existing/components base-url=http://lofd.tw.rpi.edu/~lebot/ base-namespace=WHATEVS sparql-endpoint=http://lofd.tw.rpi.edu/sparql <  <(curl -sL http://lodspeakr.org/install)
+                           comps=$user_home/prizms/$project_user_name/lodspeakr/components
+                           base=$our_base_uri/~$person_user_name
+                           echo sudo bash -s components=$comps -s base-url=$base -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql < <(curl -sL http://lodspeakr.org/install)
+                           # bash -s components=/location/./components base-url=http://lofd.tw.rpi.edu/~lebot/ base-namespace=.. sparql-endpoint=http://../sparql <  <(curl -sL htt...akr.org/install)
                         popd &> /dev/null
                      fi
 

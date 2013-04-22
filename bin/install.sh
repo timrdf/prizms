@@ -2059,7 +2059,7 @@ else
                            echo
                            read -p "Q: Install your Prizms LODSPeaKr development clone with the command above? [y/n] " -u 1 install_it
                            if [[ "$install_it" == [yY] ]]; then
-                              echo sudo bash -s components=$comps -s base-url=$base -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql < <(curl -sL http://lodspeakr.org/install)
+                              sudo bash -s components=$comps -s base-url=$base -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql < <(curl -sL http://lodspeakr.org/install)
                            else
                               echo "Okay, we didn't install it."
                            fi 

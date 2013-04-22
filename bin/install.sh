@@ -2085,12 +2085,14 @@ else
                            comps=$user_home/prizms/$project_user_name/lodspeakr/components
                            base=$our_base_uri/~$person_user_name/
                            perms="-s chown=www-data chmod=774"
-                           echo sudo bash -s components=$comps -s base-url=$base -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql $perms < <(curl -sL http://lodspeakr.org/install)
+                           perms=""
+                           echo bash -s components=$comps -s base-url=$base -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql $perms < <(curl -sL http://lodspeakr.org/install)
                            # bash -s components=/location/./components base-url=http://lofd.tw.rpi.edu/~lebot/ base-namespace=.. sparql-endpoint=http://../sparql <  <(curl -sL htt...akr.org/install)
                            echo
                            read -p "Q: Install your Prizms LODSPeaKr development clone with the command above? [y/n] " -u 1 install_it
                            if [[ "$install_it" == [yY] ]]; then
-                              sudo bash -s components=$comps -s base-url=$base -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql $perms < <(curl -sL http://lodspeakr.org/install)
+                              bash -s components=$comps -s base-url=$base -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql $perms < <(curl -sL http://lodspeakr.org/install)
+                              #sudo chown -R `stat --format=%U:%G ~/` $user_home/public_html/lodspeakr
                            else
                               echo "Okay, we didn't install it."
                            fi 

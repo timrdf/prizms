@@ -2046,7 +2046,7 @@ else
                         #   echo "Okay, we won't include lodspeakr/components into version control."
                         #fi 
                      fi
-                     if [[ `grep ".*#.*<IfModule *mod_userdir.c" /etc/apache2/mods-enabled/php5.conf` ]]; then
+                     if [[ ! `grep ".*#.*<IfModule *mod_userdir.c" /etc/apache2/mods-enabled/php5.conf` ]]; then
                         echo
                         echo "The following directive in /etc/apache2/mods-enabled/php5.conf needs to be **commented out** to enable user-level php."
                         echo

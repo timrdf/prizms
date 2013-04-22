@@ -2086,6 +2086,7 @@ else
                            base=$our_base_uri/~$person_user_name/
                            perms="-s chown=www-data chmod=774"
                            perms=""
+                           echo
                            echo bash -s components=$comps -s base-url=$base -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql $perms < <(curl -sL http://lodspeakr.org/install)
                            # bash -s components=/location/./components base-url=http://lofd.tw.rpi.edu/~lebot/ base-namespace=.. sparql-endpoint=http://../sparql <  <(curl -sL htt...akr.org/install)
                            echo

@@ -1123,7 +1123,7 @@ else
 
                         echo
                         echo $div
-                        echo "The n3.vim configuration can enable syntax highlighting for the Turtle syntax. TODO: we can add syntax highlighting to vi."
+                        echo "The n3.vim configuration can enable syntax highlighting for the Turtle syntax."
                         echo "see http://www.vim.org/scripts/script.php?script_id=944 for details to see how to modify:"
                         echo
                         echo "  $user_home/.vim/syntax/n3.vim and"

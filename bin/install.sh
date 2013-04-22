@@ -2053,7 +2053,7 @@ else
                         # http://lofd.tw.rpi.edu/~lebot/hi.txt
                         pushd $user_home/public_html &> /dev/null
                            comps=$user_home/prizms/$project_user_name/lodspeakr/components
-                           base=$our_base_uri/~$person_user_name
+                           base=$our_base_uri/~$person_user_name/
                            echo sudo bash -s components=$comps -s base-url=$base -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql < <(curl -sL http://lodspeakr.org/install)
                            # bash -s components=/location/./components base-url=http://lofd.tw.rpi.edu/~lebot/ base-namespace=.. sparql-endpoint=http://../sparql <  <(curl -sL htt...akr.org/install)
                            read -p "Q: Install your Prizms LODSPeaKr development clone? [y/n] " -u 1 install_it

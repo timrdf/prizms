@@ -1709,35 +1709,10 @@ else
                   #
                   echo
                   echo $div
-                  offer_install_aptget \
-                     'libapache2-mod-python' \
-                     "expose DataFAQs services through Apache at $our_base_uri/services/sadi"
-                  if [[ $? != 0 ]]; then
-                     enable_apache_module 'python' 'run DataFAQs SADI services'
-                     #echo "Since we've installed a new Apache module, we need to enable it."
-                     #echo
-                     #echo sudo a2enmod python
-                     #echo
-                     #read -p "Q: May we enable mod_python using the command above? [y/n] " -u 1 enable_it
-                     #if [[ "$enable_it" == [yY] ]]; then
-                     #   echo sudo a2enmod python
-                     #        sudo a2enmod python
-                     #fi # use: 
-                     # TODO: what if it was already installed, but not enabled?
-
-                     if [[ $? != 0 ]]; then
-                        echo "Since we've made some changes to apache, we need to restart it so they take effect."
-                        echo
-                        echo sudo service apache2 restart
-                        echo
-                        read -p "Q: May we restart apache using the command above? [y/n] " -u 1 restart_it
-                        if [[ "$restart_it" == [yY] ]]; then
-                           echo sudo service apache2 restart
-                                sudo service apache2 restart
-                           need_apache_restart=""
-                        fi
-                     fi
-                  fi
+                  offer_install_aptget 'libapache2-mod-python' \
+                                       "expose DataFAQs services through Apache at $our_base_uri/services/sadi" 
+                                       # e.g. http://lofd.tw.rpi.edu/sadi-services/lift-ckan - - - - - - - - ^
+                  enable_apache_module 'python' 'run DataFAQs SADI services'
 
                   echo
                   echo $div

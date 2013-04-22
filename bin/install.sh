@@ -397,7 +397,7 @@ else
 
 
    # https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_PERSON_URI
-   if [[ -z $i_am_project_user ]]; then
+   if [[ -z $i_am_project_user ]]; then # Running as developer e.g. jsmith not loxd
       echo
       echo $div
       echo "Prizms can include you in the provenance that it captures."
@@ -533,7 +533,7 @@ else
    echo "        The repos/ directory will contain a variety of supporting utilities that Prizms uses from other projects."
    echo
 
-   if [[ -z $i_am_project_user ]]; then
+   if [[ -z $i_am_project_user ]]; then # Running as developer e.g. jsmith not loxd
 
    echo "  ~$person_user_name/prizms/$project_user_name"
    echo
@@ -552,7 +552,7 @@ else
 
    #if [[ -z "$i_am_project_user" && `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == "no" ]]; then
    #if [[ -z "$i_am_project_user" && ! -e ${user_home%/*}/$project_user_name ]]; then
-   if [[ -z "$i_am_project_user" && ! `grep "^${project_user_name}:" /etc/passwd` ]]; then
+   if [[ -z "$i_am_project_user" && ! `grep "^${project_user_name}:" /etc/passwd` ]]; then # Running as developer e.g. jsmith not loxd
       echo
       echo $div
       echo ${user_home%/*}/$project_user_name
@@ -584,7 +584,7 @@ else
    pushd &> /dev/null
       cd
       user_home=`pwd`
-      if [[ -z "$i_am_project_user" ]]; then
+      if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
          development="development"
          prizms="prizms/"
       else
@@ -604,7 +604,7 @@ else
             target_dir=${target_dir%.*}
 
             if [ ! -e $target_dir ]; then
-               if [[ -z "`git config --get user.email`" && -n "$person_email" && -z "$i_am_project_user" ]]; then
+               if [[ -z "`git config --get user.email`" && -n "$person_email" && -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                   echo
                   echo $div
                   echo "We can set your email address in your global git configuration using the following command."
@@ -621,7 +621,7 @@ else
                echo
                echo $div
                echo "GitHub requires that you have an SSH key and that it be registered with them."
-               if [[ ! -e $user_home/.ssh/id_dsa.pub && ! -e $user_home/.ssh/id_rsa.pub && -z "$i_am_project_user" ]]; then
+               if [[ ! -e $user_home/.ssh/id_dsa.pub && ! -e $user_home/.ssh/id_rsa.pub && -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                   echo
                   echo "You don't have a ~$person_user_name/.ssh/id_dsa.pub or ~$person_user_name/.ssh/id_rsa.pub,"
                   echo "which could be created using the following command:"
@@ -717,7 +717,7 @@ else
                   added=''
 
                   if [[ -z "$i_am_project_user" && \
-                       ( ! -e data/source/ || ! -e lodspeakr/ || ! -e doc/ || ! -e 'data/faqs/example-1/faqt-brick' ) ]]; then
+                       ( ! -e data/source/ || ! -e lodspeakr/ || ! -e doc/ || ! -e 'data/faqs/example-1/faqt-brick' ) ]]; then # Running as developer e.g. jsmith not loxd
                      echo
                      echo $div
                      echo "Prizms reuses the directory conventions that csv2rdf4lod-automation uses."
@@ -750,7 +750,7 @@ else
 
                   # Add .gitignore with "*" in data/source/.gitignore
                   target="data/source/.gitignore"
-                  if [[ ! -e $target && -z "$i_am_project_user" ]]; then
+                  if [[ ! -e $target && -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                      echo
                      echo "It's a good practice to include a .gitignore in your data/source directory, so that you do not accidentally commit and push large data files into your repository."
                      echo
@@ -764,7 +764,7 @@ else
 
 
                   # Set shell environment variable values in source-me.sh's.
-                  if [[ -z "$i_am_project_user" ]]; then 
+                  if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                      # Done by development user, NOT project user.
 
                      # FOR PROJECT
@@ -1201,7 +1201,7 @@ else
 
 
 
-                  if [[ -z "$i_am_project_user" ]]; then 
+                  if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                      # Start installing dependencies.
 
                      #
@@ -1790,7 +1790,7 @@ else
                      read -p "Press any key to continue." -u 1
                   fi
 
-                  if [[ -z "$i_am_project_user" ]]; then
+                  if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                      # Apache module 'env' is needed to enable the SetEnv command in the 
                      # $PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess below.
                      # enable envars:
@@ -1868,7 +1868,7 @@ else
 
                   # TODO: add source ../csv2rdf4lod-source-me-for-<project>.sh to as-<developer>.sh
 
-                  if [[ -z "$i_am_project_user" ]]; then
+                  if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                      #
                      # LODSPeaKr: https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu
                      #
@@ -2080,7 +2080,7 @@ else
                         popd &> /dev/null
                      fi
                     
-                  fi # not $i_am_project_user
+                  fi # Running as developer e.g. jsmith not loxd
 
                   # robots.txt
                   echo
@@ -2142,7 +2142,7 @@ else
                   if [[ -n "$upstream_ckan" && "$upstream_ckan" != "none" ]]; then
                      echo "You've specified an upstream CKAN from which to mirror dataset listings ($upstream_ckan),"
                      echo "but Prizms hasn't extracted the access metadata into $target."
-                     if [[ -n "$upstream_ckan_source_id" && -z "$i_am_project_user" ]]; then
+                     if [[ -n "$upstream_ckan_source_id" && -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                         echo
                         read -p "Q: May we extract the access metadata from the datasets in $upstream_ckan, placing them within $target? [y/n] " -u 1 extract_it
                         if [[ "$extract_it" == [yY] ]]; then
@@ -2165,7 +2165,7 @@ else
 
 
 
-                  if [[ -z "$i_am_project_user" ]]; then 
+                  if [[ -n "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                      echo
                      echo $div
                      echo "Prizms can use existing upstream LODSPeaKrs."
@@ -2194,7 +2194,7 @@ else
                   echo "and is retrieved by the cronjob itself to determine additional tasks that it should perform."
                   echo "The cronjob is run by the user $project_user_name."
                   echo "See https://github.com/jimmccusker/twc-healthdata/wiki/Automation"
-                  if [[ -z "$i_am_project_user" ]]; then 
+                  if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                      # Set up cronjob as cr-cron.sh
                      template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/cr-cron.sh"
                      if [[ -n "$our_source_id" ]]; then
@@ -2287,7 +2287,7 @@ else
                   fi
 
 
-                  if [[ -z $i_am_project_user ]]; then
+                  if [[ -z $i_am_project_user ]]; then # Running as developer e.g. jsmith not loxd
                      # ^ We are currently doing this \/ (avoid the infinite loop)
                      #echo
                      #echo $div
@@ -2341,7 +2341,7 @@ else
                   echo $div
                   if [[ -n $i_am_project_user ]]; then
                      echo "We're all done installing Prizms production environment for the user `whoami`."
-                  else
+                  else # Running as developer e.g. jsmith not loxd
                      echo "We're all done installing Prizms development environment for the user `whoami`."
                      echo
                      echo $div

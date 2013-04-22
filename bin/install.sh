@@ -264,6 +264,9 @@ else
       modules="$1"
       reason="$2"
       for module in $modules; do
+         echo
+         echo "sudo a2enmod $module | grep 'already enabled'"
+         echo
          already_enabled=`sudo a2enmod $module | grep 'already enabled'`
          # ^^ This enables it before we ask for permission.
          #    If it was already enabled, nothing to do.
@@ -1709,10 +1712,12 @@ else
                   #
                   echo
                   echo $div
-                  offer_install_aptget 'libapache2-mod-python' \
-                                       "expose DataFAQs services through Apache at $our_base_uri/services/sadi" 
-                                       # e.g. http://lofd.tw.rpi.edu/sadi-services/lift-ckan - - - - - - - - ^
-                  enable_apache_module 'python' 'run DataFAQs SADI services'
+                  offer_install_aptget \
+                     'libapache2-mod-python' \
+                     "expose DataFAQs services through Apache at $our_base_uri/services/sadi" # e.g. http://lofd.tw.rpi.edu/sadi-services/lift-ckan
+                  if [[ $? != 0 ]]; then
+                     enable_apache_module 'python' 'run DataFAQs SADI services'
+                  fi
 
                   echo
                   echo $div

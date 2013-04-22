@@ -2032,7 +2032,7 @@ else
                      # TODO: multiple users development site: https://github.com/timrdf/prizms/issues/16
                      echo
                      echo $div
-                     echo "Prizms permits development of its LODSPeaKr within developer's namespace (e.g. $our_base_uri/~$user_name)"
+                     echo "Prizms permits development of its LODSPeaKr within developer's namespace (e.g. $our_base_uri/~$person_user_name)"
                      echo "This allows developers to prototype data views before committing it to the production site (e.g. $our_base_uri)"
                      echo "Once finished, developers commit their code to $project_code_repository and the $project_user_name pulls it to deploy it at $our_base_uri."
                      echo

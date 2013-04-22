@@ -2165,25 +2165,25 @@ else
 
 
 
-                  #if [[ -n "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
-                  #   echo
-                  #   echo $div
-                  #   echo "Prizms can use existing upstream LODSPeaKrs."
-                  #   echo
-                  #   # TODO: Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
-                  #   # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
-                  #   #
-                  #   for upstream in `${user_home%/*}/$project_user_name/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
-                  #      for ctype in services types; do
-                  #         for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
-                  #            echo $component
-                  #            # =>
-                  #            # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
-                  #            # $conf['components']['services'][] = '/home/alvaro/previousproject2/lodspeakr/components/services/myService';
-                  #         done
-                  #      done
-                  #   done
-                  #fi
+                  if [[ -n "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+                     echo
+                     echo $div
+                     echo "Prizms can use existing upstream LODSPeaKrs."
+                     echo
+                     # TODO: Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
+                     # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
+                     #
+                     for upstream in `find ${user_home%/*}/$project_user_name/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
+                        for ctype in services types; do
+                           for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
+                              echo $component
+                              # =>
+                              # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
+                              # $conf['components']['services'][] = '/home/alvaro/previousproject2/lodspeakr/components/services/myService';
+                           done
+                        done
+                     done
+                  fi
  
 
                   echo

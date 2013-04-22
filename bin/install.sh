@@ -285,6 +285,14 @@ else
             echo "(module $module is already enabled: $already_enabled)"
          fi
       done
+      if [[ "$enabled" == "1" ]]; then
+         read -p "Q: Apache needs to restart for $module to take effect. Restart apache? [y/n] " -u 1 restart_it
+         if [[ "$restart_it" != [yY] ]]; then
+            sudo service apache2 restart
+         else
+            echo "Okay, we didn't restart Apache, but you'll need to restart it for $module to take effect."
+         fi
+      fi
       return $enabled
    }
 
@@ -2018,8 +2026,21 @@ else
 
 
                      # TODO: multiple users development site: https://github.com/timrdf/prizms/issues/16
-                     # http://httpd.apache.org/docs/2.2/mod/mod_userdir.html
-                     # http://lofd.tw.rpi.edu/~lebot/index.html
+                     echo
+                     echo $div
+                     echo "Prizms permits development of its LODSPeaKr within developer's namespace (e.g. $our_base_uri/~$user_name)"
+                     echo "This allows developers to prototype data views before committing it to the production site (e.g. $our_base_uri)"
+                     echo "Once finished, developers commit their code to $project_code_repository and the $project_user_name pulls it to deploy it at $our_base_uri."
+                     echo
+                     enable_apache_module 'userdir' "run development clone of $project_user_name Prizms' LODSPeaKr"  
+                     #if [[ $? ]]; then
+                     #else
+                     #fi
+                     # mkdir  ~/public_html; echo "hi" > ~/public_html/hi.txt
+                     # http://lofd.tw.rpi.edu/~lebot/hi.txt
+
+                     # bash -s components=/location/of/existing/components base-url=http://lofd.tw.rpi.edu/~lebot/ base-namespace=WHATEVS sparql-endpoint=http://lofd.tw.rpi.edu/sparql <  <(curl -sL http://lodspeakr.org/install)
+
                      #      git pull lofd
                      #cd public_html
                      #bash << lodspk
@@ -2039,6 +2060,7 @@ else
                      # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
                      # $conf['components']['services'][] = '/home/alvaro/previousproject2/lodspeakr/components/services/myService';
 
+                     
                   fi # not $i_am_project_user
 
                   # robots.txt

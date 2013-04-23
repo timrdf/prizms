@@ -325,8 +325,8 @@ else
          if [[ "$install_it" == [yY] ]]; then
             echo sudo cp $target ${target}_`date +%Y-%m-%d-%H-%M-%S`
                  sudo cp $target ${target}_`date +%Y-%m-%d-%H-%M-%S`
-            echo sudo mv .prizms-sadi-htaccess $target
-                 sudo mv .prizms-sadi-htaccess $target
+            echo sudo mv .prizms-apache-config $target
+                 sudo mv .prizms-apache-config $target
             restart_apache
          else
             echo "Okay, we won't update $target."

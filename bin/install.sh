@@ -2376,7 +2376,7 @@ else
                                  # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
                                  read -p "Q: Add $component as an external LODSPeaKr component? [y/n] " -u 1 enable
                                  if [[ $enable == [nN] ]]; then
-                                    cherry_pick="#$cherry_pick"
+                                    cherry_pick="// $cherry_pick"
                                  fi
                                  if [[ ${#enable} -gt 0 ]]; then
                                     cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}' > .prizms-installer-settings.inc.php

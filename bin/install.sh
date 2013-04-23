@@ -2047,7 +2047,13 @@ else
                         if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                                   target='/var/www/lodspeakr/settings.inc.php'
                            target_backup="/var/www/lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
-                           sudo cp $target $target_backup
+                           sudo="sudo"
+                           if [[ -h $target ]]; then
+                                     target='lodspeakr/settings.inc.php'
+                              target_backup="lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
+                              sudo=""
+                           fi
+                           $sudo cp $target $target_backup
                            echo
                            echo $div
                            echo "Prizms can use existing upstream LODSPeaKrs."
@@ -2076,8 +2082,10 @@ else
                                        fi
                                        if [[ ${#enable} -gt 0 ]]; then
                                           cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}' > .prizms-installer-settings.inc.php
-                                          sudo mv .prizms-installer-settings.inc.php $target
-                                          added="$added lodspeakr/settings.inc.php"
+                                          $sudo mv .prizms-installer-settings.inc.php $target
+                                          if [[ -h $target ]]; then
+                                             added="$added lodspeakr/settings.inc.php"
+                                          fi
                                        fi
                                     fi
                                     echo

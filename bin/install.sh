@@ -2040,7 +2040,53 @@ else
                               echo "Okay, we will leave $www/lodspeakr/settings.inc.php as not version controlled."
                            fi
                         fi
-                     fi
+
+                        # TODO: Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
+                        # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
+                        #
+                        if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+                                  target='/var/www/lodspeakr/settings.inc.php'
+                           target_backup="/var/www/lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
+                           sudo cp $target $target_backup
+                           echo
+                           echo $div
+                           echo "Prizms can use existing upstream LODSPeaKrs."
+                           echo
+                           for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
+                              for ctype in services types; do
+                                 for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
+                                    echo $component # e.g. /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
+
+                                    there=`grep "$conf.'components'..'$ctype'... = '$component';" $target`
+
+                                    cherry_pick="\$conf['components']['$ctype'][] = '$component';"
+                                    if [[ $there ]]; then
+                                       disabled=`echo $there | grep "^#"`; disabled=${#disabled}
+                                       if [[ ! $disabled ]]; then
+                                          echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
+                                       fi
+                                    else
+                                       echo "^ not there; add $cherry_pick"
+                                       # =>
+                                       # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
+                                       # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
+                                       read -p "Q: Add $component as an external LODSPeaKr component? [y/n] " -u 1 enable
+                                       if [[ $enable == [nN] ]]; then
+                                          cherry_pick="// $cherry_pick"
+                                       fi
+                                       if [[ ${#enable} -gt 0 ]]; then
+                                          cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}' > .prizms-installer-settings.inc.php
+                                          mv .prizms-installer-settings.inc.php $target
+                                       fi
+                                    fi
+                                    echo
+                                 done
+                              done
+                           done
+                        fi # Running as developer e.g. jsmith not loxd
+
+                     fi # -e $www/lodspeakr/settings.inc.php
+
 
                      # TODO: change $lodspk['title'] = 'LODSPeaKr'; in settings.inc.php
 
@@ -2362,50 +2408,6 @@ else
                   # TODO: add warning if more than one "cr-cron.sh" in crontab
 
 
-
-                  # TODO: Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
-                  # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
-                  #
-                  if [[ -n "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
-                            target='/var/www/lodspeakr/settings.inc.php'
-                     target_backup="/var/www/lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
-                     cp $target $target_backup
-                     echo
-                     echo $div
-                     echo "Prizms can use existing upstream LODSPeaKrs."
-                     echo
-                     for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
-                        for ctype in services types; do
-                           for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
-                              echo $component # e.g. /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
-
-                              there=`grep "$conf.'components'..'$ctype'... = '$component';" $target`
-
-                              cherry_pick="\$conf['components']['$ctype'][] = '$component';"
-                              if [[ $there ]]; then
-                                 disabled=`echo $there | grep "^#"`; disabled=${#disabled}
-                                 if [[ ! $disabled ]]; then
-                                    echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
-                                 fi
-                              else
-                                 echo "^ not there; add $cherry_pick"
-                                 # =>
-                                 # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
-                                 # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
-                                 read -p "Q: Add $component as an external LODSPeaKr component? [y/n] " -u 1 enable
-                                 if [[ $enable == [nN] ]]; then
-                                    cherry_pick="// $cherry_pick"
-                                 fi
-                                 if [[ ${#enable} -gt 0 ]]; then
-                                    cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}' > .prizms-installer-settings.inc.php
-                                    mv .prizms-installer-settings.inc.php $target
-                                 fi
-                              fi
-                              echo
-                           done
-                        done
-                     done
-                  fi
 
 
                   # Finished.

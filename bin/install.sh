@@ -312,7 +312,7 @@ else
       echo "       ..."
       echo
       current=`sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1 | grep All`
-      if [[ "$current" != "All" ]]; then
+      if [[ -z "$current" ]]; then
          echo "We can change /var/www's AllowOverride to All (it is currently \"$current\"), making the new $target be:"
          echo
          sudo cat $target | awk '{if($1=="<Directory"){scope=$2} if($1=="AllowOverride" && scope=="/var/www/>"){print $1,"All"}else{print}}' > .prizms-apache-config

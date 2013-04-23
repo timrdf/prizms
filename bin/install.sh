@@ -2020,7 +2020,8 @@ else
 
                         # /var/www$ sudo chmod -R g+w lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php; sudo chgrp -R www-data lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php
             
-                        # TODO: if /var/www/lodspeakr/settings.inc.php exists and is not a soft link to /home/ieeevis/prizms/ieeevis/lodspeakr/settings.inc.php
+                        # If /var/www/lodspeakr/settings.inc.php exists and is not a soft link to /home/ieeevis/prizms/ieeevis/lodspeakr/settings.inc.php,
+                        # move it into the developer's working copy, soft link into the project user's read-only clone.
                         target="$www/lodspeakr/settings.inc.php"
                         if [[ ! -h $target ]]; then
                            echo
@@ -2223,14 +2224,16 @@ else
 
                      echo
                      echo "Your Prizms LODSPeaKr development clone should exist within $user_home/public_html"
-                     echo
                      if [[ ! -e $user_home/public_html ]]; then
+                        echo
                         read -p "Q: Make directory $user_home/public_html ? [y/n] " -u 1 make_it
                         if [[ "$make_it" == [yY] ]]; then
                            mkdir $user_home/public_html
                         else
                            echo "Okay, we won't include lodspeakr/components into version control."
                         fi 
+                     else
+                        echo "($user_home/public_html exists)"
                      fi
                      if [[ -e $user_home/public_html && ! -e $user_home/public_html/lodspeakr ]]; then
                         # mkdir  ~/public_html; echo "hi" > ~/public_html/hi.txt

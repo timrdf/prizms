@@ -2193,16 +2193,19 @@ else
                      for upstream in `find ${user_home%/*}/$project_user_name/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
                         for ctype in services types; do
                            for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
-                              echo $component # /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
+                              echo $component # e.g. /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
+
                               there=`grep "$conf.'components'..'services'... = '$component';" $target`
                               disabled=`echo $there | grep "^#"`; disabled=${#disabled}
+
+                              cherry_pick="\$conf['components']['services'][] = '$component';"
                               if [[ $there ]]; then
-                                 echo "^ there, disabled = $disabled"
+                                 echo "^ there, disabled = $disabled --- $cherry_pick"
                                  # =>
                                  # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
                                  # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
                               else
-                                 echo "^ not there, disabled = $disabled"
+                                 echo "^ not there, disabled = $disabled --- $cherry_pick"
                               fi
                            done
                         done

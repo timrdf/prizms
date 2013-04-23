@@ -1886,6 +1886,9 @@ else
                         sudo cat $target | awk '{if($1=="<Directory"){scope=$2} if($1=="AllowOverride" && $2=="/var/www/>"){print $1,"All"}else{print}}' > .prizms-apache-config
                         cat .prizms-apache-config
                         echo
+                        echo "- - The difference is - -"
+                        sudo diff $target .prizms-apache-config
+                        echo
                         read -p "Q: May we update $target to enable AllowOverride All for /var/www? [y/n] " -u 1 install_it
                         if [[ "$install_it" == [yY] ]]; then
                            sudo cp $target .$target_`date +%Y-%m-%d-%H-%M-%S`

@@ -1883,7 +1883,7 @@ else
                      if [[ "$current" != "All" ]]; then
                         echo "We can change /var/www's AllowOverride to All, making the new $target be:"
                         echo
-                        sudo cat $target | awk '{if($1=="<Directory"){scope=$2} if($1=="AllowOverride" && scope=="/var/www/>"){print $1,"All"}else{print}}'
+                        sudo cat $target | awk '{if($1=="<Directory"){scope=$2} if($1=="AllowOverride" && scope=="/var/www/>"){print $1,"All"}else{print}}' > .prizms-apache-config
                         cat .prizms-apache-config
                         echo
                         echo "- - The difference is - -"

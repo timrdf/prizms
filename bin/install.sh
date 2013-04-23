@@ -2106,33 +2106,6 @@ else
                      fi
 
 
-                     # TODO: Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
-                     # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
-                     #
-                     if [[ -n "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
-                        target='/var/www/lodspeakr/settings.inc.php'
-                        echo
-                        echo $div
-                        echo "Prizms can use existing upstream LODSPeaKrs."
-                        echo
-                        for upstream in `find ${user_home%/*}/$project_user_name/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
-                           for ctype in services types; do
-                              for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
-                                 echo $component # /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
-                                 there=`grep "$conf.'components'..'services'... = '$component';" $target`
-                                 if [[ $there ]]; then
-                                    echo ^ there
-                                    # =>
-                                    # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
-                                    # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
-                                 else
-                                    echo ^ not there
-                                 fi
-                              done
-                           done
-                        done
-                     fi
-
  
                      # Multiple users development site (https://github.com/timrdf/prizms/issues/16)
                      echo
@@ -2206,6 +2179,35 @@ else
                      fi
                     
                   fi # Running as developer e.g. jsmith not loxd
+
+
+                  # TODO: Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
+                  # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
+                  #
+                  if [[ -n "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+                     target='/var/www/lodspeakr/settings.inc.php'
+                     echo
+                     echo $div
+                     echo "Prizms can use existing upstream LODSPeaKrs."
+                     echo
+                     for upstream in `find ${user_home%/*}/$project_user_name/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
+                        for ctype in services types; do
+                           for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
+                              echo $component # /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
+                              there=`grep "$conf.'components'..'services'... = '$component';" $target`
+                              if [[ $there ]]; then
+                                 echo ^ there
+                                 # =>
+                                 # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
+                                 # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
+                              else
+                                 echo ^ not there
+                              fi
+                           done
+                        done
+                     done
+                  fi
+
 
                   # robots.txt
                   echo

@@ -1871,7 +1871,7 @@ else
                      # AllowOverride None -> AllowOverride All
                      echo
                      echo $div
-                     target="/etc/apache2/sites-available/default"
+                     target="/etc/apache2/sites-available/default" 
                      echo "DataFAQs needs to specify environment variables in an .htaccess"
                      echo ".htaccess only work if the 'AllowOverride All' directive is set in $target, similar to:"
                      echo

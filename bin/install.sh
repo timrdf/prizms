@@ -1908,7 +1908,7 @@ else
                      enable_apache_module 'env' 'enable DataFAQs provenance'
 
                      # AllowOverride None -> AllowOverride All
-                     enable_htaccess
+                     enable_htaccess "DataFAQs needs to access environment variables set in .htaccess files to assert its provenance and POST to CKAN."
 
                      # tail -f /var/log/apache2/error.log
                   else

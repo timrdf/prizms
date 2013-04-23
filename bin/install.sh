@@ -323,8 +323,8 @@ else
          echo
          read -p "Q: May we update $target to enable AllowOverride All for /var/www? [y/n] " -u 1 install_it
          if [[ "$install_it" == [yY] ]]; then
-            echo sudo cp $target .${target}_`date +%Y-%m-%d-%H-%M-%S`
-                 sudo cp $target .${target}_`date +%Y-%m-%d-%H-%M-%S`
+            echo sudo cp $target ${target}_`date +%Y-%m-%d-%H-%M-%S`
+                 sudo cp $target ${target}_`date +%Y-%m-%d-%H-%M-%S`
             echo sudo mv .prizms-sadi-htaccess $target
                  sudo mv .prizms-sadi-htaccess $target
             restart_apache

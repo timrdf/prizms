@@ -127,6 +127,8 @@ else
       shift
    fi
 
+   project_user_home="${user_home%/*}/$project_user_name"
+
    i_am_project_user=""
    if [[ "$project_user_name" == `whoami` ]]; then
       i_am_project_user="yes"
@@ -2190,7 +2192,7 @@ else
                      echo $div
                      echo "Prizms can use existing upstream LODSPeaKrs."
                      echo
-                     for upstream in `find ${user_home%/*}/$project_user_name/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
+                     for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
                         for ctype in services types; do
                            for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
                               echo $component # e.g. /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
@@ -2201,7 +2203,7 @@ else
                               if [[ $there ]]; then
                                  disabled=`echo $there | grep "^#"`; disabled=${#disabled}
                                  if [[ ! $disabled ]]; then
-                                    echo "^ there, not disabled (need to check the primary"
+                                    echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
                                  fi
                               else
                                  echo "^ not there; add $cherry_pick"
@@ -2209,6 +2211,7 @@ else
                                  # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
                                  # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
                               fi
+                              echo
                            done
                         done
                      done

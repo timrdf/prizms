@@ -1879,11 +1879,11 @@ else
                      #fi # 
 
                      # AllowOverride None -> AllowOverride All
-                     target='/etc/apache2/sites-enabled/000-default'
+                     target='/etc/apache2/sites-available/default'
                      echo "TODO: Need to permit AllowOverride All in $target"
 
                      # Change to 'All' in
-                     # /etc/apache2/sites-enabled/000-default
+                     # /etc/apache2/sites-available/default
                      #    <Directory /var/www/>
                      #       Options Indexes FollowSymLinks MultiViews
                      #       AllowOverride All
@@ -1995,7 +1995,9 @@ else
                         enable_apache_module 'php5'    'run LODSPeaKr'
 
                         # TODO: AllowOverride must be 'All':
-                        # cat /etc/apache2/sites-enabled/000-default | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1
+                        # cat /etc/apache2/sites-available/default | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1
+                        #echo "  /etc/apache2/sites-available/default must 'AllowOverride All' for <Directory /var/www/>"
+                        # echo 'https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu:'
 
                         # /var/www$ sudo chmod -R g+w lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php; sudo chgrp -R www-data lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php
                      fi
@@ -2433,58 +2435,4 @@ else
          echo "If you aren't going to use a code repository, we can't help you very much."
       fi
    popd &> /dev/null
-
-
-
-   exit
-
-
-   # TODO: work the following into this installer:
-
-
-   # https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu
-   echo "Dependency for LODSPeaKr:"
-   offer_install_with_apt 'a2enmod' 'apache2'
-
-   # curl already done by csv2rdf4lod-automation's install-csv2rdf4lod-dependencies.sh
-
-   for package in php5 php5-cli php5-sqlite php5-curl sqlite3; do
-      not_installed=`dpkg -s $package 2>&1 | grep "is not installed"`
-      if [[ -n "$not_installed" && "$dryrun" != "true" ]]; then
-         echo
-         echo "~~~~ ~~~~"
-      fi  
-      if [[ -n "$not_installed" ]]; then
-         echo $TODO sudo apt-get install $package
-         if [[ "$dryrun" != "true" ]]; then
-            read -p "$package (Dependency for LODSPeaKr) is not shown in dpkg; install it with command above? [y/n] " -u 1 install_it
-            if [[ "$install_it" == [yY] ]]; then
-               sudo apt-get install $package
-            fi  
-         fi  
-      else
-         echo "[okay] $package is installed (needed for LODSPeaKr)."
-      fi  
-   done
-
-   echo
-   echo "~~~~ ~~~~"
-   echo "sudo a2enmod rewrite"
-   read -p "LODSPeaKr requires HTTP rewrite. Enable it with the command above? [y/n] " -u 1 install_it
-   if [[ "$install_it" == [yY] ]]; then
-      sudo a2enmod rewrite
-   fi
-
-   echo
-   echo "~~~~ ~~~~"
-   echo 'https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu:'
-   echo "  /etc/apache2/sites-enabled/000-default must 'AllowOverride All' for <Directory /var/www/>"
-   echo
-   echo "sudo service apache2 restart"
-   read -p "Please edit 000-default to AllowOverride All, THEN type 'y' to restart apache, or just type 'N' to skip this. [y/n] " -u 1 install_it
-   if [[ "$install_it" == [yY] ]]; then
-      echo "~~~~ ~~~~"
-      echo "Dependency for LODSPeaKr:"
-      sudo service apache2 restart
-   fi
 fi

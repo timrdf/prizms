@@ -2195,13 +2195,14 @@ else
                            for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
                               echo $component # /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
                               there=`grep "$conf.'components'..'services'... = '$component';" $target`
+                              disabled=`echo $there | grep "^#"`; disabled=${#disabled}
                               if [[ $there ]]; then
-                                 echo ^ there
+                                 echo "^ there, disabled = $disabled"
                                  # =>
                                  # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
                                  # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
                               else
-                                 echo ^ not there
+                                 echo "^ not there, disabled = $disabled"
                               fi
                            done
                         done

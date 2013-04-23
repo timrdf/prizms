@@ -2024,7 +2024,8 @@ else
                         target="$www/lodspeakr/settings.inc.php"
                         if [[ ! -h $target ]]; then
                            echo
-                           echo "$target exists, but is not soft-linked into $project_user's read-only clone of $project_code_repository."
+                           echo $div
+                           echo "$target exists, but is not soft-linked into $project_user_name's read-only clone of $project_code_repository."
                            echo "The following commands will place settings.inc.php into your development clone, and link to $project_user's read-only production clone."
                            echo
                            echo    sudo mv $target $user_home/prizms/lofd/lodspeakr/settings.inc.php
@@ -2041,7 +2042,7 @@ else
                            fi
                         fi
 
-                        # TODO: Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
+                        # Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
                         # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
                         #
                         if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
@@ -2056,21 +2057,21 @@ else
                            $sudo cp $target $target_backup
                            echo
                            echo $div
-                           echo "Prizms can use existing upstream LODSPeaKrs."
+                           echo "Prizms can use existing upstream LODSPeaKrs by referencing them within settings.inc.php."
                            echo
                            for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
                               for ctype in services types; do
                                  for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
-                                    echo $component # e.g. /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
+                                    # ^ e.g. /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
 
                                     there=`grep "$conf.'components'..'$ctype'... = '$component';" $target`
 
                                     cherry_pick="\$conf['components']['$ctype'][] = '$component';"
                                     if [[ $there ]]; then
                                        disabled=`echo $there | grep "^#"`; disabled=${#disabled}
-                                       if [[ ! $disabled ]]; then
-                                          echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
-                                       fi
+                                       #if [[ ! $disabled ]]; then
+                                       #   echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
+                                       #fi
                                     else
                                        echo "^ not there; add $cherry_pick"
                                        # =>

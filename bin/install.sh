@@ -2349,7 +2349,9 @@ else
                   # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
                   #
                   if [[ -n "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
-                     target='/var/www/lodspeakr/settings.inc.php'
+                            target='/var/www/lodspeakr/settings.inc.php'
+                     target_backup="/var/www/lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
+                     cp $target $target_backup
                      echo
                      echo $div
                      echo "Prizms can use existing upstream LODSPeaKrs."
@@ -2369,10 +2371,17 @@ else
                                  fi
                               else
                                  echo "^ not there; add $cherry_pick"
-                                 cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}'
                                  # =>
                                  # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
                                  # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
+                                 read -p "Q: Add $component as an external LODSPeaKr component? [y/n] " -u 1 enable
+                                 if [[ $enable == [nN] ]]; then
+                                    cherry_pick="#$cherry_pick"
+                                 fi
+                                 if [[ ${#enable} -gt 0 ]]; then
+                                    cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}' > .prizms-installer-settings.inc.php
+                                    mv .prizms-installer-settings.inc.php $target
+                                 fi
                               fi
                               echo
                            done

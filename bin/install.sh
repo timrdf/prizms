@@ -2207,6 +2207,7 @@ else
                                  fi
                               else
                                  echo "^ not there; add $cherry_pick"
+                                 sudo cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}'
                                  # =>
                                  # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
                                  # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';

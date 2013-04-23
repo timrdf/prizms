@@ -299,6 +299,18 @@ else
       return $enabled
    }
 
+   function restart_apache {
+      echo "Since we've made some changes to apache, we need to restart it so that they take effect."
+      echo
+      echo sudo service apache2 restart
+      echo
+      read -p "May we restart apache using the command above? [y/n] " -u 1 restart_it
+      if [[ "$restart_it" == [yY] ]]; then
+         echo sudo service apache2 restart
+              sudo service apache2 restart
+      fi
+   }
+
    echo
    echo "Okay, let's install Prizms!"
    echo "   https://github.com/timrdf/prizms/wiki"
@@ -1050,7 +1062,7 @@ else
 
                         target="data/source/csv2rdf4lod-source-me-as-$user.sh"
 
-                        if [[ "$person_username" == `whoami` ]]; then
+                        if [[ "$person_username" == `whoami` ]]; then # TODO: this user name is always empty.
                            your="your"
                         else
                            your="$project_user_name's"
@@ -1138,7 +1150,7 @@ else
                               mkdir -p $user_home/.vim/syntax
                               curl -L 'http://www.vim.org/scripts/download_script.php?src_id=6882' > $user_home/.vim/syntax/n3.vim
 
-                              echo " RDF Notation 3 Syntax"                                        > $user_home/.vim/filetype.vim
+                              echo " \"RDF Notation 3 Syntax"                                      > $user_home/.vim/filetype.vim
                               echo "    augroup filetypedetect"                                   >> $user_home/.vim/filetype.vim
                               echo "        au BufNewFile,BufRead *.n3  setfiletype n3"           >> $user_home/.vim/filetype.vim
                               echo "        au BufNewFile,BufRead *.ttl  setfiletype n3"          >> $user_home/.vim/filetype.vim
@@ -1201,8 +1213,10 @@ else
 
 
 
+                  #
+                  # Start installing dependencies.
+                  #
                   if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
-                     # Start installing dependencies.
 
                      #
                      # We need to check the /etc/hosts before we try to install Virtuoso as a dependency,
@@ -1237,8 +1251,7 @@ else
                      # Processing triggers for ureadahead ...
                      # Errors were encountered while processing:
                      #  virtuoso-opensource
-                     # 
-                     # cannot:
+
                      target=/etc/hosts
                      localhost_ip=`cat $target | awk '$2=="localhost"{print $1}'`
                      vm_ip=`grep "tw.rpi.edu" $target | awk '{print $1}'`
@@ -1471,83 +1484,22 @@ else
                            fi
                         fi
 
-                        # AS both DEVELOPER and PROJECT USER (after dependencies were installed).
-                        for user in $person_user_name $project_user_name; do
-
-                           target="data/source/csv2rdf4lod-source-me-as-$user.sh"
-
-                           if [[ "$person_username" == `whoami` ]]; then
-                              your="your"
-                           else
-                              your="$project_user_name's"
-                           fi
-
-                           # JENAROOT to data/source/csv2rdf4lod-source-me-as-$user.sh
-                           echo
-                           echo $div
-                           echo ${PRIZMS_HOME%/*}
-                           find ${PRIZMS_HOME%/*} -type d -name "apache-jena*" # /home/lebot/opt/apache-jena-2.7.4
-                           set_paths_cmd="export JENAROOT=`find ${PRIZMS_HOME%/*} -type d -name "apache-jena*" | tail -1 | sed "s/\`whoami\`/$user/g"`"
-                           echo "Apache Jena requires the shell environent variable JENAROOT to be set."
-                           echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Apache-Jena"
-                           echo "The following command should appear in $your data/source/csv2rdf4lod-source-me-as-$user.sh."
-                           echo
-                           echo "    $set_paths_cmd"
-                           already_there=`grep "^$set_paths_cmd" $target`
-                           echo
-                           if [ -n "$already_there" ]; then
-                              echo "It seems that you already have the following in $your $target, so we won't offer to add it again:"
-                              echo
-                              echo $already_there
-                           else
-                              read -p "Add this command to $your $target? [y/n] " -u 1 install_it
-                              if [[ "$install_it" == [yY] ]]; then
-                                 echo $set_paths_cmd >> $target
-                                 echo
-                                 echo "Okay, we added it:"
-                                 grep "^$set_paths_command" $target
-                                 added="$added $target"
-                              else
-                                 echo "We didn't $change $your $target, so you'll need to make sure you set the paths correctly each time."
-                              fi
-                           fi
-                           # was(?) needed as stopgap: export PATH=$PATH:$JENAROOT/bin
-
-                        done
-
-                        # TODO: X_GOOGLE_MAPS_API_Key
-                        credentials="/etc/prizms/$project_user_name/??triple-store??/google/csv2rdf4lod-source-me-for-googlemap-credentials.sh"
-
-
                         echo
                         echo $div
                         offer_install_aptget \
                            'libapache2-mod-proxy-html' \
-                           "expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
+                           "expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql and the (port 8080) Tomcat application server of SADI services at $our_base_uri/sadi-services"
 
                         echo $div
                         enable_apache_module 'proxy_http' "expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
-                        # Replaced with the call above:
-                        # sudo a2enmod proxy
-                        # sudo a2enmod proxy_http
-                        #modules='proxy_http' # 'proxy' is enabled when proxy_http is enabled.
-                        #for module in $modules; do
-                        #   echo "The Apache2 module $module needs to be enabled to expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql."
-                        #   echo "The $module module needs to be enabled, which can be done with the following command:"
-                        #   echo
-                        #   echo "sudo a2enmod $module"
-                        #   echo
-                        #   read -p "Q: May we enable the module above using the command above? [y/n] " -u 1 install_it
-                        #   if [[ "$install_it" == [yY] ]]; then
-                        #      echo sudo a2enmod $module
-                        #           sudo a2enmod $module
-                        #   fi # use: 
-                        #   #fi
-                        #done
+                        #                  ^ 'proxy' module is enabled when proxy_http is enabled.
 
                         #
-                        # See mapping into apache at https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
-                        # NOTE: replaced by new config below.
+                        # The apache directives to map the proxy seems to always change.
+                        #
+                        # Mapping 1: See https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso
+                        #
+                        # Mapping 2:
                         #
                         #  <Location /sparql>
                         #      allow from all
@@ -1561,7 +1513,7 @@ else
                         #    # ProxyHTMLURLMap         http://localhost:8890/sparql /sparql
                         #  </Location>
                         #
-                        # This works on melagrid:
+                        # Mapping 3: works on melagrid.
                         #
                         #  <Location /sparql>
                         #     allow from all
@@ -1576,7 +1528,10 @@ else
                         #     ProxyHTMLURLMap         http://localhost:8890/sparql /sparql
                         #  </Location>
                         # 
-                        # This works on ieeevis VM, and replaced these ^^ (TODO: even newer one to work along side sadi-services https://scm.escience.rpi.edu/trac/ticket/1612#comment:2)
+                        # https://scm.escience.rpi.edu/trac/ticket/1502#comment:5 (sparql only)
+                        # https://scm.escience.rpi.edu/trac/ticket/1612#comment:2 (sparql AND sadi-services)
+                        #
+                        # Mapping 4: works on ieeevis VM (but needed to be updated to work along side sadi-services https://scm.escience.rpi.edu/trac/ticket/1612#comment:2)
                         #
                         #  # https://scm.escience.rpi.edu/trac/ticket/1502#comment:5
                         #  ProxyTimeout 1800
@@ -1591,118 +1546,183 @@ else
 
                         echo
                         echo $div
-                        target='/etc/apache2/sites-enabled/000-default' # TODO: replace this with /etc/apache2/sites-available/default
+                        target='/etc/apache2/sites-available/default'
                         already_there=""
                         if [ -e $target ]; then
                            already_there=`grep 'Location /sparql' $target`
                         fi
                         echo "Some Apache directives (e.g., ProxyPass) need to be set in $target to expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql."
                         if [[ -z "$already_there" ]]; then
-                           echo "To expose your Virtuoso server on port 8890 as a URL such as $our_base_uri/sparql,"
+                           echo "To expose the Virtuoso server on port 8890 at $our_base_uri/sparql,"
                            echo "the following apache configuration needs to be set in $target:"
+                           echo                                                                         # Mapping 3 (see above)
+                           echo '  <Location /sparql>'                                               > .prizms-apache-conf 
+                           echo '     allow from all'                                               >> .prizms-apache-conf
+                           echo '     SetHandler None'                                              >> .prizms-apache-conf
+                           echo '     Options +Indexes'                                             >> .prizms-apache-conf
+                           echo '     ProxyPass               http://localhost:8890/sparql'         >> .prizms-apache-conf
+                           echo '     ProxyPassReverse        /sparql'                              >> .prizms-apache-conf
+                           echo '     ProxyHTMLExtended On'                                         >> .prizms-apache-conf
+                           echo '    #ProxyHTMLEnable         On'                                   >> .prizms-apache-conf
+                           echo '     ProxyHTMLURLMap url\(/([^\)]*)\) url(/sparql$1) Rihe'         >> .prizms-apache-conf
+                           echo '     ProxyHTMLURLMap         /sparql /sparql'                      >> .prizms-apache-conf
+                           echo '     ProxyHTMLURLMap         http://localhost:8890/sparql /sparql' >> .prizms-apache-conf
+                           echo '  </Location>'                                                     >> .prizms-apache-conf
+                           cat .prizms-apache-conf
+                           sudo cat $target | grep -v "</VirtualHost>" > .apache-conf
+                           cat .prizms-apache-conf >> .apache-conf
+                           virtualhost=`sudo grep "</VirtualHost>" $target`
+                           echo $virtualhost > .apache-conf
                            echo
-                           echo '  <Location /sparql>'                                               > .prizms-std.common
-                           echo '     allow from all'                                               >> .prizms-std.common
-                           echo '     SetHandler None'                                              >> .prizms-std.common
-                           echo '     Options +Indexes'                                             >> .prizms-std.common
-                           echo '     ProxyPass               http://localhost:8890/sparql'         >> .prizms-std.common
-                           echo '     ProxyPassReverse        /sparql'                              >> .prizms-std.common
-                           echo '     ProxyHTMLExtended On'                                         >> .prizms-std.common
-                           echo '    #ProxyHTMLEnable         On'                                   >> .prizms-std.common
-                           echo '     ProxyHTMLURLMap url\(/([^\)]*)\) url(/sparql$1) Rihe'         >> .prizms-std.common
-                           echo '     ProxyHTMLURLMap         /sparql /sparql'                      >> .prizms-std.common
-                           echo '     ProxyHTMLURLMap         http://localhost:8890/sparql /sparql' >> .prizms-std.common
-                           echo '  </Location>'                                                     >> .prizms-std.common
-                           cat .prizms-std.common
+                           echo The final configuration file will look like:
                            echo
-                           read -p "Q: May we append the configuration above into $target? [y/n] " -u 1 install_it
+                           cat .apache-conf
+                           read -p "Q: May we add the directives above to $target? [y/n] " -u 1 install_it
                            if [[ "$install_it" == [yY] ]]; then
-                              cat .prizms-std.common | sudo tee -a $target
-                              need_apache_restart="yes"
+                              sudo cp $target .$target_`date +%Y-%m-%d-%H-%M-%S`
+                              #cat .prizms-apache-conf | sudo tee -a $target &> /dev/null
+                              sudo mv .apache-conf $target
+                              restart_apache
                            fi
                         else
-                           echo "($target already contains the ProxyPath directives)"
+                           echo "($target seems to already contain the ProxyPath directives to map /sparql to 8890)"
                         fi
 
-                        # add to /etc/apache2/sites-available/std.common
-                        if [[ -n "$need_apache_restart" ]]; then
-                           echo "Since we've made some changes to apache, we need to restart it so they take effect."
-                           echo
-                           echo sudo service apache2 restart
-                           echo
-                           read -p "May we restart apache using the command above? [y/n] " -u 1 restart_it
-                           if [[ "$restart_it" == [yY] ]]; then
-                              echo sudo service apache2 restart
-                                   sudo service apache2 restart
-                              need_apache_restart=""
-                           fi
-                        fi
-
-                        # Added the following to /etc/vservers/.httpd/ieeevis.conf
-                        # Redirect permanent /projects/ieeevis /projects/ieeevis/
-
-                        # We're trying to get to http://aquarius.tw.rpi.edu/projects/melagrid/sparql
+                        # Adding the following to /etc/vservers/.httpd/ieeevis.conf avoids http://lofd.tw.rpi.edu falling into VM host.
+                        #    Redirect permanent /projects/ieeevis /projects/ieeevis/
 
                         target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
 
-                        # Set CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT
+                        # Set CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT (project-wide)
                         change_source_me $target CSV2RDF4LOD_PUBLISH_SPARQL_ENDPOINT $our_base_uri/sparql \
                            'permit Prizms to query the data that is has loaded for subsequent processing' \
                            'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables' \
                            'some loss'
 
-                        # Set CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT 
+                        # Set CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT (project-wide)
                         change_source_me $target CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT $our_base_uri/sparql \
                            'indicate the external URL for the SPARQL endpoint for provenance purposes' \
                            'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT' \
                            'will not correctly capture the provenance of named graph loads in the SPARQL endpoint'
 
                      fi # end $virtuoso_installed
+                     rm -f .prizms-apache-conf
 
                      target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
 
-                     # set CSV2RDF4LOD_PUBLISH_VIRTUOSO true
+                     # set CSV2RDF4LOD_PUBLISH_VIRTUOSO true (ONLY for project user)
                      change_source_me $target CSV2RDF4LOD_PUBLISH_VIRTUOSO true \
                         "enable loading the RDF dump files in the htdocs directory ($www/source) into the SPARQL endpoint" \
                         'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore' \
                         'unable to load the SPARQL endpoint'
 
-                     # set CSV2RDF4LOD_PUBLISH_SUBSET_SAMPLES true
+                     # set CSV2RDF4LOD_PUBLISH_SUBSET_SAMPLES true (ONLY for project user)
                      change_source_me $target CSV2RDF4LOD_PUBLISH_SUBSET_SAMPLES true \
                         "enable loading the *small* sample portions of the full RDF dump files into the SPARQL endpoint" \
                         'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables' \
                         'unable to load the SPARQL endpoint with samples of the RDF that you created'
 
-                     # TODO: is logging location set up correctly? Yes, but verify on next iteration...
+                     # TODO: is logging location set up correctly? Yes, but verify.
 
-                     rm -f .prizms-std.common
+                     tomcat_installed="no"
+                     if [[ -e '/etc/tomcat6/tomcat-users.xml' && \
+                           -e '/etc/init.d/tomcat6'           && \
+                           -d '/var/lib/tomcat6/webapps/' ]]; then
+                        tomcat_installed="yes"
+                     fi
+                     if [[ "$tomcat_installed" == "yes" ]]; then
+                        # The following two are also done above if virtuoso is installed.
+                        # Calling them twice is safe.
+                        echo
+                        echo $div
+                        offer_install_aptget 'libapache2-mod-proxy-html' \
+                                             "expose the (port 8080) Tomcat application server of SADI services at $our_base_uri/sadi-services"
 
-                    # TODO
-                    # https://scm.escience.rpi.edu/trac/ticket/1502#comment:5 (sparql only)
-                    # https://scm.escience.rpi.edu/trac/ticket/1612#comment:2 (sparql AND sadi-services)
-                    #ProxyTimeout 1800
-                    #ProxyRequests Off
-                    #ProxyPass /sparql http://localhost:8890/sparql
-                    #ProxyPassReverse /sparql http://localhost:8890/sparql
-                    #<Location /sparql>
-                    #        Order allow,deny
-                    #        allow from all
-                    #        ProxyHTMLURLMap / /sparql/ c
-                    #        SetOutputFilter proxy-html
-                    #</Location>
-                    #
-                    #ProxyPass /sadi-services http://localhost:8080/sadi-services
-                    #ProxyPassReverse /sadi-services http://localhost:8080/sadi-services
-                    #<Location /sadi-services>
-                    #        Order allow,deny
-                    #        allow from all
-                    #        ProxyHTMLURLMap / /sparql/ c
-                    #        ProxyHTMLURLMap http://localhost:8080/ /
-                    #        SetOutputFilter proxy-html
-                    #</Location>
+                        echo $div
+                        enable_apache_module 'proxy_http' \
+                                             "expose your (port 8080) Tomcat application server of SADI services at the URL $our_base_uri/sadi-services"
+                        #                  ^ 'proxy' module is enabled when proxy_http is enabled.
 
+                        # TODO
+                        # https://scm.escience.rpi.edu/trac/ticket/1502#comment:5 (sparql only)
+                        # https://scm.escience.rpi.edu/trac/ticket/1612#comment:2 (sparql AND sadi-services)
+                        #
+                        #ProxyTimeout 1800
+                        #ProxyRequests Off
+                        #
+                        #ProxyPass /sparql http://localhost:8890/sparql
+                        #ProxyPassReverse /sparql http://localhost:8890/sparql
+                        #<Location /sparql>
+                        #        Order allow,deny
+                        #        allow from all
+                        #        ProxyHTMLURLMap / /sparql/ c
+                        #        SetOutputFilter proxy-html
+                        #</Location>
+                        #
+                        #ProxyPass /sadi-services http://localhost:8080/sadi-services
+                        #ProxyPassReverse /sadi-services http://localhost:8080/sadi-services
+                        #<Location /sadi-services>
+                        #        Order allow,deny
+                        #        allow from all
+                        #        ProxyHTMLURLMap / /sparql/ c
+                        #        ProxyHTMLURLMap http://localhost:8080/ /
+                        #        SetOutputFilter proxy-html
+                        #</Location>
+
+                     fi
+
+                     # TODO: X_GOOGLE_MAPS_API_Key
+                     credentials="/etc/prizms/$project_user_name/??triple-store??/google/csv2rdf4lod-source-me-for-googlemap-credentials.sh"
 
                   fi # end "I am not project user"
+
+
+                  if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+
+                     # AS both DEVELOPER and PROJECT USER (after dependencies were installed).
+                     for user in $person_user_name $project_user_name; do
+
+                        target="data/source/csv2rdf4lod-source-me-as-$user.sh"
+
+                        if [[ "$person_username" == `whoami` ]]; then # TODO: this variable is always empty.
+                           your="your"
+                        else
+                           your="$project_user_name's"
+                        fi
+
+                        # JENAROOT to data/source/csv2rdf4lod-source-me-as-$user.sh
+                        echo
+                        echo $div
+                        echo ${PRIZMS_HOME%/*}
+                        find ${PRIZMS_HOME%/*} -type d -name "apache-jena*" # /home/lebot/opt/apache-jena-2.7.4
+                        set_paths_cmd="export JENAROOT=`find ${PRIZMS_HOME%/*} -type d -name "apache-jena*" | tail -1 | sed "s/\`whoami\`/$user/g"`"
+                        echo "Apache Jena requires the shell environent variable JENAROOT to be set."
+                        echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Apache-Jena"
+                        echo "The following command should appear in $your data/source/csv2rdf4lod-source-me-as-$user.sh."
+                        echo
+                        echo "    $set_paths_cmd"
+                        already_there=`grep "^$set_paths_cmd" $target`
+                        echo
+                        if [ -n "$already_there" ]; then
+                           echo "It seems that you already have the following in $your $target, so we won't offer to add it again:"
+                           echo
+                           echo $already_there
+                        else
+                           read -p "Add this command to $your $target? [y/n] " -u 1 install_it
+                           if [[ "$install_it" == [yY] ]]; then
+                              echo $set_paths_cmd >> $target
+                              echo
+                              echo "Okay, we added it:"
+                              grep "^$set_paths_command" $target
+                              added="$added $target"
+                           else
+                              echo "We didn't $change $your $target, so you'll need to make sure you set the paths correctly each time."
+                           fi
+                        fi
+                        # was(?) needed as stopgap: export PATH=$PATH:$JENAROOT/bin
+                     done
+                  fi
+
 
 
                   # TODO: VSR_PROVENANCE='true' in source-me.sh
@@ -2164,15 +2184,14 @@ else
                   fi
 
 
-
+                  # TODO: Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
+                  # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
+                  #
                   if [[ -n "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                      echo
                      echo $div
                      echo "Prizms can use existing upstream LODSPeaKrs."
                      echo
-                     # TODO: Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
-                     # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
-                     #
                      for upstream in `find ${user_home%/*}/$project_user_name/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
                         for ctype in services types; do
                            for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do

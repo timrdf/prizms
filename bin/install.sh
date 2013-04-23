@@ -2036,12 +2036,12 @@ else
                      echo
                      echo $div
                      echo "LODSPeaKr permits a logo for the web site."
-                     echo "The logo should be placed at /home/$person_user_name/prizms/$person_user_name/lodspeakr/components/static/img/logo.png"
+                     echo "The logo should be placed at /home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png"
                      echo
-                     if [[ ! -e /home/$person_user_name/prizms/$person_user_name/lodspeakr/components/static/img/logo.png ]]; then
+                     if [[ ! -e /home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png ]]; then
                         read -p "Q: Did you know that you can add a logo to your site? [y/n] " -u 1 logo
                      else
-                        echo "(/home/$person_user_name/prizms/$person_user_name/lodspeakr/components/static/img/logo.png already exists)"
+                        echo "(/home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png already exists)"
                      fi
 
 

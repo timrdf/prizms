@@ -299,6 +299,41 @@ else
       return $enabled
    }
 
+   function enable_htaccess {
+      reason="$1"
+      echo
+      echo $div
+      target="/etc/apache2/sites-available/default" 
+      echo "$reason"
+      echo ".htaccess only work if the 'AllowOverride All' directive is set in $target, similar to:"
+      echo
+      echo "    <Directory /var/www/>"
+      echo "       AllowOverride All"
+      echo "       ..."
+      echo
+      current=`sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1 | grep All`
+      if [[ "$current" != "All" ]]; then
+         echo "We can change /var/www's AllowOverride to All, making the new $target be:"
+         echo
+         sudo cat $target | awk '{if($1=="<Directory"){scope=$2} if($1=="AllowOverride" && scope=="/var/www/>"){print $1,"All"}else{print}}' > .prizms-apache-config
+         cat .prizms-apache-config
+         echo
+         echo "- - The difference is - -"
+         sudo diff $target .prizms-apache-config
+         echo
+         read -p "Q: May we update $target to enable AllowOverride All for /var/www? [y/n] " -u 1 install_it
+         if [[ "$install_it" == [yY] ]]; then
+            sudo cp $target .$target_`date +%Y-%m-%d-%H-%M-%S`
+            mv .prizms-sadi-htaccess $target
+            restart_apache
+         else
+            echo "Okay, we won't update $target."
+         fi
+      else
+         echo "($target seems to permit .htaccess: `sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www`"
+      fi
+   }
+
    function restart_apache {
       echo
       echo $div
@@ -1869,36 +1904,8 @@ else
                      enable_apache_module 'env' 'enable DataFAQs provenance'
 
                      # AllowOverride None -> AllowOverride All
-                     echo
-                     echo $div
-                     target="/etc/apache2/sites-available/default" 
-                     echo "DataFAQs needs to specify environment variables in an .htaccess"
-                     echo ".htaccess only work if the 'AllowOverride All' directive is set in $target, similar to:"
-                     echo
-                     echo "    <Directory /var/www/>"
-                     echo "       AllowOverride All"
-                     echo "       ..."
-                     echo
-                     current=`sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1 | grep All`
-                     if [[ "$current" != "All" ]]; then
-                        echo "We can change /var/www's AllowOverride to All, making the new $target be:"
-                        echo
-                        sudo cat $target | awk '{if($1=="<Directory"){scope=$2} if($1=="AllowOverride" && scope=="/var/www/>"){print $1,"All"}else{print}}' > .prizms-apache-config
-                        cat .prizms-apache-config
-                        echo
-                        echo "- - The difference is - -"
-                        sudo diff $target .prizms-apache-config
-                        echo
-                        read -p "Q: May we update $target to enable AllowOverride All for /var/www? [y/n] " -u 1 install_it
-                        if [[ "$install_it" == [yY] ]]; then
-                           sudo cp $target .$target_`date +%Y-%m-%d-%H-%M-%S`
-                           mv .prizms-sadi-htaccess $target
-                        else
-                           echo "Okay, we won't update $target."
-                        fi
-                     else
-                        echo "($target seems to permit .htaccess: `sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www`"
-                     fi
+                     enable_htaccess
+
                      # tail -f /var/log/apache2/error.log
                   else
                      echo
@@ -2002,10 +2009,8 @@ else
                         enable_apache_module 'rewrite' 'run LODSPeaKr'
                         enable_apache_module 'php5'    'run LODSPeaKr'
 
-                        # TODO: AllowOverride must be 'All':
-                        # cat /etc/apache2/sites-available/default | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1
-                        #echo "  /etc/apache2/sites-available/default must 'AllowOverride All' for <Directory /var/www/>"
-                        # echo 'https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu:'
+                        # AllowOverride must be 'All' https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu
+                        enable_htaccess "LODSPeaKr needs .htaccess"
 
                         # /var/www$ sudo chmod -R g+w lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php; sudo chgrp -R www-data lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php
                      fi

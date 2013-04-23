@@ -1064,7 +1064,7 @@ else
 
                         target="data/source/csv2rdf4lod-source-me-as-$user.sh"
 
-                        if [[ "$person_username" == `whoami` ]]; then # TODO: this user name is always empty.
+                        if [[ "$person_user_name" == `whoami` ]]; then
                            your="your"
                         else
                            your="$project_user_name's"
@@ -1736,7 +1736,7 @@ else
 
                         target="data/source/csv2rdf4lod-source-me-as-$user.sh"
 
-                        if [[ "$person_username" == `whoami` ]]; then # TODO: this variable is always empty.
+                        if [[ "$person_user_name" == `whoami` ]]; then
                            your="your"
                         else
                            your="$project_user_name's"
@@ -1863,34 +1863,39 @@ else
                   fi
 
                   if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
+
                      # Apache module 'env' is needed to enable the SetEnv command in the 
                      # $PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess below.
-                     # enable envars:
-                     # sudo a2enmod env
                      enable_apache_module 'env' 'enable DataFAQs provenance'
-                     #echo "Since we've installed a new Apache module, we need to enable it."
-                     #echo
-                     #echo sudo a2enmod env
-                     #echo
-                     #read -p "Q: May we enable the Apache env module using the command above? [y/n] " -u 1 enable_it
-                     #if [[ "$enable_it" == [yY] ]]; then
-                     #   echo sudo a2enmod env
-                     #        sudo a2enmod env
-                     #fi # 
 
                      # AllowOverride None -> AllowOverride All
-                     target='/etc/apache2/sites-available/default'
-                     echo "TODO: Need to permit AllowOverride All in $target"
-
-                     # Change to 'All' in
-                     # /etc/apache2/sites-available/default
-                     #    <Directory /var/www/>
-                     #       Options Indexes FollowSymLinks MultiViews
-                     #       AllowOverride All
-
-                     # restart apache:
-                     # sudo service apache2 restart
-
+                     echo
+                     echo $div
+                     target="/etc/apache2/sites-available/default"
+                     echo "DataFAQs needs to specify environment variables in an .htaccess"
+                     echo ".htaccess only work if the 'AllowOverride All' directive is set in $target, similar to:"
+                     echo
+                     echo "    <Directory /var/www/>"
+                     echo "       AllowOverride All"
+                     echo "       ..."
+                     echo
+                     current=`sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1 | grep All`
+                     if [[ "$current" != "All" ]]; then
+                        echo "We can change /var/www's AllowOverride to All, making the new $target be:"
+                        echo
+                        sudo cat $target | awk '{if($1=="<Directory"){scope=$2} if($1=="AllowOverride" && $2=="/var/www/>"){print $1,"All"}else{print}}' > .prizms-apache-config
+                        cat .prizms-apache-config
+                        echo
+                        read -p "Q: May we update $target to enable AllowOverride All for /var/www? [y/n] " -u 1 install_it
+                        if [[ "$install_it" == [yY] ]]; then
+                           sudo cp $target .$target_`date +%Y-%m-%d-%H-%M-%S`
+                           mv .prizms-sadi-htaccess $target
+                        else
+                           echo "Okay, we won't update $target."
+                        fi
+                     else
+                        echo "($target seems to permit .htaccess: `sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www`"
+                     fi
                      # tail -f /var/log/apache2/error.log
                   else
                      echo
@@ -2002,8 +2007,9 @@ else
                         # /var/www$ sudo chmod -R g+w lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php; sudo chgrp -R www-data lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php
                      fi
 
+                     # TODO: change $lodspk['title'] = 'LODSPeaKr'; in settings.inc.php
 
-                     # TODO: the following need to be updated if --our-base-uri becomes e.g. http://ieeevis.tw.rpi.edu
+                     # The following need to be updated if --our-base-uri becomes e.g. http://ieeevis.tw.rpi.edu
                      # $conf['endpoint']['local'] = 'http://aquarius.tw.rpi.edu/projects/ieeevis/sparql';
                      # $conf['basedir'] = 'http://aquarius.tw.rpi.edu/projects/ieeevis/';
                      # $conf['ns']['local']   = 'http://aquarius.tw.rpi.edu/projects/ieeevis/';
@@ -2079,11 +2085,29 @@ else
                         echo "(LODSPeaKr is already under version control)" 
                      fi
 
-                     # TODO: change $lodspk['title'] = 'LODSPeaKr'; in settings.inc.php
 
+                     # TODO: Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
+                     # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
+                     #
+                     if [[ -n "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+                        echo
+                        echo $div
+                        echo "Prizms can use existing upstream LODSPeaKrs."
+                        echo
+                        for upstream in `find ${user_home%/*}/$project_user_name/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
+                           for ctype in services types; do
+                              for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
+                                 echo $component
+                                 # =>
+                                 # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
+                                 # $conf['components']['services'][] = '/home/alvaro/previousproject2/lodspeakr/components/services/myService';
+                              done
+                           done
+                        done
+                     fi
 
-
-                     # Multiple users development site: https://github.com/timrdf/prizms/issues/16
+ 
+                     # Multiple users development site (https://github.com/timrdf/prizms/issues/16)
                      echo
                      echo $div
                      echo "Prizms permits development of its LODSPeaKr within developers' namespaces (e.g. $our_base_uri/~$person_user_name)."
@@ -2238,26 +2262,7 @@ else
                   fi
 
 
-                  # TODO: Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
-                  # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
-                  #
-                  if [[ -n "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
-                     echo
-                     echo $div
-                     echo "Prizms can use existing upstream LODSPeaKrs."
-                     echo
-                     for upstream in `find ${user_home%/*}/$project_user_name/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
-                        for ctype in services types; do
-                           for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
-                              echo $component
-                              # =>
-                              # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
-                              # $conf['components']['services'][] = '/home/alvaro/previousproject2/lodspeakr/components/services/myService';
-                           done
-                        done
-                     done
-                  fi
- 
+
 
                   echo
                   echo $div
@@ -2334,6 +2339,13 @@ else
 
 
                   # TODO: add warning if more than one "cr-cron.sh" in crontab
+
+
+
+
+
+
+                  # Finished.
 
                   #
                   # Add all new files to version control.

@@ -334,7 +334,7 @@ else
             echo "Okay, we won't update $target."
          fi
       else
-         echo "($target seems to permit .htaccess for /var/www)"
+         echo "($target seems to permit .htaccess files for /var/www)"
       fi
    }
 

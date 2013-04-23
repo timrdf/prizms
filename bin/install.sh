@@ -1572,7 +1572,7 @@ else
                            sudo cat $target | grep -v "</VirtualHost>" > .apache-conf
                            cat .prizms-apache-conf >> .apache-conf
                            virtualhost=`sudo grep "</VirtualHost>" $target`
-                           echo $virtualhost > .apache-conf
+                           echo $virtualhost >> .apache-conf
                            echo
                            echo The final configuration file will look like:
                            echo

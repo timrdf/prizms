@@ -332,7 +332,7 @@ else
             echo "Okay, we won't update $target."
          fi
       else
-         echo "($target seems to permit .htaccess: `sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www`"
+         echo "($target seems to permit .htaccess for /var/www)"
       fi
    }
 

@@ -815,6 +815,7 @@ else
                      fi
                   fi
 
+                  # TODO: add source ../csv2rdf4lod-source-me-for-<project>.sh to as-<developer>.sh
 
                   # Set shell environment variable values in source-me.sh's.
                   if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
@@ -1919,11 +1920,11 @@ else
                      if [[ ! -e $target ]]; then
                         echo "$target does not exist, but it should contain the following directives to enable the SADI services:"
                         echo
-                        echo "Options -MultiViews"                                           > .prizms-sadi-htaccess
-                        echo "SetHandler mod_python"                                        >> .prizms-sadi-htaccess
-                        echo "PythonHandler sadi"                                           >> .prizms-sadi-htaccess
+                        echo "Options -MultiViews"                     > .prizms-sadi-htaccess
+                        echo "SetHandler mod_python"                  >> .prizms-sadi-htaccess
+                        echo "PythonHandler sadi"                     >> .prizms-sadi-htaccess
                         # SetEnv X_CKAN_API_Key     # This needs 'sudo a2enmod env' to take affect. # see http://httpd.apache.org/docs/2.2/mod/mod_env.html
-                        echo "SetEnv DATAFAQS_BASE_URI http://aquarius.tw.rpi.edu/projects" >> .prizms-sadi-htaccess # TODO: hard coded URI here; naughty
+                        echo "SetEnv DATAFAQS_BASE_URI $our_base_uri" >> .prizms-sadi-htaccess
                         cat .prizms-sadi-htaccess
                         echo
                         read -p "Q: May we install the directives above into $target? [y/n] " -u 1 install_it
@@ -1957,7 +1958,6 @@ else
 
 
 
-                  # TODO: add source ../csv2rdf4lod-source-me-for-<project>.sh to as-<developer>.sh
 
                   if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                      #
@@ -2021,6 +2021,7 @@ else
 
                      # TODO: change $lodspk['title'] = 'LODSPeaKr'; in settings.inc.php
 
+
                      # The following need to be updated if --our-base-uri becomes e.g. http://ieeevis.tw.rpi.edu
                      # $conf['endpoint']['local'] = 'http://aquarius.tw.rpi.edu/projects/ieeevis/sparql';
                      # $conf['basedir'] = 'http://aquarius.tw.rpi.edu/projects/ieeevis/';
@@ -2031,11 +2032,18 @@ else
                      # move the file and make the soft link.
 
 
-                     # TODO: if /home/ieeevis/prizms/ieeevis/lodspeakr/components/static/img/logo.png does not exist, say to add it.
+                     # LODSPeaKr logo
+                     echo
+                     echo $div
+                     echo "LODSPeaKr permits a logo for the web site."
+                     echo "The logo should be placed at /home/$person_user_name/prizms/$person_user_name/lodspeakr/components/static/img/logo.png"
+                     echo
+                     if [[ ! -e /home/$person_user_name/prizms/$person_user_name/lodspeakr/components/static/img/logo.png ]]; then
+                        read -p "Q: Did you know that you can add a logo to your site? [y/n] " -u 1 logo
+                     else
+                        echo "(/home/$person_user_name/prizms/$person_user_name/lodspeakr/components/static/img/logo.png already exists)"
+                     fi
 
-
-                     # TODO add to settings.inc.php to cherry pick others' lodspeakr components
-                     # see https://github.com/timrdf/prizms/issues/12
 
                      echo
                      echo $div

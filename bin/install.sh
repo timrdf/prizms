@@ -2019,6 +2019,27 @@ else
                         enable_htaccess "LODSPeaKr needs .htaccess"
 
                         # /var/www$ sudo chmod -R g+w lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php; sudo chgrp -R www-data lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php
+            
+                        # TODO: if /var/www/lodspeakr/settings.inc.php exists and is not a soft link to /home/ieeevis/prizms/ieeevis/lodspeakr/settings.inc.php
+                        target="$www/lodspeakr/settings.inc.php"
+                        if [[ ! -h $target ]]; then
+                           echo
+                           echo "$target exists, but is not soft-linked into $project_user's read-only clone of $project_code_repository."
+                           echo "The following commands will place settings.inc.php into your development clone, and link to $project_user's read-only production clone."
+                           echo
+                           echo    sudo mv $target $user_home/prizms/lofd/lodspeakr/settings.inc.php
+                           echo    sudo ln -s      $project_user_home/prizms/lofd/lodspeakr/settings.inc.php $target
+                           echo
+                           read -p "Q: Would you like to configure LODSPeaKr now? [y/n] " -u 1 install_it
+                           if [[ "$install_it" ]]; then
+                              sudo mv $target $user_home/prizms/lofd/lodspeakr/settings.inc.php
+                              sudo ln -s      $project_user_home/prizms/lofd/lodspeakr/settings.inc.php $target
+                              added="$added lodspeakr/settings.inc.php"
+                              # Move the file and make the soft link.
+                           else
+                              echo "Okay, we will leave $www/lodspeakr/settings.inc.php as not version controlled."
+                           fi
+                        fi
                      fi
 
                      # TODO: change $lodspk['title'] = 'LODSPeaKr'; in settings.inc.php
@@ -2029,9 +2050,6 @@ else
                      # $conf['basedir'] = 'http://aquarius.tw.rpi.edu/projects/ieeevis/';
                      # $conf['ns']['local']   = 'http://aquarius.tw.rpi.edu/projects/ieeevis/';
 
-
-                     # TODO: if /var/www/lodspeakr/settings.inc.php exists and is not a soft link to /home/ieeevis/prizms/ieeevis/lodspeakr
-                     # move the file and make the soft link.
 
 
                      # LODSPeaKr logo

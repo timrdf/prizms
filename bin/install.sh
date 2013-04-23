@@ -2077,6 +2077,7 @@ else
                                        if [[ ${#enable} -gt 0 ]]; then
                                           cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}' > .prizms-installer-settings.inc.php
                                           sudo mv .prizms-installer-settings.inc.php $target
+                                          added="$added lodspeakr/settings.inc.php"
                                        fi
                                     fi
                                     echo

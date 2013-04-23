@@ -300,11 +300,13 @@ else
    }
 
    function restart_apache {
+      echo
+      echo $div
       echo "Since we've made some changes to apache, we need to restart it so that they take effect."
       echo
       echo sudo service apache2 restart
       echo
-      read -p "May we restart apache using the command above? [y/n] " -u 1 restart_it
+      read -p "Q: May we restart apache using the command above? [y/n] " -u 1 restart_it
       if [[ "$restart_it" == [yY] ]]; then
          echo sudo service apache2 restart
               sudo service apache2 restart
@@ -1558,7 +1560,7 @@ else
                         #        SetOutputFilter proxy-html
                         #  </Location>
  
-                        echo
+                        echo # (This Apache-config modification pattern is repeated below for Tomcat)
                         echo $div
                         target='/etc/apache2/sites-available/default'
                         already_there=""
@@ -1659,21 +1661,66 @@ else
                                              "expose your (port 8080) Tomcat application server of SADI services at the URL $our_base_uri/sadi-services"
                         #                  ^ 'proxy' module is enabled when proxy_http is enabled.
 
-                        # TODO
                         # https://scm.escience.rpi.edu/trac/ticket/1502#comment:5 (sparql only)
                         # https://scm.escience.rpi.edu/trac/ticket/1612#comment:2 (sparql AND sadi-services)
                         #
-                       #
-                        #ProxyPass /sadi-services http://localhost:8080/sadi-services
-                        #ProxyPassReverse /sadi-services http://localhost:8080/sadi-services
-                        #<Location /sadi-services>
+                        # Mapping 5: works on datafaqstest and lofd (see virtuoso above for Mappings 1-4)
+                        #
+                        # ProxyPass /sadi-services http://localhost:8080/sadi-services
+                        # ProxyPassReverse /sadi-services http://localhost:8080/sadi-services
+                        # <Location /sadi-services>
                         #        Order allow,deny
                         #        allow from all
                         #        ProxyHTMLURLMap / /sparql/ c
                         #        ProxyHTMLURLMap http://localhost:8080/ /
                         #        SetOutputFilter proxy-html
-                        #</Location>
+                        # </Location>
 
+                        echo # (This Apache-config modification pattern is repeated above for Virtuoso)
+                        echo $div
+                        target='/etc/apache2/sites-available/default'
+                        already_there=""
+                        if [ -e $target ]; then
+                           already_there=`grep 'Location /sadi-services' $target`
+                        fi
+                        echo "Some Apache directives (e.g., ProxyPass) need to be set in $target to expose your (port 8080) Tomcat application server at the URL $our_base_uri/sadi-services."
+                        if [[ -z "$already_there" ]]; then
+                           echo "To expose the (port 8080) Tomacat application server of SADI services at $our_base_uri/sadi-services,"
+                           echo "the following apache configuration needs to be set in $target:"
+                           echo                                                                          # Mapping 5 (see above)
+                           echo '  ProxyTimeout 1800'                                                    > .prizms-apache-conf
+                           echo '  ProxyRequests Off'                                                   >> .prizms-apache-conf
+                           echo                                                                         >> .prizms-apache-conf
+                           echo '  ProxyPass /sadi-services http://localhost:8080/sadi-services'        >> .prizms-apache-conf
+                           echo '  ProxyPassReverse /sadi-services http://localhost:8080/sadi-services' >> .prizms-apache-conf
+                           echo '  <Location /sadi-services>'                                           >> .prizms-apache-conf
+                           echo '          Order allow,deny'                                            >> .prizms-apache-conf
+                           echo '          allow from all'                                              >> .prizms-apache-conf
+                           echo '          ProxyHTMLURLMap http://localhost:8080/ /'                    >> .prizms-apache-conf
+                           echo '          SetOutputFilter proxy-html'                                  >> .prizms-apache-conf
+                           echo '  </Location>'                                                         >> .prizms-apache-conf
+                           cat .prizms-apache-conf
+
+                           # Tuck the new directives into the entire configuration file.
+                           virtualhost=`sudo  grep    "</VirtualHost>" $target`
+                           sudo cat $target | grep -v "</VirtualHost>" > .apache-conf
+                           cat .prizms-apache-conf                    >> .apache-conf
+                           echo                                       >> .apache-conf
+                           echo $virtualhost                          >> .apache-conf
+                           echo
+                           echo The final configuration file will look like:
+                           echo
+                           cat .apache-conf
+                           read -p "Q: May we add the directives above to $target? [y/n] " -u 1 install_it
+                           if [[ "$install_it" == [yY] ]]; then
+                              sudo cp $target .$target_`date +%Y-%m-%d-%H-%M-%S`
+                              #cat .prizms-apache-conf | sudo tee -a $target &> /dev/null
+                              sudo mv .apache-conf $target
+                              restart_apache
+                           fi
+                        else
+                           echo "($target seems to already contain the ProxyPath directives to map /sadi-services to 8080)"
+                        fi
                      fi
 
                      # TODO: X_GOOGLE_MAPS_API_Key

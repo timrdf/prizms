@@ -304,8 +304,10 @@ else
       echo
       echo $div
       target="/etc/apache2/sites-available/default" 
-      echo "$reason"
-      echo ".htaccess only work if the 'AllowOverride All' directive is set in $target, similar to:"
+      if [[ -n "$reason" ]]; then
+         echo "$reason"
+      fi
+      echo ".htaccess files only work if the 'AllowOverride All' directive is set in $target, similar to:"
       echo
       echo "    <Directory /var/www/>"
       echo "       AllowOverride All"

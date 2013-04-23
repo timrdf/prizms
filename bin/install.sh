@@ -2076,7 +2076,7 @@ else
                                        fi
                                        if [[ ${#enable} -gt 0 ]]; then
                                           cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}' > .prizms-installer-settings.inc.php
-                                          mv .prizms-installer-settings.inc.php $target
+                                          sudo mv .prizms-installer-settings.inc.php $target
                                        fi
                                     fi
                                     echo

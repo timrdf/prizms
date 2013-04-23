@@ -1543,7 +1543,21 @@ else
                         #          Order allow,deny
                         #          allow from all
                         #  </Location>
-
+                        #
+                        # Mapping 5: works on datafaqstest and lofd (updated to work along side Tomcat).
+                        #
+                        #  ProxyTimeout 1800
+                        #  ProxyRequests Off
+                        #
+                        #  ProxyPass /sparql http://localhost:8890/sparql
+                        #  ProxyPassReverse /sparql http://localhost:8890/sparql
+                        #  <Location /sparql>
+                        #        Order allow,deny
+                        #        allow from all
+                        #        ProxyHTMLURLMap / /sparql/ c
+                        #        SetOutputFilter proxy-html
+                        #  </Location>
+ 
                         echo
                         echo $div
                         target='/etc/apache2/sites-available/default'
@@ -1555,20 +1569,21 @@ else
                         if [[ -z "$already_there" ]]; then
                            echo "To expose the Virtuoso server on port 8890 at $our_base_uri/sparql,"
                            echo "the following apache configuration needs to be set in $target:"
-                           echo                                                                         # Mapping 3 (see above)
-                           echo '  <Location /sparql>'                                               > .prizms-apache-conf 
-                           echo '     allow from all'                                               >> .prizms-apache-conf
-                           echo '     SetHandler None'                                              >> .prizms-apache-conf
-                           echo '     Options +Indexes'                                             >> .prizms-apache-conf
-                           echo '     ProxyPass               http://localhost:8890/sparql'         >> .prizms-apache-conf
-                           echo '     ProxyPassReverse        /sparql'                              >> .prizms-apache-conf
-                           echo '     ProxyHTMLExtended On'                                         >> .prizms-apache-conf
-                           echo '    #ProxyHTMLEnable         On'                                   >> .prizms-apache-conf
-                           echo '     ProxyHTMLURLMap url\(/([^\)]*)\) url(/sparql$1) Rihe'         >> .prizms-apache-conf
-                           echo '     ProxyHTMLURLMap         /sparql /sparql'                      >> .prizms-apache-conf
-                           echo '     ProxyHTMLURLMap         http://localhost:8890/sparql /sparql' >> .prizms-apache-conf
+                           echo                                                                       # Mapping 5 (see above)
+                           echo '  ProxyTimeout 1800'                                                > .prizms-apache-conf
+                           echo '  ProxyRequests Off'                                               >> .prizms-apache-conf
+                           echo                                                                     >> .prizms-apache-conf
+                           echo '  ProxyPass /sparql http://localhost:8890/sparql'                  >> .prizms-apache-conf
+                           echo '  ProxyPassReverse /sparql http://localhost:8890/sparql'           >> .prizms-apache-conf
+                           echo '  <Location /sparql>'                                              >> .prizms-apache-conf
+                           echo '          Order allow,deny'                                        >> .prizms-apache-conf
+                           echo '          allow from all'                                          >> .prizms-apache-conf
+                           echo '          ProxyHTMLURLMap / /sparql/ c'                            >> .prizms-apache-conf
+                           echo '          SetOutputFilter proxy-html'                              >> .prizms-apache-conf
                            echo '  </Location>'                                                     >> .prizms-apache-conf
                            cat .prizms-apache-conf
+
+                           # Tuck the new directives into the entire configuration file.
                            virtualhost=`sudo  grep    "</VirtualHost>" $target`
                            sudo cat $target | grep -v "</VirtualHost>" > .apache-conf
                            cat .prizms-apache-conf                    >> .apache-conf
@@ -1648,18 +1663,7 @@ else
                         # https://scm.escience.rpi.edu/trac/ticket/1502#comment:5 (sparql only)
                         # https://scm.escience.rpi.edu/trac/ticket/1612#comment:2 (sparql AND sadi-services)
                         #
-                        #ProxyTimeout 1800
-                        #ProxyRequests Off
-                        #
-                        #ProxyPass /sparql http://localhost:8890/sparql
-                        #ProxyPassReverse /sparql http://localhost:8890/sparql
-                        #<Location /sparql>
-                        #        Order allow,deny
-                        #        allow from all
-                        #        ProxyHTMLURLMap / /sparql/ c
-                        #        SetOutputFilter proxy-html
-                        #</Location>
-                        #
+                       #
                         #ProxyPass /sadi-services http://localhost:8080/sadi-services
                         #ProxyPassReverse /sadi-services http://localhost:8080/sadi-services
                         #<Location /sadi-services>

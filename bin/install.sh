@@ -1569,10 +1569,11 @@ else
                            echo '     ProxyHTMLURLMap         http://localhost:8890/sparql /sparql' >> .prizms-apache-conf
                            echo '  </Location>'                                                     >> .prizms-apache-conf
                            cat .prizms-apache-conf
+                           virtualhost=`sudo  grep    "</VirtualHost>" $target`
                            sudo cat $target | grep -v "</VirtualHost>" > .apache-conf
-                           cat .prizms-apache-conf >> .apache-conf
-                           virtualhost=`sudo grep "</VirtualHost>" $target`
-                           echo $virtualhost >> .apache-conf
+                           cat .prizms-apache-conf                    >> .apache-conf
+                           echo                                       >> .apache-conf
+                           echo $virtualhost                          >> .apache-conf
                            echo
                            echo The final configuration file will look like:
                            echo

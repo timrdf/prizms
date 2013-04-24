@@ -2394,10 +2394,12 @@ else
                            echo "Your crontab is currently:"
                            cat $tab
                            echo
+                           m=$(($RANDOM%60))
+                           h=$(($RANDOM%24))
                            # m h  dom mon dow   command
                            # 14 20 * * * /srv/twc-healthdata/data/source/healthdata-tw-rpi-edu/cr-cron/version/cron.sh
                            echo "# m h  dom mon dow   command" >> $tab
-                           echo "14 20 * * * $target"          >> $tab
+                           echo "$m $h * * * $target"          >> $tab
                            echo ""                             >> $tab
                            echo "We would like to update your crontab so that it is:"
                            echo

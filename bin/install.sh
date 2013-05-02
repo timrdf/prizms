@@ -819,9 +819,11 @@ else
                      read -p "Q: May we add $target? [y/n] " -u 1 make_it
                      if [[ "$make_it" == [yY] ]]; then
                         echo "*"                             > $target
-                        echo ".refresh-prizms-installation" >> $target
                         added="$added data/source/.gitignore"
                      fi
+                  fi
+                  if [[ ! -e .gitignore || ! `grep "^.refresh-prizms-installation" .gitignore` ]]; then
+                     echo ".refresh-prizms-installation" >> .gitignore
                   fi
 
                   # TODO: add source ../csv2rdf4lod-source-me-for-<project>.sh to as-<developer>.sh

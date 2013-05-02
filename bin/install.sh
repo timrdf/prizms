@@ -2089,15 +2089,15 @@ else
                            echo
                            echo $div
                            echo "$target exists, but is not soft-linked into $project_user_name's read-only clone of $project_code_repository."
-                           echo "The following commands will place settings.inc.php into your development clone, and link to $project_user's read-only production clone."
+                           echo "The following commands will place settings.inc.php into your development clone, and link to $project_user_name's read-only production clone."
                            echo
-                           echo    sudo mv $target $user_home/prizms/lofd/lodspeakr/settings.inc.php
-                           echo    sudo ln -s      $project_user_home/prizms/lofd/lodspeakr/settings.inc.php $target
+                           echo    sudo mv $target $user_home/prizms/$project_user_name/lodspeakr/settings.inc.php
+                           echo    sudo ln -s      $project_user_home/prizms/$project_user_name/lodspeakr/settings.inc.php $target
                            echo
                            read -p "Q: Peform the commands above to put settings.inc.php under version controll? [y/n] " -u 1 install_it
                            if [[ "$install_it" == [yY] ]]; then
-                              sudo mv $target $user_home/prizms/lofd/lodspeakr/settings.inc.php
-                              sudo ln -s      $project_user_home/prizms/lofd/lodspeakr/settings.inc.php $target
+                              sudo mv $target $user_home/prizms/$project_user_name/lodspeakr/settings.inc.php
+                              sudo ln -s      $project_user_home/prizms/$project_user_name/lodspeakr/settings.inc.php $target
                               added="$added lodspeakr/settings.inc.php"
                               # Move the file and make the soft link.
                            else

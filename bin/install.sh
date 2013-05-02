@@ -1894,7 +1894,8 @@ else
 
 
                   if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
-                     for credentials in "/etc/prizms/$project_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh"; do
+                     for credentials in "/etc/prizms/$project_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh" \
+                                        "/etc/prizms/$project_user_name/ckan/datahub.io/csv2rdf4lod-source-me-for-ckan-credentials.sh"; do
                         if [[ -e $credentials ]]; then
                            target="data/source/csv2rdf4lod-source-me-credentials.sh"
                            echo

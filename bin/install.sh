@@ -1878,7 +1878,7 @@ else
                            read -p "Q: What API Key should we use to update datahub.io metadata entries? " ckankey
                            echo
                            if [[ -n "$ckankey" ]]; then
-                              change_source_me $credentials 'X_CKAN_API_Key' "$our_base_uri" \
+                              change_source_me $credentials 'X_CKAN_API_Key' "$ckankey" \
                                  'authenticate to datahub.io' \
                                  'https://github.com/timrdf/DataFAQs/wiki/Missing-CKAN-API-Key' \
                                  'will not be able to inform datahub.io about this Prizms nodes'

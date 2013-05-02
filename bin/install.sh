@@ -1328,7 +1328,9 @@ else
                      else
                         echo "(locahost's IP is $localhost_ip; Virtuoso should not have any issues.)"
                      fi 
+                  fi # end running as developer e.g. jsmith not loxd
 
+                  if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                      #
                      # Install third party utilities (mostly with apt-get and tarball installs).
                      #
@@ -1364,9 +1366,9 @@ else
                         fi
                      fi
                      rm -f .before-prizms-installed-dependencies
+                  fi # end running as developer e.g. jsmith not loxd
 
-
-
+                  if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
 
                      virtuoso_installed="no"
                      if [[ -e '/var/lib/virtuoso/db/virtuoso.ini' && \
@@ -1511,22 +1513,6 @@ else
                               fi
                            fi
                         fi
-                        if [[ -e $credentials ]]; then
-                           target="data/source/csv2rdf4lod-source-me-credentials.sh"
-                           echo
-                           echo $div
-                           echo "$target is a public version controlled script that points to all credentials required for the project."
-                           already_there=`grep $credentials $target`
-                           if [[ -z $already_there ]]; then
-                              echo
-                              read -p "Add 'source $credentials' to $target? [y/n] " -u 1 add_it
-                              echo "source $credentials" >> $target
-                              echo "Added."
-                              added="$added $target"
-                           else
-                              echo "($target already includes $credentials)"
-                           fi
-                        fi
 
                         echo
                         echo $div
@@ -1667,6 +1653,9 @@ else
 
                      fi # end $virtuoso_installed
                      rm -f .prizms-apache-conf
+                  fi # end running as developer e.g. jsmith not loxd
+
+                  if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
 
                      target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
 
@@ -1684,6 +1673,9 @@ else
 
                      # TODO: is logging location set up correctly? Yes, but verify.
 
+                  fi # end running as developer e.g. jsmith not loxd
+
+                  if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                      tomcat_installed="no"
                      if [[ -e '/etc/tomcat6/tomcat-users.xml' && \
                            -e '/etc/init.d/tomcat6'           && \
@@ -1764,6 +1756,9 @@ else
                            echo "($target seems to already contain the ProxyPath directives to map /sadi-services to 8080)"
                         fi
                      fi
+                  fi # end running as developer e.g. jsmith not loxd
+
+                  if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
 
                      # TODO: X_GOOGLE_MAPS_API_Key
                      credentials="/etc/prizms/$project_user_name/??triple-store??/google/csv2rdf4lod-source-me-for-googlemap-credentials.sh"
@@ -1815,7 +1810,7 @@ else
                         fi
                         # was(?) needed as stopgap: export PATH=$PATH:$JENAROOT/bin
                      done
-                  fi
+                  fi # end running as developer e.g. jsmith not loxd
 
 
 
@@ -1854,6 +1849,66 @@ else
                         fi
                      fi
                   fi
+
+                  if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+                     echo 
+                     echo $div
+                     echo "Prizms pings datahub.io with lodcloud-specific metadata updates."
+                     echo "datahub.io requires an API key."
+                     credentials="/etc/prizms/$project_user_name/ckan/datahub.io/csv2rdf4lod-source-me-for-ckan-credentials.sh"
+                     if [[ -e $credentials ]]; then
+                        ckankey=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'X_CKAN_API_Key' $credentials`
+                     fi
+                     if [[ -z "$ckankey" ]]; then
+                        echo
+                        echo "Prizms stores datahub.io API Key outside of version control, so that they are kept from the public." 
+                        if [[ ! -e $credentials ]]; then
+                           echo
+                           read -p "Q: May we set up $credentials to maintain the datahub.io API Key? [y/n] " -u 1 do_it
+                           if [[ "$do_it" == [yY] ]]; then
+                              echo sudo mkdir -p `dirname $credentials`
+                                   sudo mkdir -p `dirname $credentials`
+                              if [[ -e `dirname $credentials` ]]; then
+                                 echo
+                                 echo "Prizms uses X_CKAN_API_Key to authenticate to datahub.io."
+                                 echo
+                                 read -p "Q: What API Key should we use to update datahub.io metadata entries? " ckankey
+                                 echo
+                                 if [[ -n "$vpw" ]]; then
+                                    echo "export X_CKAN_API_Key='$ckaykey'" | sudo tee -a $credentials
+                                 fi
+                              else
+                                 echo "ERROR: could not create `dirname $credentials`"
+                              fi
+                           else
+                              echo "Okay, we won't create $credentials. But we won't be able to use Virtuoso to load RDF data."
+                              echo "See https://github.com/timrdf/DataFAQs/wiki/Missing-CKAN-API-Key"
+                           fi
+                        fi
+                     fi
+                  fi # end running as developer e.g. jsmith not loxd
+
+
+                  if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+                     for credentials in "/etc/prizms/$project_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh"; do
+                        if [[ -e $credentials ]]; then
+                           target="data/source/csv2rdf4lod-source-me-credentials.sh"
+                           echo
+                           echo $div
+                           echo "$target is a public version controlled script that points to all credentials required for the project."
+                           already_there=`grep $credentials $target`
+                           if [[ -z $already_there ]]; then
+                              echo
+                              read -p "Add 'source $credentials' to $target? [y/n] " -u 1 add_it
+                              echo "source $credentials" >> $target
+                              echo "Added."
+                              added="$added $target"
+                           else
+                              echo "($target already includes $credentials)"
+                           fi
+                        fi
+                     done
+                  fi # end running as developer e.g. jsmith not loxd
 
 
                   # No need to avoid when $i_am_project_user, since the directory would already be created by the developer's invocation of the installer.
@@ -2256,7 +2311,16 @@ else
                            fi 
                         popd &> /dev/null
                      fi
-                    
+                   
+                     # TODO: $user_home/public_html/lodspeakr/settings.inc.php should contain the following
+                     #
+                     # $conf['home'] = '/home/lebot/public_html/lodspeakr/'; // $conf['home'] = '/var/www/lodspeakr/';
+                     # $conf['basedir'] = 'http://lofd.tw.rpi.edu/~lebot/';
+                     # $conf['debug'] = false;
+                     #
+                     # $conf['ns']['local']   = 'http://lofd.tw.rpi.edu/';
+                     # $conf['mirror_external_uris'] = true;
+ 
                   fi # Running as developer e.g. jsmith not loxd
 
 

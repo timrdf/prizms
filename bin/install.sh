@@ -1885,6 +1885,8 @@ else
                               echo "See https://github.com/timrdf/DataFAQs/wiki/Missing-CKAN-API-Key"
                            fi
                         fi
+                     else
+                        echo "(it appears that X_CKAN_API_Key is already set in $credentials)"
                      fi
                   fi # end running as developer e.g. jsmith not loxd
 

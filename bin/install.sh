@@ -1861,7 +1861,7 @@ else
                      fi
                      if [[ -z "$ckankey" ]]; then
                         echo
-                        echo "Prizms stores datahub.io API Key outside of version control, so that they are kept from the public." 
+                        echo "Prizms stores the datahub.io API Key that it uses outside of version control, so that it is kept from the public." 
                         if [[ ! -e $credentials ]]; then
                            echo
                            read -p "Q: May we set up $credentials to maintain the datahub.io API Key? [y/n] " -u 1 do_it
@@ -1874,7 +1874,7 @@ else
                                  echo
                                  read -p "Q: What API Key should we use to update datahub.io metadata entries? " ckankey
                                  echo
-                                 if [[ -n "$vpw" ]]; then
+                                 if [[ -n "$ckankey" ]]; then
                                     echo "export X_CKAN_API_Key='$ckaykey'" | sudo tee -a $credentials
                                  fi
                               else

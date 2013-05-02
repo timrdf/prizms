@@ -205,6 +205,13 @@ else
       if [[ $target =~ /etc.* || ( -e "$target" && `stat --format=%U $target` != `whoami` ) ]]; then
          sudo="sudo"
       fi
+      if [[ ! -e `dirname $target` ]]; then
+         $sudo mkdir -p `dirname $target`
+      fi
+      if [[ ! -e `dirname $target` ]]; then
+         echo "ERROR: could not create `dirname $credentials`"
+      fi
+
       if [[ -n "$new_value" ]]; then
          if [[ -z "`grep $ENVVAR $target 2> /dev/null`" ]]; then
             echo "export $ENVVAR=''" | $sudo tee -a $target
@@ -1862,28 +1869,23 @@ else
                      if [[ -z "$ckankey" ]]; then
                         echo
                         echo "Prizms stores the datahub.io API Key that it uses outside of version control, so that it is kept from the public." 
-                        if [[ ! -e $credentials ]]; then
+                        echo
+                        read -p "Q: May we set up $credentials to maintain the datahub.io API Key? [y/n] " -u 1 do_it
+                        if [[ "$do_it" == [yY] ]]; then
                            echo
-                           read -p "Q: May we set up $credentials to maintain the datahub.io API Key? [y/n] " -u 1 do_it
-                           if [[ "$do_it" == [yY] ]]; then
-                              echo sudo mkdir -p `dirname $credentials`
-                                   sudo mkdir -p `dirname $credentials`
-                              if [[ -e `dirname $credentials` ]]; then
-                                 echo
-                                 echo "Prizms uses X_CKAN_API_Key to authenticate to datahub.io."
-                                 echo
-                                 read -p "Q: What API Key should we use to update datahub.io metadata entries? " ckankey
-                                 echo
-                                 if [[ -n "$ckankey" ]]; then
-                                    echo "export X_CKAN_API_Key='$ckaykey'" | sudo tee -a $credentials
-                                 fi
-                              else
-                                 echo "ERROR: could not create `dirname $credentials`"
-                              fi
-                           else
-                              echo "Okay, we won't create $credentials. But we won't be able to use Virtuoso to load RDF data."
-                              echo "See https://github.com/timrdf/DataFAQs/wiki/Missing-CKAN-API-Key"
+                           echo "Prizms uses X_CKAN_API_Key to authenticate to datahub.io."
+                           echo
+                           read -p "Q: What API Key should we use to update datahub.io metadata entries? " ckankey
+                           echo
+                           if [[ -n "$ckankey" ]]; then
+                              change_source_me $credentials 'X_CKAN_API_Key' "$our_base_uri" \
+                                 'authenticate to datahub.io' \
+                                 'https://github.com/timrdf/DataFAQs/wiki/Missing-CKAN-API-Key' \
+                                 'will not be able to inform datahub.io about this Prizms nodes'
                            fi
+                        else
+                           echo "Okay, we won't create $credentials. But we won't be able to use Virtuoso to load RDF data."
+                           echo "See https://github.com/timrdf/DataFAQs/wiki/Missing-CKAN-API-Key"
                         fi
                      else
                         echo "(it appears that X_CKAN_API_Key is already set in $credentials)"

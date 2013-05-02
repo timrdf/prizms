@@ -2065,7 +2065,7 @@ else
                         echo "$www/lodspeakr was created, but not configured with settings.inc.php"
                         echo
                         read -p "Q: Would you like to configure LODSPeaKr now? [y/n] " -u 1 install_it
-                        if [[ "$install_it" ]]; then
+                        if [[ "$install_it" == [yY] ]]; then
                            pushd $www/lodspeakr &> /dev/null
                               sudo ./install.sh `pwd`
                            popd &> /dev/null
@@ -2095,7 +2095,7 @@ else
                            echo    sudo ln -s      $project_user_home/prizms/lofd/lodspeakr/settings.inc.php $target
                            echo
                            read -p "Q: Peform the commands above to put settings.inc.php under version controll? [y/n] " -u 1 install_it
-                           if [[ "$install_it" ]]; then
+                           if [[ "$install_it" == [yY] ]]; then
                               sudo mv $target $user_home/prizms/lofd/lodspeakr/settings.inc.php
                               sudo ln -s      $project_user_home/prizms/lofd/lodspeakr/settings.inc.php $target
                               added="$added lodspeakr/settings.inc.php"

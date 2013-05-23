@@ -277,10 +277,10 @@ else
          echo "sudo a2enmod $module | grep 'already enabled'"
          echo
          already_enabled=`sudo a2enmod $module | grep 'already enabled'`
-         # ^^ This enables it before we ask for permission.
+         # ^^ This enables it before we ask for permission, stating e.g. 'Module proxy_http already enabled' if it already was.
          #    If it was already enabled, nothing to do.
          #    If it wasn't already enabled and we don't get permission, we disable it.
-         if [[ -z "$already_enabled" ]]; then
+         if [[ -z "$already_enabled" ]]; then # "not already enabled"
             echo "The Apache2 module $module needs to be enabled to"
             echo "$reason."
             echo "The $module module needs to be enabled, which can be done with the following command:"
@@ -289,7 +289,8 @@ else
             echo
             read -p "Q: May we enable the module above using the command above? [y/n] " -u 1 enable_it
             if [[ "$enable_it" != [yY] ]]; then
-               sudo a2dismod $module # We just enabled it (to check), but they don't want it enabled.
+               sudo a2dismod $module # We just previously enabled it (to check), but they don't want it enabled.
+               echo "Okay, we won't enable $module."
             else
                enabled=1
             fi
@@ -298,6 +299,8 @@ else
          fi
       done
       if [[ "$enabled" == "1" ]]; then
+         echo "We enabled $module with: sudo a2enmod $module"
+         echo
          read -p "Q: Apache needs to restart for $module to take effect. Restart apache? [y/n] " -u 1 restart_it
          if [[ "$restart_it" != [yY] ]]; then
             sudo service apache2 restart

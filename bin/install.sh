@@ -626,6 +626,10 @@ else
          exit 1
       fi
    fi
+   if [[ -z "$i_am_project_user" && ! `grep "^${project_user_name}:" /etc/passwd` ]]; then # Running as developer e.g. jsmith not loxd
+      echo "WARNING: $project_user_name was not created."
+      exit 1
+   fi
 
 
    echo

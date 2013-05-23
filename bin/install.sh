@@ -1238,7 +1238,11 @@ else
                   echo "source-me.sh that you need to run, and should be placed within your ~/.bashrc."
                   echo
                   echo "   $source_me"
-                  already_there=`grep ".*source \`pwd\`/data/source/csv2rdf4lod-source-me-as-\`whoami\`.sh.*" ~/.bashrc`
+                  if [[ -e ~/.bashrc ]]; then
+                     already_there=`grep ".*source \`pwd\`/data/source/csv2rdf4lod-source-me-as-\`whoami\`.sh.*" ~/.bashrc`
+                  else
+                     already_there=""
+                  fi
                   echo
                   if [ -n "$already_there" ]; then
                      echo "It seems that you already have the following in your ~/.bashrc, so we won't offer to add it again:"

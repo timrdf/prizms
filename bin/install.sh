@@ -134,6 +134,13 @@ else
       i_am_project_user="yes"
    fi
 
+   # Grammar with perspective to developer user about herself or the production user.
+   if [[ "$person_user_name" == `whoami` ]]; then
+      your="your"
+   else
+      your="$project_user_name's"
+   fi
+
    #
    project_code_repository=""
    if [[ "$1" == "--repos" ]]; then
@@ -302,7 +309,7 @@ else
          echo "We enabled $module with: sudo a2enmod $module"
          echo
          read -p "Q: Apache needs to restart for $module to take effect. Restart apache? [y/n] " -u 1 restart_it
-         if [[ "$restart_it" != [yY] ]]; then
+         if [[ "$restart_it" == [yY] ]]; then
             sudo service apache2 restart
          else
             echo "Okay, we didn't restart Apache, but you'll need to restart it for $module to take effect."
@@ -1122,12 +1129,6 @@ else
 
                         target="data/source/csv2rdf4lod-source-me-as-$user.sh"
 
-                        if [[ "$person_user_name" == `whoami` ]]; then
-                           your="your"
-                        else
-                           your="$project_user_name's"
-                        fi
-
                         #
                         # Add PATH = PATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$user.sh
                         #
@@ -1186,7 +1187,7 @@ else
                               grep ".*export CLASSPATH=.*prizms/bin/install/classpaths.sh.*" $target
                               added="$added $target"
                            else
-                              echo "We didn't $change $your $target, so you'll need to make sure you set the paths correctly each time."
+                              echo "We didn't change $your $target, so you'll need to make sure you set the paths correctly each time."
                            fi
                         fi
 
@@ -1795,12 +1796,6 @@ else
 
                         target="data/source/csv2rdf4lod-source-me-as-$user.sh"
 
-                        if [[ "$person_user_name" == `whoami` ]]; then
-                           your="your"
-                        else
-                           your="$project_user_name's"
-                        fi
-
                         # JENAROOT to data/source/csv2rdf4lod-source-me-as-$user.sh
                         echo
                         echo $div
@@ -1827,7 +1822,7 @@ else
                               grep "^$set_paths_command" $target
                               added="$added $target"
                            else
-                              echo "We didn't $change $your $target, so you'll need to make sure you set the paths correctly each time."
+                              echo "We didn't change $your $target, so you'll need to make sure you set the paths correctly each time."
                            fi
                         fi
                      done

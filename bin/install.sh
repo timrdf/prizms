@@ -1910,7 +1910,11 @@ else
                            echo
                            echo $div
                            echo "$target is a public version controlled script that points to all credentials required for the project."
-                           already_there=`grep $credentials $target`
+                           if [[ -e $target ]]; then
+                              already_there=`grep $credentials $target`
+                           else
+                              already_there=""
+                           fi
                            if [[ -z $already_there ]]; then
                               echo
                               read -p "Add 'source $credentials' to $target? [y/n] " -u 1 add_it
@@ -2050,7 +2054,7 @@ else
                         lodchown=www-data:$project_user_name 
                         echo "$www/lodspeakr is not set up yet. It can be installed with the command:"
                         echo
-                        echo " sudo bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql chown=$lodchown < <(curl -sL http://lodspeakr.org/install)"
+                        echo " sudo bash -s base-url=$our_base_uri base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql chown=$lodchown < <(curl -sL http://lodspeakr.org/install)"
                         echo
                         read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
                         if [[ "$install_it" == [yY] ]]; then
@@ -2058,7 +2062,7 @@ else
                               # bash -s http://server/baseurl http://example.org/namespace/ http://server/sparql  < <(curl -sL http://lodspeakr.org/install)
                               # see https://github.com/alangrafu/lodspeakr/wiki/Installation#wiki-automatic
                               #sudo bash < <(curl -sL http://lodspeakr.org/install)
-                              sudo bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql chown=$lodchown < <(curl -sL http://lodspeakr.org/install)
+                              sudo bash -s base-url=$our_base_uri base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql chown=$lodchown < <(curl -sL http://lodspeakr.org/install)
                               # Question 1: http://lod.melagrid.org
                               # Question 2: <accept default>
                               # Question 3: http://lod.melagrid.org/sparql
@@ -2261,12 +2265,12 @@ else
                            perms="-s chown=www-data chmod=774"
                            perms="-s chmod=777" # https://github.com/timrdf/prizms/issues/18 TODO
                            echo
-                           echo bash -s components=$comps -s base-url=$base -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql $perms < <(curl -sL http://lodspeakr.org/install)
+                           echo bash -s components=$comps base-url=$base base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql $perms < <(curl -sL http://lodspeakr.org/install)
                            # bash -s components=/location/./components base-url=http://lofd.tw.rpi.edu/~lebot/ base-namespace=.. sparql-endpoint=http://../sparql <  <(curl -sL htt...akr.org/install)
                            echo
                            read -p "Q: Install your Prizms LODSPeaKr development clone with the command above? [y/n] " -u 1 install_it
                            if [[ "$install_it" == [yY] ]]; then
-                              bash -s components=$comps -s base-url=$base -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql $perms < <(curl -sL http://lodspeakr.org/install)
+                              bash -s components=$comps base-url=$base base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql $perms < <(curl -sL http://lodspeakr.org/install)
                               #sudo chown -R `stat --format=%U:%G ~/` $user_home/public_html/lodspeakr
                            else
                               echo "Okay, we didn't install it."

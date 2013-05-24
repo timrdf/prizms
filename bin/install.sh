@@ -2092,7 +2092,8 @@ else
                         fi
                      fi
                      if [[ -e $www/lodspeakr/settings.inc.php ]]; then
-                        sudo chmod g+w $www/lodspeakr/settings.inc.php
+                        sudo chown provenanceweb:www-data $www/lodspeakr/settings.inc.php
+                        sudo chmod g+w                    $www/lodspeakr/settings.inc.php
 
                         enable_apache_module 'rewrite' 'run LODSPeaKr'
                         enable_apache_module 'php5'    'run LODSPeaKr'

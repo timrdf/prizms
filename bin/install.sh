@@ -2315,7 +2315,7 @@ else
                      echo
                      echo $div
                      echo "Prizms can use existing upstream LODSPeaKrs by referencing them within settings.inc.php."
-                     echo "($target) `whoami`"
+                     echo "($target) `whoami` at `pwd`"
                      echo
                      for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
                         for ctype in services types; do

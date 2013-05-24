@@ -2044,6 +2044,9 @@ else
                      echo
                      offer_install_aptget "curl apache2 php5 php5-cli php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
                      www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
+                  fi
+
+                  if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                      echo
                      echo $div
                      echo "LODSPeaKr lives within the htdocs directory ($www),"
@@ -2071,6 +2074,10 @@ else
                            echo "Okay, we won't install LODSPeaKr at $www/lodspeakr."
                         fi
                      fi
+                  fi
+
+                  if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
+         
                      if [[ -e $www/lodspeakr && ! -e $www/lodspeakr/settings.inc.php ]]; then
                         echo
                         echo "$www/lodspeakr was created, but not configured with settings.inc.php"
@@ -2115,10 +2122,10 @@ else
                               echo "Okay, we will leave $www/lodspeakr/settings.inc.php as not version controlled."
                            fi
                         fi
-
-
                      fi # -e $www/lodspeakr/settings.inc.php
+                  fi
 
+                  if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
 
                      # TODO: change $lodspk['title'] = 'LODSPeaKr'; in settings.inc.php
 
@@ -2143,6 +2150,7 @@ else
                      fi
 
 
+                     # Avoid index.html
                      echo
                      echo $div
                      echo "Prizms does not need the index.html in the htdocs directory, since it uses lodspeakr"
@@ -2244,6 +2252,7 @@ else
                      fi
 
                      echo
+                     echo $div
                      echo "Your Prizms LODSPeaKr development clone should exist within $user_home/public_html"
                      if [[ ! -e $user_home/public_html ]]; then
                         echo
@@ -2266,7 +2275,6 @@ else
                            perms="-s chmod=777" # https://github.com/timrdf/prizms/issues/18 TODO
                            echo
                            echo bash -s components=$comps base-url=$base base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql $perms < <(curl -sL http://lodspeakr.org/install)
-                           # bash -s components=/location/./components base-url=http://lofd.tw.rpi.edu/~lebot/ base-namespace=.. sparql-endpoint=http://../sparql <  <(curl -sL htt...akr.org/install)
                            echo
                            read -p "Q: Install your Prizms LODSPeaKr development clone with the command above? [y/n] " -u 1 install_it
                            if [[ "$install_it" == [yY] ]]; then
@@ -2289,6 +2297,60 @@ else
  
                   fi # Running as developer e.g. jsmith not loxd
 
+
+                  # Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
+                  # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
+                  #
+                  # Note that this requires the production user to be set up already. (TODO: or does it? Can't the production user just do it?)
+                  if [[ -n "$i_am_project_user" && -e $www/lodspeakr/settings.inc.php ]]; then  # Running as production user e.g. loxd not jsmith # TODO: try to do as production user.
+                            target='/var/www/lodspeakr/settings.inc.php'
+                     target_backup="/var/www/lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
+                     sudo="sudo" # TODO: try to do as production user.
+                     if [[ -h $target ]]; then
+                               target='lodspeakr/settings.inc.php'
+                        target_backup="lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
+                        sudo="" # TODO: try to do as production user.
+                     fi
+                     $sudo cp $target $target_backup
+                     echo
+                     echo $div
+                     echo "Prizms can use existing upstream LODSPeaKrs by referencing them within settings.inc.php."
+                     echo
+                     for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
+                        for ctype in services types; do
+                           for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
+                              # ^ e.g. /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
+
+                              there=`grep "$conf.'components'..'$ctype'... = '$component';" $target`
+
+                              cherry_pick="\$conf['components']['$ctype'][] = '$component';"
+                              if [[ $there ]]; then
+                                 disabled=`echo $there | grep "^#"`; disabled=${#disabled}
+                                 #if [[ ! $disabled ]]; then
+                                 #   echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
+                                 #fi
+                              else
+                                 echo "^ not there; add $cherry_pick"
+                                 # =>
+                                 # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
+                                 # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
+                                 read -p "Q: Add $component as an external LODSPeaKr component? [y/n] " -u 1 enable
+                                 if [[ $enable == [nN] ]]; then
+                                    cherry_pick="// $cherry_pick"
+                                 fi
+                                 if [[ ${#enable} -gt 0 ]]; then
+                                    cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}' > .prizms-installer-settings.inc.php
+                                    $sudo mv .prizms-installer-settings.inc.php $target # TODO: try to do as production user.
+                                    if [[ -h $target ]]; then
+                                       added="$added lodspeakr/settings.inc.php"
+                                    fi
+                                 fi
+                              fi
+                              #echo
+                           done
+                        done
+                     done
+                  fi # Running as developer e.g. jsmith not loxd # TODO: try to do as production user.
 
                   # robots.txt
                   echo
@@ -2469,7 +2531,7 @@ else
                      read -p "Q: ^--- Since we modified these files to your working copy of $project_code_repository, let's add, commit, and push them, okay? [y/n] " -u 1 push_them
                      if [[ "$push_them" == [yY] ]]; then
                         git add -f $added
-                        git commit -m 'During install: added stub directories and readme files.'
+                        git commit -m 'During Prizms install: added stub directories and readme files.'
                         git push
                      else
                         echo
@@ -2535,59 +2597,6 @@ else
                   # Do any setup that the developer needs to do after the production user was setup.
 
 
-                  # Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
-                  # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
-                  #
-                  # Note that this requires the production user to be set up already. (TODO: or does it? Can't the production user just do it?)
-                  if [[ -z "$i_am_project_user" && -e $www/lodspeakr/settings.inc.php ]]; then  # Running as developer e.g. jsmith not loxd # TODO: try to do as production user.
-                            target='/var/www/lodspeakr/settings.inc.php'
-                     target_backup="/var/www/lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
-                     sudo="sudo" # TODO: try to do as production user.
-                     if [[ -h $target ]]; then
-                               target='lodspeakr/settings.inc.php'
-                        target_backup="lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
-                        sudo="" # TODO: try to do as production user.
-                     fi
-                     $sudo cp $target $target_backup
-                     echo
-                     echo $div
-                     echo "Prizms can use existing upstream LODSPeaKrs by referencing them within settings.inc.php."
-                     echo
-                     for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
-                        for ctype in services types; do
-                           for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
-                              # ^ e.g. /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
-
-                              there=`grep "$conf.'components'..'$ctype'... = '$component';" $target`
-
-                              cherry_pick="\$conf['components']['$ctype'][] = '$component';"
-                              if [[ $there ]]; then
-                                 disabled=`echo $there | grep "^#"`; disabled=${#disabled}
-                                 #if [[ ! $disabled ]]; then
-                                 #   echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
-                                 #fi
-                              else
-                                 echo "^ not there; add $cherry_pick"
-                                 # =>
-                                 # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
-                                 # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
-                                 read -p "Q: Add $component as an external LODSPeaKr component? [y/n] " -u 1 enable
-                                 if [[ $enable == [nN] ]]; then
-                                    cherry_pick="// $cherry_pick"
-                                 fi
-                                 if [[ ${#enable} -gt 0 ]]; then
-                                    cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}' > .prizms-installer-settings.inc.php
-                                    $sudo mv .prizms-installer-settings.inc.php $target # TODO: try to do as production user.
-                                    if [[ -h $target ]]; then
-                                       added="$added lodspeakr/settings.inc.php"
-                                    fi
-                                 fi
-                              fi
-                              #echo
-                           done
-                        done
-                     done
-                  fi # Running as developer e.g. jsmith not loxd # TODO: try to do as production user.
 
                   echo
                   echo $div

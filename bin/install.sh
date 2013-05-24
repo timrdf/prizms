@@ -2306,16 +2306,16 @@ else
                             target='/var/www/lodspeakr/settings.inc.php'
                      target_backup="/var/www/lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
                      sudo="sudo" # TODO: try to do as production user.
-                     if [[ -h $target ]]; then
-                               target='lodspeakr/settings.inc.php'
-                        target_backup="lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
+                     if [[ -h $target ]]; then # FILE exists and is a symbolic link.
+                               #target='lodspeakr/settings.inc.php'
+                        #target_backup="lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
                         sudo="" # TODO: try to do as production user.
                      fi
                      $sudo cp $target $target_backup
                      echo
                      echo $div
                      echo "Prizms can use existing upstream LODSPeaKrs by referencing them within settings.inc.php."
-                     echo "($target)"
+                     echo "($target) `whoami`"
                      echo
                      for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
                         for ctype in services types; do

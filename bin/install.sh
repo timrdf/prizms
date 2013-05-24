@@ -2234,7 +2234,7 @@ else
 
                         read -p "Q: Can you please go comment it out, and press 'y' when finished? [y/n] " -u 1 commented_out
                         if [[ "$commented_out" == [yY] ]]; then
-                           if [[ `grep ".*#.*<IfModule *mod_userdir.c" /etc/apache2/mods-enabled/php5.conf` ]]; then
+                           if [[ ! `grep ".*#.*<IfModule *mod_userdir.c" /etc/apache2/mods-enabled/php5.conf` ]]; then
                               echo "It doesn't look like you commented it out. Try again by running the installer again."
                               read -p "Q: Can you please go comment it out, and press 'y' when finished? [y/n] " -u 1 commented_out
                            fi

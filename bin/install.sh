@@ -2132,6 +2132,7 @@ else
 
                      # TODO: change $lodspk['title'] = 'LODSPeaKr'; in settings.inc.php
 
+                     # TODO: https://github.com/timrdf/provenanceweb/wiki/Installation#enable-visualbox
 
                      # The following need to be updated if --our-base-uri becomes e.g. http://ieeevis.tw.rpi.edu
                      # $conf['endpoint']['local'] = 'http://aquarius.tw.rpi.edu/projects/ieeevis/sparql';

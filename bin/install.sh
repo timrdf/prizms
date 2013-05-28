@@ -1352,8 +1352,10 @@ else
                   fi # end running as developer e.g. jsmith not loxd
 
                   avoid_sudo="--avoid-sudo"
+                  use_sudo=""
                   if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                      avoid_sudo=""
+                     use_sudo="--use-sudo"
                   fi
                   #if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd # TODO: this should be removed in favor of $avoid_sudo
                      #
@@ -1364,26 +1366,26 @@ else
                      echo "Prizms uses a variety of third party utilities that we can try to install for you automatically."
                      echo "The following utilities seem to already be installed okay:"
                      echo
-                     echo $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo
-                     $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo | grep "^.okay"
-                     $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       -n $avoid_sudo | grep "^.okay"
+                     echo $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo
+                     $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo | grep "^.okay"
+                     $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       -n $avoid_sudo $use_sudo | grep "^.okay"
                      # TODO: set up the user-based install that does NOT require sudo. python's easy_install
                    
-                     todo=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo | grep "^.TODO" | grep -v "pydistutils.cfg"`
-                     todo=$todo`$PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                  -n $avoid_sudo | grep "^.TODO" | grep -v "pydistutils.cfg"`
+                     todo=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo | grep "^.TODO" | grep -v "pydistutils.cfg"`
+                     todo=$todo`$PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                  -n $avoid_sudo $use_sudo | grep "^.TODO" | grep -v "pydistutils.cfg"`
                      if [ -n "$todo" ]; then
                         echo
                         echo "However, the following do not seem to be installed:"
                         echo
-                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo | grep "^.TODO" | grep -v "pydistutils.cfg"
-                        $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       -n $avoid_sudo | grep "^.TODO" | grep -v "pydistutils.cfg"
+                        $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo | grep "^.TODO" | grep -v "pydistutils.cfg"
+                        $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       -n $avoid_sudo $use_sudo | grep "^.TODO" | grep -v "pydistutils.cfg"
                         echo
                         read -p "Q: May we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
                         echo
                         if [[ "$install_them" == [yY] ]]; then
                            touch .before-prizms-installed-dependencies
-                           $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh $avoid_sudo
-                           $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       $avoid_sudo
+                           $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh $avoid_sudo $use_sudo
+                           $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       $avoid_sudo $use_sudo
                         else
                            echo "Okay, we won't try to install them. Check out the following if you want to do it yourself:"
                            echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"

@@ -773,7 +773,7 @@ else
                   echo "Okay, $project_code_repository is now ${clone}'d to $dir." 
                fi
             fi
-            if [ -e $target_dir ]; then
+            if [[ -e $target_dir ]]; then
                pushd $target_dir &> /dev/null
 
                   echo "#!/bin/bash"                                                  > .refresh-prizms-installation
@@ -843,9 +843,8 @@ else
                   fi
                   if [[ ! -e .gitignore || ! `grep "^.refresh-prizms-installation" .gitignore` ]]; then
                      echo ".refresh-prizms-installation" >> .gitignore
+                     added="$added data/source/.gitignore"
                   fi
-
-                  # TODO: add source ../csv2rdf4lod-source-me-for-<project>.sh to as-<developer>.sh
 
                   # Set shell environment variable values in source-me.sh's.
                   if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
@@ -1038,6 +1037,9 @@ else
                         echo "$div `whoami`"
                         echo "There wasn't a source-me.sh for your machine in the data conversion root, so we created one for you at $target"
                      fi
+
+
+                     # TODO: add source ../csv2rdf4lod-source-me-for-<project>.sh to as-<developer>.sh
 
 
                      # AS DEVELOPER

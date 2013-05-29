@@ -196,7 +196,7 @@ else
    div="-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
    function change_source_me {
       echo
-      echo $div
+      echo "$div `whoami`"
       target="$1"    #"data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
       ENVVAR="$2"    #'CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID'; 
       new_value="$3" #"$our_source_id"
@@ -321,7 +321,7 @@ else
    function enable_htaccess {
       reason="$1"
       echo
-      echo $div
+      echo "$div `whoami`"
       target="/etc/apache2/sites-available/default" 
       if [[ -n "$reason" ]]; then
          echo "$reason"
@@ -359,7 +359,7 @@ else
 
    function restart_apache {
       echo
-      echo $div
+      echo "$div `whoami`"
       echo "Since we've made some changes to apache, we need to restart it so that they take effect."
       echo
       echo sudo service apache2 restart
@@ -384,12 +384,12 @@ else
          project_user_name=`whoami`
          echo "Your project's user name is: $project_user_name"
          echo
-         echo $div
+         echo "$div `whoami`"
          read -p "Q: What is your user name? " -u 1 person_user_name
          echo "Okay, your user name is $person_user_name"
       else
          echo
-         echo $div
+         echo "$div `whoami`"
          echo "Okay, `whoami` isn't your project's user name."
          read -p "Q: Is `whoami` _your_ user name? [y/n] " -u 1 it_is
          if [[ $it_is == [yY] ]]; then
@@ -397,7 +397,7 @@ else
             person_user_name=`whoami`
             echo "Okay, your user name is $person_user_name."
             echo
-            echo $div
+            echo "$div `whoami`"
             echo "Prizms should be installed to a user name on this machine created specifically for the project."
             read -p "Q: Does your project have a user name yet? [y/n] " -u 1 it_does
             if [[ $it_does == [yY] ]]; then
@@ -425,7 +425,7 @@ else
    fi
 
    echo
-   echo $div
+   echo "$div `whoami`"
    echo "It is important to maintain your Prizms using version control."
    echo "It helps you maintain your site, it facilitates collaboration with others, and it encourages reproducibility by others."
    if [ -z "$project_code_repository" ]; then
@@ -450,7 +450,7 @@ else
 
 
    echo
-   echo $div
+   echo "$div `whoami`"
    echo "Prizms can pull dataset listings from an installation of CKAN,"
    echo "which can make it easier to gather the datasets that you'd like to integrate."
    echo "It's fine not to pull from a CKAN, so if you don't want to, just leave this blank."
@@ -471,7 +471,7 @@ else
    # https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_PERSON_URI
    if [[ -z $i_am_project_user ]]; then # Running as developer e.g. jsmith not loxd
       echo
-      echo $div
+      echo "$div `whoami`"
       echo "Prizms can include you in the provenance that it captures."
       echo "This can give you credit for the work that you're doing to create great data."
       if [ -z "$person_uri" ]; then
@@ -493,7 +493,7 @@ else
 
    # https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name
    echo
-   echo $div
+   echo "$div `whoami`"
    echo "Prizms generates its own versioned datasets based on other versioned datasets that it accumulates and integrates."
    echo "These are called 'autonomic datasets' and provide added value on top of the collection of others' datasets."
    echo "To organize these generated autonomic datasets properly, we need to know the right value for"
@@ -522,7 +522,7 @@ else
 
    # https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name
    echo
-   echo $div
+   echo "$div `whoami`"
    echo "Prizms names datasets and their entities within a base URI that is given in"
    echo "the CSV2RDF4LOD_BASE_URI environment variable."
    echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Conversion-process-phase:-name"
@@ -545,7 +545,7 @@ else
 
    # https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble
    echo
-   echo $div
+   echo "$div `whoami`"
    echo "Prizms can automatically publish lodcloud-compliant metadata to a CKAN listing at http://datahub.io."
    echo "Enabling this feature allows your Linked Data to be included in the LOD Cloud Diagram."
    echo "See https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble"
@@ -568,10 +568,10 @@ else
 
 
    echo
-   echo $div
-   echo $div
+   echo "$div `whoami`"
+   echo "$div `whoami`"
    echo "                                    Ready to install"
-   echo $div
+   echo "$div `whoami`"
    echo "We now have what we need to start installing Prizms:"
    echo
    if [ -n "$person_uri" ]; then
@@ -595,7 +595,7 @@ else
    PROJECT_PRIZMS_HOME=`echo $PRIZMS_HOME | sed "s/\`whoami\`/$project_user_name/g"`
 
    echo
-   echo $div
+   echo "$div `whoami`"
    echo "Okay, we'd like to install prizms at the following locations."
    echo
    echo "  $PRIZMS_HOME/"
@@ -626,11 +626,16 @@ else
    #if [[ -z "$i_am_project_user" && ! -e ${user_home%/*}/$project_user_name ]]; then
    if [[ -z "$i_am_project_user" && ! `grep "^${project_user_name}:" /etc/passwd` ]]; then # Running as developer e.g. jsmith not loxd
       echo
-      echo $div
+      echo "$div `whoami`"
       echo ${user_home%/*}/$project_user_name
       read -p "Q: Create user $project_user_name? [y/n] " -u 1 install_project_user
       if [[ "$install_project_user" == [yY] ]]; then
          $PRIZMS_HOME/bin/install/project-user.sh $project_user_name
+         # TODO:
+         # give yourself permission to write cache/ and settings.inc
+         # give apache permission to write cache/ and meta/ (and optionally settings.inc.php)
+         # Add existing user tony to ftp supplementary/secondary group with usermod command using -a option ~ i.e. add the user to the supplemental group(s). Use only with -G option :
+         # sudo usermod -a -G ieeevis `whoami`
       else
          echo "ERROR: We need a user name."
          exit 1
@@ -643,14 +648,14 @@ else
 
 
    echo
-   echo $div
+   echo "$div `whoami`"
    echo "Prizms combines a couple other projects, all of which are available on github."
    echo "We'll retrieve those and place them in the directory $PRIZMS_HOME/repos/"
    echo "If they're already there, we'll just update them from the latest on github."
    $PRIZMS_HOME/bin/install/prizms-dependency-repos.sh
 
 
-   echo $div
+   echo "$div `whoami`"
    clone='clone'
    pull='pull'
    if [ "$vcs" == "svn" ]; then
@@ -682,7 +687,7 @@ else
             if [ ! -e $target_dir ]; then
                if [[ -z "`git config --get user.email`" && -n "$person_email" && -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                   echo
-                  echo $div
+                  echo "$div `whoami`"
                   echo "We can set your email address in your global git configuration using the following command."
                   echo "Doing so will associate your commits to your github account, instead of attributing them to a user named after your machine."
                   echo
@@ -695,7 +700,7 @@ else
                fi
 
                echo
-               echo $div
+               echo "$div `whoami`"
                echo "GitHub requires that you have an SSH key and that it be registered with them."
                if [[ ! -e $user_home/.ssh/id_dsa.pub && ! -e $user_home/.ssh/id_rsa.pub && -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                   echo
@@ -724,7 +729,7 @@ else
                   fi
                   if [ -e $user_home/.ssh/id_dsa.pub ]; then
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "Great! You have a shiny new SSH key."
                      if [ "$vcs" == "git" ]; then
                         echo "Go add the following to https://github.com/settings/ssh"
@@ -795,7 +800,7 @@ else
                   if [[ -z "$i_am_project_user" && \
                        ( ! -e data/source/ || ! -e lodspeakr/ || ! -e doc/ || ! -e 'data/faqs/example-1/faqt-brick' ) ]]; then # Running as developer e.g. jsmith not loxd
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "Prizms reuses the directory conventions that csv2rdf4lod-automation uses."
                      echo "Following these conventions aids uniformity across many projects' offerings."
                      echo "For more, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Directory-Conventions"
@@ -858,7 +863,7 @@ else
                      target="data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
                      if [ -e $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh ]; then
                         echo
-                        echo $div
+                        echo "$div `whoami`"
                         echo "Prizms uses the CSV2RDF4LOD_ environment variables that are part of csv2rdf4lod-automation."
                         echo "These environment variables are used to control how Prizms operates."
                         echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables"
@@ -885,7 +890,7 @@ else
                      #
                      if [[ "$upstream_ckan" == http* && -e "$target" ]]; then
                         echo
-                        echo $div
+                        echo "$div `whoami`"
                         echo "Prizms uses the shell environment variable CSV2RDF4LOD_CKAN_SOURCE to"
                         echo "indicate the upstream CKAN from which to pull dataset listings."
 
@@ -1002,7 +1007,7 @@ else
 
                      # Repeat the three above for /etc/apache2/envvars
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      target='/etc/apache2/envvars'
                      echo "Prizms includes additional PROV-O assertions about SADI services in the description they return upon HTTP GET requests"
                      change_source_me $target DATAFAQS_BASE_URI "$our_base_uri" \
@@ -1030,7 +1035,7 @@ else
                         added="$added $target"
                         # TODO: export CSV2RDF4LOD_CONVERT_MACHINE_URI="http://tw.rpi.edu/web/inside/machine/aquarius#melagrid"
                         echo
-                        echo $div
+                        echo "$div `whoami`"
                         echo "There wasn't a source-me.sh for your machine in the data conversion root, so we created one for you at $target"
                      fi
 
@@ -1049,7 +1054,7 @@ else
                         $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CONVERT_PERSON_URI' $target --change-to $person_uri
                         added="$added $target"
                         echo
-                        echo $div
+                        echo "$div `whoami`"
                         echo "There wasn't a source-me.sh for your user name in the data conversion root, so we created one for you at $target"
                      fi
 
@@ -1071,7 +1076,7 @@ else
                         # any others to source?
                         added="$added $target"
                         echo
-                        echo $div
+                        echo "$div `whoami`"
                         echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
                      fi
 
@@ -1097,7 +1102,7 @@ else
                      # AS DEVELOPER
                      # alias: Developer su'ing to Project user name
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      new_command="alias $project_user_name='sudo su $project_user_name'" # e.g. alias hd='sudo su healthdata'
                      target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
                      echo "As a developer of this $project_user_name Prizms, you will need to change into the $project_user_name user"
@@ -1133,7 +1138,7 @@ else
                         # Add PATH = PATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$user.sh
                         #
                         echo
-                        echo $div
+                        echo "$div `whoami`"
                         set_paths_cmd=`$PRIZMS_HOME/bin/install/paths.sh --help | tail -1 | sed 's/^ *//' | sed "s/\`whoami\`/$user/g"`
                         echo "The following command adds into $your shell environment the paths that Prizms requires to run its scripts."
                         echo "Running it multiple times will have no effect, since only the missing paths are added."
@@ -1164,7 +1169,7 @@ else
                         # Add CLASSPATH = CLASSPATH + sitaute paths to data/source/csv2rdf4lod-source-me-as-$user.sh
                         #
                         echo
-                        echo $div
+                        echo "$div `whoami`"
                         set_paths_cmd=`$PRIZMS_HOME/bin/install/classpaths.sh --help | tail -1 | sed 's/^ *//' | sed "s/\`whoami\`/$user/g"`
                         echo "The following command adds into $your shell environment the Java class paths that Prizms requires to run its scripts."
                         echo "Just like the previous paths.sh command, running this multiple times will have no effect, since only the missing paths are added."
@@ -1198,7 +1203,7 @@ else
                            'unable to invoke some scripts'
 
                         echo
-                        echo $div
+                        echo "$div `whoami`"
                         echo "The n3.vim configuration can enable syntax highlighting for the Turtle syntax."
                         echo "see http://www.vim.org/scripts/script.php?script_id=944 for details to see how to modify:"
                         echo
@@ -1237,7 +1242,7 @@ else
                   # Add source data/source/csv2rdf4lod-source-me-as-$person_user_name.sh to ~/.bashrc
                   #
                   echo
-                  echo $div
+                  echo "$div `whoami`"
                   source_me="source `pwd`/data/source/csv2rdf4lod-source-me-as-`whoami`.sh"
                   echo "Prizms encapsulates all of the environment variables and PATH setup that is needed within"
                   echo "a single source-me.sh script dedicated to the user that needs it. The script is version-controlled"
@@ -1288,7 +1293,7 @@ else
                      # otherwise dpkg will fail to build it when called by csv2rdf4lod-automation's install-dependencies.sh.
                      #
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "Virtuoso will have issues if it is on a virtual machine and /etc/hosts's localhost is 127.0.0.1 instead of the VM's IP."
                      # Hack for our pseudo-VMs. This needs to be done before installing virtuoso with install-csv2rdf4lod-dependencies.sh
                      #
@@ -1362,7 +1367,7 @@ else
                      # Install third party utilities (mostly with apt-get and tarball installs).
                      #
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "Prizms uses a variety of third party utilities that we can try to install for you automatically."
                      echo "The following utilities seem to already be installed okay:"
                      echo
@@ -1421,7 +1426,7 @@ else
                         # Now, load up http://localhost:8890/conductor in your laptop's web browser, and you're viewing the service from the VM.
 
                         echo
-                        echo $div
+                        echo "$div `whoami`"
                         target="/var/lib/virtuoso/db/virtuoso.ini"
                         data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/$target_dir/data/
                         already_set=`grep 'DirsAllowed' $target | grep -v $data_root`
@@ -1485,7 +1490,7 @@ else
                         fi
                         if [[ -z "$vpw" ]]; then
                            echo
-                           echo $div
+                           echo "$div `whoami`"
                            echo "If you just installed Virtuoso, and haven't changed the default password for the user 'dba',"
                            echo "you should do that now at http://localhost:8890/conductor."
                            if [[ -n "$vm_ip" ]]; then
@@ -1540,12 +1545,12 @@ else
                         fi
 
                         echo
-                        echo $div
+                        echo "$div `whoami`"
                         offer_install_aptget \
                            'libapache2-mod-proxy-html' \
                            "expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql and the (port 8080) Tomcat application server of SADI services at $our_base_uri/sadi-services"
 
-                        echo $div
+                        echo "$div `whoami`"
                         enable_apache_module 'proxy_http' "expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
                         #                  ^ 'proxy' module is enabled when proxy_http is enabled.
 
@@ -1614,7 +1619,7 @@ else
                         #  </Location>
  
                         echo # (This Apache-config modification pattern is repeated below for Tomcat)
-                        echo $div
+                        echo "$div `whoami`"
                         target='/etc/apache2/sites-available/default'
                         already_there=""
                         if [ -e $target ]; then
@@ -1711,11 +1716,11 @@ else
                         # The following two are also done above if virtuoso is installed.
                         # Calling them twice is safe.
                         echo
-                        echo $div
+                        echo "$div `whoami`"
                         offer_install_aptget 'libapache2-mod-proxy-html' \
                                              "expose the (port 8080) Tomcat application server of SADI services at $our_base_uri/sadi-services"
 
-                        echo $div
+                        echo "$div `whoami`"
                         enable_apache_module 'proxy_http' \
                                              "expose your (port 8080) Tomcat application server of SADI services at the URL $our_base_uri/sadi-services"
                         #                  ^ 'proxy' module is enabled when proxy_http is enabled.
@@ -1736,7 +1741,7 @@ else
                         # </Location>
 
                         echo # (This Apache-config modification pattern is repeated above for Virtuoso)
-                        echo $div
+                        echo "$div `whoami`"
                         target='/etc/apache2/sites-available/default'
                         already_there=""
                         if [ -e $target ]; then
@@ -1800,7 +1805,7 @@ else
 
                         # JENAROOT to data/source/csv2rdf4lod-source-me-as-$user.sh
                         echo
-                        echo $div
+                        echo "$div `whoami`"
                         echo ${PRIZMS_HOME%/*}
                         find ${PRIZMS_HOME%/*} -type d -name "apache-jena*" # /home/lebot/opt/apache-jena-2.7.4
                         set_paths_cmd="export JENAROOT=`find ${PRIZMS_HOME%/*} -type d -name "apache-jena*" | tail -1 | sed "s/\`whoami\`/$user/g"`"
@@ -1838,7 +1843,7 @@ else
                   # DataFAQs services via mod_python
                   #
                   echo
-                  echo $div
+                  echo "$div `whoami`"
                   offer_install_aptget \
                      'libapache2-mod-python' \
                      "expose DataFAQs services through Apache at $our_base_uri/services/sadi" # e.g. http://lofd.tw.rpi.edu/sadi-services/lift-ckan
@@ -1847,7 +1852,7 @@ else
                   fi
 
                   echo
-                  echo $div
+                  echo "$div `whoami`"
                   www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
                   echo "Prizms deploys DataFAQs services by linking to them from within the htdocs directory, which is currently $www"
                   if [[ -d "$www" ]]; then
@@ -1870,7 +1875,7 @@ else
 
                   if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                      echo 
-                     echo $div
+                     echo "$div `whoami`"
                      echo "Prizms pings datahub.io with lodcloud-specific metadata updates."
                      echo "datahub.io requires an API key."
                      credentials="/etc/prizms/$project_user_name/ckan/datahub.io/csv2rdf4lod-source-me-for-ckan-credentials.sh"
@@ -1910,7 +1915,7 @@ else
                         if [[ -e $credentials ]]; then
                            target="data/source/csv2rdf4lod-source-me-credentials.sh"
                            echo
-                           echo $div
+                           echo "$div `whoami`"
                            echo "$target is a public version controlled script that points to all credentials required for the project."
                            if [[ -e $target ]]; then
                               already_there=`grep $credentials $target`
@@ -1933,7 +1938,7 @@ else
 
                   # No need to avoid when $i_am_project_user, since the directory would already be created by the developer's invocation of the installer.
                   echo 
-                  echo $div
+                  echo "$div `whoami`"
                   www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
                   echo "Prizms publishes RDF dump files into the htdocs directory, which is currently set to \"$www\"."
                   if [[ -n "$www" ]]; then
@@ -1991,7 +1996,7 @@ else
                      # tail -f /var/log/apache2/error.log
                   else
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "Prizms exposes a directory of python SADI services through Apache, which needs to know what implementation should handle the invocation."
                      target="$PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess"
                      if [[ ! -e $target ]]; then
@@ -2020,7 +2025,7 @@ else
      
     
                   echo
-                  echo $div
+                  echo "$div `whoami`"
                   target='/etc/apache2/envvars'
                   already_there=`grep X_CKAN_API_Key $target`
                   echo "Prizms uses some SADI services that write to the CKAN at http://datahub.io, which requires an API key."
@@ -2041,7 +2046,7 @@ else
                      # LODSPeaKr: https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu
                      #
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "Prizms uses LODSPeaKr to serve its RDF as Linked Data, and to serve the corresponding human-web pages."
                      echo
                      offer_install_aptget "curl apache2 php5 php5-cli php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
@@ -2050,7 +2055,7 @@ else
 
                   if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "LODSPeaKr lives within the htdocs directory ($www),"
                      echo "while your $project_user_name Prizms will maintain the model/views within"
                      echo "the version-controlled repository ($project_code_repository)." 
@@ -2110,7 +2115,7 @@ else
                         target="$www/lodspeakr/settings.inc.php"
                         if [[ ! -h $target ]]; then
                            echo
-                           echo $div
+                           echo "$div `whoami`"
                            echo "$target exists, but is not soft-linked into $project_user_name's read-only clone of $project_code_repository."
                            echo "The following commands will place settings.inc.php into your development clone, and link to $project_user_name's read-only production clone."
                            echo
@@ -2145,7 +2150,7 @@ else
 
                      # LODSPeaKr logo
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "LODSPeaKr permits a logo for the web site."
                      echo "The logo should be placed at /home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png"
                      echo
@@ -2158,7 +2163,7 @@ else
 
                      # Avoid index.html
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "Prizms does not need the index.html in the htdocs directory, since it uses lodspeakr"
                      if [[ -e $www/index.html ]]; then
                         echo
@@ -2176,7 +2181,7 @@ else
 
 
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "Prizms maintains the LODSPeaKr components under version control ($project_code_repository)"
                      echo "See https://github.com/alangrafu/lodspeakr/wiki/Develop-your-own-components-in-a-different-repository"
                      if [[ ! -h $www/lodspeakr/components ]]; then # Is not an alias. # TODO: and it points to within our github clone...
@@ -2221,7 +2226,7 @@ else
  
                      # Multiple users development site (https://github.com/timrdf/prizms/issues/16)
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "Prizms permits development of its LODSPeaKr within developers' namespaces (e.g. $our_base_uri/~$person_user_name)."
                      echo "This allows developers to prototype data views before committing them to the production site (e.g. $our_base_uri)."
                      echo "Once finished, developers commit their code to $project_code_repository and the $project_user_name user pulls it to deploy at $our_base_uri."
@@ -2258,7 +2263,7 @@ else
                      fi
 
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "Your Prizms LODSPeaKr development clone should exist within $user_home/public_html"
                      if [[ ! -e $user_home/public_html ]]; then
                         echo
@@ -2319,7 +2324,7 @@ else
                      fi
                      $sudo cp $target $target_backup
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "Prizms can use existing upstream LODSPeaKrs by referencing them within settings.inc.php."
                      echo "($target) `whoami` at `pwd`"
                      echo
@@ -2361,7 +2366,7 @@ else
 
                   # robots.txt
                   echo
-                  echo $div
+                  echo "$div `whoami`"
                   echo "Prizms nodes are more useful when automated agents are permitted to crawl and index the data on its site."
                   echo "$our_base_uri/robots.txt needs to permit web agents to crawl the site, which can be done by renaming the file with:"
                   echo
@@ -2388,7 +2393,7 @@ else
                   # Sitemap: http://ieeevis.tw.rpi.edu/source/ieeevis-tw-rpi-edu/file/cr-sitemap/version/latest/conversion/sitemap.xml
                   # Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml
                   echo
-                  echo $div
+                  echo "$div `whoami`"
                   echo "Automated web agents can use the 'Sitemap:' directive of $our_base_uri/robots.txt"
                   echo "to keep the data in Prizms in sync with their indexing. The robots.txt directive is:"
                   echo
@@ -2411,7 +2416,7 @@ else
                   #
                   # http://data.melagrid.org/cowabunga/dude.html -> data-melagrid-org
                   echo
-                  echo $div
+                  echo "$div `whoami`"
                   export CLASSPATH=$CLASSPATH`$PRIZMS_HOME/bin/install/classpaths.sh` 
                   upstream_ckan_source_id=`java edu.rpi.tw.string.NameFactory --source-id-of $upstream_ckan`
                   target="data/source/$upstream_ckan_source_id"
@@ -2444,7 +2449,7 @@ else
 
 
                   echo
-                  echo $div
+                  echo "$div `whoami`"
                   target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
                   echo "Prizms automates dataset updates by regularly invoking $target with cron."
                   echo "$target is maintained using version control,"
@@ -2531,7 +2536,7 @@ else
                   #
                   if [ -n "$added" ]; then # This should never pass when $i_am_project_user, if it does, something above shouldn't changed $added.
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "We just added the following to `pwd`"
                      echo "   $added"
                      echo
@@ -2554,7 +2559,7 @@ else
                   if [[ -z $i_am_project_user ]]; then # Running as developer e.g. jsmith not loxd
                      # ^ We are currently doing this \/ (avoid the infinite loop)
                      #echo
-                     #echo $div
+                     #echo "$div `whoami`"
                      #echo "Since we've made some changes to apache, we need to restart it so they take effect."
                      #echo
                      #echo sudo service apache2 restart
@@ -2565,7 +2570,7 @@ else
                      #fi
 
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "We've finished setting up your development environment."
                      echo "The next step is to set up the $project_user_name's production environment,"
                      echo "which we can do by running this script again as user $project_user_name"
@@ -2606,13 +2611,13 @@ else
 
 
                   echo
-                  echo $div
+                  echo "$div `whoami`"
                   if [[ -n $i_am_project_user ]]; then
                      echo "We're all done installing Prizms production environment for the user `whoami`."
                   else # Running as developer e.g. jsmith not loxd
                      echo "We're all done installing Prizms development environment for the user `whoami`."
                      echo
-                     echo $div
+                     echo "$div `whoami`"
                      echo "Now what?"
                      echo "* Check out the data site $our_base_uri/"
                      echo "* Check out the SPARQL endpoint $our_base_uri/sparql"

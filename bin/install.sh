@@ -849,9 +849,9 @@ else
                         added="$added data/source/.gitignore"
                      fi
                   fi
-                  if [[ ! -e $target || ! `grep "^.refresh-prizms-installation" $target` && -z "$i_am_project_user" ]]; then
-                     echo ".refresh-prizms-installation" >> $target
-                     added="$added data/source/.gitignore"
+                  if [[ ! -e .gitignore || ! `grep "^.refresh-prizms-installation" $target` && -z "$i_am_project_user" ]]; then
+                     echo ".refresh-prizms-installation" >> .gitignore
+                     added="$added .gitignore"
                   fi
 
                   # Set shell environment variable values in source-me.sh's.

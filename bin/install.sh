@@ -281,9 +281,9 @@ else
       reason="$2"
       for module in $modules; do
          echo
-         echo "sudo a2enmod $module 2>dev/null | grep 'already enabled'"
+         echo "sudo a2enmod $module | grep 'already enabled'"
          echo
-         already_enabled=`sudo a2enmod $module | grep 'already enabled'`
+         already_enabled=`sudo a2enmod $module 2>dev/null | grep 'already enabled'`
          # ^^ This enables it before we ask for permission, stating e.g. 'Module proxy_http already enabled' if it already was.
          #    If it was already enabled, nothing to do.
          #    If it wasn't already enabled and we don't get permission, we disable it.

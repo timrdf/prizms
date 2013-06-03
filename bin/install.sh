@@ -2074,15 +2074,18 @@ else
                         read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
                         if [[ "$install_it" == [yY] ]]; then
                            offer_install_aptget "curl apache2 php5 php5-cli php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
+                           owner_group=`stat --format=%U:%G $www`
+                           sudo chown $project_user_name:$project_user_name $www
                            pushd $www &> /dev/null
                               # bash -s http://server/baseurl http://example.org/namespace/ http://server/sparql  < <(curl -sL http://lodspeakr.org/install)
                               # see https://github.com/alangrafu/lodspeakr/wiki/Installation#wiki-automatic
                               #sudo bash < <(curl -sL http://lodspeakr.org/install)
-                              sudo bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql -s chown=$lodchown < <(curl -sL http://lodspeakr.org/install)
+                              sudo su - $project_user_name -c "cd $www; bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql -s chown=$lodchown < <(curl -sL http://lodspeakr.org/install)"
                               # Question 1: http://lod.melagrid.org
                               # Question 2: <accept default>
                               # Question 3: http://lod.melagrid.org/sparql
                            popd &>/dev/null
+                           sudo chown $owner_group $www
                         else
                            echo "Okay, we won't install LODSPeaKr at $www/lodspeakr."
                         fi

@@ -1039,7 +1039,6 @@ else
                      fi
 
 
-                     # TODO: add source ../csv2rdf4lod-source-me-for-<project>.sh to as-<developer>.sh
 
 
                      # AS DEVELOPER
@@ -1051,6 +1050,7 @@ else
                      template="$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/conversion-root-stub/source/csv2rdf4lod-source-me-as-xxx.sh"
                      target="data/source/csv2rdf4lod-source-me-as-$person_user_name.sh"
                      if [[ ! -e $target ]]; then
+                        # TODO: add source ../csv2rdf4lod-source-me-for-<project>.sh to as-<developer>.sh (not appearing in some cases)
                         cp $template $target
                         echo "source `pwd`/data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"              >> $target
                         $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_CONVERT_PERSON_URI' $target --change-to $person_uri
@@ -2074,7 +2074,7 @@ else
                               # bash -s http://server/baseurl http://example.org/namespace/ http://server/sparql  < <(curl -sL http://lodspeakr.org/install)
                               # see https://github.com/alangrafu/lodspeakr/wiki/Installation#wiki-automatic
                               #sudo bash < <(curl -sL http://lodspeakr.org/install)
-                              sudo bash -s base-url=$our_base_uri base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql chown=$lodchown < <(curl -sL http://lodspeakr.org/install)
+                              sudo bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql -s chown=$lodchown < <(curl -sL http://lodspeakr.org/install)
                               # Question 1: http://lod.melagrid.org
                               # Question 2: <accept default>
                               # Question 3: http://lod.melagrid.org/sparql

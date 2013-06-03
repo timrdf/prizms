@@ -2245,32 +2245,33 @@ else
                      enable_apache_module 'userdir' "run development clones of the $project_user_name Prizm's LODSPeaKr"  
 
                      if [[ ! -e /etc/apache2/mods-enabled/php5.conf ]]; then
-                        read -p "WARNING: /etc/apache2/mods-enabled/php5.conf does not exist, so we're not sure how to enable user-level php." -u 1 oops
+                        read -p "WARNING: /etc/apache2/mods-enabled/php5.conf does not exist, so we're not sure how to enable user-level php. (press enter to continue) " -u 1 oops
                         #if [[ "$make_it" == [yY] ]]; then
                         #   mkdir $user_home/public_html
                         #else
                         #   echo "Okay, we won't include lodspeakr/components into version control."
                         #fi 
-                     fi
-                     if [[ ! `grep ".*#.*<IfModule *mod_userdir.c" /etc/apache2/mods-enabled/php5.conf` ]]; then
-                        echo
-                        echo "The following directive in /etc/apache2/mods-enabled/php5.conf needs to be **commented out** to enable user-level php."
-                        echo
-                        echo "    <IfModule mod_userdir.c>"
-                        echo "        <Directory /home/*/public_html>"
-                        echo "            php_admin_value engine Off"
-                        echo "        </Directory>"
-                        echo "    </IfModule>"
+                     else
+                        if [[ ! `grep ".*#.*<IfModule *mod_userdir.c" /etc/apache2/mods-enabled/php5.conf` ]]; then
+                           echo
+                           echo "The following directive in /etc/apache2/mods-enabled/php5.conf needs to be **commented out** to enable user-level php."
+                           echo
+                           echo "    <IfModule mod_userdir.c>"
+                           echo "        <Directory /home/*/public_html>"
+                           echo "            php_admin_value engine Off"
+                           echo "        </Directory>"
+                           echo "    </IfModule>"
 
-                        read -p "Q: Can you please go comment it out, and press 'y' when finished? [y/n] " -u 1 commented_out
-                        if [[ "$commented_out" == [yY] ]]; then
-                           if [[ ! `grep ".*#.*<IfModule *mod_userdir.c" /etc/apache2/mods-enabled/php5.conf` ]]; then
-                              echo "It doesn't look like you commented it out. Try again by running the installer again."
-                              read -p "Q: Can you please go comment it out, and press 'y' when finished? [y/n] " -u 1 commented_out
-                           fi
-                        else
-                           echo "Okay, but user-level php for your Prizms LODSPeakr will not be enabled."
-                        fi 
+                           read -p "Q: Can you please go comment it out, and press 'y' when finished? [y/n] " -u 1 commented_out
+                           if [[ "$commented_out" == [yY] ]]; then
+                              if [[ ! `grep ".*#.*<IfModule *mod_userdir.c" /etc/apache2/mods-enabled/php5.conf` ]]; then
+                                 echo "It doesn't look like you commented it out. Try again by running the installer again."
+                                 read -p "Q: Can you please go comment it out, and press 'y' when finished? [y/n] " -u 1 commented_out
+                              fi
+                           else
+                              echo "Okay, but user-level php for your Prizms LODSPeakr will not be enabled."
+                           fi 
+                        fi
                      fi
 
                      echo
@@ -2296,7 +2297,7 @@ else
                            perms="-s chown=www-data chmod=774"
                            perms="-s chmod=777" # https://github.com/timrdf/prizms/issues/18 TODO
                            echo
-                           echo bash -s components=$comps base-url=$base base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql $perms < <(curl -sL http://lodspeakr.org/install)
+                           echo bash -s components=$comps -s base-url=$base -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql $perms < <(curl -sL http://lodspeakr.org/install)
                            echo
                            read -p "Q: Install your Prizms LODSPeaKr development clone with the command above? [y/n] " -u 1 install_it
                            if [[ "$install_it" == [yY] ]]; then

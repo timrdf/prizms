@@ -2107,7 +2107,7 @@ else
                         read -p "Q: Would you like to configure LODSPeaKr now? [y/n] " -u 1 install_it
                         if [[ "$install_it" == [yY] ]]; then
                            pushd $www/lodspeakr &> /dev/null
-                              sudo ./install.sh `pwd`
+                              sudo ./install.sh base-url=$our_base_uri base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql chown=$lodchown
                            popd &> /dev/null
                         else
                            echo "Okay, we won't configure LODSPeaKr at $www/lodspeakr."

@@ -1224,7 +1224,7 @@ else
                            read -p "Q: Enable syntax highlighting in vi with n3.vim? [y/n] " -u 1 install_it
                            if [[ "$install_it" == [yY] ]]; then
                               mkdir -p $user_home/.vim/syntax
-                              curl -L 'http://www.vim.org/scripts/download_script.php?src_id=6882' > $user_home/.vim/syntax/n3.vim
+                              curl --progress-bar -L 'http://www.vim.org/scripts/download_script.php?src_id=6882' > $user_home/.vim/syntax/n3.vim
 
                               echo " \"RDF Notation 3 Syntax"                                      > $user_home/.vim/filetype.vim
                               echo "    augroup filetypedetect"                                   >> $user_home/.vim/filetype.vim
@@ -1893,6 +1893,7 @@ else
                         ckankey=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'X_CKAN_API_Key' $credentials`
                      fi
                      if [[ -z "$ckankey" ]]; then
+                        echo "$div `whoami`"
                         echo
                         echo "Prizms stores the datahub.io API Key that it uses outside of version control, so that it is kept from the public." 
                         echo
@@ -2109,7 +2110,7 @@ else
                         fi
                      fi
                      if [[ -e $www/lodspeakr/settings.inc.php ]]; then
-                        sudo chown provenanceweb:www-data $www/lodspeakr/settings.inc.php
+                        sudo chown $project_user_name:www-data $www/lodspeakr/settings.inc.php
                         sudo chmod g+w                    $www/lodspeakr/settings.inc.php
 
                         enable_apache_module 'rewrite' 'run LODSPeaKr'

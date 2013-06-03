@@ -2052,6 +2052,7 @@ else
 
 
 
+                  lodchown=www-data:$project_user_name # A) user 'www-data' so apache can write; B) a group where www-data can write
                   if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                      #
                      # LODSPeaKr: https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu
@@ -2066,7 +2067,6 @@ else
                      echo "the version-controlled repository ($project_code_repository)." 
                      echo
                      if [[ ! -e $www/lodspeakr ]]; then
-                        lodchown=www-data:$project_user_name # A) user 'www-data' so apache can write; B) a group where www-data can write
                         echo "$www/lodspeakr is not set up yet. It can be installed with the command:"
                         echo
                         echo " sudo bash -s base-url=$our_base_uri base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql chown=$lodchown < <(curl -sL http://lodspeakr.org/install)"

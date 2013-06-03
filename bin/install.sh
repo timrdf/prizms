@@ -1398,7 +1398,7 @@ else
                         echo
                         if [[ "$install_them" == [yY] ]]; then
                            touch .before-prizms-installed-dependencies
-                           $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh $avoid_sudo $use_sudo
+                           $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh $avoid_sudo $use_sudo 2> /dev/null
                            $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       $avoid_sudo $use_sudo
                         else
                            echo "Okay, we won't try to install them. Check out the following if you want to do it yourself:"
@@ -2058,15 +2058,9 @@ else
                      #
                      echo
                      echo "$div `whoami`"
+                     www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
                      echo "Prizms uses LODSPeaKr to serve its RDF as Linked Data, and to serve the corresponding human-web pages."
                      echo
-                     offer_install_aptget "curl apache2 php5 php5-cli php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
-                     www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
-                  fi
-
-                  if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
-                     echo
-                     echo "$div `whoami`"
                      echo "LODSPeaKr lives within the htdocs directory ($www),"
                      echo "while your $project_user_name Prizms will maintain the model/views within"
                      echo "the version-controlled repository ($project_code_repository)." 
@@ -2079,6 +2073,7 @@ else
                         echo
                         read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
                         if [[ "$install_it" == [yY] ]]; then
+                           offer_install_aptget "curl apache2 php5 php5-cli php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
                            pushd $www &> /dev/null
                               # bash -s http://server/baseurl http://example.org/namespace/ http://server/sparql  < <(curl -sL http://lodspeakr.org/install)
                               # see https://github.com/alangrafu/lodspeakr/wiki/Installation#wiki-automatic
@@ -2096,6 +2091,9 @@ else
 
                   if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
          
+                     if [[ -e $www/lodspeakr ]]; then
+                        offer_install_aptget "curl apache2 php5 php5-cli php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
+                     fi
                      if [[ -e $www/lodspeakr && ! -e $www/lodspeakr/settings.inc.php ]]; then
                         echo
                         echo "$www/lodspeakr was created, but not configured with settings.inc.php"
@@ -2111,7 +2109,7 @@ else
                      fi
                      if [[ -e $www/lodspeakr/settings.inc.php ]]; then
                         sudo chown $project_user_name:www-data $www/lodspeakr/settings.inc.php
-                        sudo chmod g+w                    $www/lodspeakr/settings.inc.php
+                        sudo chmod g+w                         $www/lodspeakr/settings.inc.php
 
                         enable_apache_module 'rewrite' 'run LODSPeaKr'
                         enable_apache_module 'php5'    'run LODSPeaKr'

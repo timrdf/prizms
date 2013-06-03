@@ -2120,7 +2120,7 @@ else
                         fi
                      fi
                      if [[ -e $www/lodspeakr/settings.inc.php ]]; then
-                        sudo chown $project_user_name:www-data $www/lodspeakr/settings.inc.php
+                        #sudo chown $project_user_name:www-data $www/lodspeakr/settings.inc.php
                         sudo chmod g+w                         $www/lodspeakr/settings.inc.php
 
                         # /var/www$ sudo chmod -R g+w lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php; sudo chgrp -R www-data lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php

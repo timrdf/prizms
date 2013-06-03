@@ -664,14 +664,20 @@ else
    fi
    pushd &> /dev/null
       cd
-      user_home=`pwd`
+      user_home=`pwd` # e.g. /home/smithj or /home/ieeevis
+
       if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
          development="development"
       else
          development="production"
       fi 
+
+      # The local directory that we expect by cloneing $project_code_repository
+      target_dir=`basename $project_code_repository`
+      target_dir=${target_dir%.*} # e.g. 'ieeevis', 'lofd', etc.
+
       echo "Now let's install your $development copy of the $project_user_name Prizms."
-      echo "(If you already have a working copy there, we'll update it.)"
+      echo "(If you already have a working copy there, we'll update it.)" # TODO: recognize when it's already installed.
       echo
       read -p "Q: May we run '$vcs $clone $project_code_repository' from `pwd`/prizms? [y/n] " -u 1 install_it
       if [[ "$install_it" == [yY] ]]; then
@@ -679,12 +685,10 @@ else
             mkdir prizms
          fi
          pushd prizms &> /dev/null
-            target_dir=`basename $project_code_repository`
-            target_dir=${target_dir%.*}
 
             just_cloned="no"
             if [ ! -e $target_dir ]; then
-               if [[ -z "`git config --get user.email`" && -n "$person_email" && -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
+               if [[ "$vcs" == "git" && -z "`git config --get user.email`" && -n "$person_email" && -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                   echo
                   echo "$div `whoami`"
                   echo "We can set your email address in your global git configuration using the following command."

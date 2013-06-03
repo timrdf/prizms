@@ -2236,9 +2236,11 @@ else
                      else
                         echo "(LODSPeaKr is already under version control)" 
                      fi
+                  fi # end running and developer user
 
 
  
+                  if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                      # Multiple users development site (https://github.com/timrdf/prizms/issues/16)
                      echo
                      echo "$div `whoami`"
@@ -2333,6 +2335,7 @@ else
                             target='/var/www/lodspeakr/settings.inc.php'
                      target_backup="/var/www/lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
                      sudo="sudo" # TODO: try to do as production user.
+                     sudo="" # TODO: try to do as production user.
                      if [[ -h $target ]]; then # FILE exists and is a symbolic link.
                                target='lodspeakr/settings.inc.php'
                         target_backup="lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"

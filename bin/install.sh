@@ -667,23 +667,22 @@ else
       user_home=`pwd`
       if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
          development="development"
-         prizms="prizms/"
       else
          development="production"
-         prizms="prizms/"
       fi 
       echo "Now let's install your $development copy of the $project_user_name Prizms."
       echo "(If you already have a working copy there, we'll update it.)"
       echo
-      read -p "Q: May we run '$vcs $clone $project_code_repository' from `pwd`/$prizms? [y/n] " -u 1 install_it
+      read -p "Q: May we run '$vcs $clone $project_code_repository' from `pwd`/prizms? [y/n] " -u 1 install_it
       if [[ "$install_it" == [yY] ]]; then
-         if [[ -n "$prizms" && ! -e prizms ]]; then
+         if [[ ! -e prizms ]]; then
             mkdir prizms
          fi
-         pushd $prizms &> /dev/null
+         pushd prizms &> /dev/null
             target_dir=`basename $project_code_repository`
             target_dir=${target_dir%.*}
 
+            just_cloned="no"
             if [ ! -e $target_dir ]; then
                if [[ -z "`git config --get user.email`" && -n "$person_email" && -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                   echo
@@ -772,28 +771,33 @@ else
                else
                   echo "Okay, $project_code_repository is now ${clone}'d to $dir." 
                fi
-            fi
+               just_cloned="yes"
+            fi # ! -e $target_dir
             if [[ -e $target_dir ]]; then
                pushd $target_dir &> /dev/null
 
-                  echo "#!/bin/bash"                                                  > .refresh-prizms-installation
-                  echo "if [[ \"\$1\" == "pull" ]]; then"                            >> .refresh-prizms-installation
-                  echo "   pushd /home/$person_user_name/opt/prizms; git pull; popd" >> .refresh-prizms-installation
-                  echo "fi"                                                          >> .refresh-prizms-installation
-                  echo "$me \\"                                                      >> .refresh-prizms-installation
-                  echo "    --me             $person_uri              \\"            >> .refresh-prizms-installation
-                  #echo "    --my-email       $person_email            \\"           >> .refresh-prizms-installation
-                  echo "    --proj-user      $project_user_name       \\"            >> .refresh-prizms-installation
-                  echo "    --repos          $project_code_repository \\"            >> .refresh-prizms-installation
-                  echo "    --upstream-ckan  $upstream_ckan           \\"            >> .refresh-prizms-installation
-                  echo "    --our-base-uri   $our_base_uri            \\"            >> .refresh-prizms-installation
-                  echo "    --our-source-id  $our_source_id           \\"            >> .refresh-prizms-installation
-                  echo "    --our-datahub-id $our_datahub_id"                        >> .refresh-prizms-installation
-                  chmod +x .refresh-prizms-installation
+                  if [[ -z "$i_am_project_user" ]]; then
+                     echo "#!/bin/bash"                                                  > .refresh-prizms-installation
+                     echo "if [[ \"\$1\" == "pull" ]]; then"                            >> .refresh-prizms-installation
+                     echo "   pushd /home/$person_user_name/opt/prizms; git pull; popd" >> .refresh-prizms-installation
+                     echo "fi"                                                          >> .refresh-prizms-installation
+                     echo "$me \\"                                                      >> .refresh-prizms-installation
+                     echo "    --me             $person_uri              \\"            >> .refresh-prizms-installation
+                     #echo "    --my-email       $person_email            \\"           >> .refresh-prizms-installation
+                     echo "    --proj-user      $project_user_name       \\"            >> .refresh-prizms-installation
+                     echo "    --repos          $project_code_repository \\"            >> .refresh-prizms-installation
+                     echo "    --upstream-ckan  $upstream_ckan           \\"            >> .refresh-prizms-installation
+                     echo "    --our-base-uri   $our_base_uri            \\"            >> .refresh-prizms-installation
+                     echo "    --our-source-id  $our_source_id           \\"            >> .refresh-prizms-installation
+                     echo "    --our-datahub-id $our_datahub_id"                        >> .refresh-prizms-installation
+                     chmod +x .refresh-prizms-installation
+                  fi
 
-                  echo
-                  echo "$project_code_repository is already ${clone}'d into $target_dir; ${pull}'ing it..."
-                  $vcs $pull
+                  if [[ "$just_cloned" != "yes" ]]; then
+                     echo
+                     echo "$project_code_repository is already ${clone}'d into $target_dir; ${pull}'ing it..."
+                     $vcs $pull
+                  fi
 
                   added=''
 
@@ -841,8 +845,8 @@ else
                         added="$added data/source/.gitignore"
                      fi
                   fi
-                  if [[ ! -e .gitignore || ! `grep "^.refresh-prizms-installation" .gitignore` ]]; then
-                     echo ".refresh-prizms-installation" >> .gitignore
+                  if [[ ! -e $target || ! `grep "^.refresh-prizms-installation" $target` && -z "$i_am_project_user" ]]; then
+                     echo ".refresh-prizms-installation" >> $target
                      added="$added data/source/.gitignore"
                   fi
 
@@ -1398,7 +1402,7 @@ else
                         fi
                      fi
                      rm -f .before-prizms-installed-dependencies
-                  #fi # end running as developer e.g. jsmith not loxd
+                  #fi # end running as developer e.g. jsmith not loxd # # TODO: this should be removed in favor of $avoid_sudo
 
                   if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
 

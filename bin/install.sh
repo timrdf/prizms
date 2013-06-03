@@ -2093,6 +2093,12 @@ else
          
                      if [[ -e $www/lodspeakr ]]; then
                         offer_install_aptget "curl apache2 php5 php5-cli php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
+
+                        enable_apache_module 'rewrite' 'run LODSPeaKr'
+                        enable_apache_module 'php5'    'run LODSPeaKr'
+
+                        # AllowOverride must be 'All' https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu
+                        enable_htaccess "LODSPeaKr needs .htaccess"
                      fi
                      if [[ -e $www/lodspeakr && ! -e $www/lodspeakr/settings.inc.php ]]; then
                         echo
@@ -2110,12 +2116,6 @@ else
                      if [[ -e $www/lodspeakr/settings.inc.php ]]; then
                         sudo chown $project_user_name:www-data $www/lodspeakr/settings.inc.php
                         sudo chmod g+w                         $www/lodspeakr/settings.inc.php
-
-                        enable_apache_module 'rewrite' 'run LODSPeaKr'
-                        enable_apache_module 'php5'    'run LODSPeaKr'
-
-                        # AllowOverride must be 'All' https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu
-                        enable_htaccess "LODSPeaKr needs .htaccess"
 
                         # /var/www$ sudo chmod -R g+w lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php; sudo chgrp -R www-data lodspeakr/cache lodspeakr/meta lodspeakr/settings.inc.php
             

@@ -2371,6 +2371,7 @@ else
 
                                  cherry_pick="\$conf['components']['$ctype'][] = '$component';"
                                  if [[ $there ]]; then
+                                    echo $there
                                     disabled=`echo $there | grep "^//"`;
                                     if [[ -n "$disabled" ]]; then
                                        echo " (enabled) $component"

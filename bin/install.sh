@@ -2374,10 +2374,10 @@ else
                                     disabled=`echo $there | grep "^//"`;
                                     if [[ -z "$disabled" ]]; then
                                        echo " (already enabled) $component"
-                                       #TODO echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
-                                       echo $www/lodspeakr/${component#$upstream/}
                                     else
                                        echo "(already disabled) $component"
+                                       #TODO echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
+                                       echo $www/lodspeakr/${component#$upstream/}
                                     fi
                                  else
                                     echo "^ not there; add $cherry_pick"

@@ -2353,7 +2353,7 @@ else
                      echo "Prizms can use existing upstream LODSPeaKrs by referencing them within $target."
                      echo "The current upstream LODSPeaKrs are (at $project_user_home)"
                      for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
-                        echo "  $upstream"
+                        echo "  ${upstream%/*}"
                      done
                      echo "($target) `whoami` at `pwd`"
                      echo

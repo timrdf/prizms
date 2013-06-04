@@ -2138,10 +2138,10 @@ else
                            echo "$target exists, but is not soft-linked into $project_user_name's read-only clone of $project_code_repository."
                            echo "The following commands will place settings.inc.php into your development clone, and link to $project_user_name's read-only production clone."
                            echo
-                           echo    sudo mv $target $user_home/prizms/$project_user_name/lodspeakr/settings.inc.php
-                           echo    ($person_user_name git add/commit/push)
-                           echo    ($project_user_name git pull)
-                           echo    sudo ln -s      $project_user_home/prizms/$project_user_name/lodspeakr/settings.inc.php $target
+                           echo "  sudo mv $target $user_home/prizms/$project_user_name/lodspeakr/settings.inc.php"
+                           echo "  ($person_user_name git add/commit/push)"
+                           echo "  ($project_user_name git pull)"
+                           echo "  sudo ln -s      $project_user_home/prizms/$project_user_name/lodspeakr/settings.inc.php $target"
                            echo
                            read -p "Q: Peform the commands above to put settings.inc.php under version controll? [y/n] " -u 1 install_it
                            if [[ "$install_it" == [yY] ]]; then

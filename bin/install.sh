@@ -2360,6 +2360,7 @@ else
                      echo "($target) `whoami` at `pwd`"
                      echo
                      read -p "Q: Cherry pick upstream LODSPeaKrs? [y/n] " -u 1 cherry_pick
+                     echo
                      if [[ "$cherry_pick" == [yY] ]]; then
                         for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
                            for ctype in services types; do
@@ -2371,10 +2372,12 @@ else
                                  cherry_pick="\$conf['components']['$ctype'][] = '$component';"
                                  if [[ $there ]]; then
                                     disabled=`echo $there | grep "^#"`; disabled=${#disabled}
-                                    #if [[ ! $disabled ]]; then
-                                    #   echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
-                                    #fi
-                                    echo $component
+                                    if [[ ! $disabled ]]; then
+                                       echo "$component (enabled)"
+                                       #TODO echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
+                                    else
+                                       echo "$component (disabled)"
+                                    fi
                                  else
                                     echo "^ not there; add $cherry_pick"
                                     # =>

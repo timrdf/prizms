@@ -2374,8 +2374,11 @@ else
                                     disabled=`echo $there | grep "^//"`;
                                     if [[ -z "$disabled" ]]; then
                                        echo " (already  enabled) $component"
-                                       #TODO echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
-                                       echo $www/lodspeakr/${component#$upstream/}
+                                       primary="$www/lodspeakr/${component#$upstream/}"
+                                       if [[ -e $primary ]]; then
+                                          echo "  - NOTE that $primary will take precedence over $component"
+                                       fi 
+                                       #TODO primary when components is soft linked: `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`
                                     else
                                        echo " (already disabled) $component"
                                     fi

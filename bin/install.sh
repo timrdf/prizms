@@ -2373,9 +2373,9 @@ else
                                  if [[ $there ]]; then
                                     disabled=`echo $there | grep "^//"`;
                                     if [[ -z "$disabled" ]]; then
-                                       echo " (already enabled) $component"
+                                       echo " (already  enabled) $component"
                                     else
-                                       echo "(already disabled) $component"
+                                       echo " (already disabled) $component"
                                        #TODO echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
                                        echo $www/lodspeakr/${component#$upstream/}
                                     fi

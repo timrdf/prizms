@@ -2037,26 +2037,21 @@ else
                   fi
      
     
-                  echo
-                  echo "$div `whoami`"
-                  target='/etc/apache2/envvars'
-                  already_there=`grep X_CKAN_API_Key $target`
-                  echo "Prizms uses some SADI services that write to the CKAN at http://datahub.io, which requires an API key."
-                  echo "Since the SADI services access the X_CKAN_API_Key environment variable and are invoked through Apache,"
-                  echo "the Apache environment variable X_CKAN_API_Key needs to be set in $target."
-                  if [[ -n "$ckankey" && -z "$already_there" ]]; then
-                     #read -p "set X_CKAN_API_Key to $ckankey in $target? [y/n]" -u 1 set_it
-                     #if [[ "$set_it" == [yY] ]]; then
-                        change_source_me $target 'X_CKAN_API_Key' "$ckankey" \
-                           'authenticate to datahub.io' \
-                           'https://github.com/timrdf/DataFAQs/wiki/Missing-CKAN-API-Key' \
-                           'python SADI services will not be able to inform datahub.io about this Prizms nodes'
-                     #else
-                     #   echo "Okay, we won't change /etc/apache2/envvars"
-                     #fi
-                  else
-                     echo "(X_CKAN_API_Key is already set in $target)"
-                  fi
+                  #echo
+                  #echo "$div `whoami`"
+                  #target='/etc/apache2/envvars'
+                  #already_there=`grep X_CKAN_API_Key $target`
+                  #echo "Prizms uses some SADI services that write to the CKAN at http://datahub.io, which requires an API key."
+                  #echo "Since the SADI services access the X_CKAN_API_Key environment variable and are invoked through Apache,"
+                  #echo "the Apache environment variable X_CKAN_API_Key needs to be set in $target."
+                  #if [[ -n "$ckankey" && -z "$already_there" ]]; then
+                  #   change_source_me $target 'X_CKAN_API_Key' "$ckankey" \
+                  #      'for python apache SADI services to authenticate to datahub.io' \
+                  #      'https://github.com/timrdf/DataFAQs/wiki/Missing-CKAN-API-Key' \
+                  #      'SADI services will not be able to inform datahub.io about this Prizms nodes'
+                  #else
+                  #   echo "(X_CKAN_API_Key is already set in $target)"
+                  #fi
 
 
 
@@ -2144,6 +2139,8 @@ else
                            echo "The following commands will place settings.inc.php into your development clone, and link to $project_user_name's read-only production clone."
                            echo
                            echo    sudo mv $target $user_home/prizms/$project_user_name/lodspeakr/settings.inc.php
+                           echo    ($person_user_name git add/commit/push)
+                           echo    ($project_user_name git pull)
                            echo    sudo ln -s      $project_user_home/prizms/$project_user_name/lodspeakr/settings.inc.php $target
                            echo
                            read -p "Q: Peform the commands above to put settings.inc.php under version controll? [y/n] " -u 1 install_it

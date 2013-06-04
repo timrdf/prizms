@@ -2371,7 +2371,7 @@ else
 
                                  cherry_pick="\$conf['components']['$ctype'][] = '$component';"
                                  if [[ $there ]]; then
-                                    disabled=`echo $there | grep "^[^$]*[/#]"`;
+                                    disabled=`echo $there | grep "^//"`;
                                     if [[ -n "$disabled" ]]; then
                                        echo " (enabled) $component"
                                        #TODO echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"

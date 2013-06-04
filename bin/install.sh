@@ -2373,10 +2373,11 @@ else
                                  if [[ $there ]]; then
                                     disabled=`echo $there | grep "^//"`;
                                     if [[ -z "$disabled" ]]; then
-                                       echo " (enabled) $component"
+                                       echo " (already enabled) $component"
                                        #TODO echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
+                                       echo ${component#$upstream}
                                     else
-                                       echo "(disabled) $component"
+                                       echo "(already disabled) $component"
                                     fi
                                  else
                                     echo "^ not there; add $cherry_pick"

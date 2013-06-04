@@ -2350,7 +2350,11 @@ else
                      $sudo cp $target $target_backup
                      echo
                      echo "$div `whoami`"
-                     echo "Prizms can use existing upstream LODSPeaKrs by referencing them within settings.inc.php."
+                     echo "Prizms can use existing upstream LODSPeaKrs by referencing them within $target."
+                     echo "The current upstream LODSPeaKrs are (at $project_user_home)"
+                     for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
+                        echo "  $upstream"
+                     done
                      echo "($target) `whoami` at `pwd`"
                      echo
                      read -p "Q: Cherry pick upstream LODSPeaKrs? [y/n] " -u 1 cherry_pick

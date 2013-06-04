@@ -2356,6 +2356,7 @@ else
                      for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
                         echo "  ${upstream%/*}"
                      done
+                     echo
                      echo "($target) `whoami` at `pwd`"
                      echo
                      read -p "Q: Cherry pick upstream LODSPeaKrs? [y/n] " -u 1 cherry_pick

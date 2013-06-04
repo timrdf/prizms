@@ -332,7 +332,8 @@ else
       echo "       AllowOverride All"
       echo "       ..."
       echo
-      current=`sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1 | grep All`
+      #current=`sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1 | grep All`
+      current=`sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1 | sed 's/AllowOverride//' | grep All`
       if [[ -z "$current" ]]; then
          echo "We can change /var/www's AllowOverride to All (it is currently \"$current\"), making the new $target be:"
          echo

@@ -2375,7 +2375,7 @@ else
                                     if [[ -z "$disabled" ]]; then
                                        echo " (already enabled) $component"
                                        #TODO echo "^ there, not disabled (need to check the primary `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`"
-                                       echo ${component#$upstream}
+                                       echo $www/lodspeakr/${component#$upstream/}
                                     else
                                        echo "(already disabled) $component"
                                     fi

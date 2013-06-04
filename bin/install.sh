@@ -2363,6 +2363,7 @@ else
                      if [[ "$cherry_pick" == [yY] ]]; then
                         for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
                            for ctype in services types; do
+                              echo find $upstream/components/$ctype -mindepth 1 -maxdepth 1
                               for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
                                  # ^ e.g. /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
 

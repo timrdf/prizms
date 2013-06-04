@@ -2199,13 +2199,16 @@ else
                      else
                         echo "(the $www/index.html is not there, so it's not in lodspeakr's way.)"
                      fi
+                  fi # end running as developer user
 
 
+                  if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                      echo
                      echo "$div `whoami`"
                      echo "Prizms maintains the LODSPeaKr components under version control ($project_code_repository)"
                      echo "See https://github.com/alangrafu/lodspeakr/wiki/Develop-your-own-components-in-a-different-repository"
                      if [[ ! -h $www/lodspeakr/components ]]; then # Is not an alias. # TODO: and it points to within our github clone...
+                        handled="no"
                         if [[ -d $www/lodspeakr/components && ! -e lodspeakr/components ]]; then
                            echo
                            echo "We need to put lodspeakr into version control, which can be done with the following commands."
@@ -2216,7 +2219,6 @@ else
                            echo
                            read -p "Q: May we move $www/lodspeakr/components to `pwd`/lodspeakr/components using the commands above? [y/n] " -u 1 move_it
                            if [[ "$move_it" == [yY] ]]; then
-                              
                               sudo mv $www/lodspeakr/components `pwd`/lodspeakr/
                               added="$added lodspeakr/components"
                               sudo chown -R `stat --format=%U:%G ~/` `pwd`/lodspeakr/components
@@ -2224,9 +2226,26 @@ else
                            else
                               echo "Okay, we won't include lodspeakr/components into version control."
                            fi 
-                        elif [[ ! -e $www/lodspeakr/components && -d lodspeakr/components ]]; then
+                           handled="yes"
+                        fi
+                        if [[ -d $www/lodspeakr/components && -d lodspeakr/components ]]; then
                            echo
-                           echo "We link $www/lodspeakr/components to the version-controlled directory `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components"
+                           echo "Your Prizms repository provides a lodspeakr/components, but $www/lodspeakr/components is currently being used."
+                           echo
+                           echo "   sudo mv $www/lodspeakr/components $www/lodspeakr/components.hide"
+                           echo
+                           read -p "Q: May we hide $www/lodspeakr/components using the commands above? [y/n] " -u 1 move_it
+                           echo
+                           if [[ "$move_it" == [yY] ]]; then
+                              sudo mv $www/lodspeakr/components $www/lodspeakr/components.hide
+                           else
+                              echo "Okay, LODSPeaKr will continue to use $www/lodspeakr/components instead of lodspeakr/components."
+                           fi 
+                           handled="yes"
+                        fi
+                        if [[ ! -e $www/lodspeakr/components && -d lodspeakr/components ]]; then
+                           echo
+                           echo "We need to link $www/lodspeakr/components to the version-controlled directory `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components"
                            echo
                            echo "   sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components"
                            echo
@@ -2236,13 +2255,15 @@ else
                            else
                               echo "Okay, we won't include lodspeakr/components into version control."
                            fi 
-                        else
+                           handled="yes"
+                        fi
+                        if [[ "$handled" == "yes" ]]; then
                            echo "Whah?! not sure why $www/lodspeakr/components is not an alias, and lodspeakr/components already exists."
                         fi
                      else
                         echo "(LODSPeaKr is already under version control)" 
                      fi
-                  fi # end running and developer user
+                  fi # end running as developer user
 
 
  

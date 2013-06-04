@@ -2045,16 +2045,15 @@ else
                   echo "Since the SADI services access the X_CKAN_API_Key environment variable and are invoked through Apache,"
                   echo "the Apache environment variable X_CKAN_API_Key needs to be set in $target."
                   if [[ -n "$ckankey" && -z "$already_there" ]]; then
-                     read -p "set X_CKAN_API_Key to $ckankey in $target? [y/n]" -u 1 set_it
-                     read -p "Do nothing? (needs to be implemented)^^ todo... [y/n] " -u 1 add_it
-                     if [[ "$set_it" == [yY] ]]; then
+                     #read -p "set X_CKAN_API_Key to $ckankey in $target? [y/n]" -u 1 set_it
+                     #if [[ "$set_it" == [yY] ]]; then
                         change_source_me $target 'X_CKAN_API_Key' "$ckankey" \
                            'authenticate to datahub.io' \
                            'https://github.com/timrdf/DataFAQs/wiki/Missing-CKAN-API-Key' \
                            'python SADI services will not be able to inform datahub.io about this Prizms nodes'
-                     else
-                        echo "Okay, we won't change /etc/apache2/envvars"
-                     fi
+                     #else
+                     #   echo "Okay, we won't change /etc/apache2/envvars"
+                     #fi
                   else
                      echo "(X_CKAN_API_Key is already set in $target)"
                   fi

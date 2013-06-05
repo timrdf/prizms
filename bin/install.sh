@@ -851,7 +851,7 @@ else
                         added="$added data/source/.gitignore"
                      fi
                   fi
-                  if [[ ! -e .gitignore || ! `grep "^.refresh-prizms-installation" $target` && -z "$i_am_project_user" ]]; then
+                  if [[ ( ! -e .gitignore || ! `grep "^.refresh-prizms-installation" $target` ) && -z "$i_am_project_user" ]]; then
                      echo ".refresh-prizms-installation" >> .gitignore
                      added="$added .gitignore"
                   fi

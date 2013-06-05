@@ -1385,6 +1385,7 @@ else
                      echo "The following utilities seem to already be installed okay:"
                      echo
                      $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo | grep "^.okay"
+                     echo
                      $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       -n $avoid_sudo $use_sudo | grep "^.okay"
                      # TODO: set up the user-based install that does NOT require sudo. python's easy_install
                    
@@ -2251,7 +2252,7 @@ else
                            echo
                            echo "   sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components"
                            echo
-                           read -p "Q: May we use `pwd`/lodspeakr/components instead of $www/lodspeakr/components using the commands above? [y/n] " -u 1 move_it
+                           read -p "Q: May we use $project_user_home/lodspeakr/components instead of $www/lodspeakr/components using the commands above? [y/n] " -u 1 move_it
                            if [[ "$move_it" == [yY] ]]; then
                               sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components
                            else

@@ -877,8 +877,9 @@ else
                         echo "These environment variables are used to control how Prizms operates."
                         echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables"
                         echo
-                        read -p "May we add the environment variables to `pwd`/$target? [y/n] " -u 1 add_them
+                        read -p "Q: May we add the environment variables to `pwd`/$target? [y/n] " -u 1 add_them
                         if [[ "$add_them" == [yY] ]]; then
+                           echo
                            $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh --non-interactive --vars-only | grep -v "^export CSV2RDF4LOD_HOME" > $target
                            added="$added $target"
                         else

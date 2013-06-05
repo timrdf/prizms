@@ -1401,7 +1401,7 @@ else
                         echo
                         if [[ "$install_them" == [yY] ]]; then
                            touch .before-prizms-installed-dependencies
-                           $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh $avoid_sudo $use_sudo 2> /dev/null
+                           $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh $avoid_sudo $use_sudo #2> /dev/null
                            $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       $avoid_sudo $use_sudo
                         else
                            echo "Okay, we won't try to install them. Check out the following if you want to do it yourself:"

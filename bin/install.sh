@@ -45,7 +45,7 @@ else
 
    PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
    user_home=$(cd && echo ${PWD})
-   me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
+   this=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
    if [[ "$1" == "--help" || "$1" == "-h" ]]; then
       echo
@@ -90,7 +90,7 @@ else
 
    #echo $PRIZMS_HOME
    #echo $user_home
-   #echo $me
+   #echo $this
 
    # The parameters that we need to find out
 
@@ -740,7 +740,7 @@ else
                         cat $user_home/.ssh/id_dsa.pub
                         echo
                         read -p "Q: Finished adding your key? Once you do, we'll try running this install script again. Ready? [y] " finished
-                        $me --me             $person_uri              \
+                        $this --me             $person_uri              \
                             --my-email       $person_email            \
                             --proj-user      $project_user_name       \
                             --repos          $project_code_repository \
@@ -749,6 +749,7 @@ else
                             --our-source-id  $our_source_id           \
                             --our-datahub-id $our_datahub_id
                         # ^ Recursive call
+                        exit
                      fi
                   fi
                else
@@ -786,7 +787,7 @@ else
                      echo "if [[ \"\$1\" == "pull" ]]; then"                            >> .refresh-prizms-installation
                      echo "   pushd /home/$person_user_name/opt/prizms; git pull; popd" >> .refresh-prizms-installation
                      echo "fi"                                                          >> .refresh-prizms-installation
-                     echo "$me \\"                                                      >> .refresh-prizms-installation
+                     echo "$this \\"                                                      >> .refresh-prizms-installation
                      echo "    --me             $person_uri              \\"            >> .refresh-prizms-installation
                      #echo "    --my-email       $person_email            \\"           >> .refresh-prizms-installation
                      echo "    --proj-user      $project_user_name       \\"            >> .refresh-prizms-installation
@@ -2249,7 +2250,7 @@ else
                            echo
                            echo "   sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components"
                            echo
-                           read -p "Q: May we move $www/lodspeakr/components to `pwd`/lodspeakr/components using the commands above? [y/n] " -u 1 move_it
+                           read -p "Q: May we use `pwd`/lodspeakr/components instead of $www/lodspeakr/components using the commands above? [y/n] " -u 1 move_it
                            if [[ "$move_it" == [yY] ]]; then
                               sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components
                            else

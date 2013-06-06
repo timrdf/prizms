@@ -2150,7 +2150,9 @@ else
                            if [[ "$install_it" == [yY] ]]; then
                               sudo mv $target $user_home/prizms/$project_user_name/lodspeakr/settings.inc.php
                               sudo ln -s      $project_user_home/prizms/$project_user_name/lodspeakr/settings.inc.php $target
-                              added="$added lodspeakr/settings.inc.php"
+                              if [[ -e lodspeakr/settings.inc.php ]]; then
+                                 added="$added lodspeakr/settings.inc.php"
+                              fi
                               # Move the file and make the soft link.
                            else
                               echo "Okay, we will leave $www/lodspeakr/settings.inc.php as not version controlled."

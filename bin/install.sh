@@ -675,7 +675,7 @@ else
 
       # The local directory that we expect by cloneing $project_code_repository
       repodir=`basename $project_code_repository`
-      repodir=${target_dir%.*} # e.g. 'ieeevis', 'lofd', etc.
+      repodir=${repodir%.*} # e.g. 'ieeevis', 'lofd', etc.
 
       echo "Now let's install your $development copy of the $project_user_name Prizms."
       echo "(If you already have a working copy there, we'll update it.)" # TODO: recognize when it's already installed.

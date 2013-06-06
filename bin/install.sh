@@ -674,8 +674,8 @@ else
       fi 
 
       # The local directory that we expect by cloneing $project_code_repository
-      target_dir=`basename $project_code_repository`
-      target_dir=${target_dir%.*} # e.g. 'ieeevis', 'lofd', etc.
+      repodir=`basename $project_code_repository`
+      repodir=${target_dir%.*} # e.g. 'ieeevis', 'lofd', etc.
 
       echo "Now let's install your $development copy of the $project_user_name Prizms."
       echo "(If you already have a working copy there, we'll update it.)" # TODO: recognize when it's already installed.
@@ -688,7 +688,7 @@ else
          pushd prizms &> /dev/null
 
             just_cloned="no"
-            if [ ! -e $target_dir ]; then
+            if [ ! -e $repodir ]; then
                if [[ "$vcs" == "git" && -z "`git config --get user.email`" && -n "$person_email" && -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                   echo
                   echo "$div `whoami`"
@@ -778,9 +778,9 @@ else
                   echo "Okay, $project_code_repository is now ${clone}'d to $dir." 
                fi
                just_cloned="yes"
-            fi # ! -e $target_dir
-            if [[ -e $target_dir ]]; then
-               pushd $target_dir &> /dev/null
+            fi # ! -e $repodir
+            if [[ -e $repodir ]]; then
+               pushd $repodir &> /dev/null
 
                   if [[ -z "$i_am_project_user" ]]; then
                      echo "#!/bin/bash"                                                  > .refresh-prizms-installation
@@ -801,7 +801,7 @@ else
 
                   if [[ "$just_cloned" != "yes" ]]; then
                      echo
-                     echo "$project_code_repository is already ${clone}'d into $target_dir; ${pull}'ing it..."
+                     echo "$project_code_repository is already ${clone}'d into $repodir; ${pull}'ing it..."
                      $vcs $pull
                   fi
 
@@ -1093,7 +1093,7 @@ else
                         echo "There wasn't a source-me.sh for your project's user name in the data conversion root, so we created one for you at $target"
                      fi
 
-                     project_data_root="${user_home%/*}/$project_user_name/prizms/$target_dir/data/source" # TODO: reconcile - what does this impact?
+                     project_data_root="${user_home%/*}/$project_user_name/prizms/$repodir/data/source" # TODO: reconcile - what does this impact?
                      change_source_me $target CSV2RDF4LOD_CONVERT_DATA_ROOT "$project_data_root" \
                         "indicate the production data directory, from which /var/www and the production SPARQL endpoints are loaded" \
                         'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_CONVERT_DATA_ROOT' \
@@ -1442,7 +1442,7 @@ else
                         echo
                         echo "$div `whoami`"
                         target="/var/lib/virtuoso/db/virtuoso.ini"
-                        data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/$target_dir/data/
+                        data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/$repodir/data/
                         already_set=`grep 'DirsAllowed' $target | grep -v $data_root`
                         echo "Virtuoso can only access the directories that are specified in $target's 'DirsAllowed' setting."
                         echo "If you have an RDF file in some *other* directory, you will not be able to load it into Virtuoso,"
@@ -2113,7 +2113,8 @@ else
                         # AllowOverride must be 'All' https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu
                         enable_htaccess "LODSPeaKr needs .htaccess"
                      fi
-                     if [[ -e $www/lodspeakr && ! -e $www/lodspeakr/settings.inc.php && ! -e $user_home/prizms/$project_user_name/lodspeakr/settings.inc.php ]]; then
+                     if [[ -e $www/lodspeakr && ! -e $www/lodspeakr/settings.inc.php && ! -e $user_home/prizms/$repodir/lodspeakr/settings.inc.php ]]; then
+                        echo "$div `whoami`"
                         echo
                         echo "$www/lodspeakr was created, but not configured with settings.inc.php"
                         echo
@@ -2141,15 +2142,15 @@ else
                            echo "$target exists, but is not soft-linked into $project_user_name's read-only clone of $project_code_repository."
                            echo "The following commands will place settings.inc.php into your development clone, and link to $project_user_name's read-only production clone."
                            echo
-                           echo "  sudo mv $target $user_home/prizms/$target_dir/lodspeakr/settings.inc.php"
+                           echo "  sudo mv $target $user_home/prizms/$repodir/lodspeakr/settings.inc.php"
                            echo "  ($person_user_name git add/commit/push)"
                            echo "  ($project_user_name git pull)"
-                           echo "  sudo ln -s      $project_user_home/prizms/$target_dir/lodspeakr/settings.inc.php $target"
+                           echo "  sudo ln -s      $project_user_home/prizms/$repodir/lodspeakr/settings.inc.php $target"
                            echo
                            read -p "Q: Peform the commands above to put settings.inc.php under version controll? [y/n] " -u 1 install_it
                            if [[ "$install_it" == [yY] ]]; then
-                              sudo mv $target $user_home/prizms/$target_dir/lodspeakr/settings.inc.php
-                              sudo ln -s      $project_user_home/prizms/$target_dir/lodspeakr/settings.inc.php $target
+                              sudo mv $target $user_home/prizms/$repodir/lodspeakr/settings.inc.php
+                              sudo ln -s      $project_user_home/prizms/$repodir/lodspeakr/settings.inc.php $target
                               if [[ -e lodspeakr/settings.inc.php ]]; then
                                  added="$added lodspeakr/settings.inc.php"
                               fi
@@ -2700,7 +2701,7 @@ else
                   # Organize it into a versioned dataset (just like everything else).
 
                popd &> /dev/null
-            fi # if $target_dir e.g. /home/lebot/prizms/melagrid
+            fi # if $repodir e.g. /home/lebot/prizms/melagrid
          popd &> /dev/null
       else
          echo "If you aren't going to use a code repository, we can't help you very much."

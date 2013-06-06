@@ -2113,7 +2113,7 @@ else
                         # AllowOverride must be 'All' https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu
                         enable_htaccess "LODSPeaKr needs .htaccess"
                      fi
-                     if [[ -e $www/lodspeakr && ! -e $www/lodspeakr/settings.inc.php ]]; then
+                     if [[ -e $www/lodspeakr && ! -e $www/lodspeakr/settings.inc.php && ! -e $user_home/prizms/$project_user_name/lodspeakr/settings.inc.php ]]; then
                         echo
                         echo "$www/lodspeakr was created, but not configured with settings.inc.php"
                         echo

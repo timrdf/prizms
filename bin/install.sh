@@ -1369,11 +1369,12 @@ else
                      fi 
                   fi # end running as developer e.g. jsmith not loxd
 
-                  avoid_sudo="--avoid-sudo"
-                  use_sudo=""
                   if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                      avoid_sudo=""
                      use_sudo="--use-sudo"
+                  else
+                     avoid_sudo="--avoid-sudo"
+                     use_sudo=""
                   fi
                   #if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd # TODO: this should be removed in favor of $avoid_sudo
                      #
@@ -2312,6 +2313,9 @@ else
                            fi 
                         fi
                      fi
+                  fi # end running as developer
+
+                  if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
 
                      echo
                      echo "$div `whoami`"
@@ -2348,6 +2352,19 @@ else
                         popd &> /dev/null
                      fi
                    
+                     if [[ -e $user_home/public_html/lodspeakr && $user_home/public_html/index.html ]]; then
+                        echo "Your development LODSPeaKr is installed, but $user_home/public_html/index.html needs to be tucked away for .htaccess to work."
+                        echo
+                        echo "   mv $user_home/public_html/index.html $user_home/public_html/it.works"
+                        echo
+                        read -p "Q: Hide the index.html using the command above? [y/n] " -u 1 install_it
+                        if [[ "$install_it" == [yY] ]]; then
+                           mv $user_home/public_html/index.html $user_home/public_html/it.works
+                        else
+                           echo "Okay, we'll leave $user_home/public_html/index.html as it is."
+                        fi 
+                     fi
+
                      # TODO: $user_home/public_html/lodspeakr/settings.inc.php should contain the following
                      #
                      # $conf['home'] = '/home/lebot/public_html/lodspeakr/'; // $conf['home'] = '/var/www/lodspeakr/';

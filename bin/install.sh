@@ -2352,7 +2352,7 @@ else
                         popd &> /dev/null
                      fi
                    
-                     if [[ -e $user_home/public_html/lodspeakr && $user_home/public_html/index.html ]]; then
+                     if [[ -e $user_home/public_html/lodspeakr && -e $user_home/public_html/index.html ]]; then
                         echo "Your development LODSPeaKr is installed, but $user_home/public_html/index.html needs to be tucked away for .htaccess to work."
                         echo
                         echo "   mv $user_home/public_html/index.html $user_home/public_html/it.works"

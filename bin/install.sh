@@ -51,7 +51,7 @@ else
       echo
       echo "usage: `basename $0` [--me <your-URI>] [--my-email <your-email>] [--proj-user <user>] [--repos <code-repo>] "
       echo "                  [--upstream-ckan <ckan>] [--our-base-uri <uri>] [--our-source-id <source-id>]"
-      echo "                  [--our-datahub-id]"
+      echo "                  [--our-datahub-id <datahub-id>]"
       echo
       echo "This script will determine and use the following parameters to install an instance of Prizms:"
       echo "  (these arguments must be provided in the order listed)"
@@ -877,13 +877,18 @@ else
                         echo "These environment variables are used to control how Prizms operates."
                         echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables"
                         echo
-                        read -p "Q: May we add the environment variables to `pwd`/$target? [y/n] " -u 1 add_them
-                        if [[ "$add_them" == [yY] ]]; then
-                           echo
-                           $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh --non-interactive --vars-only | grep -v "^export CSV2RDF4LOD_HOME" > $target
-                           added="$added $target"
+                        if [[ ! -e $target ]]; then
+                           read -p "Q: May we add the environment variables to `pwd`/$target? [y/n] " -u 1 add_them
+                           if [[ "$add_them" == [yY] ]]; then
+                              echo
+                              $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh --non-interactive --vars-only | grep -v "^export CSV2RDF4LOD_HOME" > $target
+                              added="$added $target"
+                           else
+                              echo "Okay, but at some point you should create these environment variables. Otherwise, we might not behave as you'd like us to."
+                           fi
                         else
-                           echo "Okay, but at some point you should create these environment variables. Otherwise, we might not behave as you'd like us to."
+                           echo "($target already exists)"
+                           mv $PRIZMS_HOME/repos/csv2rdf4lod-automation/install.sh $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin                           
                         fi
                      fi
 

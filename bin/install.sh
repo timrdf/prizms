@@ -64,7 +64,7 @@ else
       echo
       echo " --proj-user      | the project's                       user name                        (e.g. melagrid)"
       echo
-      echo " --repos          | the project's code repository                                        (e.g. git@github.com:jimmccusker/melagrid.git)"
+      echo " --repos          | the project's code repository                                        (e.g. git@github.com:timrdf/ieeevis.git)"
       echo
       echo " --upstream-ckan  | [optional] the URL of a CKAN from which to pull dataset listings     (e.g. http://data.melagrid.org)"
       echo "                  : see https://github.com/jimmccusker/twc-healthdata/wiki/Retrieving-CKAN%27s-Dataset-Distribution-Files"
@@ -563,7 +563,7 @@ else
          echo "We won't be able to publish metadata about this installation of Prizms."
       fi
    else
-      echo "(We'll use the base URI that you already indicated: $our_datahub_id)"
+      echo "(We'll use the datahub identifier that you already specified: $our_datahub_id (http://datahub.io/dataset/$our_datahub_id)"
    fi
 
 

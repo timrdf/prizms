@@ -35,7 +35,7 @@ missing=""
 #done
 
 for situate in $HOME/repos/csv2rdf4lod-automation/bin/util/cr-situate-classpaths.sh \
-               $HOME/repos/vsr/src/vsr-situate-classpaths.sh; do
+               $HOME/repos/vsr/bin/vsr-situate-classpaths.sh; do
    missing=$missing`$situate`
 done
 

@@ -282,7 +282,7 @@ else
       modules="$1"
       reason="$2"
       if [[ ! $i_can_sudo ]]; then
-         echo "WARNING: Could not attempt to enable Apache module $module because `whoami` does not have sudo privileges."
+         echo "WARNING: Could not attempt to enable Apache modules $module because `whoami` does not have sudo privileges."
          return 0
       fi
       for module in $modules; do

@@ -193,6 +193,8 @@ else
       shift
    fi
 
+   i_can_sudo=`sudo -v &> /dev/null`
+
    div="-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
    function change_source_me {
       echo
@@ -279,6 +281,10 @@ else
       enabled=0
       modules="$1"
       reason="$2"
+      if [[ ! $i_can_sudo ]]; then
+         echo "WARNING: Could not attempt to enable Apache module $module because `whoami` does not have sudo privileges."
+         return 0
+      fi
       for module in $modules; do
          echo
          echo "sudo a2enmod $module | grep 'already enabled'"

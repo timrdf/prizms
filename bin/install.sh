@@ -667,6 +667,9 @@ else
       user_home=`pwd` # e.g. /home/smithj or /home/ieeevis
    popd &> /dev/null
 
+   try=$(cd ${0%/*} && echo ${PWD})
+   echo $user_home vs. $try
+   
    if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
       development="development"
    else

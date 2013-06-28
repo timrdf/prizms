@@ -779,7 +779,7 @@ else
 
          echo "Now let's install your $development copy of the $project_user_name Prizms."
          echo
-         read -p "Q: May we run '$vcs $clone $project_code_repository' from `pwd`/prizms? [y/n] " -u 1 install_it
+         read -p "Q: May we run '$vcs $clone $project_code_repository' from `pwd`? [y/n] " -u 1 install_it
          if [[ "$install_it" == [yY] ]]; then
             # When the project user:
             # Your configuration specifies to merge with the ref 'master'

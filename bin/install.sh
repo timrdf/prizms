@@ -2155,7 +2155,7 @@ else
                      echo "Okay, we won't configure LODSPeaKr at $www/lodspeakr."
                   fi
                fi
-               if [[ -e $www/lodspeakr/settings.inc.php ]]; then
+               if [[ -e $www/lodspeakr/settings.inc.php && $i_can_sudo ]]; then
                   #sudo chown $project_user_name:www-data $www/lodspeakr/settings.inc.php
                   sudo chmod g+w                         $www/lodspeakr/settings.inc.php
 

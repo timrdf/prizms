@@ -993,7 +993,7 @@ else
                   'some loss'
 
                # Set DATAFAQS_HOME in the project-level source-me.sh.
-               target="data/faqs/datafaqs-source-me.sh"
+               #target="data/faqs/datafaqs-source-me.sh"
                change_source_me $target DATAFAQS_HOME "$PRIZMS_HOME/repos/DataFAQs" \
                   'find the scripts that DataFAQs needs to run' \
                   'https://github.com/timrdf/DataFAQs/wiki/DATAFAQS-environment-variables' \

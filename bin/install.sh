@@ -282,7 +282,7 @@ else
       modules="$1"
       reason="$2"
       if [[ ! $i_can_sudo ]]; then
-         echo "WARNING: Could not attempt to enable Apache modules $modules because `whoami` does not have sudo privileges."
+         echo "WARNING: Could not attempt to enable Apache module(s) \"$modules\" because `whoami` does not have sudo privileges."
          return 0
       fi
       for module in $modules; do
@@ -2141,7 +2141,7 @@ else
                   # AllowOverride must be 'All' https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu
                   enable_htaccess "LODSPeaKr needs .htaccess"
                fi
-               if [[ -e $www/lodspeakr && ! -e $www/lodspeakr/settings.inc.php && ! -e $user_home/prizms/$repodir/lodspeakr/settings.inc.php ]]; then
+               if [[ -e $www/lodspeakr && ! -e $www/lodspeakr/settings.inc.php && ! -e $user_home/prizms/$repodir/lodspeakr/settings.inc.php && $i_can_sudo ]]; then
                   echo "$div `whoami`"
                   echo
                   echo "$www/lodspeakr was created, but not configured with settings.inc.php"

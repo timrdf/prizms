@@ -656,7 +656,6 @@ else
    $PRIZMS_HOME/bin/install/prizms-dependency-repos.sh
 
 
-   echo "$div `whoami`"
    clone='clone'
    pull='pull'
    if [ "$vcs" == "svn" ]; then

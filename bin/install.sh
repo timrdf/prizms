@@ -325,6 +325,10 @@ else
    }
 
    function enable_htaccess {
+      if [[ ! $i_can_sudo ]]; then
+         echo "WARNING: Could not attempt to enable Apache module $module because `whoami` does not have sudo privileges."
+         return
+      fi
       reason="$1"
       echo
       echo "$div `whoami`"

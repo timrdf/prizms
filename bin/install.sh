@@ -680,20 +680,11 @@ else
    repodir=`basename $project_code_repository`
    repodir=${repodir%.*} # e.g. 'ieeevis', 'lofd', etc.
 
-   echo "Now let's install your $development copy of the $project_user_name Prizms."
-   echo "(If you already have a working copy there, we'll update it.)" # TODO: recognize when it's already installed.
-   echo
-   read -p "Q: May we run '$vcs $clone $project_code_repository' from `pwd`/prizms? [y/n] " -u 1 install_it
-   if [[ "$install_it" == [yY] ]]; then
-      echo "blah"
-   else
-      echo "If you aren't going to use a code repository, we can't help you very much."
-   fi
-
    pushd $user_home/prizms &> /dev/null
 
       just_cloned="no"
       if [ ! -e $repodir ]; then
+
          if [[ "$vcs" == "git" && -z "`git config --get user.email`" && -n "$person_email" && -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
             echo
             echo "$div `whoami`"
@@ -746,13 +737,13 @@ else
                   echo
                   read -p "Q: Finished adding your key? Once you do, we'll try running this install script again. Ready? [y] " finished
                   $this --me             $person_uri              \
-                      --my-email       $person_email            \
-                      --proj-user      $project_user_name       \
-                      --repos          $project_code_repository \
-                      --upstream-ckan  $upstream_ckan           \
-                      --our-base-uri   $our_base_uri            \
-                      --our-source-id  $our_source_id           \
-                      --our-datahub-id $our_datahub_id
+                        --my-email       $person_email            \
+                        --proj-user      $project_user_name       \
+                        --repos          $project_code_repository \
+                        --upstream-ckan  $upstream_ckan           \
+                        --our-base-uri   $our_base_uri            \
+                        --our-source-id  $our_source_id           \
+                        --our-datahub-id $our_datahub_id
                   # ^ Recursive call
                   exit
                fi
@@ -761,29 +752,38 @@ else
             echo "(You have a .ssh/*.pub; be sure to register it with GitHub. See https://help.github.com/articles/generating-ssh-keys)"
          fi
 
-         # When the project user:
-         # Your configuration specifies to merge with the ref 'master'
-         # from the remote, but no such ref was fetched.
+         echo "Now let's install your $development copy of the $project_user_name Prizms."
          echo
-         touch .before_clone
-         $vcs $clone $project_code_repository
-         status=$?
-         dir=`find . -mindepth 1 -maxdepth 1 -type d -newer .before_clone`
-         rm .before_clone
-         echo
-
-         if [ "$status" -eq 128 ]; then
-            echo "It seems that you didn't have permissions to $clone $project_code_repository"
-            echo "GitHub requires an ssh key to check out a writeable working clone"
-            echo "See https://help.github.com/articles/generating-ssh-keys"
+         read -p "Q: May we run '$vcs $clone $project_code_repository' from `pwd`/prizms? [y/n] " -u 1 install_it
+         if [[ "$install_it" == [yY] ]]; then
+            # When the project user:
+            # Your configuration specifies to merge with the ref 'master'
+            # from the remote, but no such ref was fetched.
             echo
-         elif [ "$status" -ne 0 ]; then
-            echo "We're not sure what happended; $vcs returned $status"
+            touch .before_clone
+            $vcs $clone $project_code_repository
+            status=$?
+            dir=`find . -mindepth 1 -maxdepth 1 -type d -newer .before_clone`
+            rm .before_clone
+            echo
+
+            if [ "$status" -eq 128 ]; then
+               echo "It seems that you didn't have permissions to $clone $project_code_repository"
+               echo "GitHub requires an ssh key to check out a writeable working clone"
+               echo "See https://help.github.com/articles/generating-ssh-keys"
+               echo
+            elif [ "$status" -ne 0 ]; then
+               echo "We're not sure what happended; $vcs returned $status"
+            else
+               echo "Okay, $project_code_repository is now ${clone}'d to $dir." 
+            fi
+            just_cloned="yes"
          else
-            echo "Okay, $project_code_repository is now ${clone}'d to $dir." 
+            echo "Sorry, Prizms needs to set up using a version controlled repository."
          fi
-         just_cloned="yes"
+
       fi # ! -e $repodir
+
       if [[ -e $repodir ]]; then
          pushd $repodir &> /dev/null
 
@@ -792,7 +792,7 @@ else
                echo "if [[ \"\$1\" == "pull" ]]; then"                            >> .refresh-prizms-installation
                echo "   pushd /home/$person_user_name/opt/prizms; git pull; popd" >> .refresh-prizms-installation
                echo "fi"                                                          >> .refresh-prizms-installation
-               echo "$this \\"                                                      >> .refresh-prizms-installation
+               echo "$this \\"                                                    >> .refresh-prizms-installation
                echo "    --me             $person_uri              \\"            >> .refresh-prizms-installation
                #echo "    --my-email       $person_email            \\"           >> .refresh-prizms-installation
                echo "    --proj-user      $project_user_name       \\"            >> .refresh-prizms-installation

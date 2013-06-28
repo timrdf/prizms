@@ -992,13 +992,6 @@ else
                   'https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble' \
                   'some loss'
 
-               # Set DATAFAQS_HOME in the project-level source-me.sh.
-               #target="data/faqs/datafaqs-source-me.sh"
-               change_source_me $target DATAFAQS_HOME "$PRIZMS_HOME/repos/DataFAQs" \
-                  'find the scripts that DataFAQs needs to run' \
-                  'https://github.com/timrdf/DataFAQs/wiki/DATAFAQS-environment-variables' \
-                  'running DataFAQs will fail'
-
                # Set DATAFAQS_BASE_URI in the project-level source-me.sh.
                change_source_me $target DATAFAQS_BASE_URI "$our_base_uri" \
                   'situate the URIs created by DataFAQs within a namespace that we control' \
@@ -1162,6 +1155,7 @@ else
                # AS both DEVELOPER and PROJECT USER
                for user in $person_user_name $project_user_name; do
 
+                  user_prizms_home=`echo $PRIZMS_HOME | sed "s/\`whoami\`/$user/g"`
                   target="data/source/csv2rdf4lod-source-me-as-$user.sh"
 
                   #
@@ -1231,6 +1225,12 @@ else
                      "Ensure that all of the csv2rdf4lod-automation scripts can call each other." \
                      'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-not-set' \
                      'unable to invoke some scripts'
+
+                  # Set DATAFAQS_HOME
+                  change_source_me $target DATAFAQS_HOME "$user_prizms_home/repos/DataFAQs" \
+                     'find the scripts that DataFAQs needs to run' \
+                     'https://github.com/timrdf/DataFAQs/wiki/DATAFAQS-environment-variables' \
+                     'running DataFAQs will fail'
 
                   echo
                   echo "$div `whoami`"

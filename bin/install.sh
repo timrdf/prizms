@@ -807,7 +807,12 @@ else
             if [[ "$just_cloned" != "yes" ]]; then
                echo
                echo "$project_code_repository is already ${clone}'d into $repodir; ${pull}'ing it..."
-               $vcs $pull
+               read -p "Q: May we run '$vcs $pull' from `pwd`/prizms/$repodir? [y/n] " -u 1 pull_it
+               if [[ "$pull_it" == [yY] ]]; then
+                  $vcs $pull
+               else
+                  echo "Okay, we'll work with our current copy of your Prizms node."
+               fi
             fi
 
             added=''

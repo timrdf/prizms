@@ -806,8 +806,11 @@ else
 
             if [[ "$just_cloned" != "yes" ]]; then
                echo
-               echo "$project_code_repository is already ${clone}'d into $repodir; ${pull}'ing it..."
-               read -p "Q: May we run '$vcs $pull' from `pwd`/prizms/$repodir? [y/n] " -u 1 pull_it
+               echo "$div `whoami`"
+               echo "Prizms will use $project_code_repository to coordinate your metadata between development and production."
+               echo "$project_code_repository is already ${clone}'d into $repodir."
+               echo
+               read -p "Q: May we run '$vcs $pull' from `pwd`/prizms/$repodir to get the latest metadata? [y/n] " -u 1 pull_it
                if [[ "$pull_it" == [yY] ]]; then
                   $vcs $pull
                else

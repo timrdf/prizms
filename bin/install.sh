@@ -143,9 +143,19 @@ else
 
    #
    project_code_repository=""
-   if [[ "$1" == "--repos" ]]; then
+   if [[ "$1" == "--repos" || "$1" == "--repo" ]]; then
       if [[ "$2" != --* ]]; then
          project_code_repository="$2"
+         shift
+      fi
+      shift
+   fi
+
+   #
+   project_code_repository_branch="" # May be empty - will use the default branch.
+   if [[ "$1" == "--repos-branch" || "$1" == "--repo-branch" ]]; then
+      if [[ "$2" != --* ]]; then
+         project_code_repository_branch="$2"
          shift
       fi
       shift
@@ -745,13 +755,14 @@ else
                   cat $user_home/.ssh/id_dsa.pub
                   echo
                   read -p "Q: Finished adding your key? Once you do, we'll try running this install script again. Ready? [y] " finished
-                  $this --me             $person_uri              \
-                        --my-email       $person_email            \
-                        --proj-user      $project_user_name       \
-                        --repos          $project_code_repository \
-                        --upstream-ckan  $upstream_ckan           \
-                        --our-base-uri   $our_base_uri            \
-                        --our-source-id  $our_source_id           \
+                  $this --me             $person_uri                     \
+                        --my-email       $person_email                   \
+                        --proj-user      $project_user_name              \
+                        --repos          $project_code_repository        \
+                        --repos-branch   $project_code_repository_branch \
+                        --upstream-ckan  $upstream_ckan                  \
+                        --our-base-uri   $our_base_uri                   \
+                        --our-source-id  $our_source_id                  \
                         --our-datahub-id $our_datahub_id
                   # ^ Recursive call
                   exit
@@ -802,13 +813,14 @@ else
                echo "   pushd /home/$person_user_name/opt/prizms; git pull; popd" >> .refresh-prizms-installation
                echo "fi"                                                          >> .refresh-prizms-installation
                echo "$this \\"                                                    >> .refresh-prizms-installation
-               echo "    --me             $person_uri              \\"            >> .refresh-prizms-installation
-               #echo "    --my-email       $person_email            \\"           >> .refresh-prizms-installation
-               echo "    --proj-user      $project_user_name       \\"            >> .refresh-prizms-installation
-               echo "    --repos          $project_code_repository \\"            >> .refresh-prizms-installation
-               echo "    --upstream-ckan  $upstream_ckan           \\"            >> .refresh-prizms-installation
-               echo "    --our-base-uri   $our_base_uri            \\"            >> .refresh-prizms-installation
-               echo "    --our-source-id  $our_source_id           \\"            >> .refresh-prizms-installation
+               echo "    --me             $person_uri                     \\"     >> .refresh-prizms-installation
+               #echo "    --my-email       $person_email                  \\"     >> .refresh-prizms-installation
+               echo "    --proj-user      $project_user_name              \\"     >> .refresh-prizms-installation
+               echo "    --repos          $project_code_repository        \\"     >> .refresh-prizms-installation
+               echo "    --repos-branch   $project_code_repository_branch \\"     >> .refresh-prizms-installation
+               echo "    --upstream-ckan  $upstream_ckan                  \\"     >> .refresh-prizms-installation
+               echo "    --our-base-uri   $our_base_uri                   \\"     >> .refresh-prizms-installation
+               echo "    --our-source-id  $our_source_id                  \\"     >> .refresh-prizms-installation
                echo "    --our-datahub-id $our_datahub_id"                        >> .refresh-prizms-installation
                chmod +x .refresh-prizms-installation
             fi
@@ -2713,6 +2725,7 @@ else
                                                             --my-email                                          \
                                                             --proj-user      $project_user_name                 \
                                                             --repos          $read_only_project_code_repository \
+                                                            --repos-branch   $project_code_repository_branch    \
                                                             --upstream-ckan  $upstream_ckan                     \
                                                             --our-base-uri   $our_base_uri                      \
                                                             --our-source-id  $our_source_id                     \

@@ -801,22 +801,6 @@ else
                echo "We're not sure what happended; $vcs returned $status"
             else
                echo "Okay, $project_code_repository is now ${clone}'d to $dir." 
-               if [[ -n "$project_code_repository_branch" ]]; then
-                  echo "Switching to branch $project_code_repository_branch"
-
-                  # Didn't seem to work:
-                  #echo "$vcs pull origin $project_code_repository_branch"
-                  #      $vcs pull origin $project_code_repository_branch
-
-                  echo $vcs branch -t $project_code_repository_branch origin/$project_code_repository_branch
-                       $vcs branch -t $project_code_repository_branch origin/$project_code_repository_branch
-                  # ^ responds:
-                  # git branch -t prizms-support origin/prizms-support
-                  # Branch prizms-support set up to track remote branch prizms-support from origin.
-
-                  echo $vcs checkout $project_code_repository_branch
-                       $vcs checkout $project_code_repository_branch
-               fi
             fi
             just_cloned="yes"
          else
@@ -827,6 +811,23 @@ else
 
       if [[ -e $repodir ]]; then
          pushd $repodir &> /dev/null
+
+            if [[ -n "$project_code_repository_branch" ]]; then
+               echo "Switching to branch $project_code_repository_branch"
+
+               # Didn't seem to work:
+               #echo "$vcs pull origin $project_code_repository_branch"
+               #      $vcs pull origin $project_code_repository_branch
+
+               echo $vcs branch -t $project_code_repository_branch origin/$project_code_repository_branch
+                    $vcs branch -t $project_code_repository_branch origin/$project_code_repository_branch
+               # ^ responds:
+               # git branch -t prizms-support origin/prizms-support
+               # Branch prizms-support set up to track remote branch prizms-support from origin.
+
+               echo $vcs checkout $project_code_repository_branch
+                    $vcs checkout $project_code_repository_branch
+            fi
 
             if [[ -z "$i_am_project_user" ]]; then
                echo "#!/bin/bash"                                                  > .refresh-prizms-installation

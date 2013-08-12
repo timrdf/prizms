@@ -24,9 +24,9 @@ if [ ! -e $PRIZMS_HOME/lodspeakrs ]; then
 fi
 
 pushd $PRIZMS_HOME/repos &> /dev/null
-   for repos in git://github.com/timrdf/csv2rdf4lod-automation.git \
-                git://github.com/timrdf/DataFAQs.git \
-                git://github.com/timrdf/vsr.git; do
+   for repos in https://github.com/timrdf/csv2rdf4lod-automation.git \
+                https://github.com/timrdf/DataFAQs.git \
+                https://github.com/timrdf/vsr.git; do
       echo
       directory=`basename $repos`
       directory=${directory%.*}
@@ -47,7 +47,7 @@ popd &> /dev/null
 # https://github.com/timrdf/prizms/issues/12
 #
 pushd $PRIZMS_HOME/lodspeakrs &> /dev/null
-   for repos in git://github.com/jimmccusker/twc-healthdata.git ; do
+   for repos in https://github.com/jimmccusker/twc-healthdata.git; do
       echo
       directory=`basename $repos`
       directory=${directory%.*}

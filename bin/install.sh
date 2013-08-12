@@ -30,8 +30,8 @@ if [[ ${0%install.sh} == $0 ]]; then # $0 is 'bash' etc when bootstrapping, it i
             echo
             mkdir -p `pwd`/opt
             cd opt
-            echo git clone git://github.com/timrdf/prizms.git
-            git clone git://github.com/timrdf/prizms.git
+            echo git clone https://github.com/timrdf/prizms.git
+            git clone https://github.com/timrdf/prizms.git
             echo
             echo "Prizms bootstrap is installed. Run:"
             echo "  opt/prizms/bin/install.sh --help"

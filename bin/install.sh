@@ -209,10 +209,10 @@ else
    function change_source_me {
       echo
       echo "$div `whoami`"
-      target="$1"    #"data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
-      ENVVAR="$2"    #'CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID'; 
-      new_value="$3" #"$our_source_id"
-      purpose="$4"   #"indicate the source identifier for all datasets that it creates on its own"
+      target="$1"    # e.g. "data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
+      ENVVAR="$2"    # e.g. 'CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID'; 
+      new_value="$3" # e.g. "$our_source_id"
+      purpose="$4"   # e.g. "indicate the source identifier for all datasets that it creates on its own"
       see="$5"
       loss="$6"      #"in order for Prizms to create useful Linked Data URIs"
       echo "Prizms uses the shell environment variable $ENVVAR"
@@ -1101,6 +1101,11 @@ else
                   echo
                   echo "$div `whoami`"
                   echo "There wasn't a source-me.sh for your machine in the data conversion root, so we created one for you at $target"
+
+                  see='https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore'
+                  loss=' and will not be able to use Virtuoso triple store'
+                  change_source_me $target 'CSV2RDF4LOD_PUBLISH_VIRTUOSO_INI_PATH'  $VIRTUOSO_INI  'configure Virtuoso'          "$see" "$loss"
+                  change_source_me $target 'CSV2RDF4LOD_PUBLISH_VIRTUOSO_ISQL_PATH' $VIRTUOSO_ISQL 'load / delete from Virtuoso' "$see" "$loss"
                fi
 
 
@@ -1478,10 +1483,27 @@ else
 
                virtuoso_installed="no"
                if [[ -e '/var/lib/virtuoso/db/virtuoso.ini' && \
-                     -e '/usr/bin/isql-v'                   && \
+                     -e '/var/lib/virtuoso/db/virtuoso.log' && \
                      -e '/etc/init.d/virtuoso-opensource'   && \
-                     -e '/var/lib/virtuoso/db/virtuoso.log' ]]; then
+                     -e '/usr/bin/isql-v' ]]; then
+                  # First  condition is if we used "dpkg -i ${pkg}_amd64.deb" to install it.
+
                   virtuoso_installed="yes"
+                  VIRTUOSO_INI='/var/lib/virtuoso/db/virtuoso.ini'
+                  VIRTUOSO_INIT_D='/etc/init.d/virtuoso-opensource'
+                  VIRTUOSO_ISQL='/usr/bin/isql-v'
+
+               elif [[ -e '/etc/virtuoso-opensource-6.1/virtuoso.ini'        && \
+                       -e '/var/lib/virtuoso-opensource-6.1/db/virtuoso.log' && \
+                       -e '/etc/init.d/virtuoso-opensource-6.1'              && \
+                       -e '/usr/bin/isql-vt' ]]; then
+                  # Second condition is if we used "sudo aptitude install virtuoso-opensource" to install it.
+                  #   /usr/bin/isql-vt
+
+                  virtuoso_installed="yes"
+                  VIRTUOSO_INI='/etc/virtuoso-opensource-6.1/virtuoso.ini'
+                  VIRTUOSO_INIT_D='/etc/init.d/virtuoso-opensource-6.1'
+                  VIRTUOSO_ISQL='/usr/bin/isql-vt'
                fi
                if [[ "$virtuoso_installed" == "yes" ]]; then
 
@@ -1503,7 +1525,7 @@ else
 
                   echo
                   echo "$div `whoami`"
-                  target="/var/lib/virtuoso/db/virtuoso.ini"
+                  target="$VIRTUOSO_INI"
                   data_root=`cd; echo ${PWD%/*}`/$project_user_name/prizms/$repodir/data/
                   already_set=`grep 'DirsAllowed' $target | grep -v $data_root`
                   echo "Virtuoso can only access the directories that are specified in $target's 'DirsAllowed' setting."
@@ -1538,13 +1560,13 @@ else
                         echo
                         echo "Virtuoso needs to be restarted for the setting to take effect, which can be done with:"
                         echo
-                        echo "   sudo /etc/init.d/virtuoso-opensource stop"
-                        echo "   sudo /etc/init.d/virtuoso-opensource start"
+                        echo "   sudo $VIRTUOSO_INIT_D stop"
+                        echo "   sudo $VIRTUOSO_INIT_D start"
                         echo
                         read -p "Restart virtuoso now (with the command above)? [y/n] " -u 1 restart_it
                         if [[ "$restart_it" == [yY] ]]; then
-                           sudo /etc/init.d/virtuoso-opensource stop
-                           sudo /etc/init.d/virtuoso-opensource start
+                           sudo $VIRTUOSO_INIT_D stop
+                           sudo $VIRTUOSO_INIT_D start
                         else
                            echo "Okay, we won't restart virtuoso. But you'll need to restart it to load data from $target."
                            echo "See:"

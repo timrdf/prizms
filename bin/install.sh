@@ -1103,12 +1103,6 @@ else
                   echo "There wasn't a source-me.sh for your machine in the data conversion root, so we created one for you at $target"
                fi
 
-               see='https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore'
-               loss=' and will not be able to use Virtuoso triple store'
-               echo "trying INI $VIRTUOSO_INI and ISQL_PATH $VIRTUOSO_ISQL"
-               change_source_me $target 'CSV2RDF4LOD_PUBLISH_VIRTUOSO_INI_PATH'  "$VIRTUOSO_INI"  'configure Virtuoso'          "$see" "$loss"
-               change_source_me $target 'CSV2RDF4LOD_PUBLISH_VIRTUOSO_ISQL_PATH' "$VIRTUOSO_ISQL" 'load / delete from Virtuoso' "$see" "$loss"
-
 
 
                # AS DEVELOPER
@@ -1586,6 +1580,13 @@ else
                      echo "($target already has $data_root included in its 'DirsAllowed' setting.)"
                   fi
 
+                  target="data/source/csv2rdf4lod-source-me-on-$project_user_name.sh"
+                  see='https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore'
+                  loss=' and will not be able to use Virtuoso triple store'
+                  echo "trying INI $VIRTUOSO_INI and ISQL_PATH $VIRTUOSO_ISQL"
+                  change_source_me $target 'CSV2RDF4LOD_PUBLISH_VIRTUOSO_INI_PATH'  "$VIRTUOSO_INI"  'configure Virtuoso'          "$see" "$loss"
+                  change_source_me $target 'CSV2RDF4LOD_PUBLISH_VIRTUOSO_ISQL_PATH' "$VIRTUOSO_ISQL" 'load / delete from Virtuoso' "$see" "$loss"
+
                   credentials="/etc/prizms/$project_user_name/triple-store/virtuoso/csv2rdf4lod-source-me-for-virtuoso-credentials.sh"
                   if [[ -e $credentials ]]; then
                      vpw=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh 'CSV2RDF4LOD_PUBLISH_VIRTUOSO_PASSWORD' $credentials`
@@ -1783,7 +1784,10 @@ else
                      'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT' \
                      'will not correctly capture the provenance of named graph loads in the SPARQL endpoint'
 
+               else
+                  echo "(Virtuoso is not installed)"
                fi # end $virtuoso_installed
+
                rm -f .prizms-apache-conf
             fi # end running as developer e.g. jsmith not loxd
 

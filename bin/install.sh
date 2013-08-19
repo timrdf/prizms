@@ -2715,6 +2715,7 @@ else
             # Add all new files to version control.
             #
             if [ -n "$added" ]; then # This should never pass when $i_am_project_user, if it does, something above shouldn't changed $added.
+               added=`echo $added | sort -u`
                echo
                echo "$div `whoami`"
                echo "We just added the following to `pwd`"

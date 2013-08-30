@@ -37,17 +37,27 @@ fi
 see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets"
 CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID=${CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID:?"not set; see $see"}
 
-echo "Available datasets:"
 retrieves=`dirname $me`
-me_local=`basename $me`
-for retrieve in `find $retrieves -name "pr-*" -not -name $me_local`; do
-   datasetID=`basename $retrieve | sed 's/.sh$//'`
-   if [[ -e $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/retrieve.sh ]]; then
-      enabled='enabled'
-   else
-      enabled='not enabled'
-   fi
-   echo "   $retrieve ($datasetID) is $enabled"
-done
 
-echo $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT
+if [[ $# -eq 0 ]]; then
+   echo "Available datasets:"
+   me_local=`basename $me`
+   for retrieve in `find $retrieves -name "pr-*" -not -name $me_local`; do
+      datasetID=`basename $retrieve | sed 's/.sh$//'`
+      if [[ -e $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh ]]; then
+         enabled='enabled'
+      else
+         enabled='not enabled'
+      fi
+      echo "   $retrieve ($datasetID) is $enabled"
+   done
+else
+   datasetID="$1"
+   if [[ ! -e $retrieves/$datasetID.sh ]]; then
+      echo "ERROR: dataset $datasetID is not available: $retrieves/$datasetID.sh"
+   elif [[ ! -e $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh ]]; then
+      mkdir -p $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version
+      ln $retrieves/$datasetID.sh $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh
+   fi
+   echo $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT
+fi

@@ -117,7 +117,7 @@ echo "INFO version   : $version $version_reason"
 if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -name source` ]]; then
 
    see='https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables'
-   local endpoint=${endpoint:?"not set; source csv2rdf4lod/source-me.sh or see $see"}
+   local endpoint=${CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT:?"not set; source csv2rdf4lod/source-me.sh or see $see"}
 
    # Create the directory for the new version.
    mkdir -p $version/source

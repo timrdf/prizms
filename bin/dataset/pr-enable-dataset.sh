@@ -37,6 +37,7 @@ fi
 see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets"
 CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID=${CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID:?"not set; see $see"}
 
+echo "Available datasets:"
 retrieves=`dirname $me`
 me_local=`basename $me`
 for retrieve in `find $retrieves -name "pr-*" -not -name $me_local`; do
@@ -46,7 +47,7 @@ for retrieve in `find $retrieves -name "pr-*" -not -name $me_local`; do
    else
       enabled='not enabled'
    fi
-   echo "$retrieve ($datasetID) is $enabled"
+   echo "   $retrieve ($datasetID) is $enabled"
 done
 
 echo $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT

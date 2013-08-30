@@ -124,31 +124,15 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
    pushd $version/source &> /dev/null
       touch .__CSV2RDF4LOD_retrieval # Make a timestamp so we know what files were created during retrieval.
       # - - - - - - - - - - - - - - - - - - - - Replace below for custom retrieval  - - - \
-      cat ../src/unsummarized.rq
-      echo $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT
-      if [[ "$url" =~ http* ]]; then                                                    # |
-         pcurl.sh $url                                                                  # |
+      if [[ "$CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT" =~ http* && \
+            -e ../../../src/unsummarized.rq && 
+            `which cache-queries.sh &> /dev/null` ]]; then
+         cache-queries.sh $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT -o csv -q ../../../src/unsummarized.rq -od .
+      else
+         echo "   ERROR: Failed to create dataset `basename $0`:"                        
+         echo "      CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT: $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT"        
+         echo "      cache-queries.sh path: `which cache-queries.sh`"
       fi
-      if [ `ls *.gz *.zip 2> /dev/null | wc -l` -gt 0 ]; then                           # |
-         # Uncompress anything that is compressed.                                      # |
-         touch .__CSV2RDF4LOD_retrieval # Ignore the compressed file                    # |
-         sleep 1                                                                        # |
-         for zip in `ls *.gz *.zip 2> /dev/null`; do                                    # |
-            punzip.sh $zip              # We are capturing provenance of decompression. # |
-         done                                                                           # |
-      fi                                                                                # |
-      if [ `ls *.htm 2> /dev/null | wc -l` -gt 0 ]; then                                # |
-         # Tidy any HTML                                                                # |
-         touch .__CSV2RDF4LOD_retrieval # Ignore the compressed file                    # |
-         sleep 1                                                                        # |
-         tidy.sh *.htm                                                                  # |
-      fi                                                                                # |
-      if [ `ls *.html 2> /dev/null | wc -l` -gt 0 ]; then                               # |
-         # Tidy any HTML                                                                # |
-         touch .__CSV2RDF4LOD_retrieval # Ignore the compressed file                    # |
-         sleep 1                                                                        # |
-         tidy.sh *.html                                                                 # |
-      fi                                                                                # |
       if [ "$CSV2RDF4LOD_RETRIEVE_DROID_SOURCES" != "false" ]; then                     # |
          sleep 1                                                                        # |
          cr-droid.sh . > cr-droid.ttl                                                   # |

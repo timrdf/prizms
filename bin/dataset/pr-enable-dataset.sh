@@ -25,7 +25,7 @@ TEMP="_"`basename $0``date +%s`_$$.tmp
 
 if [[   `cr-pwd-type.sh` == 'cr:data-root' ]]; then
    DATA=$(cd ../ && echo ${PWD})
-   trim=""
+   trim="source/"
 elif [[ `cr-pwd-type.sh` == 'cr:source' ]]; then
    DATA=$(cd ../../ && echo ${PWD})
    trim="source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/"

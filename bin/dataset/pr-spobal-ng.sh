@@ -26,6 +26,8 @@
 #
 
 this=$(cd ${0%/*} && echo $PWD/${0##*/})
+base=${this%/bin/dataset/pr-spobal-ng.sh}
+#base=${base%/*}
 
 see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-not-set"
 CSV2RDF4LOD_HOME=${CSV2RDF4LOD_HOME:?"not set; source csv2rdf4lod/source-me.sh or see $see"}

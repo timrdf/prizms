@@ -57,6 +57,7 @@ if [[ $# -eq 0 ]]; then
 else
    datasetID="$1"
    retrieval_trigger=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh
+   src=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/src
 
    if [[ ! -e $retrieves/$datasetID.sh ]]; then
       echo "ERROR: dataset $datasetID is not available: $retrieves/$datasetID.sh"
@@ -66,5 +67,11 @@ else
       mkdir -p `dirname $retrieval_trigger`
       ln -s $retrieves/$datasetID.sh $retrieval_trigger
       echo "Created ${retrieval_trigger#$DATA/$trim} -> $retrieves/$datasetID.sh"
+   fi
+
+   echo $src
+   if [[ -e $retrieves/$datasetID && ! -e $src ]]; then
+      echo ln -s $retrieves/$datasetID $src
+      echo "Created ${src#$DATA/$trim} -> $retrieves/$datasetID"
    fi
 fi

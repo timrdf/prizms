@@ -120,6 +120,7 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
    popd &> /dev/null
 
    # Go into the conversion cockpit of the new version.
+   worthwhile="no"
    pushd $version &> /dev/null
 
       if [ ! -e automatic ]; then
@@ -130,6 +131,7 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
 
       ng=''
       for sd_name in `cat source/unsummarized.rq.csv | sed 's/^"//;s/"$//' | grep "^http"`; do
+         worthwhile="yes"
          ng_ugly=`resource-name.sh --named-graph $endpoint $sd_name`
          ng_hash=`md5.sh -qs "$ng_ugly"`
          ng="$endpoint/id/named-graph/$ng_hash" 
@@ -144,6 +146,11 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
       fi
 
    popd &> /dev/null
+
+   if [[ "$worthwhile" != 'yes' ]]; then
+      echo "Note: version $version did not become worthwhile; remove retrieval attempt."
+      rm -rf $version
+   fi
 else
    echo "Version exists; skipping."
 fi

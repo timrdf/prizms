@@ -124,7 +124,6 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
    pushd $version/source &> /dev/null
       touch .__CSV2RDF4LOD_retrieval # Make a timestamp so we know what files were created during retrieval.
       # - - - - - - - - - - - - - - - - - - - - Replace below for custom retrieval  - - - \
-      cat ../../../src/unsummarized.rq
       if [[ "$CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT" =~ http* && \
             -e ../../../src/unsummarized.rq && 
             `which cache-queries.sh` ]]; then
@@ -152,94 +151,13 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
 
       retrieved_files=`find source -newer source/.__CSV2RDF4LOD_retrieval -type f | grep -v "pml.ttl$" | grep -v "cr-droid.ttl$"`
 
-      all_rdf="yes"
-      for file in $retrieved_files; do
-         if [[ `${CSV2RDF4LOD_HOME}/bin/util/valid-rdf.sh $file` != "yes" ]]; then
-            all_rdf="no"
-         fi
+      for sd_name in `cat source/unsummarized.rq.csv | sed 's/^"//;s/"$//' | grep "^http"`; do
+         ng_ugly=`resource-name.sh --named-graph $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT $sd_name`
+         ng_hash=`md5.sh -qs "$ng_ugly"`
+         ng="$endpoint/id/named-graph/$ng_hash" 
+         echo "$ng -> $sd_name"
+         vsr-spo-balance.sh -s "$CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT" . "$sd_name" > manual/$ng_hash.ttl
       done
-
-      if [[ -e ../prepare.sh || -e ../2manual.sh ]]; then
-         # Leave it up to the global preparation trigger to populate manual/ from any of the source/
-         # The preparation trigger should also create the cr-create-convert.sh.
-         # See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Automated-creation-of-a-new-Versioned-Dataset#preparation-trigger
-         # 2manual.sh is the legacy name for the preparation trigger.
-         if [[ -e ../prepare.sh ]]; then
-            trigger=../prepare.sh
-         else
-            trigger=../2manual.sh
-         fi
-         chmod +x $trigger
-         $trigger
-         
-      elif [[ `find source -name "*.xls" | wc -l` -gt 0 ]]; then
-         # Tackle the xls files
-         for xls in `find source -name "*.xls"`; do
-            touch .__CSV2RDF4LOD_csvify
-            sleep 1
-            xls2csv.sh -w -od source $xls
-            for csv in `find source -type f -newer .__CSV2RDF4LOD_csvify`; do
-               #justify.sh $xls $csv xls2csv_`md5.sh \`which justify.sh\`` # TODO: excessive? justify.sh needs to know the broad class rule/engine
-                                                             # TODO: shouldn't you be hashing the xls2csv.sh, not justify.sh?
-               justify.sh $xls $csv csv2rdf4lod_xls2csv_sh
-            done
-         done
-
-         files=`find source/ -name "*.csv"`
-         cr-create-conversion-trigger.sh  -w --comment-character "$commentCharacter" --header-line $headerLine --delimiter ${delimiter:-","} $files
-      elif [[ `find source -name "*.htm.tidy" -o -name "*.html.tidy" | wc -l` -gt 0 && -e ../../src/html2csv.xsl ]]; then
-         # HTML files
-         for tidy in `find source -name "*.htm.tidy" -o -name "*.html.tidy"`; do
-            csv="manual/`basename ${tidy%.tidy}`.csv"
-            saxon.sh ../../src/html2csv.xsl a a $tidy > $csv
-            justify.sh $tidy $csv html2csv
-         done
-
-         files=`find manual -name "*.csv"`
-         cr-create-conversion-trigger.sh -w --comment-character "$commentCharacter" --header-line $headerLine --delimiter ${delimiter:-","} $files
-      elif [[ `find source -name "*.json" | wc -l` -gt 0 && -e ../../src/json2csv.py ]]; then
-         # JSON files
-         for json in `find source -name "*.json"`; do
-            csv="manual/`basename ${json%.json}`.csv"
-            python ../../src/json2csv.py $json > $csv
-            justify.sh $json $csv custom_json2csv
-         done
-
-         files=`find manual -name "*.csv"`
-         cr-create-conversion-trigger.sh -w --comment-character "$commentCharacter" --header-line $headerLine --delimiter ${delimiter:-","} $files
-      elif [[ $all_rdf == "yes" ]]; then
-         echo "[INFO] All retrieved files are RDF; not creating conversion trigger."
-      else
-         # Take a best guess as to what data files should be converted.
-         # Include source/* that is newer than source/.__CSV2RDF4LOD_retrieval and NOT *.pml.ttl
-
-         existing_files=""
-         for name in $retrieved_files; do
-            if [[ -e $name ]]; then
-               existing_files="$existing_files $name"
-            else
-               echo "[INFO] \"$name\" does not exist."
-            fi
-         done
-         if [[ ${#existing_files} -gt 0 ]]; then
-            # Create a conversion trigger for the files obtained during retrieval.
-            cr-create-conversion-trigger.sh -w --comment-character "$commentCharacter" --header-line $headerLine --delimiter ${delimiter:-","} $existing_files
-         else
-            echo
-            echo "ERROR: No valid files found when retrieving `cr-dataset-id.sh`; not creating conversion trigger."
-         fi
-      fi
-
-      cr-convert.sh
-      if [[ -e cr-convert-`cr-dataset-id.sh`.sh ]]; then
-         for enhancementID in `cr-list-enhancement-identifiers.sh`; do
-            flag=""
-            if [ $enhancementID != "1" ]; then
-               flag="-e $enhancementID"
-            fi
-            ./cr-convert-`cr-dataset-id.sh`.sh $flag # Run enhancement (flag not used for first enhancement)
-         done
-      fi
 
    popd &> /dev/null
 else

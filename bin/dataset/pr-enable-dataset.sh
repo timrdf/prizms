@@ -46,12 +46,13 @@ if [[ $# -eq 0 ]]; then
    me_local=`basename $me`
    for retrieve in `find $retrieves -name "pr-*" -not -name $me_local`; do
       datasetID=`basename $retrieve | sed 's/.sh$//'`
-      if [[ -e $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh ]]; then
+      retrieval_trigger=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh
+      if [[ -e $retrieval_trigger ]]; then
          enabled='enabled'
       else
          enabled='not enabled'
       fi
-      echo "   $datasetID - $enabled ($retrieve)"
+      echo "   $datasetID - $enabled at $retrieval_trigger ($retrieve)"
    done
 else
    datasetID="$1"

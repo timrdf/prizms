@@ -23,14 +23,11 @@ fi
 
 TEMP="_"`basename $0``date +%s`_$$.tmp
 
-echo $HOME
-echo $me
-
-datasets=`dirname $me`
+retrieves=`dirname $me`
 me_local=`basename $me`
-
-for dataset in `find $datasets -name "pr-*" -not -name $me_local`; do
-   echo $dataset
+for retrieve in `find $retrieves -name "pr-*" -not -name $me_local`; do
+   datasetID=`basename $retrieve | sed 's/.sh$//'`
+   echo $retrieve ($datasetID)
 done
 
 echo $CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID

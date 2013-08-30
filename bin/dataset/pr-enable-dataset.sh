@@ -23,9 +23,12 @@ fi
 
 TEMP="_"`basename $0``date +%s`_$$.tmp
 
-echo hi
 echo $HOME
 echo $me
+
+for dataset in `find \`dirname $HOME\` -maxdepth 1 -name "pr-*"`; do
+   echo $dataset
+done
+
 echo $CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID
 echo $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT
-

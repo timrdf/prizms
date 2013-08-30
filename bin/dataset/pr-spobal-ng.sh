@@ -113,6 +113,7 @@ echo "INFO version   : $version $version_reason"
 #echo "INFO delimiter : $delimiter"
 echo 'pr-spobal-ng.sh -> pr-spobal-ng/unsummarized.rq'
 echo $this
+echo $base
 exit
 
 #

@@ -44,7 +44,7 @@ retrieves=`dirname $me`
 if [[ $# -eq 0 ]]; then
    echo "Available datasets:"
    me_local=`basename $me`
-   for retrieve in `find $retrieves -name "pr-*" -not -name $me_local`; do
+   for retrieve in `find $retrieves -type f -name "pr-*" -not -name $me_local`; do
       datasetID=`basename $retrieve | sed 's/.sh$//'`
       retrieval_trigger=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh
       if [[ -e $retrieval_trigger ]]; then

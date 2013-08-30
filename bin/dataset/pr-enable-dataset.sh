@@ -50,9 +50,9 @@ if [[ $# -eq 0 ]]; then
       if [[ -e $retrieval_trigger ]]; then
          enabled='enabled'
       else
-         enabled='not enabled'
+         enabled='*not* enabled'
       fi
-      echo "   $datasetID   $enabled at ${retrieval_trigger#$DATA/$trim} ($retrieve)"
+      echo "   $datasetID   is $enabled at ${retrieval_trigger#$DATA/$trim} ($retrieve)"
    done
 else
    datasetID="$1"

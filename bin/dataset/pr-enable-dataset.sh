@@ -65,6 +65,6 @@ else
    else
       mkdir -p `dirname $retrieval_trigger`
       ln -s $retrieves/$datasetID.sh $retrieval_trigger
-      echo "Created ${retrieval_trigger#$DATA/$trim}"
+      echo "Created ${retrieval_trigger#$DATA/$trim} -> $retrieves/$datasetID.sh"
    fi
 fi

@@ -41,7 +41,7 @@ fi
 
 TEMP="_"`basename $0``date +%s`_$$.tmp
 
-if [[ $# -lt 2 || "$1" == "--help" ]]; then
+if [[ "$1" == "--help" ]]; then
    echo "usage: `basename $0` version-identifier URL [--comment-character char]"
    echo "                                                                 [--header-line        row]"
    echo "                                                                 [--delimiter         char]"
@@ -104,6 +104,7 @@ echo "INFO comment   : $commentCharacter"
 echo "INFO header    : $headerLine"
 echo "INFO delimiter : $delimiter"
 echo
+exit
 
 #
 # This script is invoked from a cr:directory-of-versions, 

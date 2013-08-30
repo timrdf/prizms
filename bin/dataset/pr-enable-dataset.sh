@@ -69,9 +69,8 @@ else
       echo "Created ${retrieval_trigger#$DATA/$trim} -> $retrieves/$datasetID.sh"
    fi
 
-   echo $src
    if [[ -e $retrieves/$datasetID && ! -e $src ]]; then
-      echo ln -s $retrieves/$datasetID $src
+      ln -s $retrieves/$datasetID $src
       echo "Created ${src#$DATA/$trim} -> $retrieves/$datasetID"
    fi
 fi

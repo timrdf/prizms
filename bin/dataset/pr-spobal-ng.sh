@@ -161,7 +161,9 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
          ng_ugly=`resource-name.sh --named-graph $endpoint $sd_name`
          ng_hash=`md5.sh -qs "$ng_ugly"`
          ng="$endpoint/id/named-graph/$ng_hash" 
-         echo "$ng -> $sd_name"
+         echo
+         echo "<$ng> sd:name <$sd_name> ."
+         echo
          vsr-spo-balance.sh -s "$endpoint" . "$sd_name" > automatic/$ng_hash.ttl
       done
 

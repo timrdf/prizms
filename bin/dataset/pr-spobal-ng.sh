@@ -26,8 +26,6 @@
 #
 
 this=$(cd ${0%/*} && echo $PWD/${0##*/})
-base=${this%/bin/dataset/pr-spobal-ng.sh}
-#base=${base%/*}
 
 see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-not-set"
 CSV2RDF4LOD_HOME=${CSV2RDF4LOD_HOME:?"not set; source csv2rdf4lod/source-me.sh or see $see"}
@@ -111,11 +109,6 @@ echo "INFO version   : $version $version_reason"
 #echo "INFO comment   : $commentCharacter"
 #echo "INFO header    : $headerLine"
 #echo "INFO delimiter : $delimiter"
-echo 'pr-spobal-ng.sh -> pr-spobal-ng/unsummarized.rq'
-echo $this
-echo $base
-cat ../src/unsummarized.rq
-exit
 
 #
 # This script is invoked from a cr:directory-of-versions, 
@@ -131,6 +124,7 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
    pushd $version/source &> /dev/null
       touch .__CSV2RDF4LOD_retrieval # Make a timestamp so we know what files were created during retrieval.
       # - - - - - - - - - - - - - - - - - - - - Replace below for custom retrieval  - - - \
+      cat ../src/unsummarized.rq
       echo $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT
       pcurl.sh $url                                                                     # |
       if [ `ls *.gz *.zip 2> /dev/null | wc -l` -gt 0 ]; then                           # |

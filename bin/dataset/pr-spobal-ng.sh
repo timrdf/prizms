@@ -62,7 +62,8 @@ if [[ "$1" == "cr:auto" && ${#url} -gt 0 ]]; then
 fi
 if [[ ${#version} -eq 0                        || \
       ${#version} -ne 11 && "$1" == "cr:auto"  || \
-                            "$1" == "cr:today" ]]; then
+                            "$1" == "cr:today" || \
+                            "$1" == "cr:force" ]]; then
    # We couldn't determine the date from the URL (11 length from e.g. "2013-Aug-12")
    # Or, there was no URL given.
    # Or, we're told to use today's date.

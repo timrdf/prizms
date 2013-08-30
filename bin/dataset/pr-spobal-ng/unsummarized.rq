@@ -1,0 +1,30 @@
+#3> <> rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/pr-spobal-ng> .
+
+prefix sd:   <http://www.w3.org/ns/sparql-service-description#>
+prefix prov: <http://www.w3.org/ns/prov#>
+prefix void: <http://rdfs.org/ns/void#>
+prefix vsr:  <http://purl.org/twc/vocab/vsr#>
+
+select distinct ?unsummarized
+where {
+
+  # Summarize any named graph ...
+  graph ?unsummarized {
+     [] a []
+  }
+
+  filter not exists {
+     # ... that has not been summarized [in another graph] ...
+     graph ?summary {
+        ?spo a vsr:SPODataset; prov:wasDerivedFrom [ sd:name ?unsummarized ] .
+     }
+  }
+  filter not exists {
+     # ... and is not a summary itself.
+     graph ?unsummarized {
+        ?spo a vsr:SPODataset; prov:wasDerivedFrom [ sd:name [] ] .
+     }
+  }
+  filter(?unsummarized != <http://www.openlinksw.com/schemas/virtrdf#>)
+  filter(?unsummarized != <http://www.w3.org/2002/07/owl#>)
+}

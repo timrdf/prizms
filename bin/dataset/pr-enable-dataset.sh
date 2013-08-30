@@ -53,11 +53,15 @@ if [[ $# -eq 0 ]]; then
    done
 else
    datasetID="$1"
+   retrieval_trigger=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh
+
    if [[ ! -e $retrieves/$datasetID.sh ]]; then
       echo "ERROR: dataset $datasetID is not available: $retrieves/$datasetID.sh"
-   elif [[ ! -e $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh ]]; then
-      mkdir -p $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version
-      ln $retrieves/$datasetID.sh $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh
+   elif [[ ! -e $retrieval_trigger ]]; then
+      mkdir -p $retrieval_trigger
+      ln $retrieves/$datasetID.sh $retrieval_trigger
+      echo "Created $retrieval_trigger"
+   else
+      echo "Warning: Did not create $retrieval_trigger because it already exists."
    fi
-   echo $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT
 fi

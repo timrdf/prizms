@@ -107,6 +107,7 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
    pushd $version/source &> /dev/null
       touch .__CSV2RDF4LOD_retrieval # Make a timestamp so we know what files were created during retrieval.
       # - - - - - - - - - - - - - - - - - - - - Replace below for custom retrieval  - - - \
+      echo $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT
       pcurl.sh $url                                                                     # |
       if [ `ls *.gz *.zip 2> /dev/null | wc -l` -gt 0 ]; then                           # |
          # Uncompress anything that is compressed.                                      # |

@@ -23,6 +23,7 @@ fi
 
 TEMP="_"`basename $0``date +%s`_$$.tmp
 
+echo hi
 echo $HOME
 echo $me
 echo $CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID

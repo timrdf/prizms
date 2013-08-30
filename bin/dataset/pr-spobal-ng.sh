@@ -127,8 +127,8 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
       cat ../../../src/unsummarized.rq
       if [[ "$CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT" =~ http* && \
             -e ../../../src/unsummarized.rq && 
-            `which cache-queries.sh &> /dev/null` ]]; then
-         cache-queries.sh $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT -o csv -q ../../../src/unsummarized.rq -od .
+            `which cache-queries.sh` ]]; then
+         cache-queries.sh "$CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT" -o csv -q ../../../src/unsummarized.rq -od .
       else
          echo "   ERROR: Failed to create dataset `basename $0`:"                        
          echo "      CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT: $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT"        

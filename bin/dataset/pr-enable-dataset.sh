@@ -26,7 +26,9 @@ TEMP="_"`basename $0``date +%s`_$$.tmp
 echo $HOME
 echo $me
 
-for dataset in `find \`dirname $HOME\` -maxdepth 1 -name "pr-*"`; do
+datasets=`dirname $me`
+
+for dataset in `find $datasets -name "pr-*"`; do
    echo $dataset
 done
 

@@ -44,11 +44,9 @@ fi
 TEMP="_"`basename $0``date +%s`_$$.tmp
 
 if [[ "$1" == "--help" ]]; then
-   echo "usage: `basename $0` version-identifier URL [--comment-character char]"
-   echo "                                                                 [--header-line        row]"
-   echo "                                                                 [--delimiter         char]"
-   echo "   version-identifier: conversion:version_identifier for the VersionedDataset to create (use cr:auto for default)"
-   echo "   URL               : URL to retrieve the data file."
+   echo "usage: `basename $0` [version-identifier] [URL]"
+   echo "   version-identifier: conversion:version_identifier for the VersionedDataset to create. Can be '', 'cr:auto', 'cr:today', 'cr:force'."
+   echo "   URL               : URL to use during retrieval."
    exit 1
 fi
 
@@ -82,33 +80,8 @@ if [ ${#version} -gt 0 -a `echo $version | grep ":" | wc -l | awk '{print $1}'` 
 fi
 shift 2
 
-#-#-#-#-#-#-#-#-#
-commentCharacter="#"
-if [ "$1" == "--comment-character" -a $# -ge 2 ]; then
-   commentCharacter="$2"
-   shift 2
-fi
-
-#-#-#-#-#-#-#-#-#
-headerLine=1
-if [ "$1" == "--header-line" -a $# -ge 2 ]; then
-   headerLine="$2"
-   shift 2
-fi
-
-#-#-#-#-#-#-#-#-#
-delimiter='\t'
-delimiter=','
-if [ "$1" == "--delimiter" -a $# -ge 2 ]; then
-   delimiter="$2"
-   shift 2
-fi
-
-echo "INFO url       : $url"
+echo "INFO url       : $url" # TODO: run spo balance for this name, if it's given.
 echo "INFO version   : $version $version_reason"
-#echo "INFO comment   : $commentCharacter"
-#echo "INFO header    : $headerLine"
-#echo "INFO delimiter : $delimiter"
 
 #
 # This script is invoked from a cr:directory-of-versions, 
@@ -148,15 +121,13 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
    # Go into the conversion cockpit of the new version.
    pushd $version &> /dev/null
 
-      if [ ! -e manual ]; then
-         mkdir manual
-      fi
       if [ ! -e automatic ]; then
          mkdir automatic
       fi
 
       retrieved_files=`find source -newer source/.__CSV2RDF4LOD_retrieval -type f | grep -v "pml.ttl$" | grep -v "cr-droid.ttl$"`
 
+      ng=''
       for sd_name in `cat source/unsummarized.rq.csv | sed 's/^"//;s/"$//' | grep "^http"`; do
          ng_ugly=`resource-name.sh --named-graph $endpoint $sd_name`
          ng_hash=`md5.sh -qs "$ng_ugly"`
@@ -166,6 +137,10 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
          echo
          vsr-spo-balance.sh -s "$endpoint" . "$sd_name" > automatic/$ng_hash.ttl
       done
+
+      if [[ "$ng" != '' ]]; then
+         aggregate-source-rdf.sh automatic/*.ttl
+      fi
 
    popd &> /dev/null
 else

@@ -25,6 +25,8 @@
 # https://github.com/timrdf/csv2rdf4lod-automation/wiki/Automated-creation-of-a-new-Versioned-Dataset
 #
 
+this=$(cd ${0%/*} && echo $PWD/${0##*/})
+
 see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-not-set"
 CSV2RDF4LOD_HOME=${CSV2RDF4LOD_HOME:?"not set; source csv2rdf4lod/source-me.sh or see $see"}
 
@@ -107,7 +109,8 @@ echo "INFO version   : $version $version_reason"
 echo "INFO comment   : $commentCharacter"
 echo "INFO header    : $headerLine"
 echo "INFO delimiter : $delimiter"
-echo
+echo 'pr-spobal-ng.sh -> pr-spobal-ng/unsummarized.rq'
+echo $this
 exit
 
 #

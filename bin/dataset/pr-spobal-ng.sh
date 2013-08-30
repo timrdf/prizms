@@ -60,17 +60,21 @@ if [[ "$1" == "cr:auto" && ${#url} -gt 0 ]]; then
    #echo "Attempting to use URL modification date to name version: $version"
    version_reason="(URL's modification date)"
 fi
-if [ ${#version} -ne 11 -a "$1" == "cr:auto" ]; then # 11!?
+if [[ ${#version} -eq 0                        || \
+      ${#version} -ne 11 -a "$1" == "cr:auto"  || \
+                            "$1" == "cr:today" ]]; then
+   # We couldn't determine the date from the URL (11 length from e.g. "2013-Aug-12")
+   # Or, there was no URL given.
+   # Or, we're told to use today's date.
    version=`cr-make-today-version.sh 2>&1 | head -1`
    #echo "Using today's date to name version: $version"
    version_reason="(Today's date)"
 fi
-if [ "$1" == "cr:today" ]; then
-   version=`cr-make-today-version.sh 2>&1 | head -1`
-   #echo "Using today's date to name version: $version"
-   version_reason="(Today's date)"
+if [[ -e "$version" && "$1" == "cr:force"  ]]; then
+   version=`date +%Y-%m-%d-%H-%M_%s`
 fi
 if [ ${#version} -gt 0 -a `echo $version | grep ":" | wc -l | awk '{print $1}'` -gt 0 ]; then
+   # No colons allowed?
    echo "Version identifier invalid."
    exit 1
 fi

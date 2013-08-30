@@ -72,7 +72,7 @@ if [[ ${#version} -eq 0                        || \
    version_reason="(Today's date)"
 fi
 if [[ -e "$version" && "$1" == "cr:force"  ]]; then
-   version=`date +%Y-%m-%d-%H-%M_%s`
+   version=`date +%Y-%b-%d-%H-%M_%s`
 fi
 if [ ${#version} -gt 0 -a `echo $version | grep ":" | wc -l | awk '{print $1}'` -gt 0 ]; then
    # No colons allowed?

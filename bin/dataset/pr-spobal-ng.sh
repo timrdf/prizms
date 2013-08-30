@@ -114,6 +114,7 @@ echo "INFO version   : $version $version_reason"
 echo 'pr-spobal-ng.sh -> pr-spobal-ng/unsummarized.rq'
 echo $this
 echo $base
+cat ../src/unsummarized.rq
 exit
 
 #

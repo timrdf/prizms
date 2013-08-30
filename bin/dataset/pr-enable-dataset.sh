@@ -60,8 +60,8 @@ else
    elif [[ ! -e $retrieval_trigger ]]; then
       mkdir -p $retrieval_trigger
       ln $retrieves/$datasetID.sh $retrieval_trigger
-      echo "Created $retrieval_trigger"
+      echo "Created ${retrieval_trigger#$DATA}"
    else
-      echo "Warning: Did not create $retrieval_trigger because it already exists."
+      echo "Warning: Did not create ${retrieval_trigger#$DATA} because it already exists."
    fi
 fi

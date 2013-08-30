@@ -44,7 +44,7 @@ for retrieve in `find $retrieves -name "pr-*" -not -name $me_local`; do
    if [[ -e $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/retrieve.sh ]]; then
       enabled='enabled'
    else
-      enabled='disabled'
+      enabled='not enabled'
    fi
    echo "$retrieve ($datasetID) is $enabled"
 done

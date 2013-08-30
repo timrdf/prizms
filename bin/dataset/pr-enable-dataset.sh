@@ -23,12 +23,30 @@ fi
 
 TEMP="_"`basename $0``date +%s`_$$.tmp
 
+if [[   `cr-pwd-type.sh` == 'cr:data-root' ]]; then
+   DATA=`pwd`
+elif [[ `cr-pwd-type.sh` == 'cr:source' ]]; then
+   DATA=`dirname \`pwd\``
+fi
+
+if [[ -z "$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID" && \
+      `${CSV2RDF4LOD_HOME}/bin/util/is-pwd-a.sh cr:source` == "yes" ]]; then
+   export CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID=`cr-source-id.sh`
+fi
+
+see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets"
+CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID=${CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID:?"not set; see $see"}
+
 retrieves=`dirname $me`
 me_local=`basename $me`
 for retrieve in `find $retrieves -name "pr-*" -not -name $me_local`; do
    datasetID=`basename $retrieve | sed 's/.sh$//'`
-   echo "$retrieve ($datasetID)"
+   if [[ -e $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/retrieve.sh ]]; then
+      enabled='enabled'
+   else
+      enabled='disabled'
+   fi
+   echo "$retrieve ($datasetID) is $enabled"
 done
 
-echo $CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID
 echo $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT

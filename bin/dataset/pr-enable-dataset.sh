@@ -51,7 +51,7 @@ if [[ $# -eq 0 ]]; then
       else
          enabled='not enabled'
       fi
-      echo "   $datasetID is $enabled ($retrieve)"
+      echo "   $datasetID - $enabled ($retrieve)"
    done
 else
    datasetID="$1"

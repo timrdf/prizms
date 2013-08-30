@@ -132,6 +132,8 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
          echo "   ERROR: Failed to create dataset `basename $0`:"                        
          echo "      CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT: $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT"        
          echo "      cache-queries.sh path: `which cache-queries.sh`"
+         echo "      ../../../src/unsummarized.rq:"
+         head ../../../src/unsummarized.rq &> /dev/null
       fi
       if [ "$CSV2RDF4LOD_RETRIEVE_DROID_SOURCES" != "false" ]; then                     # |
          sleep 1                                                                        # |

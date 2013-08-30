@@ -23,12 +23,15 @@ fi
 
 missing=""
 
-if [ ! `which prizms-dependency-repos.sh` ]; then
-   missing=":"
-   missing=$missing$HOME/bin/install
+if [ ! `which prizms-dependency-repos.sh &> /dev/null` ]; then
+   missing=$missing":"$HOME/bin/install
 fi
 
-if [[ ! `which tdbloader` ]]; then
+if [ ! `which pr-enable-dataset.sh &> /dev/null` ]; then
+   missing=$missing":"$HOME/bin/dataset
+fi
+
+if [[ ! `which tdbloader &> /dev/null` ]]; then
    # When HOME is                  /home/lebot/opt/prizms
    # csv2rdf4lod installer creates /home/lebot/opt/apache-jena-2.7.4
    # and PATH needs to add         /home/lebot/opt/apache-jena-2.7.4/bin
@@ -37,8 +40,7 @@ if [[ ! `which tdbloader` ]]; then
    jenaroot=`find $opt -type d -name "apache-jena*"`
 
    if [[ -n "$missing" && -n "$jenaroot" && -e "$jenaroot" ]]; then
-      missing=$missing":"
-      missing=$missing$jenaroot/bin
+      missing=$missing":"$jenaroot/bin
    fi
 fi
 

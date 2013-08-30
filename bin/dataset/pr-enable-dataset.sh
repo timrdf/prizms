@@ -27,8 +27,9 @@ echo $HOME
 echo $me
 
 datasets=`dirname $me`
+me_local=`dirname $me`
 
-for dataset in `find $datasets -name "pr-*"`; do
+for dataset in `find $datasets -name "pr-*" -not -name $me_local`; do
    echo $dataset
 done
 

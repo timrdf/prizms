@@ -59,11 +59,11 @@ else
 
    if [[ ! -e $retrieves/$datasetID.sh ]]; then
       echo "ERROR: dataset $datasetID is not available: $retrieves/$datasetID.sh"
-   elif [[ ! -e $retrieval_trigger ]]; then
+   elif [[ -e $retrieval_trigger ]]; then
+      echo "Warning: Did not create ${retrieval_trigger#$DATA/$trim} because it already exists: $retrieval_trigger."
+   else
       mkdir -p $retrieval_trigger
       ln $retrieves/$datasetID.sh $retrieval_trigger
       echo "Created ${retrieval_trigger#$DATA/$trim}"
-   else
-      echo "Warning: Did not create ${retrieval_trigger#$DATA/$trim} because it already exists."
    fi
 fi

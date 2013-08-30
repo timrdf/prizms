@@ -62,7 +62,10 @@ else
    elif [[ -e $retrieval_trigger ]]; then
       echo "Warning: Did not create ${retrieval_trigger#$DATA/$trim} because it already exists: $retrieval_trigger."
    else
+      echo mkdir -p $retrieval_trigger
       mkdir -p $retrieval_trigger
+
+      echo ln $retrieves/$datasetID.sh $retrieval_trigger
       ln $retrieves/$datasetID.sh $retrieval_trigger
       echo "Created ${retrieval_trigger#$DATA/$trim}"
    fi

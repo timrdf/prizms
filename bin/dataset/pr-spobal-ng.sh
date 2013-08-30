@@ -148,7 +148,9 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
    popd &> /dev/null
 
    if [[ "$worthwhile" != 'yes' ]]; then
+      echo
       echo "Note: version $version did not become worthwhile; remove retrieval attempt."
+      echo
       rm -rf $version
    fi
 else

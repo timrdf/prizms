@@ -25,8 +25,10 @@ TEMP="_"`basename $0``date +%s`_$$.tmp
 
 if [[   `cr-pwd-type.sh` == 'cr:data-root' ]]; then
    DATA=`pwd`
+   trim=""
 elif [[ `cr-pwd-type.sh` == 'cr:source' ]]; then
    DATA=`dirname \`pwd\``
+   trim="source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/"
 fi
 
 if [[ -z "$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID" && \
@@ -60,8 +62,8 @@ else
    elif [[ ! -e $retrieval_trigger ]]; then
       mkdir -p $retrieval_trigger
       ln $retrieves/$datasetID.sh $retrieval_trigger
-      echo "Created ${retrieval_trigger#$DATA/}"
+      echo "Created ${retrieval_trigger#$DATA/$trim}"
    else
-      echo "Warning: Did not create ${retrieval_trigger#$DATA/} because it already exists."
+      echo "Warning: Did not create ${retrieval_trigger#$DATA/$trim} because it already exists."
    fi
 fi

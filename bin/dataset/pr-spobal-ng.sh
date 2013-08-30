@@ -149,7 +149,7 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
 
    if [[ "$worthwhile" != 'yes' ]]; then
       echo
-      echo "Note: version $version did not become worthwhile; remove retrieval attempt."
+      echo "Note: version $version of dataset `cr-dataset-id.sh` did not become worthwhile; remove retrieval attempt."
       echo
       rm -rf $version
    fi

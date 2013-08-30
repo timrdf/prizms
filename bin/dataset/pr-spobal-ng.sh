@@ -126,7 +126,9 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
       # - - - - - - - - - - - - - - - - - - - - Replace below for custom retrieval  - - - \
       cat ../src/unsummarized.rq
       echo $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT
-      pcurl.sh $url                                                                     # |
+      if [[ "$url" =~ http* ]]; then                                                    # |
+         pcurl.sh $url                                                                  # |
+      fi
       if [ `ls *.gz *.zip 2> /dev/null | wc -l` -gt 0 ]; then                           # |
          # Uncompress anything that is compressed.                                      # |
          touch .__CSV2RDF4LOD_retrieval # Ignore the compressed file                    # |

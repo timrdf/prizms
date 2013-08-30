@@ -124,6 +124,7 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
    pushd $version/source &> /dev/null
       touch .__CSV2RDF4LOD_retrieval # Make a timestamp so we know what files were created during retrieval.
       # - - - - - - - - - - - - - - - - - - - - Replace below for custom retrieval  - - - \
+      cat ../../../src/unsummarized.rq
       if [[ "$CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT" =~ http* && \
             -e ../../../src/unsummarized.rq && 
             `which cache-queries.sh &> /dev/null` ]]; then
@@ -133,7 +134,7 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
          echo "      CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT: $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT"        
          echo "      cache-queries.sh path: `which cache-queries.sh`"
          echo "      ../../../src/unsummarized.rq:"
-         head ../../../src/unsummarized.rq &> /dev/null
+         ls -lt ../../../src/unsummarized.rq
       fi
       if [ "$CSV2RDF4LOD_RETRIEVE_DROID_SOURCES" != "false" ]; then                     # |
          sleep 1                                                                        # |

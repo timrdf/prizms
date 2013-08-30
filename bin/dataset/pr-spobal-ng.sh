@@ -116,6 +116,9 @@ echo "INFO version   : $version $version_reason"
 #
 if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -name source` ]]; then
 
+   see='https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables'
+   local endpoint=${endpoint:?"not set; source csv2rdf4lod/source-me.sh or see $see"}
+
    # Create the directory for the new version.
    mkdir -p $version/source
 
@@ -124,13 +127,13 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
    pushd $version/source &> /dev/null
       touch .__CSV2RDF4LOD_retrieval # Make a timestamp so we know what files were created during retrieval.
       # - - - - - - - - - - - - - - - - - - - - Replace below for custom retrieval  - - - \
-      if [[ "$CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT" =~ http* && \
+      if [[ "$endpoint" =~ http* && \
             -e ../../../src/unsummarized.rq && 
             `which cache-queries.sh` ]]; then
-         cache-queries.sh "$CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT" -o csv -q ../../../src/unsummarized.rq -od .
+         cache-queries.sh "$endpoint" -o csv -q ../../../src/unsummarized.rq -od .
       else
          echo "   ERROR: Failed to create dataset `basename $0`:"                        
-         echo "      CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT: $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT"        
+         echo "      CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT: $endpoint"        
          echo "      cache-queries.sh path: `which cache-queries.sh`"
          echo "      ../../../src/unsummarized.rq:"
          ls -lt ../../../src/unsummarized.rq
@@ -148,15 +151,18 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
       if [ ! -e manual ]; then
          mkdir manual
       fi
+      if [ ! -e automatic ]; then
+         mkdir automatic
+      fi
 
       retrieved_files=`find source -newer source/.__CSV2RDF4LOD_retrieval -type f | grep -v "pml.ttl$" | grep -v "cr-droid.ttl$"`
 
       for sd_name in `cat source/unsummarized.rq.csv | sed 's/^"//;s/"$//' | grep "^http"`; do
-         ng_ugly=`resource-name.sh --named-graph $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT $sd_name`
+         ng_ugly=`resource-name.sh --named-graph $endpoint $sd_name`
          ng_hash=`md5.sh -qs "$ng_ugly"`
          ng="$endpoint/id/named-graph/$ng_hash" 
          echo "$ng -> $sd_name"
-         vsr-spo-balance.sh -s "$CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT" . "$sd_name" > manual/$ng_hash.ttl
+         vsr-spo-balance.sh -s "$endpoint" . "$sd_name" > automatic/$ng_hash.ttl
       done
 
    popd &> /dev/null

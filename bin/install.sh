@@ -204,6 +204,7 @@ else
    fi
 
    i_can_sudo=`sudo -v &> /dev/null`
+   i_can_sudo=$?
 
    div="-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
    function change_source_me {

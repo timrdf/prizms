@@ -456,7 +456,7 @@ else
    fi
    vcs=""
    if [ -n "$project_code_repository" ]; then
-      if [[ "$project_code_repository" == git* ]]; then
+      if [[ "$project_code_repository" == git* || "$project_code_repository" == *git ]]; then
          vcs="git"
       elif [[ "$project_code_repository" == svn* ]]; then
          vcs="svn"

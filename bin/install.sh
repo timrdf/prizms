@@ -1655,8 +1655,10 @@ else
                      "expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql and the (port 8080) Tomcat application server of SADI services at $our_base_uri/sadi-services"
 
                   echo "$div `whoami`"
+                  enable_apache_module 'proxy'      "expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
                   enable_apache_module 'proxy_http' "expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
                   #                  ^ 'proxy' module is enabled when proxy_http is enabled.
+                  #                    ... but apparently not always :(  https://github.com/timrdf/prizms/issues/71
 
                   #
                   # The apache directives to map the proxy seems to always change.
@@ -2726,6 +2728,7 @@ else
                if [[ "$push_them" == [yY] ]]; then
                   git add -f $added
                   git commit -m 'During Prizms install: added stub directories and readme files.'
+                  # TODO: https://github.com/timrdf/prizms/issues/75
                   git push
                else
                   echo

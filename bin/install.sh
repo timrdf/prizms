@@ -442,6 +442,21 @@ else
       fi
    }
 
+   function restart_tomcat {
+      echo "Tomcat can be restarted with:"
+      echo
+      echo "  sudo /etc/init.d/tomcat6 stop"
+      echo "  sudo /etc/init.d/tomcat6 start"
+      echo
+      read -p "Q: Changes to tomcat require it to restart. Restart it (requires sudo) ? [y/n] " -u 1 restart_it
+      #if [[ "$restart_it" == [yY] ]]; then
+      echo sudo /etc/init.d/tomcat6 stop
+           sudo /etc/init.d/tomcat6 stop
+      echo sudo /etc/init.d/tomcat6 start
+           sudo /etc/init.d/tomcat6 start
+      #fi
+   }
+
    echo
    echo "Okay, let's install Prizms!"
    echo "   https://github.com/timrdf/prizms/wiki"
@@ -1990,25 +2005,26 @@ else
                   add_proxy_pass '/etc/apache2/sites-available/default' '/annotator'
 
                   # Setting baseURI for the annotator webapp.
-                  if [[ -e $webapps/annotator.war ]]; then
-                     if [[ ! `grep "baseURI=$our_base_uri/annotator/" $webapps/annotator/WEB-INF/classes/semanteco.properties` ]]; then
-                        # append e.g. baseUrl=http://hub.tw.rpi.edu/annotator/ to 
-                        # webapps/annotator/WEB-INF/classes/semanteco.properties 
-                        echo "$webapps/annotator/WEB-INF/classes/semanteco.properties needs to set baseURI to $our_base_uri/annotator/"
-                        echo "so that the annotator's javascript can be accessed."
-                        echo
-                        echo "   echo baseURI=$our_base_uri/annotator/ | sudo tee $webapps/annotator/WEB-INF/classes/semanteco.properties"
-                        echo
-                        read -p "Q: we update semanteco.properties with the command above? [y/n] " -u 1 install_it
-                        if [[ "$install_it" == [yY] ]]; then
-                           echo "baseURI=$our_base_uri/annotator/" | sudo tee $webapps/annotator/WEB-INF/classes/semanteco.properties
-                        else
-                           echo "Okay, we won't modify $webapps/annotator/WEB-INF/classes/semanteco.properties."
-                        fi
-                     else
-                        echo "($webapps/annotator/WEB-INF/classes/semanteco.properties already sets baseURI to $our_base_uri/annotator/; no need to reset it)"
-                     fi
-                  fi
+                  #if [[ -e $webapps/annotator.war ]]; then
+                  #   if [[ ! `grep "baseURI=$our_base_uri/annotator/" $webapps/annotator/WEB-INF/classes/semanteco.properties` ]]; then
+                  #      # append e.g. baseUrl=http://hub.tw.rpi.edu/annotator/ to 
+                  #      # webapps/annotator/WEB-INF/classes/semanteco.properties 
+                  #      echo "$webapps/annotator/WEB-INF/classes/semanteco.properties needs to set baseURI to $our_base_uri/annotator/"
+                  #      echo "so that the annotator's javascript can be accessed."
+                  #      echo
+                  #      echo "   echo baseURI=$our_base_uri/annotator/ | sudo tee $webapps/annotator/WEB-INF/classes/semanteco.properties"
+                  #      echo
+                  #      read -p "Q: we update semanteco.properties with the command above? [y/n] " -u 1 install_it
+                  #      if [[ "$install_it" == [yY] ]]; then
+                  #         echo "baseURI=$our_base_uri/annotator/" | sudo tee $webapps/annotator/WEB-INF/classes/semanteco.properties
+                  #         restart_tomcat
+                  #      else
+                  #         echo "Okay, we won't modify $webapps/annotator/WEB-INF/classes/semanteco.properties."
+                  #      fi
+                  #   else
+                  #      echo "($webapps/annotator/WEB-INF/classes/semanteco.properties already sets baseURI to $our_base_uri/annotator/; no need to reset it)"
+                  #   fi
+                  #fi
                fi
                # Reinstall by running:
                # sudo rm -rf /var/lib/tomcat6/webapps/annotator* ~/opt/prizms/repos/semanteco-annotator-webapp*

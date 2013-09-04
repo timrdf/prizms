@@ -1999,7 +1999,7 @@ else
                         echo
                         echo "   echo baseURI=$our_base_uri/annotator/ | sudo tee $webapps/annotator/WEB-INF/classes/semanteco.properties"
                         echo
-                        read -p "Q: May we copy $war to $webapps/annotator.war? [y/n] " -u 1 install_it
+                        read -p "Q: we update semanteco.properties with the command above? [y/n] " -u 1 install_it
                         if [[ "$install_it" == [yY] ]]; then
                            echo "baseURI=$our_base_uri/annotator/" | sudo tee $webapps/annotator/WEB-INF/classes/semanteco.properties
                         else

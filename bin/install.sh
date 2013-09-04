@@ -1985,6 +1985,8 @@ else
                   fi
                   add_proxy_pass '/etc/apache2/sites-available/default' '/annotator'
                fi
+               # Reinstall by running:
+               # sudo rm -rf /var/lib/tomcat6/webapps/annotator* ~/opt/prizms/repos/semanteco-annotator-webapp*
             fi # end running as developer e.g. jsmith not loxd (Post-configure csv2rdf4lod annotator webapp service (in Tomcat))
 
 

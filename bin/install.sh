@@ -1974,15 +1974,15 @@ else
                   #add_proxy_pass '/etc/apache2/sites-available/default' '/sadi-services'
                   war=`find $PRIZMS_HOME/repos/semanteco-annotator-webapp -name 'semanteco-annotator-webapp*.war'`
                   war_local=`basename $war`
-                  if [[ ! -e $webapp/$war_local ]]; then
-                     read -p "Q: May we copy $war to $webapp/$war_local? [y/n] " -u 1 install_it
+                  if [[ ! -e $webapps/$war_local ]]; then
+                     read -p "Q: May we copy $war to $webapps/$war_local? [y/n] " -u 1 install_it
                      if [[ "$install_it" == [yY] ]]; then
-                        sudo cp $war $webapp/$war_local
+                        sudo cp $war $webapps/$war_local
                      else
-                        echo "Okay, we won't deploy $webapp/$war_local."
+                        echo "Okay, we won't deploy $webapps/$war_local."
                      fi
                   else
-                     echo "($webapp/$war_local already exists; no need to redeploy)"
+                     echo "($webapps/$war_local already exists; no need to redeploy)"
                   fi
                fi
             fi # end running as developer e.g. jsmith not loxd (Post-configure csv2rdf4lod annotator webapp service (in Tomcat))

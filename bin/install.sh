@@ -379,6 +379,55 @@ else
       fi
    }
 
+   function add_proxy_pass {
+      local target="$1" # e.g. '/etc/apache2/sites-available/default'
+      local path="$2"   # e.g. '/sadi-services'
+
+      already_there=""
+      if [ -e $target ]; then
+         already_there=`grep "Location $path" $target`
+      fi
+      echo "$div `whoami`"
+      echo "Some Apache directives (e.g., ProxyPass) need to be set in $target to expose your (port 8080) Tomcat application server at the URL $our_base_uri$path."
+      if [[ -z "$already_there" ]]; then
+         echo "To expose the (port 8080) Tomacat application server of SADI services at $our_base_uri/$path,"
+         echo "the following apache configuration needs to be set in $target:"
+         echo                                                                          # Mapping 5 (see above)
+         echo '  ProxyTimeout 1800'                                  > .prizms-apache-conf
+         echo '  ProxyRequests Off'                                 >> .prizms-apache-conf
+         echo                                                       >> .prizms-apache-conf
+         echo "  ProxyPass $path http://localhost:8080$path"        >> .prizms-apache-conf
+         echo "  ProxyPassReverse $path http://localhost:8080$path" >> .prizms-apache-conf
+         echo "  <Location $path>"                                  >> .prizms-apache-conf
+         echo '          Order allow,deny'                          >> .prizms-apache-conf
+         echo '          allow from all'                            >> .prizms-apache-conf
+         echo '          ProxyHTMLURLMap http://localhost:8080/ /'  >> .prizms-apache-conf
+         echo '          SetOutputFilter proxy-html'                >> .prizms-apache-conf
+         echo '  </Location>'                                       >> .prizms-apache-conf
+         cat .prizms-apache-conf
+
+         # Tuck the new directives into the entire configuration file.
+         local virtualhost=`sudo  grep    "</VirtualHost>" $target`
+         sudo cat $target | grep -v "</VirtualHost>" > .apache-conf
+         cat .prizms-apache-conf                    >> .apache-conf
+         echo                                       >> .apache-conf
+         echo $virtualhost                          >> .apache-conf
+         echo
+         echo The final configuration file will look like:
+         echo
+         cat .apache-conf
+         read -p "Q: May we add the directives above to $target? [y/n] " -u 1 install_it
+         if [[ "$install_it" == [yY] ]]; then
+            sudo cp $target .$target_`date +%Y-%m-%d-%H-%M-%S`
+            #cat .prizms-apache-conf | sudo tee -a $target &> /dev/null
+            sudo mv .apache-conf $target
+            restart_apache
+         fi
+      else
+         echo "($target seems to already contain the ProxyPath directives to map $path to 8080)"
+      fi
+   }
+
    function restart_apache {
       echo
       echo "$div `whoami`"
@@ -1439,43 +1488,42 @@ else
                avoid_sudo="--avoid-sudo"
                use_sudo=""
             fi
-            #if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd # TODO: this should be removed in favor of $avoid_sudo
-               #
-               # Install third party utilities (mostly with apt-get and tarball installs).
-               #
+            #
+            # Install third party utilities (mostly with apt-get and tarball installs).
+            #
+            echo
+            echo "$div `whoami`"
+            echo "Prizms uses a variety of third party utilities that we can try to install for you automatically."
+            echo "The following utilities seem to already be installed okay:"
+            echo
+            $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo | grep "^.okay"
+            echo
+            $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       -n $avoid_sudo $use_sudo | grep "^.okay"
+            # TODO: set up the user-based install that does NOT require sudo. python's easy_install
+          
+            todo=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo 2>&1 | grep "^.TODO" | grep -v "pydistutils.cfg"`
+            todo=$todo`$PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                  -n $avoid_sudo $use_sudo 2>&1 | grep "^.TODO" | grep -v "pydistutils.cfg"`
+            if [ -n "$todo" ]; then
                echo
-               echo "$div `whoami`"
-               echo "Prizms uses a variety of third party utilities that we can try to install for you automatically."
-               echo "The following utilities seem to already be installed okay:"
+               echo "However, the following do not seem to be installed:"
                echo
-               $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo | grep "^.okay"
+               $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo 2>&1 | grep "^.TODO" | grep -v "pydistutils.cfg"
+               $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       -n $avoid_sudo $use_sudo 2>&1 | grep "^.TODO" | grep -v "pydistutils.cfg"
                echo
-               $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       -n $avoid_sudo $use_sudo | grep "^.okay"
-               # TODO: set up the user-based install that does NOT require sudo. python's easy_install
-             
-               todo=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo 2>&1 | grep "^.TODO" | grep -v "pydistutils.cfg"`
-               todo=$todo`$PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                  -n $avoid_sudo $use_sudo 2>&1 | grep "^.TODO" | grep -v "pydistutils.cfg"`
-               if [ -n "$todo" ]; then
-                  echo
-                  echo "However, the following do not seem to be installed:"
-                  echo
-                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo 2>&1 | grep "^.TODO" | grep -v "pydistutils.cfg"
-                  $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       -n $avoid_sudo $use_sudo 2>&1 | grep "^.TODO" | grep -v "pydistutils.cfg"
-                  echo
-                  read -p "Q: May we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
-                  echo
-                  if [[ "$install_them" == [yY] ]]; then
-                     touch .before-prizms-installed-dependencies
-                     $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh $avoid_sudo $use_sudo #2> /dev/null
-                     $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       $avoid_sudo $use_sudo
-                  else
-                     echo "Okay, we won't try to install them. Check out the following if you want to do it yourself:"
-                     echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"
-                  fi
+               read -p "Q: May we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
+               echo
+               if [[ "$install_them" == [yY] ]]; then
+                  touch .before-prizms-installed-dependencies
+                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh $avoid_sudo $use_sudo #2> /dev/null
+                  $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       $avoid_sudo $use_sudo
+               else
+                  echo "Okay, we won't try to install them. Check out the following if you want to do it yourself:"
+                  echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Installing-csv2rdf4lod-automation---complete"
                fi
-               rm -f .before-prizms-installed-dependencies
-            #fi # end running as developer e.g. jsmith not loxd # # TODO: this should be removed in favor of $avoid_sudo
+            fi
+            rm -f .before-prizms-installed-dependencies
 
+            # Post-configure Virtuoso
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
 
                virtuoso_installed="no"
@@ -1725,6 +1773,7 @@ else
                   #        SetOutputFilter proxy-html
                   #  </Location>
 
+                  # TODO: replace this code with the function e.g. add_proxy_pass '/etc/apache2/sites-available/default' '/sparql'
                   echo # (This Apache-config modification pattern is repeated below for Tomcat)
                   echo "$div `whoami`"
                   target='/etc/apache2/sites-available/default'
@@ -1793,7 +1842,8 @@ else
                fi # end $virtuoso_installed
 
                rm -f .prizms-apache-conf
-            fi # end running as developer e.g. jsmith not loxd
+            fi # end running as developer e.g. jsmith not loxd  (Post-configure Virtuoso)
+
 
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
 
@@ -1815,13 +1865,17 @@ else
 
             fi # end running as developer e.g. jsmith not loxd
 
+
+            tomcat_installed="no"
+            if [[ -e '/etc/tomcat6/tomcat-users.xml' && \
+                  -e '/etc/init.d/tomcat6'           && \
+                  -d '/var/lib/tomcat6/webapps/' ]]; then
+               tomcat_installed="yes"
+            fi
+
+
+            # Post-configure SADI service (in Tomcat)
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
-               tomcat_installed="no"
-               if [[ -e '/etc/tomcat6/tomcat-users.xml' && \
-                     -e '/etc/init.d/tomcat6'           && \
-                     -d '/var/lib/tomcat6/webapps/' ]]; then
-                  tomcat_installed="yes"
-               fi
                if [[ "$tomcat_installed" == "yes" ]]; then
                   # The following two are also done above if virtuoso is installed.
                   # Calling them twice is safe.
@@ -1851,6 +1905,7 @@ else
                   # </Location>
 
                   echo # (This Apache-config modification pattern is repeated above for Virtuoso)
+                  # TODO: replace this code with the function e.g. add_proxy_pass '/etc/apache2/sites-available/default' '/sadi-services'
                   echo "$div `whoami`"
                   target='/etc/apache2/sites-available/default'
                   already_there=""
@@ -1896,7 +1951,8 @@ else
                      echo "($target seems to already contain the ProxyPath directives to map /sadi-services to 8080)"
                   fi
                fi
-            fi # end running as developer e.g. jsmith not loxd
+            fi # end running as developer e.g. jsmith not loxd (Post-configure SADI service (in Tomcat))
+
 
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
 

@@ -1971,7 +1971,6 @@ else
                echo "Prizms includes a csv2rdf4lod annotator webapp UI"
                if [[ "$tomcat_installed" == "yes" && 
                    -e $PRIZMS_HOME/repos/semanteco-annotator-webapp ]]; then
-                  #add_proxy_pass '/etc/apache2/sites-available/default' '/sadi-services'
                   war=`find $PRIZMS_HOME/repos/semanteco-annotator-webapp -name 'semanteco-annotator-webapp*.war'`
                   war_local=`basename $war`
                   if [[ ! -e $webapps/$war_local ]]; then
@@ -1984,6 +1983,7 @@ else
                   else
                      echo "($webapps/annotator.war already exists; no need to redeploy)"
                   fi
+                  add_proxy_pass '/etc/apache2/sites-available/default' '/annotator'
                fi
             fi # end running as developer e.g. jsmith not loxd (Post-configure csv2rdf4lod annotator webapp service (in Tomcat))
 

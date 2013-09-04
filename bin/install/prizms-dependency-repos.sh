@@ -43,7 +43,8 @@ pushd $PRIZMS_HOME/repos &> /dev/null
    if [[ ! -e semanteco-annotator-webapp.zip ]]; then
       # See https://github.com/timrdf/prizms/wiki/csv2rdf4lod-annotator
       echo "curl semanteco-annotator-webapp.zip"
-      curl --insecure 'https://orion.tw.rpi.edu/jenkins/job/semanteco-prizms-support/lastStableBuild/edu.rpi.tw.escience%24semanteco-annotator-webapp/artifact/*zip*/archive.zip'> semanteco-annotator-webapp.zip
+      url='https://orion.tw.rpi.edu/jenkins/job/semanteco-prizms-support/lastStableBuild/edu.rpi.tw.escience%24semanteco-annotator-webapp/artifact/*zip*/archive.zip'
+      curl --insecure --progress-bar $url > semanteco-annotator-webapp.zip
    fi
    echo
 popd &> /dev/null

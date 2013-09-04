@@ -1453,14 +1453,14 @@ else
                $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       -n $avoid_sudo $use_sudo | grep "^.okay"
                # TODO: set up the user-based install that does NOT require sudo. python's easy_install
              
-               todo=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo | grep "^.TODO" | grep -v "pydistutils.cfg"`
-               todo=$todo`$PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                  -n $avoid_sudo $use_sudo | grep "^.TODO" | grep -v "pydistutils.cfg"`
+               todo=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo 2>&1 | grep "^.TODO" | grep -v "pydistutils.cfg"`
+               todo=$todo`$PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                  -n $avoid_sudo $use_sudo 2>&1 | grep "^.TODO" | grep -v "pydistutils.cfg"`
                if [ -n "$todo" ]; then
                   echo
                   echo "However, the following do not seem to be installed:"
                   echo
-                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo | grep "^.TODO" | grep -v "pydistutils.cfg"
-                  $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       -n $avoid_sudo $use_sudo | grep "^.TODO" | grep -v "pydistutils.cfg"
+                  $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo 2>&1 | grep "^.TODO" | grep -v "pydistutils.cfg"
+                  $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       -n $avoid_sudo $use_sudo 2>&1 | grep "^.TODO" | grep -v "pydistutils.cfg"
                   echo
                   read -p "Q: May we try to install the dependencies listed above? (We'll need root for most of them) [y/n] " -u 1 install_them
                   echo

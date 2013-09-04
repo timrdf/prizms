@@ -1971,6 +1971,8 @@ else
                echo "Prizms includes a csv2rdf4lod annotator webapp UI"
                if [[ "$tomcat_installed" == "yes" && 
                    -e $PRIZMS_HOME/repos/semanteco-annotator-webapp ]]; then
+
+                  # Deploy the .war
                   war=`find $PRIZMS_HOME/repos/semanteco-annotator-webapp -name 'semanteco-annotator-webapp*.war'`
                   war_local=`basename $war`
                   if [[ ! -e $webapps/annotator.war ]]; then
@@ -1983,9 +1985,13 @@ else
                   else
                      echo "($webapps/annotator.war already exists; no need to redeploy)"
                   fi
+
+                  # Apache ProxyPass
                   add_proxy_pass '/etc/apache2/sites-available/default' '/annotator'
+
+                  # Setting baseURI for the annotator webapp.
                   if [[ -e $webapps/annotator.war ]]; then
-                     if [[ `grep "baseURI=$our_base_uri/annotator/" $webapps/annotator/WEB-INF/classes/semanteco.properties` ]]; then
+                     if [[ ! `grep "baseURI=$our_base_uri/annotator/" $webapps/annotator/WEB-INF/classes/semanteco.properties` ]]; then
                         # append e.g. baseUrl=http://hub.tw.rpi.edu/annotator/ to 
                         # webapps/annotator/WEB-INF/classes/semanteco.properties 
                         echo "$webapps/annotator/WEB-INF/classes/semanteco.properties needs to set baseURI to $our_base_uri/annotator/"

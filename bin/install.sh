@@ -1984,6 +1984,25 @@ else
                      echo "($webapps/annotator.war already exists; no need to redeploy)"
                   fi
                   add_proxy_pass '/etc/apache2/sites-available/default' '/annotator'
+                  if [[ -e $webapps/annotator.war ]]; then
+                     if [[ `grep "baseURI=$our_base_uri/annotator/" $webapps/annotator/WEB-INF/classes/semanteco.properties` ]]; then
+                        # append e.g. baseUrl=http://hub.tw.rpi.edu/annotator/ to 
+                        # webapps/annotator/WEB-INF/classes/semanteco.properties 
+                        echo "$webapps/annotator/WEB-INF/classes/semanteco.properties needs to set baseURI to $our_base_uri/annotator/"
+                        echo "so that the annotator's javascript can be accessed."
+                        echo
+                        echo "   echo baseURI=$our_base_uri/annotator/ | sudo tee $webapps/annotator/WEB-INF/classes/semanteco.properties"
+                        echo
+                        read -p "Q: May we copy $war to $webapps/annotator.war? [y/n] " -u 1 install_it
+                        if [[ "$install_it" == [yY] ]]; then
+                           echo "baseURI=$our_base_uri/annotator/" | sudo tee $webapps/annotator/WEB-INF/classes/semanteco.properties
+                        else
+                           echo "Okay, we won't modify $webapps/annotator/WEB-INF/classes/semanteco.properties."
+                        fi
+                     else
+                        echo "($webapps/annotator/WEB-INF/classes/semanteco.properties already sets baseURI to $our_base_uri/annotator/; no need to reset it)"
+                     fi
+                  fi
                fi
                # Reinstall by running:
                # sudo rm -rf /var/lib/tomcat6/webapps/annotator* ~/opt/prizms/repos/semanteco-annotator-webapp*

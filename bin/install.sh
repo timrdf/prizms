@@ -1871,7 +1871,7 @@ else
                   -e '/etc/init.d/tomcat6'           && \
                   -d '/var/lib/tomcat6/webapps/' ]]; then
                tomcat_installed="yes"
-               webapps='/var/lib/tomcat6/webapps/'
+               webapps='/var/lib/tomcat6/webapps'
             fi
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                if [[ "$tomcat_installed" == "yes" ]]; then

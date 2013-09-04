@@ -1973,7 +1973,7 @@ else
                    -e $PRIZMS_HOME/repos/semanteco-annotator-webapp ]]; then
                   war=`find $PRIZMS_HOME/repos/semanteco-annotator-webapp -name 'semanteco-annotator-webapp*.war'`
                   war_local=`basename $war`
-                  if [[ ! -e $webapps/$war_local ]]; then
+                  if [[ ! -e $webapps/annotator.war ]]; then
                      read -p "Q: May we copy $war to $webapps/annotator.war? [y/n] " -u 1 install_it
                      if [[ "$install_it" == [yY] ]]; then
                         sudo cp $war $webapps/annotator.war

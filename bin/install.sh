@@ -1975,14 +1975,14 @@ else
                   war=`find $PRIZMS_HOME/repos/semanteco-annotator-webapp -name 'semanteco-annotator-webapp*.war'`
                   war_local=`basename $war`
                   if [[ ! -e $webapps/$war_local ]]; then
-                     read -p "Q: May we copy $war to $webapps/$war_local? [y/n] " -u 1 install_it
+                     read -p "Q: May we copy $war to $webapps/annotator.war? [y/n] " -u 1 install_it
                      if [[ "$install_it" == [yY] ]]; then
-                        sudo cp $war $webapps/$war_local
+                        sudo cp $war $webapps/annotator.war
                      else
-                        echo "Okay, we won't deploy $webapps/$war_local."
+                        echo "Okay, we won't deploy $webapps/annotator.war."
                      fi
                   else
-                     echo "($webapps/$war_local already exists; no need to redeploy)"
+                     echo "($webapps/annotator.war already exists; no need to redeploy)"
                   fi
                fi
             fi # end running as developer e.g. jsmith not loxd (Post-configure csv2rdf4lod annotator webapp service (in Tomcat))

@@ -2417,6 +2417,25 @@ else
                   echo "(/home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png already exists)"
                fi
 
+               if [[ -n "$vm_ip" ]]; then # We are on a TWC VM
+                  if [[ `grep "^RewriteBase" $www/.htaccess | awk '{print $2}'` != '/' ]]; then
+                     cat $www/.htaccess | awk '{if($1=="RewriteBase"){print "RewriteBase /"}else{print}}' > .prizms_www_htaccess
+                     echo "It appears as though you are installing onto a TWC VM."
+                     echo "LODSPeaKer needs its RewriteBase to be tweaked when it's on a TWC VM, which can be done with the following change:"
+                     echo
+                     diff $www/.htaccess .prizms_www_htaccess
+                     echo
+                     read -p "Q: Update $www/.htaccess with the above change? [y/n] " -u 1 update_it
+                     if [[ "$update_it" == [yY] ]]; then
+                        echo "sudo cp                      $www/.htaccess $www/.htaccess_`date +%Y-%m-%d-%H-%M-%S`"
+                        sudo cp                      $www/.htaccess $www/.htaccess_`date +%Y-%m-%d-%H-%M-%S`
+                        echo "sudo cp .prizms_www_htaccess $www/.htaccess"
+                        sudo cp .prizms_www_htaccess $www/.htaccess
+                     else
+                        echo "Okay, we won't modify $www/.htaccess."
+                     fi
+                  fi
+               fi
 
                # Avoid index.html
                echo

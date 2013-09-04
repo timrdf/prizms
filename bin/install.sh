@@ -1972,8 +1972,8 @@ else
                if [[ "$tomcat_installed" == "yes" && 
                    -e $PRIZMS_HOME/repos/semanteco-annotator-webapp ]]; then
                   #add_proxy_pass '/etc/apache2/sites-available/default' '/sadi-services'
-                  local war=`find $PRIZMS_HOME/repos/semanteco-annotator-webapp -name 'semanteco-annotator-webapp*.war'`
-                  local war_local=`basename $war`
+                  war=`find $PRIZMS_HOME/repos/semanteco-annotator-webapp -name 'semanteco-annotator-webapp*.war'`
+                  war_local=`basename $war`
                   if [[ ! -e $webapp/$war_local ]]; then
                      read -p "Q: May we copy $war to $webapp/$war_local? [y/n] " -u 1 install_it
                      if [[ "$install_it" == [yY] ]]; then

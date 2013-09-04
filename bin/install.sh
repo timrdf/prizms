@@ -1871,10 +1871,8 @@ else
                   -e '/etc/init.d/tomcat6'           && \
                   -d '/var/lib/tomcat6/webapps/' ]]; then
                tomcat_installed="yes"
+               webapps='/var/lib/tomcat6/webapps/'
             fi
-
-
-            # Post-configure SADI service (in Tomcat)
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                if [[ "$tomcat_installed" == "yes" ]]; then
                   # The following two are also done above if virtuoso is installed.
@@ -1885,9 +1883,20 @@ else
                                        "expose the (port 8080) Tomcat application server of SADI services at $our_base_uri/sadi-services"
 
                   echo "$div `whoami`"
+                  enable_apache_module 'proxy' \
+                                       "expose your (port 8080) Tomcat application server of SADI services at the URL $our_base_uri/sadi-services"
+
+                  echo "$div `whoami`"
                   enable_apache_module 'proxy_http' \
                                        "expose your (port 8080) Tomcat application server of SADI services at the URL $our_base_uri/sadi-services"
                   #                  ^ 'proxy' module is enabled when proxy_http is enabled.
+                  #                    ... but not always... 
+               fi
+            fi
+
+            # Post-configure SADI service (in Tomcat)
+            if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+               if [[ "$tomcat_installed" == "yes" ]]; then
 
                   # https://scm.escience.rpi.edu/trac/ticket/1502#comment:5 (sparql only)
                   # https://scm.escience.rpi.edu/trac/ticket/1612#comment:2 (sparql AND sadi-services)
@@ -1952,6 +1961,32 @@ else
                   fi
                fi
             fi # end running as developer e.g. jsmith not loxd (Post-configure SADI service (in Tomcat))
+
+
+
+            # Post-configure csv2rdf4lod annotator webapp GUI service (in Tomcat)
+            # See https://github.com/timrdf/prizms/wiki/csv2rdf4lod-annotator
+            if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+               echo "$div `whoami`"
+               echo "Prizms includes a csv2rdf4lod annotator webapp UI"
+               if [[ "$tomcat_installed" == "yes" && 
+                   -e $PRIZMS_HOME/repos/semanteco-annotator-webapp ]]; then
+                  #add_proxy_pass '/etc/apache2/sites-available/default' '/sadi-services'
+                  local war=`find $PRIZMS_HOME/repos/semanteco-annotator-webapp -name 'semanteco-annotator-webapp*.war'`
+                  local war_local=`basename $war`
+                  if [[ ! -e $webapp/$war_local ]]; then
+                     read -p "Q: May we copy $war to $webapp/$war_local? [y/n] " -u 1 install_it
+                     if [[ "$install_it" == [yY] ]]; then
+                        sudo cp $war $webapp/$war_local
+                     else
+                        echo "Okay, we won't deploy $webapp/$war_local."
+                     fi
+                  else
+                     echo "($webapp/$war_local already exists; no need to redeploy)"
+                  fi
+               fi
+            fi # end running as developer e.g. jsmith not loxd (Post-configure csv2rdf4lod annotator webapp service (in Tomcat))
+
 
 
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd

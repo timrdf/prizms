@@ -45,6 +45,10 @@ pushd $PRIZMS_HOME/repos &> /dev/null
       echo "curl semanteco-annotator-webapp.zip"
       url='https://orion.tw.rpi.edu/jenkins/job/semanteco-prizms-support/lastStableBuild/edu.rpi.tw.escience%24semanteco-annotator-webapp/artifact/*zip*/archive.zip'
       curl --insecure --progress-bar $url > semanteco-annotator-webapp.zip
+      if [[ -e semanteco-annotator-webapp.zip && 
+          ! -d semanteco-annotator-webapp ]]; then
+         unzip semanteco-annotator-webapp.zip -d semanteco-annotator-webapp
+      fi
    fi
    echo
 popd &> /dev/null

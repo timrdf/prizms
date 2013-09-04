@@ -311,7 +311,7 @@ else
             echo
             echo "sudo a2enmod $module"
             echo
-            read -p "Q: May we enable the module above using the command above? [y/n] " -u 1 enable_it
+            read -p "Q: May we enable the module $module using the command above? [y/n] " -u 1 enable_it
             if [[ "$enable_it" != [yY] ]]; then
                sudo a2dismod $module # We just previously enabled it (to check), but they don't want it enabled.
                echo "Okay, we won't enable $module."
@@ -2243,7 +2243,7 @@ else
                      echo "  ($project_user_name git pull)"
                      echo "  sudo ln -s      $project_user_home/prizms/$repodir/lodspeakr/settings.inc.php $target"
                      echo
-                     read -p "Q: Peform the commands above to put settings.inc.php under version controll? [y/n] " -u 1 install_it
+                     read -p "Q: Peform the commands above to put settings.inc.php under version control? [y/n] " -u 1 install_it
                      if [[ "$install_it" == [yY] ]]; then
                         sudo mv $target $user_home/prizms/$repodir/lodspeakr/settings.inc.php
                         sudo ln -s      $project_user_home/prizms/$repodir/lodspeakr/settings.inc.php $target

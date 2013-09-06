@@ -428,6 +428,31 @@ else
       fi
    }
 
+   function rewritebase {
+      htaccess="$1" # e.g. /var/www/.htaccess
+      echo
+      echo "$div `whoami`"
+      echo "LODSPeaKer needs its RewriteBase to be tweaked when it's on a TWC VM, which can be done with the following change:"
+      if [[ `grep "^RewriteBase" $htaccess | awk '{print $2}'` != '/' ]]; then
+         cat $htaccess | awk '{if($1=="RewriteBase"){print "RewriteBase /"}else{print}}' > .prizms_www_htaccess
+         echo "It appears as though you are installing onto a TWC VM."
+         echo
+         diff $htaccess .prizms_www_htaccess
+         echo
+         read -p "Q: Update $htaccess with the above change? [y/n] " -u 1 update_it
+         if [[ "$update_it" == [yY] ]]; then
+            echo "sudo cp                      $htaccess $www/.htaccess_`date +%Y-%m-%d-%H-%M-%S`"
+            sudo cp                      $htaccess $www/.htaccess_`date +%Y-%m-%d-%H-%M-%S`
+            echo "sudo cp .prizms_www_htaccess $htaccess"
+            sudo cp .prizms_www_htaccess $htaccess
+         else
+            echo "Okay, we won't modify $htaccess."
+         fi
+      else
+         echo "(It appears that you aren't installing on a TWC VM, so LODSPeaKr doesn't need RewriteBase to be changed.)"
+      fi
+   }
+
    function restart_apache {
       echo
       echo "$div `whoami`"
@@ -2404,27 +2429,30 @@ else
                fi
 
                if [[ -n "$vm_ip" ]]; then # We are on a TWC VM
-                  echo
-                  echo "$div `whoami`"
-                  echo "LODSPeaKer needs its RewriteBase to be tweaked when it's on a TWC VM, which can be done with the following change:"
-                  if [[ `grep "^RewriteBase" $www/.htaccess | awk '{print $2}'` != '/' ]]; then
-                     cat $www/.htaccess | awk '{if($1=="RewriteBase"){print "RewriteBase /"}else{print}}' > .prizms_www_htaccess
-                     echo "It appears as though you are installing onto a TWC VM."
-                     echo
-                     diff $www/.htaccess .prizms_www_htaccess
-                     echo
-                     read -p "Q: Update $www/.htaccess with the above change? [y/n] " -u 1 update_it
-                     if [[ "$update_it" == [yY] ]]; then
-                        echo "sudo cp                      $www/.htaccess $www/.htaccess_`date +%Y-%m-%d-%H-%M-%S`"
-                        sudo cp                      $www/.htaccess $www/.htaccess_`date +%Y-%m-%d-%H-%M-%S`
-                        echo "sudo cp .prizms_www_htaccess $www/.htaccess"
-                        sudo cp .prizms_www_htaccess $www/.htaccess
-                     else
-                        echo "Okay, we won't modify $www/.htaccess."
-                     fi
-                  else
-                     echo "(It appears that you aren't installing on a TWC VM, so LODSPeaKr doesn't need RewriteBase to be changed.)"
-                  fi
+                  #echo
+                  #echo "$div `whoami`"
+                  #echo "LODSPeaKer needs its RewriteBase to be tweaked when it's on a TWC VM, which can be done with the following change:"
+                  #if [[ `grep "^RewriteBase" $www/.htaccess | awk '{print $2}'` != '/' ]]; then
+                  #   cat $www/.htaccess | awk '{if($1=="RewriteBase"){print "RewriteBase /"}else{print}}' > .prizms_www_htaccess
+                  #   echo "It appears as though you are installing onto a TWC VM."
+                  #   echo
+                  #   diff $www/.htaccess .prizms_www_htaccess
+                  #   echo
+                  #   read -p "Q: Update $www/.htaccess with the above change? [y/n] " -u 1 update_it
+                  #   if [[ "$update_it" == [yY] ]]; then
+                  #      echo "sudo cp                      $www/.htaccess $www/.htaccess_`date +%Y-%m-%d-%H-%M-%S`"
+                  #      sudo cp                      $www/.htaccess $www/.htaccess_`date +%Y-%m-%d-%H-%M-%S`
+                  #      echo "sudo cp .prizms_www_htaccess $www/.htaccess"
+                  #      sudo cp .prizms_www_htaccess $www/.htaccess
+                  #   else
+                  #      echo "Okay, we won't modify $www/.htaccess."
+                  #   fi
+                  #else
+                  #   echo "(It appears that you aren't installing on a TWC VM, so LODSPeaKr doesn't need RewriteBase to be changed.)"
+                  #fi
+   
+                  # This replaces the code above:
+                  rewritebase $www/.htaccess
                fi
 
                # Avoid index.html
@@ -2611,7 +2639,10 @@ else
                #
                # $conf['ns']['local']   = 'http://lofd.tw.rpi.edu/';
                # $conf['mirror_external_uris'] = true;
-
+               vm_ip=`grep "tw.rpi.edu" $target | awk '{print $1}'`
+               if [[ -n "$vm_ip" ]]; then # We are on a TWC VM
+                  rewritebase $user_home/public_html/.htaccess
+               fi
             fi # Running as developer e.g. jsmith not loxd
 
 

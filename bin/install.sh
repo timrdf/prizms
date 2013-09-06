@@ -1548,7 +1548,7 @@ else
             # Post-configure Virtuoso
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
 
-               virtuoso_installed=`virtuoso-install-info.sh`
+               virtuoso_installed=`virtuoso-install-info.sh` # https://github.com/timrdf/prizms/issues/79
                if [[ "$virtuoso_installed" == "yes" ]]; then
 
                   virtuoso_install_method=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh method`

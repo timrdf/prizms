@@ -890,6 +890,13 @@ else
                # git branch -t prizms-support origin/prizms-support
                # Branch prizms-support set up to track remote branch prizms-support from origin.
 
+
+               # TODO: 
+               # Switching to branch prizms-support
+               # git branch -t prizms-support origin/prizms-support
+               # fatal: A branch named 'prizms-support' already exists.
+               # git checkout prizms-support
+
                echo $vcs checkout $project_code_repository_branch
                     $vcs checkout $project_code_repository_branch
             fi
@@ -1541,34 +1548,13 @@ else
             # Post-configure Virtuoso
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
 
-               virtuoso_installed="no"
-               if [[ -e '/var/lib/virtuoso/db/virtuoso.ini' && \
-                     -e '/var/lib/virtuoso/db/virtuoso.log' && \
-                     -e '/etc/init.d/virtuoso-opensource'   && \
-                     -e '/usr/bin/isql-v' ]]; then
-                  # First  condition is if we used "dpkg -i ${pkg}_amd64.deb" to install it.
-
-                  virtuoso_installed="yes"
-                  virtuoso_install_method='dpkg'
-                  VIRTUOSO_INI='/var/lib/virtuoso/db/virtuoso.ini'
-                  VIRTUOSO_INIT_D='/etc/init.d/virtuoso-opensource'
-                  VIRTUOSO_ISQL='/usr/bin/isql-v'
-
-               elif [[ -e '/etc/virtuoso-opensource-6.1/virtuoso.ini'        && \
-                       -e '/var/lib/virtuoso-opensource-6.1/db/virtuoso.log' && \
-                       -e '/etc/init.d/virtuoso-opensource-6.1'              && \
-                       -e '/usr/bin/isql-vt' ]]; then
-                  # Second condition is if we used "sudo aptitude install virtuoso-opensource" to install it.
-                  #   /usr/bin/isql-vt
-
-                  virtuoso_installed="yes"
-                  virtuoso_install_method='aptitude'
-                  VIRTUOSO_INI='/etc/virtuoso-opensource-6.1/virtuoso.ini'
-                  VIRTUOSO_INIT_D='/etc/init.d/virtuoso-opensource-6.1'
-                  VIRTUOSO_ISQL='/usr/bin/isql-vt'
-
-               fi
+               virtuoso_installed=`virtuoso-install-info.sh`
                if [[ "$virtuoso_installed" == "yes" ]]; then
+
+                  virtuoso_install_method=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh method`
+                             VIRTUOSO_INI=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh ini`
+                          VIRTUOSO_INIT_D=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh init_d`
+                            VIRTUOSO_ISQL=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh isql`
 
                   # 1111 is Virtuoso's default port to access its "JDBC".
                   # 8890 is Virtuoso's default port for its web app admin interface.

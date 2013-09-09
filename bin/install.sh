@@ -2819,6 +2819,7 @@ else
             echo "Prizms can derived secondary datasets using built-in scripts."
             echo "see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets"
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+               $PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh
                $PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is *not* enabled'
                not_enabled=`$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is *not* enabled'`
                echo grep
@@ -2828,7 +2829,7 @@ else
                      echo $not_enabled could be enabled.
                   done 
                else
-                  echo "(All serived secondary datasets are enabled)"
+                  echo "(All derived secondary datasets are enabled)"
                fi
             else
                echo "(Prizms' derived secondary datasets are enabled by a development user, not the production user.)"

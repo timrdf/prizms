@@ -2824,7 +2824,9 @@ else
                   if [[ -n "$not_enabled" ]]; then
                      for not_enabled in `$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled' | awk '{print $1}'`; do
                         echo 
-                        read -p "Q: Derived dataset '$not_enabled' is currently not enabled. Enable it? [y/n] " -u 1 enable_it
+                        echo "Derived dataset '$not_enabled' is currently not enabled."
+                        echo 
+                        read -p "Q: Enable derived dataset '$not_enabled'? [y/n] " -u 1 enable_it
                         echo
                         if [[ "$enable_it" == [yY] ]]; then
                            echo "Derived datasets can be enabled either as 'latest version only' or recurring versions."

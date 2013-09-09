@@ -2850,7 +2850,7 @@ else
                               for link in $created; do
                                  echo "      $not_enabled enabled with $created"
                                  if [[ -e $link ]]; then
-                                    added="$added $link"
+                                    added="$added data/source/$link"
                                  fi
                               done
                               echo "      Okay, we enabled $not_enabled"

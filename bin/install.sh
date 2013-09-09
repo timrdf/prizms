@@ -2823,7 +2823,19 @@ else
                   not_enabled=`$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled'`
                   if [[ -n "$not_enabled" ]]; then
                      for not_enabled in `$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled' | awk '{print $1}'`; do
-                        echo $not_enabled could be enabled.
+                        echo 
+                        read -p "   $not_enabled is currently *not* enabled. Enable it? [y/n] " -u 1 enable_it
+                        echo
+                        if [[ "$enable_it" == [yY] ]]; then
+                           #mkdir -p `dirname $target`
+                           #cp $template $target
+                           #chmod +x $target
+                           #added="$added $target"
+                           echo "Okay, we added $not_enabled"
+                        else
+                           echo "Okay, we didn't enable $not_enabled."
+                           echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets"
+                        fi
                      done 
                   else
                      echo "(All derived secondary datasets are enabled)"

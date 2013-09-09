@@ -1386,14 +1386,18 @@ else
                      read -p "Q: Enable syntax highlighting in vi with n3.vim? [y/n] " -u 1 install_it
                      if [[ "$install_it" == [yY] ]]; then
                         mkdir -p $user_home/.vim/syntax
-                        curl --progress-bar -L 'http://www.vim.org/scripts/download_script.php?src_id=6882' > $user_home/.vim/syntax/n3.vim
+                        curl --progress-bar --max-time 30 -L 'http://www.vim.org/scripts/download_script.php?src_id=6882' > $user_home/.vim/syntax/n3.vim
 
-                        echo " \"RDF Notation 3 Syntax"                                      > $user_home/.vim/filetype.vim
-                        echo "    augroup filetypedetect"                                   >> $user_home/.vim/filetype.vim
-                        echo "        au BufNewFile,BufRead *.n3  setfiletype n3"           >> $user_home/.vim/filetype.vim
-                        echo "        au BufNewFile,BufRead *.ttl  setfiletype n3"          >> $user_home/.vim/filetype.vim
-                        echo "        au BufNewFile,BufRead *.trig  setfiletype n3"         >> $user_home/.vim/filetype.vim
-                        echo "    augroup END "                                             >> $user_home/.vim/filetype.vim
+                        if [[ -e $user_home/.vim/syntax/n3.vim ]]; then
+                           echo " \"RDF Notation 3 Syntax"                                      > $user_home/.vim/filetype.vim
+                           echo "    augroup filetypedetect"                                   >> $user_home/.vim/filetype.vim
+                           echo "        au BufNewFile,BufRead *.n3  setfiletype n3"           >> $user_home/.vim/filetype.vim
+                           echo "        au BufNewFile,BufRead *.ttl  setfiletype n3"          >> $user_home/.vim/filetype.vim
+                           echo "        au BufNewFile,BufRead *.trig  setfiletype n3"         >> $user_home/.vim/filetype.vim
+                           echo "    augroup END "                                             >> $user_home/.vim/filetype.vim
+                        else
+                           echo "WARNING: Could not enable Turtle syntax highlighting in vi."
+                        fi
                      else
                         echo "Okay, we didn't change anything."
                      fi

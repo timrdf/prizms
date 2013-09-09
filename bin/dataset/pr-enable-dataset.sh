@@ -41,11 +41,12 @@ CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID=${CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID:?"not set;
 retrieves=`dirname $me`
 
 if [[ $# -eq 0 ]]; then
-   echo $HOME
    echo "Available datasets:"
    me_local=`basename $me`
    available=`find $retrieves -type f -name "pr-*" -not -name $me_local`
-   #grep -RIl '#3> <> a conversion:RetrievalTrigger;' bin
+   if [[ -d $HOME/repos/csv2rdf4lod-automation/bin ]]; then
+      available="$available `grep -RIl '#3> <> a conversion:RetrievalTrigger;' $HOME/repos/csv2rdf4lod-automation/bin`"
+   fi
    for retrieve in $available; do
       datasetID=`basename $retrieve | sed 's/.sh$//'`
       retrieval_trigger=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh

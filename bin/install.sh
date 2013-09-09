@@ -2945,35 +2945,39 @@ else
                echo "The next step is to set up the $project_user_name's production environment,"
                echo "which we can do by running this script again as user $project_user_name"
                echo
-               read -p "Q: Set up the production environment as the $project_user_name user? [y/n] " -u 1 as_project
-               if [[ "$as_project" == [yY] ]]; then
-                  read_only_project_code_repository=`echo $project_code_repository | sed 's/^git@:/git:\/\/\//'`
-                  # ^ e.g. git@github.com:jimmccusker/melagrid.git -> git://github.com/jimmccusker/melagrid.git
+               if [[ "$i_can_sudo" -eq 0 ]]; then
+                  read -p "Q: Set up the production environment as the $project_user_name user? [y/n] " -u 1 as_project
+                  if [[ "$as_project" == [yY] ]]; then
+                     read_only_project_code_repository=`echo $project_code_repository | sed 's/^git@:/git:\/\/\//'`
+                     # ^ e.g. git@github.com:jimmccusker/melagrid.git -> git://github.com/jimmccusker/melagrid.git
 
-                  # Bootstrap the project user with this install script.
-                  echo
-                  echo ${user_home%/*}/$project_user_name/opt/prizms
-                  echo
-                  if [[ ! -e ${user_home%/*}/$project_user_name/opt/prizms ]]; then
-                     echo sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone http://github.com/timrdf/prizms.git"
-                          sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone http://github.com/timrdf/prizms.git"
+                     # Bootstrap the project user with this install script.
+                     echo
+                     echo ${user_home%/*}/$project_user_name/opt/prizms
+                     echo
+                     if [[ ! -e ${user_home%/*}/$project_user_name/opt/prizms ]]; then
+                        echo sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone http://github.com/timrdf/prizms.git"
+                             sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone http://github.com/timrdf/prizms.git"
+                     else
+                        echo sudo su - $project_user_name -c "cd opt/prizms; git pull"
+                             sudo su - $project_user_name -c "cd opt/prizms; git pull"
+                     fi
+
+                     sudo su - $project_user_name -c "cd; opt/prizms/bin/install.sh                                \
+                                                               --me                                                \
+                                                               --my-email                                          \
+                                                               --proj-user      $project_user_name                 \
+                                                               --repos          $read_only_project_code_repository \
+                                                               --repos-branch   $project_code_repository_branch    \
+                                                               --upstream-ckan  $upstream_ckan                     \
+                                                               --our-base-uri   $our_base_uri                      \
+                                                               --our-source-id  $our_source_id                     \
+                                                               --our-datahub-id $our_datahub_id"
                   else
-                     echo sudo su - $project_user_name -c "cd opt/prizms; git pull"
-                          sudo su - $project_user_name -c "cd opt/prizms; git pull"
+                     echo "Okay, we won't set up the production environment."
                   fi
-
-                  sudo su - $project_user_name -c "cd; opt/prizms/bin/install.sh                                \
-                                                            --me                                                \
-                                                            --my-email                                          \
-                                                            --proj-user      $project_user_name                 \
-                                                            --repos          $read_only_project_code_repository \
-                                                            --repos-branch   $project_code_repository_branch    \
-                                                            --upstream-ckan  $upstream_ckan                     \
-                                                            --our-base-uri   $our_base_uri                      \
-                                                            --our-source-id  $our_source_id                     \
-                                                            --our-datahub-id $our_datahub_id"
                else
-                  echo "Okay, we won't set up the production environment."
+                  echo "WARNING: The user `whoami` cannot set up the production user $project_user_name because it does not have sudo."
                fi
             fi
 

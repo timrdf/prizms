@@ -2843,12 +2843,12 @@ else
                               else
                                  as_latest=""
                               fi
-                              created=`$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh $as_latest $not_enabled | grep "^Created" | awk '{print $1}'`
+                              created=`$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh $as_latest $not_enabled | grep "^Created" | awk '{print $2}'`
                               #         ^^ outputs:
                               #           Created c2tc/pr-spobal-ng/version/retrieve.sh -> /home/lebot/opt/prizms/bin/dataset/pr-spobal-ng.sh
                               #           Created c2tc/pr-spobal-ng/src                 -> /home/lebot/opt/prizms/bin/dataset/pr-spobal-ng
                               for link in $created; do
-                                 echo "$not_enabled enabled with $created"
+                                 echo "      $not_enabled enabled with $created"
                                  if [[ -e $link ]]; then
                                     added="$added $link"
                                  fi

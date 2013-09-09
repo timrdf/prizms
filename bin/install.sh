@@ -2006,11 +2006,15 @@ else
                   war=`find $PRIZMS_HOME/repos/semanteco-annotator-webapp -name 'semanteco-annotator-webapp*.war'`
                   war_local=`basename $war`
                   if [[ ! -e $webapps/annotator.war ]]; then
-                     read -p "Q: May we copy $war to $webapps/annotator.war? [y/n] " -u 1 install_it
-                     if [[ "$install_it" == [yY] ]]; then
-                        sudo cp $war $webapps/annotator.war
+                     if [[ $i_can_sudo ]]; then
+                        read -p "Q: May we copy $war to $webapps/annotator.war? [y/n] " -u 1 install_it
+                        if [[ "$install_it" == [yY] ]]; then
+                           sudo cp $war $webapps/annotator.war
+                        else
+                           echo "Okay, we won't deploy $webapps/annotator.war."
+                        fi
                      else
-                        echo "Okay, we won't deploy $webapps/annotator.war."
+                        echo "WARNING: $webapps/annotator.war does not exist, but `whoami` does not have sudo and thus can't deploy it."
                      fi
                   else
                      echo "($webapps/annotator.war already exists; no need to redeploy)"

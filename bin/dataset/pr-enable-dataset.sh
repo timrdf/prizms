@@ -64,7 +64,7 @@ else
 
    built_in="$retrieves/$datasetID.sh"
    for search in "$HOME/repos/csv2rdf4lod-automation/bin"; do
-      if [[ -e $built_in ]]; then
+      if [[ ! -e $built_in ]]; then
          built_in=`find $HOME/repos/csv2rdf4lod-automation/bin -name "$datasetID*"`
       fi 
    done

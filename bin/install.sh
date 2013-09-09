@@ -3,6 +3,8 @@
 #3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install.sh>;
 #3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/Installing-Prizms> .
 
+TRUE='0'
+
 if [[ ${0%install.sh} == $0 ]]; then # $0 is 'bash' etc when bootstrapping, it is the path of the script otherwise.
 
    if [[ "$0" == "bash" ]]; then
@@ -292,7 +294,7 @@ else
       enabled=0
       modules="$1"
       reason="$2"
-      if [[ ! $i_can_sudo ]]; then
+      if [[ ! $i_can_sudo -eq 0 ]]; then
          echo "WARNING: Could not attempt to enable Apache module(s) \"$modules\" because `whoami` does not have sudo privileges."
          return 0
       fi
@@ -336,7 +338,7 @@ else
    }
 
    function enable_htaccess {
-      if [[ ! $i_can_sudo ]]; then
+      if [[ ! $i_can_sudo -eq 0 ]]; then
          echo "WARNING: Could not attempt to enable Apache htaccess because `whoami` does not have sudo privileges."
          return
       fi
@@ -2006,7 +2008,7 @@ else
                   war=`find $PRIZMS_HOME/repos/semanteco-annotator-webapp -name 'semanteco-annotator-webapp*.war'`
                   war_local=`basename $war`
                   if [[ ! -e $webapps/annotator.war ]]; then
-                     if [[ $i_can_sudo ]]; then
+                     if [[ $i_can_sudo -eq 0 ]]; then
                         read -p "Q: May we copy $war to $webapps/annotator.war? [y/n] " -u 1 install_it
                         if [[ "$install_it" == [yY] ]]; then
                            sudo cp $war $webapps/annotator.war
@@ -2362,7 +2364,7 @@ else
                   # AllowOverride must be 'All' https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu
                   enable_htaccess "LODSPeaKr needs .htaccess"
                fi
-               if [[ -e $www/lodspeakr && ! -e $www/lodspeakr/settings.inc.php && ! -e $user_home/prizms/$repodir/lodspeakr/settings.inc.php && $i_can_sudo ]]; then
+               if [[ -e $www/lodspeakr && ! -e $www/lodspeakr/settings.inc.php && ! -e $user_home/prizms/$repodir/lodspeakr/settings.inc.php && $i_can_sudo -eq 0 ]]; then
                   echo "$div `whoami`"
                   echo
                   echo "$www/lodspeakr was created, but not configured with settings.inc.php"
@@ -2376,7 +2378,7 @@ else
                      echo "Okay, we won't configure LODSPeaKr at $www/lodspeakr."
                   fi
                fi
-               if [[ -e $www/lodspeakr/settings.inc.php && $i_can_sudo ]]; then
+               if [[ -e $www/lodspeakr/settings.inc.php && $i_can_sudo -eq 0 ]]; then
                   #sudo chown $project_user_name:www-data $www/lodspeakr/settings.inc.php
                   sudo chmod g+w                         $www/lodspeakr/settings.inc.php
 

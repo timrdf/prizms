@@ -2848,14 +2848,17 @@ else
                               #           Created c2tc/pr-spobal-ng/version/retrieve.sh -> /home/lebot/opt/prizms/bin/dataset/pr-spobal-ng.sh
                               #           Created c2tc/pr-spobal-ng/src                 -> /home/lebot/opt/prizms/bin/dataset/pr-spobal-ng
                               for link in $created; do
+                                 echo "$not_enabled enabled with $created"
                                  if [[ -e $link ]]; then
                                     added="$added $link"
                                  fi
                               done
                               echo "      Okay, we enabled $not_enabled"
+                              echo
                            else
                               echo "      Okay, we didn't enable $not_enabled."
                               echo "      See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets"
+                              echo
                            fi
                         done 
                      fi

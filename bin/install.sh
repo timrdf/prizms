@@ -2813,8 +2813,23 @@ else
                echo "(You are not using an upstream CKAN; call this installer with argument --upstream-ckan if you want to)"
             fi
 
-
-
+      
+            echo
+            echo "$div `whoami`"
+            echo "Prizms can derived secondary datasets using built-in scripts."
+            echo "see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets"
+            if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+               not_enabled=`$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is *not* enabled'`
+               if [[ -n "$not_enabled" ]]; then
+                  for not_enabled in `$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is *not* enabled'`; do
+                     echo $not_enabled could be enabled.
+                  done 
+               else
+                  echo "(All serived secondary datasets are enabled)"
+               fi
+            else
+               echo "(Prizms' derived secondary datasets are enabled by a development user, not the production user.)"
+            fi
 
             echo
             echo "$div `whoami`"

@@ -79,8 +79,11 @@ else
       echo "Created ${retrieval_trigger#$DATA/$trim} -> $built_in"
    fi
 
-   if [[ -e $retrieves/$datasetID && ! -e $src ]]; then
-      ln -s $built_in $src
-      echo "Created ${src#$DATA/$trim} -> $built_in"
+   if [[ -e ${built_in%.*} && ! -e $src ]]; then
+      ln -s ${built_in%.*} $src
+      echo "Created ${src#$DATA/$trim} -> ${built_in%.*}"
    fi
 fi
+
+# TODO: use readlink <path to soft link> to determine where they point to.
+# https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets#transporting-enabled-datasets-across-prizms-nodes

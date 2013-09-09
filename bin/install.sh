@@ -2822,33 +2822,37 @@ else
                pushd data/source &> /dev/null
                   not_enabled=`$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled'`
                   if [[ -n "$not_enabled" ]]; then
-                     for not_enabled in `$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled' | awk '{print $1}'`; do
-                        echo 
-                        echo "Derived dataset '$not_enabled' is currently not enabled."
-                        echo 
-                        read -p "Q: Enable derived dataset '$not_enabled'? [y/n] " -u 1 enable_it
-                        echo
-                        if [[ "$enable_it" == [yY] ]]; then
-                           echo "Derived datasets can be enabled either as 'latest version only' or recurring versions."
-                           echo "  By 'latest version only', each new derivation will replace the previous."
-                           echo "  By recurring versions, a new version will be added in addition to the previous versions."
-                           echo "  Using 'latest version only reduces the size of your Prizms node, but loses the historical nature of using recurring versions."
+                     read -p "Q: Review derived datasets to enable? [y/n] " -u 1 review_them
+                     echo
+                     if [[ "$review_them" == [yY] ]]; then
+                        for not_enabled in `$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled' | awk '{print $1}'`; do
                            echo 
-                           read -p "  Q: Enable derived dataset '$not_enabled' as 'latest version only'? [y/n] " -u 1 as_latest
+                           echo "Derived dataset '$not_enabled' is currently not enabled."
+                           echo 
+                           read -p "Q: Enable derived dataset '$not_enabled'? [y/n] " -u 1 enable_it
                            echo
-                           if [[ "$as_latest" == [yY] ]]; then
-                              as_latest="--as-latest"
+                           if [[ "$enable_it" == [yY] ]]; then
+                              echo "Derived datasets can be enabled either as 'latest version only' or recurring versions."
+                              echo "  By 'latest version only', each new derivation will replace the previous."
+                              echo "  By recurring versions, a new version will be added in addition to the previous versions."
+                              echo "  Using 'latest version only reduces the size of your Prizms node, but loses the historical nature of using recurring versions."
+                              echo 
+                              read -p "  Q: Enable derived dataset '$not_enabled' as 'latest version only'? [y/n] " -u 1 as_latest
+                              echo
+                              if [[ "$as_latest" == [yY] ]]; then
+                                 as_latest="--as-latest"
+                              else
+                                 as_latest=""
+                              fi
+                              echo $PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh $as_latest $not_enabled
+                              # TODO: added="$added $uuuu"
+                              echo "Okay, we enabled $not_enabled"
                            else
-                              as_latest=""
+                              echo "Okay, we didn't enable $not_enabled."
+                              echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets"
                            fi
-                           echo $PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh $as_latest $not_enabled
-                           # TODO: added="$added $uuuu"
-                           echo "Okay, we enabled $not_enabled"
-                        else
-                           echo "Okay, we didn't enable $not_enabled."
-                           echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets"
-                        fi
-                     done 
+                        done 
+                     fi
                   else
                      echo "(All derived secondary datasets are enabled)"
                   fi

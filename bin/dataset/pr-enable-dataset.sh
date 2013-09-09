@@ -45,7 +45,6 @@ if [[ $# -eq 0 ]]; then
    me_local=`basename $me`
    available=`find $retrieves -type f -name "pr-*" -not -name $me_local`
    if [[ -d $HOME/repos/csv2rdf4lod-automation/bin ]]; then
-      echo looking into csv2rdf4lod
       available="$available `grep -RIl '#3> <> a conversion:RetrievalTrigger;' $HOME/repos/csv2rdf4lod-automation/bin`"
    fi
    for retrieve in $available; do

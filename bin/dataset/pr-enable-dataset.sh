@@ -62,8 +62,9 @@ else
    retrieval_trigger=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh
    src=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/src
 
+   searches="$HOME/repos/csv2rdf4lod-automation/bin"
    built_in="$retrieves/$datasetID.sh"
-   for search in "$HOME/repos/csv2rdf4lod-automation/bin"; do
+   for search in "$searches"; do
       if [[ ! -e $built_in ]]; then
          built_in=`find $HOME/repos/csv2rdf4lod-automation/bin -name "$datasetID*"`
       fi 
@@ -74,12 +75,12 @@ else
       echo "Warning: Did not create ${retrieval_trigger#$DATA/$trim} because it already exists: $retrieval_trigger."
    else
       mkdir -p `dirname $retrieval_trigger`
-      ln -s $retrieves/$datasetID.sh $retrieval_trigger
-      echo "Created ${retrieval_trigger#$DATA/$trim} -> $retrieves/$datasetID.sh"
+      ln -s $built_in $retrieval_trigger
+      echo "Created ${retrieval_trigger#$DATA/$trim} -> $built_in"
    fi
 
    if [[ -e $retrieves/$datasetID && ! -e $src ]]; then
-      ln -s $retrieves/$datasetID $src
-      echo "Created ${src#$DATA/$trim} -> $retrieves/$datasetID"
+      ln -s $built_in $src
+      echo "Created ${src#$DATA/$trim} -> $built_in"
    fi
 fi

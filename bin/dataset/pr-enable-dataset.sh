@@ -61,8 +61,8 @@ if [[ $# -eq 0 ]]; then
    for retrieve in $available; do
       datasetID=`basename $retrieve | sed 's/.sh$//'`
       enabled='*not* enabled'
-      for retrieval_trigger in $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh \
-                               $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/latest/retrieve.sh; do
+      for retrieval_trigger in $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/latest/retrieve.sh \
+                               $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh; do
          if [[ -e $retrieval_trigger ]]; then
             enabled='enabled'
          fi

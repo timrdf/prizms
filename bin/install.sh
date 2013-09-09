@@ -2820,13 +2820,9 @@ else
             echo "see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets"
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                pushd data/source &> /dev/null
-                  $PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh
-                  $PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled'
                   not_enabled=`$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled'`
-                  echo grep
-                  echo $not_enabled
                   if [[ -n "$not_enabled" ]]; then
-                     for not_enabled in `$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled'`; do
+                     for not_enabled in `$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled' | awk '{print $1}'`; do
                         echo $not_enabled could be enabled.
                      done 
                   else

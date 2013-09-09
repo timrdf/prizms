@@ -62,8 +62,14 @@ else
    retrieval_trigger=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh
    src=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/src
 
-   if [[ ! -e $retrieves/$datasetID.sh ]]; then
-      echo "ERROR: dataset $datasetID is not available: $retrieves/$datasetID.sh"
+   built_in="$retrieves/$datasetID.sh"
+   for search in "$HOME/repos/csv2rdf4lod-automation/bin"; do
+      if [[ -e $built_in ]]; then
+         built_in=`find $HOME/repos/csv2rdf4lod-automation/bin -name "$datasetID*"`
+      fi 
+   done
+   if [[ ! -e $built_in ]]; then
+      echo "ERROR: dataset $datasetID is not available at $retrieves/$datasetID.sh or any external built-in."
    elif [[ -e $retrieval_trigger ]]; then
       echo "Warning: Did not create ${retrieval_trigger#$DATA/$trim} because it already exists: $retrieval_trigger."
    else

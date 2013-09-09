@@ -2816,7 +2816,7 @@ else
       
             echo
             echo "$div `whoami`"
-            echo "Prizms can derived secondary datasets using built-in scripts."
+            echo "Prizms can derive secondary datasets using built-in scripts."
             echo "see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets"
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                pushd data/source &> /dev/null
@@ -2832,7 +2832,7 @@ else
                            read -p "  Q: Enable derived dataset '$not_enabled'? [y/n] " -u 1 enable_it
                            echo
                            if [[ "$enable_it" == [yY] ]]; then
-                              echo "  Derived datasets can be enabled either as 'latest version only' or recurring versions."
+                              echo "    Derived datasets can be enabled either as 'latest version only' or recurring versions."
                               echo "    By 'latest version only', each new derivation will replace the previous."
                               echo "    By recurring versions, a new version will be added in addition to the previous versions."
                               echo "    Using 'latest version only reduces the size of your Prizms node, but loses the historical nature of using recurring versions."
@@ -2846,10 +2846,10 @@ else
                               fi
                               echo $PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh $as_latest $not_enabled
                               # TODO: added="$added $uuuu"
-                              echo "  Okay, we enabled $not_enabled"
+                              echo "    Okay, we enabled $not_enabled"
                            else
-                              echo "  Okay, we didn't enable $not_enabled."
-                              echo "  See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets"
+                              echo "    Okay, we didn't enable $not_enabled."
+                              echo "    See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets"
                            fi
                         done 
                      fi

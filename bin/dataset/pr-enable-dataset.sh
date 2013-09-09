@@ -20,7 +20,12 @@ if [ `${CSV2RDF4LOD_HOME}/bin/util/is-pwd-a.sh $ACCEPTABLE_PWDs` != "yes" ]; the
    exit 1
 fi
 
-TEMP="_"`basename $0``date +%s`_$$.tmp
+if [[ "$1" == "--help" ]]; then
+   echo "usage: `basename $0` [--as-latest] <datasetID>"
+   echo
+   echo "see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets#enabling"
+   echo
+fi
 
 if [[   `cr-pwd-type.sh` == 'cr:data-root' ]]; then
    DATA=$(cd ../ && echo ${PWD})
@@ -33,6 +38,12 @@ fi
 if [[ -z "$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID" && \
       `${CSV2RDF4LOD_HOME}/bin/util/is-pwd-a.sh cr:source` == "yes" ]]; then
    export CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID=`cr-source-id.sh`
+fi
+
+latest=""
+if [[ "$1" == '--as-latest' ]]; then
+   latest="latest/"
+   shift
 fi
 
 see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets"
@@ -49,17 +60,18 @@ if [[ $# -eq 0 ]]; then
    fi
    for retrieve in $available; do
       datasetID=`basename $retrieve | sed 's/.sh$//'`
-      retrieval_trigger=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh
-      if [[ -e $retrieval_trigger ]]; then
-         enabled='enabled'
-      else
-         enabled='*not* enabled'
-      fi
+      enabled='*not* enabled'
+      for retrieval_trigger in $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh \
+                               $DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/latest/retrieve.sh; do
+         if [[ -e $retrieval_trigger ]]; then
+            enabled='enabled'
+         fi
+      done
       echo "   $datasetID   is $enabled at ${retrieval_trigger#$DATA/$trim} ($retrieve)"
    done
 else
    datasetID="$1"
-   retrieval_trigger=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/retrieve.sh
+   retrieval_trigger=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/${latest}retrieve.sh
    src=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/src
 
    searches="$HOME/repos/csv2rdf4lod-automation/bin"
@@ -72,7 +84,7 @@ else
    if [[ ! -e $built_in ]]; then
       echo "ERROR: dataset $datasetID is not available at $retrieves/$datasetID.sh or any external built-in."
    elif [[ -e $retrieval_trigger ]]; then
-      echo "Warning: Did not create ${retrieval_trigger#$DATA/$trim} because it already exists: $retrieval_trigger."
+      echo "Note: Did not create ${retrieval_trigger#$DATA/$trim} because it already exists: $retrieval_trigger."
    else
       mkdir -p `dirname $retrieval_trigger`
       ln -s $built_in $retrieval_trigger

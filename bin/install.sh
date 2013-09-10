@@ -201,6 +201,8 @@ else
       if [[ "$2" != --* ]]; then
          our_datahub_id="$2"
          shift
+      else
+         our_datahub_id="omitted"
       fi
       shift
    fi
@@ -674,6 +676,8 @@ else
       else
          echo "We won't be able to publish metadata about this installation of Prizms."
       fi
+   elif [[ "$our_datahub_id" == 'omitted' ]]; then
+      echo "(We'll skip publishing any of this Prizms node's metadata to http://datahub.io)"
    else
       echo "(We'll use the datahub identifier that you already specified: $our_datahub_id (http://datahub.io/dataset/$our_datahub_id)"
    fi
@@ -707,7 +711,9 @@ else
    fi
    echo "Your project's Linked Data base URI is:                    $our_base_uri"
    echo "Your project's source-id is:                               $our_source_id"
-   echo "Your project's datahub.io URI is:                          http://datahub.io/dataset/$our_datahub_id"
+   if [[ -n "$our_datahub_id" && "$our_datahub_id" != 'omitted' ]]; then
+      echo "Your project's datahub.io URI is:                          http://datahub.io/dataset/$our_datahub_id"
+   fi
 
    project_home=${user_home%/*}/$project_user_name
    PROJECT_PRIZMS_HOME=`echo $PRIZMS_HOME | sed "s/\`whoami\`/$project_user_name/g"`
@@ -1129,11 +1135,13 @@ else
                   'https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble' \
                   'some loss'
 
-               # Set CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID (to $our_datahub_id) in the project-level source-me.sh.
-               change_source_me $target CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID "$our_datahub_id" \
-                  "indicate which datahub.io CKAN entry to update (i.e. http://datahub.io/dataset/$our_datahub_id) for this installation of Prizms" \
-                  'https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble' \
-                  'some loss'
+               if [[ -n "$our_datahub_id" && "$our_datahub_id" != 'omitted' ]]; then
+                  # Set CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID (to $our_datahub_id) in the project-level source-me.sh.
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_DATAHUB_METADATA_OUR_BUBBLE_ID "$our_datahub_id" \
+                     "indicate which datahub.io CKAN entry to update (i.e. http://datahub.io/dataset/$our_datahub_id) for this installation of Prizms" \
+                     'https://github.com/jimmccusker/twc-healthdata/wiki/Listing-twc-healthdata-as-a-LOD-Cloud-Bubble' \
+                     'some loss'
+               fi
 
                # Set DATAFAQS_BASE_URI in the project-level source-me.sh.
                change_source_me $target DATAFAQS_BASE_URI "$our_base_uri" \

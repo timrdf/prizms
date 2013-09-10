@@ -198,7 +198,7 @@ else
    #
    our_datahub_id=""
    if [[ "$1" == "--our-datahub-id" ]]; then
-      if [[ "$2" != --* ]]; then
+      if [[ -n "$2" || "$2" != --* ]]; then
          our_datahub_id="$2"
          shift
       else

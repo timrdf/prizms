@@ -26,13 +26,20 @@
 # https://github.com/timrdf/csv2rdf4lod-automation/wiki/Automated-creation-of-a-new-Versioned-Dataset
 #
 
-[ `readlink $0` != "" ] && this=`readlink $0` || this=$0
-#                                ^                    ^ e.g. ./retrieve.sh
-#                                | e.g. /home/lebot/opt/prizms/bin/dataset/pr-neighborlod.sh
+#                              e.g. /home/lebot/opt/prizms/bin/dataset/pr-neighborlod.sh
+#                               |
+#                               |                    e.g. ./retrieve.sh
+#                               |                     |
+#                              \./                   \./
+[ -n "`readlink $0`" ] && this=`readlink $0` || this=$0
 HOME=$(cd ${this%/*/*} && pwd)
-echo ${this%/*/*}
+export PATH=$PATH`$HOME/bin/install/paths.sh`
+export CLASSPATH=$CLASSPATH`$HOME/bin/install/classpaths.sh`
+
 echo $this
 echo $HOME
+ls $HOME/bin/install/paths.sh
+ls $HOME/bin/install/classpaths.sh
 
 exit
 see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-not-set"

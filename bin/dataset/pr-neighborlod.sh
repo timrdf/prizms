@@ -106,21 +106,20 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
    # Create the directory for the new version.
    mkdir -p $version/source
 
+   rq='../../../src/unknown-domain.rq'
    # Go into the directory that stores the original data obtained from the source organization.
    echo INFO `cr-pwd.sh`/$version/source
    pushd $version/source &> /dev/null
       touch .__CSV2RDF4LOD_retrieval # Make a timestamp so we know what files were created during retrieval.
       # - - - - - - - - - - - - - - - - - - - - Replace below for custom retrieval  - - - \
-      if [[ "$endpoint" =~ http* && \
-            -e ../../../src/unsummarized.rq && 
-            `which cache-queries.sh` ]]; then
-         cache-queries.sh "$endpoint" -o csv -q ../../../src/unsummarized.rq -od .
+      if [[ `which cache-queries.sh` && "$endpoint" =~ http* && -e $rq ]]; then
+         cache-queries.sh "$endpoint" -o csv -q $rq -od .
       else
          echo "   ERROR: Failed to create dataset `basename $0`:"                        
          echo "      CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT: $endpoint"        
          echo "      cache-queries.sh path: `which cache-queries.sh`"
-         echo "      ../../../src/unsummarized.rq:"
-         ls -lt ../../../src/unsummarized.rq
+         echo "      $rq:"
+         ls -lt $rq
       fi
       if [ "$CSV2RDF4LOD_RETRIEVE_DROID_SOURCES" != "false" ]; then                     # |
          sleep 1                                                                        # |
@@ -140,7 +139,8 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
       retrieved_files=`find source -newer source/.__CSV2RDF4LOD_retrieval -type f | grep -v "pml.ttl$" | grep -v "cr-droid.ttl$"`
 
       ng=''
-      for sd_name in `cat source/unsummarized.rq.csv | sed 's/^"//;s/"$//' | grep "^http"`; do
+      csv="`basename $rq`.csv"
+      for sd_name in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
          worthwhile="yes"
          ng_ugly=`resource-name.sh --named-graph $endpoint $sd_name`
          ng_hash=`md5.sh -qs "$ng_ugly"`
@@ -148,12 +148,11 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
          echo
          echo "<$ng> sd:name <$sd_name> ."
          echo
-         vsr-spo-balance.sh -s "$endpoint" . "$sd_name" > automatic/$ng_hash.ttl
       done
 
-      if [[ "$ng" != '' ]]; then
-         aggregate-source-rdf.sh automatic/*.ttl
-      fi
+      #if [[ "$ng" != '' ]]; then
+      #   aggregate-source-rdf.sh automatic/*.ttl
+      #fi
 
    popd &> /dev/null
 

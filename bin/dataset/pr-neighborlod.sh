@@ -139,6 +139,7 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
 
       us=`resource-name.sh --domain-of "$CSV2RDF4LOD_BASE_URI"`
       if [[ "$us" =~ http* ]]; then
+         our_redirect=`curl -sLI $CSV2RDF4LOD_BASE_URI | grep "Location:" | head -1 | awk '{print $2}'`
          datasetV=`cr-dataset-uri.sh --uri`
          cr-default-prefixes.sh --turtle                                    >> automatic/internal.ttl
          cr-default-prefixes.sh --turtle                                    >> automatic/external.ttl
@@ -146,7 +147,8 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
          csv="`basename $rq`.csv"
          for uri in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
             domain=`resource-name.sh --domain-of "$uri"`
-            [ "${uri#$us}" == "$uri" ] && internal="external" || internal="internal"
+            [ "${uri#$us}" == "$uri" && "${uri#$our_redirect}" == "$uri" ] \
+               && internal="external" || internal="internal"
             worthwhile="yes"
             echo "<$datasetV> dcterms:references <$uri> ."      | tee --append automatic/$internal.ttl
             if [[ "$domain" =~ http* ]]; then

@@ -143,8 +143,9 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
       for uri in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
          worthwhile="yes"
          domain=`resource-name.sh --domain-of "$uri"`
-         echo "<$uri> dcterms:isReferencedBy <$datasetV>;" | tee --append automatic/attributions.ttl
-         echo "       prov:wasAttributedTo   <$domain> ."  | tee --append automatic/attributions.ttl
+         echo "<$uri>"                                 | tee --append automatic/attributions.ttl
+         echo "   dcterms:isReferencedBy <$datasetV>;" | tee --append automatic/attributions.ttl
+         echo "   prov:wasAttributedTo   <$domain> ."  | tee --append automatic/attributions.ttl
       done
 
       #if [[ "$ng" != '' ]]; then

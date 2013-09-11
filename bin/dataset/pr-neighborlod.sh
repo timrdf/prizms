@@ -89,8 +89,9 @@ if [ ${#version} -gt 0 -a `echo $version | grep ":" | wc -l | awk '{print $1}'` 
    exit 1
 fi
 iteration=`find -mindepth 1 -maxdepth 1 -name "$version*" | wc -l | awk '{print $1}'`
-if [[ "$iteration" -eq 0 ]]; then
-   iteration=""
+if [[ "$iteration" -gt 0 ]]; then
+   let "iteration=$iteration+1"
+   iteration="_$iteration"
 fi
 shift 2
 

@@ -137,18 +137,24 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
 
       retrieved_files=`find source -newer source/.__CSV2RDF4LOD_retrieval -type f | grep -v "pml.ttl$" | grep -v "cr-droid.ttl$"`
 
-      datasetV=`cr-dataset-uri.sh --uri`
-      cr-default-prefixes.sh --turtle                                    >> automatic/attributions.ttl
-      echo "<$datasetV> a conversion:NeighborLODDataset ."   | tee --append automatic/attributions.ttl
-      csv="`basename $rq`.csv"
-      for uri in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
-         worthwhile="yes"
-         domain=`resource-name.sh --domain-of "$uri"`
-         echo "<$datasetV> dcterms:references <$uri> ."      | tee --append automatic/attributions.ttl
-         if [[ "$domain" =~ http* ]]; then
-            echo "<$uri> prov:wasAttributedTo   <$domain> ." | tee --append automatic/attributions.ttl
-         fi
-      done
+      us=`resource-name.sh --domain-of "$CSV2RDF4LOD_BASE_URI"`
+      if [[ "$us" =~ http* ]]; then
+         datasetV=`cr-dataset-uri.sh --uri`
+         cr-default-prefixes.sh --turtle                                    >> automatic/attributions.ttl
+         echo "<$datasetV> a conversion:NeighborLODDataset ."   | tee --append automatic/attributions.ttl
+         csv="`basename $rq`.csv"
+         for uri in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
+            domain=`resource-name.sh --domain-of "$uri"`
+            echo $us $uri
+            worthwhile="yes"
+            echo "<$datasetV> dcterms:references <$uri> ."      | tee --append automatic/attributions.ttl
+            if [[ "$domain" =~ http* ]]; then
+               echo "<$uri> prov:wasAttributedTo   <$domain> ." | tee --append automatic/attributions.ttl
+            fi
+         done
+      else
+         echo "WARNING: CSV2RDF4LOD_BASE_URI \"$CSV2RDF4LOD_BASE_URI\" not http; skipping NeighborLOD."
+      fi
 
       #if [[ "$ng" != '' ]]; then
       #   aggregate-source-rdf.sh automatic/*.ttl

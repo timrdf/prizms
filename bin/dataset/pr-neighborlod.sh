@@ -137,15 +137,17 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
 
       retrieved_files=`find source -newer source/.__CSV2RDF4LOD_retrieval -type f | grep -v "pml.ttl$" | grep -v "cr-droid.ttl$"`
 
-      cr-default-prefixes.sh --turtle                                  >> automatic/attributions.ttl
+      cr-default-prefixes.sh --turtle                                    >> automatic/attributions.ttl
+      echo "<$datasetV> a conversion:NeighborLODDataset ."   | tee --append automatic/attributions.ttl
       datasetV=`cr-dataset-uri.sh --uri`
       csv="`basename $rq`.csv"
       for uri in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
          worthwhile="yes"
          domain=`resource-name.sh --domain-of "$uri"`
-         echo "<$uri>"                                 | tee --append automatic/attributions.ttl
-         echo "   dcterms:isReferencedBy <$datasetV>;" | tee --append automatic/attributions.ttl
-         echo "   prov:wasAttributedTo   <$domain> ."  | tee --append automatic/attributions.ttl
+         echo "<$datasetV> dcterms:references <$uri> ."      | tee --append automatic/attributions.ttl
+         if [[ "$domain" =~ http* ]]; then
+            echo "<$uri> prov:wasAttributedTo   <$domain> ." | tee --append automatic/attributions.ttl
+         fi
       done
 
       #if [[ "$ng" != '' ]]; then

@@ -92,7 +92,6 @@ shift 2
 
 echo "INFO version   : $version $version_reason"
 echo "INFO url       : $url"
-exit
 
 #
 # This script is invoked from a cr:directory-of-versions, 

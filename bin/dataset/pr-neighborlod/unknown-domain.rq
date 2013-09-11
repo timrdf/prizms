@@ -17,5 +17,6 @@ where {
   filter not exists {
     ?g a conversion:NeighborLODDataset
   }
+  filter(!regex(str(?s),'^file://'))
 }
 limit 1000

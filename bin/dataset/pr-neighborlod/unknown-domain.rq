@@ -17,6 +17,8 @@ where {
   filter not exists {
     ?g a conversion:NeighborLODDataset
   }
-  filter(!regex(str(?s),'^file://'))
+  filter( regex(str(?s),'^http'))
+  filter(!regex(str(?s),'^http://localhost'))
+  # Namespace filters:
 }
 limit 1000

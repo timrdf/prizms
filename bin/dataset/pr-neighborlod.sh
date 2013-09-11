@@ -118,6 +118,11 @@ echo "INFO url       : $url"
    echo INFO `cr-pwd.sh`/$version/source
    pushd $version/source &> /dev/null
       touch .__CSV2RDF4LOD_retrieval # Make a timestamp so we know what files were created during retrieval.
+      us="$CSV2RDF4LOD_BASE_URI"
+      if [[ "$us" =~ http* ]]; then
+         our_redirect=`curl -sLI $CSV2RDF4LOD_BASE_URI | grep "Location:" | head -1 | sed 's/^\s*//;s/\s*$//' | awk '{print $2}'`
+      fi
+      # TODO: cat bin/dataset/pr-neighborlod/unknown-domain.rq | awk -f bin/dataset/pr-neighborlod/unknown-domain.awk -v ns1='blah' ns2='you'
       # - - - - - - - - - - - - - - - - - - - - Replace below for custom retrieval  - - - \
       if [[ `which cache-queries.sh` && "$endpoint" =~ http* && -e $rq ]]; then
          cache-queries.sh "$endpoint" -o csv -q $rq -od .
@@ -145,9 +150,7 @@ echo "INFO url       : $url"
 
       retrieved_files=`find source -newer source/.__CSV2RDF4LOD_retrieval -type f | grep -v "pml.ttl$" | grep -v "cr-droid.ttl$"`
 
-      us="$CSV2RDF4LOD_BASE_URI"
       if [[ "$us" =~ http* ]]; then
-         our_redirect=`curl -sLI $CSV2RDF4LOD_BASE_URI | grep "Location:" | head -1 | sed 's/^\s*//;s/\s*$//' | awk '{print $2}'`
          datasetV=`cr-dataset-uri.sh --uri`
          cr-default-prefixes.sh --turtle                                    >> automatic/internal.ttl
          cr-default-prefixes.sh --turtle                                    >> automatic/external.ttl

@@ -36,12 +36,6 @@ HOME=$(cd ${this%/*/*/*} && pwd)
 export PATH=$PATH`$HOME/bin/install/paths.sh`
 export CLASSPATH=$CLASSPATH`$HOME/bin/install/classpaths.sh`
 
-echo $this
-echo $HOME
-ls $HOME/bin/install/paths.sh
-ls $HOME/bin/install/classpaths.sh
-
-exit
 see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-not-set"
 CSV2RDF4LOD_HOME=${CSV2RDF4LOD_HOME:?"not set; source csv2rdf4lod/source-me.sh or see $see"}
 
@@ -98,6 +92,7 @@ shift 2
 
 echo "INFO url       : $url" # TODO: run spo balance for this name, if it's given.
 echo "INFO version   : $version $version_reason"
+exit
 
 #
 # This script is invoked from a cr:directory-of-versions, 

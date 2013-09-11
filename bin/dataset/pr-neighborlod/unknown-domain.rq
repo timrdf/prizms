@@ -11,8 +11,11 @@ where {
      filter(isIRI(?s))
   }
   filter not exists {
-    ?neighborlod a conversion:NeighborLODDataset;
-                 dcterms:references ?s .
+    [] a conversion:NeighborLODDataset;
+         dcterms:references ?s .
+  }
+  filter not exists {
+    ?g a conversion:NeighborLODDataset
   }
 }
 limit 1000

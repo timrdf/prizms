@@ -88,6 +88,10 @@ if [ ${#version} -gt 0 -a `echo $version | grep ":" | wc -l | awk '{print $1}'` 
    echo "Version identifier invalid."
    exit 1
 fi
+if [[ -d $version ]]; then
+   iteration=`find -mindepth 0 -maxdepth 0 -name "$version*" | wc -l | awk '{print $1}'`
+   echo "iteration: $iteration"
+fi
 shift 2
 
 echo "INFO version   : $version $version_reason"
@@ -140,7 +144,6 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
       us="$CSV2RDF4LOD_BASE_URI"
       if [[ "$us" =~ http* ]]; then
          our_redirect=`curl -sLI $CSV2RDF4LOD_BASE_URI | grep "Location:" | head -1 | sed 's/^\s*//;s/\s*$//' | awk '{print $2}'`
-         echo "US: $us REDIRECT: $our_redirect"
          datasetV=`cr-dataset-uri.sh --uri`
          cr-default-prefixes.sh --turtle                                    >> automatic/internal.ttl
          cr-default-prefixes.sh --turtle                                    >> automatic/external.ttl

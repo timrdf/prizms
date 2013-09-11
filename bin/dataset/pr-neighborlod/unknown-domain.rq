@@ -1,3 +1,5 @@
+#3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/dataset/pr-neighborlod/unknown-domain.rq> .
+
 prefix prov: <http://www.w3.org/ns/prov#>
 
 select distinct ?s

@@ -92,6 +92,7 @@ iteration=`find -mindepth 1 -maxdepth 1 -name "$version*" | wc -l | awk '{print 
 if [[ "$iteration" -gt 0 ]]; then
    let "iteration=$iteration+1"
    iteration="_$iteration"
+   version=$version$iteration
 fi
 shift 2
 
@@ -104,7 +105,6 @@ echo "INFO url       : $url"
 # e.g. source/contactingthecongress/directory-for-the-112th-congress/version
 #
 #if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -name source` ]]; then
-   version=$version$iteration
 
    see='https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables'
    endpoint=${CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT:?"not set; source csv2rdf4lod/source-me.sh or see $see"}

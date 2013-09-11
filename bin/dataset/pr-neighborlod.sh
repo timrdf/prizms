@@ -122,8 +122,8 @@ echo "INFO url       : $url"
       if [[ "$us" =~ http* ]]; then
          our_redirect=`curl -sLI $CSV2RDF4LOD_BASE_URI | grep "Location:" | head -1 | sed 's/^\s*//;s/\s*$//' | awk '{print $2}'`
       fi
-      cat $rq | awk -f ../../../src/unknown-domain.awk -v ns1="$us" ns2="$our_redirect" > automatic/`basename $0`
-      rq="automatic/`basename $0`"
+      cat $rq | awk -f ../../../src/unknown-domain.awk -v ns1="$us" ns2="$our_redirect" > `basename $rq`
+      rq=`basename $rq`
       # TODO: cat bin/dataset/pr-neighborlod/unknown-domain.rq | awk -f bin/dataset/pr-neighborlod/unknown-domain.awk -v ns1='blah' ns2='you'
       # - - - - - - - - - - - - - - - - - - - - Replace below for custom retrieval  - - - \
       if [[ `which cache-queries.sh` && "$endpoint" =~ http* && -e $rq ]]; then

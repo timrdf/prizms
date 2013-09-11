@@ -90,8 +90,8 @@ if [ ${#version} -gt 0 -a `echo $version | grep ":" | wc -l | awk '{print $1}'` 
 fi
 shift 2
 
-echo "INFO url       : $url" # TODO: run spo balance for this name, if it's given.
 echo "INFO version   : $version $version_reason"
+echo "INFO url       : $url"
 exit
 
 #

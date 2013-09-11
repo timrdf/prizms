@@ -93,6 +93,7 @@ if [[ "$iteration" -gt 0 ]]; then
    let "iteration=$iteration+1"
    iteration="_$iteration"
    version=$version$iteration
+   version_reason="$version_reason (expanding to iteration)"
 fi
 shift 2
 

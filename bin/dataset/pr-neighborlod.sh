@@ -140,6 +140,7 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
       us=`resource-name.sh --domain-of "$CSV2RDF4LOD_BASE_URI"`
       if [[ "$us" =~ http* ]]; then
          our_redirect=`curl -sLI $CSV2RDF4LOD_BASE_URI | grep "Location:" | head -1 | awk '{print $2}'`
+         echo "US: $us REDIRECT: $our_redirect"
          datasetV=`cr-dataset-uri.sh --uri`
          cr-default-prefixes.sh --turtle                                    >> automatic/internal.ttl
          cr-default-prefixes.sh --turtle                                    >> automatic/external.ttl

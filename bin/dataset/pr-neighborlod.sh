@@ -147,8 +147,7 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
          csv="`basename $rq`.csv"
          for uri in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
             domain=`resource-name.sh --domain-of "$uri"`
-            [ "${uri#$us}" == "$uri" && "${uri#$our_redirect}" == "$uri" ] \
-               && internal="external" || internal="internal"
+            [[ "${uri#$us}" == "$uri" && "${uri#$our_redirect}" == "$uri" ]] && internal="external" || internal="internal"
             worthwhile="yes"
             echo "<$datasetV> dcterms:references <$uri> ."      | tee --append automatic/$internal.ttl
             if [[ "$domain" =~ http* ]]; then

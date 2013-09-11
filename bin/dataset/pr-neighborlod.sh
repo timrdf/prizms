@@ -137,9 +137,9 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
 
       retrieved_files=`find source -newer source/.__CSV2RDF4LOD_retrieval -type f | grep -v "pml.ttl$" | grep -v "cr-droid.ttl$"`
 
+      datasetV=`cr-dataset-uri.sh --uri`
       cr-default-prefixes.sh --turtle                                    >> automatic/attributions.ttl
       echo "<$datasetV> a conversion:NeighborLODDataset ."   | tee --append automatic/attributions.ttl
-      datasetV=`cr-dataset-uri.sh --uri`
       csv="`basename $rq`.csv"
       for uri in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
          worthwhile="yes"

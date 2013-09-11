@@ -137,7 +137,7 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
 
       retrieved_files=`find source -newer source/.__CSV2RDF4LOD_retrieval -type f | grep -v "pml.ttl$" | grep -v "cr-droid.ttl$"`
 
-      us=`"$CSV2RDF4LOD_BASE_URI"`
+      us="$CSV2RDF4LOD_BASE_URI"
       if [[ "$us" =~ http* ]]; then
          our_redirect=`curl -sLI $CSV2RDF4LOD_BASE_URI | grep "Location:" | head -1 | sed 's/^\s*//;s/\s*$//' | awk '{print $2}'`
          echo "US: $us REDIRECT: $our_redirect"

@@ -1,4 +1,4 @@
-#3> <> prov:specializationOf <> .
+#3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/dataset/pr-neighborlod/unknown-domain.awk> .
 
 {
    if($0 ~ /# Namespace filters:/) {

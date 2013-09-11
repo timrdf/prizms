@@ -30,6 +30,7 @@
 #                                ^                    ^ e.g. ./retrieve.sh
 #                                | e.g. /home/lebot/opt/prizms/bin/dataset/pr-neighborlod.sh
 HOME=$(cd ${this%/*} && echo $PWD/${this##*/})
+echo ${this%/*}
 echo $this
 echo $HOME
 

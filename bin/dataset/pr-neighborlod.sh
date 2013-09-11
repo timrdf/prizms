@@ -137,14 +137,15 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
 
       retrieved_files=`find source -newer source/.__CSV2RDF4LOD_retrieval -type f | grep -v "pml.ttl$" | grep -v "cr-droid.ttl$"`
 
+      datasetV=`cr-dataset-uri.sh --uri`
       #ng=''
       csv="`basename $rq`.csv"
-      for sd_name in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
+      for uri in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
          worthwhile="yes"
          #ng_ugly=`resource-name.sh --named-graph $endpoint $sd_name`
          #ng_hash=`md5.sh -qs "$ng_ugly"`
          #ng="$endpoint/id/named-graph/$ng_hash" 
-         echo "<$ng> sd:name <$sd_name> ."
+         echo "<$uri> dcterms:isReferencedBy <$datasetV> ."
       done
 
       #if [[ "$ng" != '' ]]; then

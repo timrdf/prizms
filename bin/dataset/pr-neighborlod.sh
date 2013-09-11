@@ -149,7 +149,7 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
             domain=`resource-name.sh --domain-of "$uri"`
             echo "$our_redirect ----- ${uri#$our_redirect}"
             echo "$us ----- ${uri#$us}"
-            [[ "${uri#$us}" == "$uri" || "${uri#$our_redirect}" == "$uri" ]] && internal="external" || internal="internal"
+            [[ "${uri#$us}" == "$uri" && "${uri#$our_redirect}" == "$uri" ]] && internal="external" || internal="internal"
             worthwhile="yes"
             echo "<$datasetV> dcterms:references <$uri> ."      | tee --append automatic/$internal.ttl
             if [[ "$domain" =~ http* ]]; then

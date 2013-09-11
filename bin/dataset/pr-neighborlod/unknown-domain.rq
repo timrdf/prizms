@@ -1,0 +1,13 @@
+prefix prov: <http://www.w3.org/ns/prov#>
+
+select distinct ?s
+where {
+  graph ?g {
+     ?s ?p [] .
+     filter not exists {
+       ?s prov:wasAttributedTo ?CSV2RDF4LOD_BASE_URI
+     }
+     filter(isIRI(?s))
+  }
+}
+limit 1000

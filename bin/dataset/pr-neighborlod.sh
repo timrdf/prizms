@@ -140,19 +140,21 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
       us=`resource-name.sh --domain-of "$CSV2RDF4LOD_BASE_URI"`
       if [[ "$us" =~ http* ]]; then
          datasetV=`cr-dataset-uri.sh --uri`
-         cr-default-prefixes.sh --turtle                                    >> automatic/attributions.ttl
-         echo "<$datasetV> a conversion:NeighborLODDataset ."   | tee --append automatic/attributions.ttl
+         cr-default-prefixes.sh --turtle                                       >> automatic/internal.ttl
+         cr-default-prefixes.sh --turtle                                       >> automatic/external.ttl
+         echo "<$datasetV> a conversion:NeighborLODDataset ."      | tee --append automatic/internal.ttl
          csv="`basename $rq`.csv"
          for uri in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
             domain=`resource-name.sh --domain-of "$uri"`
             if [[ "${uri#$us}" == "$uri" ]]; then
-               worthwhile="yes"
-               echo "<$datasetV> dcterms:references <$uri> ."      | tee --append automatic/attributions.ttl
-               if [[ "$domain" =~ http* ]]; then
-                  echo "<$uri> prov:wasAttributedTo   <$domain> ." | tee --append automatic/attributions.ttl
-               fi
+               internal="internal"
             else
-               echo "`basename $0` skipping $uri b/c within our BASE $us"
+               internal="external"
+            fi
+            worthwhile="yes"
+            echo "<$datasetV> dcterms:references <$uri> ."      | tee --append automatic/$internal.ttl
+            if [[ "$domain" =~ http* ]]; then
+               echo "<$uri> prov:wasAttributedTo   <$domain> ." | tee --append automatic/$internal.ttl
             fi
          done
       else

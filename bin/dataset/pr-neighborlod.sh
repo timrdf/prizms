@@ -160,13 +160,14 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
                echo "<$uri> prov:wasAttributedTo <$domain> ."   | tee --append automatic/$internal.ttl
             fi
          done
+         vsr-follow.sh -w -od automatic automatic/external.ttl --start-to --follow dcterms:references # automatic/external.ttl.ttl
       else
          echo "WARNING: CSV2RDF4LOD_BASE_URI \"$CSV2RDF4LOD_BASE_URI\" not http; skipping NeighborLOD."
       fi
 
-      #if [[ "$ng" != '' ]]; then
-      #   aggregate-source-rdf.sh automatic/*.ttl
-      #fi
+      if [[ "$worthwhile" == 'yes' ]]; then
+         aggregate-source-rdf.sh automatic/internal.ttl automatic/external.ttl automatic/external.ttl.ttl
+      fi
 
    popd &> /dev/null
 

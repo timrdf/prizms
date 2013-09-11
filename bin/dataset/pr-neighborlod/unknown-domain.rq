@@ -8,11 +8,11 @@ select distinct ?s
 where {
   graph ?g {
      ?s ?p [] .
-     filter not exists {
-       ?neighborlod a conversion:NeighborLODDataset;
-                    dcterms:references ?s .
-     }
      filter(isIRI(?s))
+  }
+  filter not exists {
+    ?neighborlod a conversion:NeighborLODDataset;
+                 dcterms:references ?s .
   }
 }
 limit 1000

@@ -144,16 +144,17 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
          datasetV=`cr-dataset-uri.sh --uri`
          cr-default-prefixes.sh --turtle                                    >> automatic/internal.ttl
          cr-default-prefixes.sh --turtle                                    >> automatic/external.ttl
-         echo "<$datasetV> a conversion:NeighborLODDataset ."   | tee --append automatic/internal.ttl
+         echo "<$datasetV> a conversion:NeighborLODDataset ."               >> automatic/internal.ttl
          csv="`basename $rq`.csv"
          for uri in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
             domain=`resource-name.sh --domain-of "$uri"`
             [[ "${uri#$us}" == "$uri" && "${uri#$our_redirect}" == "$uri" ]] \
                && internal="external" || internal="internal"
             worthwhile="yes"
-            echo "<$datasetV> dcterms:references <$uri> ."      | tee --append automatic/$internal.ttl
+            echo $uri
+            echo "<$datasetV> dcterms:references <$uri> ."                  >> automatic/$internal.ttl
             if [[ "$domain" =~ http* ]]; then
-               echo "<$uri> prov:wasAttributedTo <$domain> ."   | tee --append automatic/$internal.ttl
+               echo "<$uri> prov:wasAttributedTo <$domain> ."               >> automatic/$internal.ttl
             fi
          done
          vsr-follow.sh -w -od automatic automatic/external.ttl --start-to --follow dcterms:references # automatic/external.ttl.ttl

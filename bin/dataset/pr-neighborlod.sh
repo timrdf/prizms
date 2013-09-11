@@ -27,13 +27,13 @@
 #
 
 [ `readlink $0` != "" ] && this=`readlink $0` || this=$0
-echo $0
+#                                ^                    ^ e.g. ./retrieve.sh
+#                                | e.g. /home/lebot/opt/prizms/bin/dataset/pr-neighborlod.sh
+HOME=$(cd ${this%/*} && echo $PWD/${this##*/})
 echo $this
-this=$(cd ${this%/*} && echo $PWD/${this##*/})
-echo $this
+echo $HOME
 
 exit
-
 see="https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-not-set"
 CSV2RDF4LOD_HOME=${CSV2RDF4LOD_HOME:?"not set; source csv2rdf4lod/source-me.sh or see $see"}
 

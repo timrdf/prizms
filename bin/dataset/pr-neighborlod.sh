@@ -29,7 +29,7 @@
 [ `readlink $0` != "" ] && this=`readlink $0` || this=$0
 #                                ^                    ^ e.g. ./retrieve.sh
 #                                | e.g. /home/lebot/opt/prizms/bin/dataset/pr-neighborlod.sh
-HOME=$(cd ${this%/*/*} && echo $PWD)
+HOME=$(cd ${this%/*/*} && pwd)
 echo ${this%/*/*}
 echo $this
 echo $HOME

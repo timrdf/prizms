@@ -146,10 +146,14 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
          for uri in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
             domain=`resource-name.sh --domain-of "$uri"`
             echo $us $uri
-            worthwhile="yes"
-            echo "<$datasetV> dcterms:references <$uri> ."      | tee --append automatic/attributions.ttl
-            if [[ "$domain" =~ http* ]]; then
-               echo "<$uri> prov:wasAttributedTo   <$domain> ." | tee --append automatic/attributions.ttl
+            if [[ "$uri" =~ "$us" ]]; then
+               worthwhile="yes"
+               echo "<$datasetV> dcterms:references <$uri> ."      | tee --append automatic/attributions.ttl
+               if [[ "$domain" =~ http* ]]; then
+                  echo "<$uri> prov:wasAttributedTo   <$domain> ." | tee --append automatic/attributions.ttl
+               fi
+            else
+               echo "`basename $0` skipping $uri b/c within our BASE $us"
             fi
          done
       else

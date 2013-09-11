@@ -148,8 +148,9 @@ if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -na
          csv="`basename $rq`.csv"
          for uri in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
             domain=`resource-name.sh --domain-of "$uri"`
-            echo "W/O $us ${uri#$us}"
-            echo "W/O $our_redirect ${uri#$our_redirect}"
+            echo
+            echo "W/O __${us}__ ${uri#$us}"
+            echo "W/O __${our_redirect}__ ${uri#$our_redirect}"
             [[ "${uri#$us}" == "$uri" && "${uri#$our_redirect}" == "$uri" ]] \
                && internal="external" || internal="internal"
             echo $internal

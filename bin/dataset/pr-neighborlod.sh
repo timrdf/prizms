@@ -118,22 +118,30 @@ echo "INFO url       : $url"
    echo INFO `cr-pwd.sh`/$version/source
    pushd $version/source &> /dev/null
       touch .__CSV2RDF4LOD_retrieval # Make a timestamp so we know what files were created during retrieval.
+      # - - - - - - - - - - - - - - - - - - - - Replace below for custom retrieval  - - - \
       us="$CSV2RDF4LOD_BASE_URI"
       if [[ "$us" =~ http* ]]; then
          our_redirect=`curl -sLI $CSV2RDF4LOD_BASE_URI | grep "Location:" | head -1 | sed 's/^\s*//;s/\s*$//' | awk '{print $2}'`
       fi
-      cat $rq | awk -f ../../../src/unknown-domain.awk -v ns1="$us" ns2="$our_redirect" > `basename $rq`
-      rq=`basename $rq`
-      # TODO: cat bin/dataset/pr-neighborlod/unknown-domain.rq | awk -f bin/dataset/pr-neighborlod/unknown-domain.awk -v ns1='blah' ns2='you'
-      # - - - - - - - - - - - - - - - - - - - - Replace below for custom retrieval  - - - \
+      rq2=`basename $rq`
+      cat $rq | awk -f ../../../src/unknown-domain.awk -v ns1="$us" ns2="$our_redirect" > $rq2
       if [[ `which cache-queries.sh` && "$endpoint" =~ http* && -e $rq ]]; then
-         cache-queries.sh "$endpoint" -o csv -q $rq -od .
+         cache-queries.sh "$endpoint" -o csv -q $rq2 -od .
+         csv="$rq2.csv"
+         if [[ `wc -l $csv | awk '{print $1}'` -lt 2 ]]; then
+            echo "No results from $rq2:"
+            cat $rq2 $csv
+            rm $csv
+            echo "Changing from subject-based to object-based query."
+            cat $rq | awk -f ../../../src/unknown-domain.awk -v ns1="$us" ns2="$our_redirect" o=o > $rq2
+            cache-queries.sh "$endpoint" -o csv -q $rq2 -od .
+         fi
       else
          echo "   ERROR: Failed to create dataset `basename $0`:"                        
          echo "      CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT: $endpoint"        
          echo "      cache-queries.sh path: `which cache-queries.sh`"
          echo "      $rq:"
-         ls -lt $rq
+         ls -lt $rq $rq2
       fi
       if [ "$CSV2RDF4LOD_RETRIEVE_DROID_SOURCES" != "false" ]; then                     # |
          sleep 1                                                                        # |
@@ -157,7 +165,6 @@ echo "INFO url       : $url"
          cr-default-prefixes.sh --turtle                                    >> automatic/internal.ttl
          cr-default-prefixes.sh --turtle                                    >> automatic/external.ttl
          echo "<$datasetV> a conversion:NeighborLODDataset ."               >> automatic/internal.ttl
-         csv="`basename $rq`.csv"
          for uri in `cat source/$csv | sed 's/^"//;s/"$//' | grep "^http"`; do
             domain=`resource-name.sh --domain-of "$uri"`
             [[ "${uri#$us}" == "$uri" && "${uri#$our_redirect}" == "$uri" ]] \

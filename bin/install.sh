@@ -1054,6 +1054,14 @@ else
                fi
 
                #
+               # Set CSV2RDF4LOD_PUBLISH_VC_REPOSITORY (to $project_code_repository) in the project-level source-me.sh.
+               #
+               change_source_me $target CSV2RDF4LOD_PUBLISH_VC_REPOSITORY "$project_code_repository" \
+                  'indicate the version control repository that is used to maintain this Prizms node metadata and triggers' \
+                  'https://github.com/timrdf/prizms/wiki/VoID#prizms-node-dataset-as-a-doapproject' \
+                  'data consumers will not be able to instantiate their own Prizms node modeled from yours'
+
+               #
                # Set CSV2RDF4LOD_BASE_URI (to $our_base_uri) in the project-level source-me.sh.
                #
                change_source_me $target CSV2RDF4LOD_BASE_URI "$our_base_uri" \

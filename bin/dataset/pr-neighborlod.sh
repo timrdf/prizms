@@ -169,7 +169,8 @@ echo "INFO url       : $url"
                echo "<$uri> prov:wasAttributedTo <$domain> ."               >> automatic/$internal.ttl
             fi
          done
-         vsr-follow.sh -w -od automatic automatic/external.ttl --no-sameness --start-to --follow dcterms:references # automatic/external.ttl.ttl
+         echo vsr-follow.sh -w -od automatic automatic/external.ttl --no-sameness --start-to --follow dcterms:references # automatic/external.ttl.ttl
+         exit
       else
          echo "WARNING: CSV2RDF4LOD_BASE_URI \"$CSV2RDF4LOD_BASE_URI\" not http; skipping NeighborLOD."
       fi

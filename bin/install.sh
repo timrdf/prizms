@@ -2928,6 +2928,7 @@ else
                         chmod +x $target
                         added="$added $target"
                         echo "Okay, we updated $target"
+                     fi
                   else
                      echo "(`pwd`/$target is already set up,"
                      echo " and is ready for the $project_user_name project user to add to its crontab.)"

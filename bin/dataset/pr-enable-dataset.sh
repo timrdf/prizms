@@ -78,9 +78,14 @@ else
    searches="$HOME/repos/csv2rdf4lod-automation/bin"
    built_in="$retrieves/$datasetID.sh"
    for search in "$searches"; do
+      echo $search >&2
       if [[ ! -e $built_in ]]; then
-         echo find $search -name "$datasetID*" >&2
-         built_in=`find $search -name "$datasetID*"`
+         for trigger in `find $search -name "$datasetID*"`; do
+            echo $trigger >&2
+            if [[ `grep -RIl '#3> <> a conversion:RetrievalTrigger;' $trigger` ]]; then
+               built_in=$trigger
+            fi
+         done
       fi 
    done
    if [[ ! -e $built_in ]]; then

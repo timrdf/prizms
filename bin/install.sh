@@ -1057,7 +1057,7 @@ else
                # Set CSV2RDF4LOD_PUBLISH_VC_REPOSITORY (to $project_code_repository) in the project-level source-me.sh.
                #
                change_source_me $target CSV2RDF4LOD_PUBLISH_VC_REPOSITORY "$project_code_repository" \
-                  'indicate the version control repository that is used to maintain this Prizms node metadata and triggers' \
+                  'share as Linked Data the URL of the version control repository that maintains this Prizms node metadata and triggers' \
                   'https://github.com/timrdf/prizms/wiki/VoID#prizms-node-dataset-as-a-doapproject' \
                   'data consumers will not be able to instantiate their own Prizms node modeled from yours'
 
@@ -2874,8 +2874,6 @@ else
                                     added="$added data/source/$link"
                                  fi
                               done
-                              echo "      Okay, we enabled $not_enabled"
-                              echo
                            else
                               echo "      Okay, we didn't enable $not_enabled."
                               echo "      See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets"

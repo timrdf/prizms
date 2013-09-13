@@ -25,6 +25,7 @@ if [[ "$1" == "--help" ]]; then
    echo
    echo "see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets#enabling"
    echo
+   exit 1
 fi
 
 if [[   `cr-pwd-type.sh` == 'cr:data-root' ]]; then

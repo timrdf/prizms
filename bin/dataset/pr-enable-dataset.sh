@@ -79,11 +79,11 @@ else
    built_in="$retrieves/$datasetID.sh"
    for search in "$searches"; do
       if [[ ! -e $built_in ]]; then
-         built_in=`find $HOME/repos/csv2rdf4lod-automation/bin -name "$datasetID*"`
+         built_in=`find $search -name "$datasetID*"`
       fi 
    done
    if [[ ! -e $built_in ]]; then
-      echo "ERROR: dataset $datasetID is not available at $retrieves/$datasetID.sh or any external built-in."
+      echo "ERROR: dataset $datasetID is not available at $retrieves/$datasetID.sh or any external built-in in $searches." >&2
    elif [[ -e $retrieval_trigger ]]; then
       echo "Note: Did not create ${retrieval_trigger#$DATA/$trim} because it already exists: $retrieval_trigger."
    else

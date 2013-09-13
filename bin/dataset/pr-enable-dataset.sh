@@ -52,12 +52,14 @@ CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID=${CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID:?"not set;
 
 retrieves=`dirname $me`
 
+searches="$HOME/repos/csv2rdf4lod-automation/bin"
+
 if [[ $# -eq 0 ]]; then
    echo "Available datasets:"
    me_local=`basename $me`
    available=`find $retrieves -type f -name "pr-*" -not -name $me_local`
    if [[ -d $HOME/repos/csv2rdf4lod-automation/bin ]]; then
-      available="$available `grep -RIl '#3> <> a conversion:RetrievalTrigger;' $HOME/repos/csv2rdf4lod-automation/bin`"
+      available="$available `grep -RIl '#3> <> a conversion:RetrievalTrigger' $HOME/repos/csv2rdf4lod-automation/bin`"
    fi
    for retrieve in $available; do
       datasetID=`basename $retrieve | sed 's/.sh$//'`
@@ -75,14 +77,13 @@ else
    retrieval_trigger=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/${latest}retrieve.sh
    src=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/src
 
-   searches="$HOME/repos/csv2rdf4lod-automation/bin"
    built_in="$retrieves/$datasetID.sh"
    for search in "$searches"; do
       echo $search >&2
       if [[ ! -e $built_in ]]; then
          for trigger in `find $search -name "$datasetID*"`; do
             echo $trigger >&2
-            if [[ `grep -RIl '#3> <> a conversion:RetrievalTrigger;' $trigger` ]]; then
+            if [[ `grep -RIl '#3> <> a conversion:RetrievalTrigger' $trigger` ]]; then
                built_in=$trigger
             fi
          done

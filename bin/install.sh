@@ -2920,6 +2920,14 @@ else
                      echo "Your current $target differs from that offered by Prizms ($template)."
                      echo "The difference is:"
                      diff $template $target
+                     echo
+                     read -p "Update your cr-cron $target to the latest offered by Prizms? [y/n] " -u 1 install_it
+                     echo
+                     if [[ "$install_it" == [yY] ]]; then
+                        cp $template $target
+                        chmod +x $target
+                        added="$added $target"
+                        echo "Okay, we updated $target"
                   else
                      echo "(`pwd`/$target is already set up,"
                      echo " and is ready for the $project_user_name project user to add to its crontab.)"

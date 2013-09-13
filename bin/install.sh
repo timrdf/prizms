@@ -2916,6 +2916,10 @@ else
                         echo "See https://github.com/jimmccusker/twc-healthdata/wiki/Automation"
                         echo "and https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets"
                      fi
+                  elif [[ `diff $template $target` ]]; then
+                     echo "Your current $target differs from that offered by Prizms ($template)."
+                     echo "The difference is:"
+                     diff $template $target
                   else
                      echo "(`pwd`/$target is already set up,"
                      echo " and is ready for the $project_user_name project user to add to its crontab.)"

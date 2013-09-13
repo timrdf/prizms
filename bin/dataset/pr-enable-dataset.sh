@@ -79,6 +79,7 @@ else
    built_in="$retrieves/$datasetID.sh"
    for search in "$searches"; do
       if [[ ! -e $built_in ]]; then
+         echo find $search -name "$datasetID*" >&2
          built_in=`find $search -name "$datasetID*"`
       fi 
    done

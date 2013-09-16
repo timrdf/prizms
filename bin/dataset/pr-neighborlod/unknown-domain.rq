@@ -16,11 +16,11 @@ where {
   filter not exists {  # ... and is not used as a class
     graph [] { [] a ?s }
   }
-  filter not exists {
+  filter not exists {  # ... and has not appeared in a previous neighborlod queue
     [] a conversion:NeighborLODDataset;
          dcterms:references ?s .
   }
-  filter not exists {
+  filter not exists {  # ... and the graph in which it appears is not something that we gathered.
     graph [] { ?g a conversion:NeighborLODDataset }
   }
   filter( regex(str(?s),'^http'))

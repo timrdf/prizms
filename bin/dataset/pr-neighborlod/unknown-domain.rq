@@ -7,18 +7,28 @@ prefix prov:       <http://www.w3.org/ns/prov#>
 select distinct ?s
 where {
   graph ?g {
-     ?s ?p [] .
-     filter(isIRI(?s))
+     ?s ?p [] .        # Any RDF URI node
+     filter(isIRI(?s)) 
+  }
+  filter not exists {  # ... that is not used as a predicate
+    graph [] { [] ?s [] }
+  }
+  filter not exists {  # ... and is not used as a class
+    graph [] { [] a ?s }
   }
   filter not exists {
     [] a conversion:NeighborLODDataset;
          dcterms:references ?s .
   }
   filter not exists {
-    ?g a conversion:NeighborLODDataset
+    graph [] { ?g a conversion:NeighborLODDataset }
   }
   filter( regex(str(?s),'^http'))
   filter(!regex(str(?s),'^http://localhost'))
+  filter(!regex(str(?s),'^http://rdf.freebase.com/ns/'))
+  filter(?g != <http://www.openlinksw.com/schemas/virtrdf#>)
+  filter(?g != <http://www.w3.org/2002/07/owl#>)
+  filter(?g != <http://localhost:8890/sparql>)
   # Namespace filters:
 }
 limit 1000

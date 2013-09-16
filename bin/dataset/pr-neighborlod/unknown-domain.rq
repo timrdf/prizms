@@ -26,6 +26,9 @@ where {
   filter not exists {  # ... and the graph in which it appears is not something that we created.
     graph [] { ?g a conversion:LinksetDataset }
   }
+  filter not exists {
+    graph [] { ?g a conversion:AggregateDataset }
+  }
   filter( regex(str(?s),'^http'))
   filter(!regex(str(?s),'^http://localhost'))
   filter(!regex(str(?s),'^http://rdf.freebase.com/ns/'))

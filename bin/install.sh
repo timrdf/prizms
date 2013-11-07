@@ -2020,7 +2020,7 @@ else
                echo "Prizms includes a csv2rdf4lod annotator webapp UI"
                if [[ "$tomcat_installed" == "yes" && 
                    -e $PRIZMS_HOME/repos/semanteco-annotator-webapp &&
-                     "$i_can_sudo" ]]; then
+                     "$i_can_sudo" -eq 0 ]]; then
 
                   # Deploy the .war
                   war=`find $PRIZMS_HOME/repos/semanteco-annotator-webapp -name 'semanteco-annotator-webapp*.war'`

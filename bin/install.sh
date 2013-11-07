@@ -2019,7 +2019,8 @@ else
                echo "$div `whoami`"
                echo "Prizms includes a csv2rdf4lod annotator webapp UI"
                if [[ "$tomcat_installed" == "yes" && 
-                   -e $PRIZMS_HOME/repos/semanteco-annotator-webapp ]]; then
+                   -e $PRIZMS_HOME/repos/semanteco-annotator-webapp &&
+                     "$i_can_sudo" ]]; then
 
                   # Deploy the .war
                   war=`find $PRIZMS_HOME/repos/semanteco-annotator-webapp -name 'semanteco-annotator-webapp*.war'`
@@ -2063,6 +2064,8 @@ else
                   #      echo "($webapps/annotator/WEB-INF/classes/semanteco.properties already sets baseURI to $our_base_uri/annotator/; no need to reset it)"
                   #   fi
                   #fi
+               else
+                  echo "(Cannot install the webapp UI because tomcat installed: \"$tomcat_installed\", $PRIZMS_HOME/repos/semanteco-annotator-webapp DNE or cannot sudo ($i_can_sudo)"
                fi
                # Reinstall by running:
                # sudo rm -rf /var/lib/tomcat6/webapps/annotator* ~/opt/prizms/repos/semanteco-annotator-webapp*

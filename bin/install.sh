@@ -2016,7 +2016,7 @@ else
             # Post-configure csv2rdf4lod annotator webapp GUI service (in Tomcat)
             # See https://github.com/timrdf/prizms/wiki/csv2rdf4lod-annotator
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
-               echo "$div `whoami`"
+               echo "$div `whoami` ($i_can_sudo)"
                echo "Prizms includes a csv2rdf4lod annotator webapp UI"
                if [[ "$tomcat_installed" == "yes" && 
                    -e $PRIZMS_HOME/repos/semanteco-annotator-webapp &&

@@ -2456,10 +2456,14 @@ else
                echo "LODSPeaKr permits a logo for the web site."
                echo "The logo should be placed at /home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png"
                echo
-               if [[ ! -e /home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png ]]; then
-                  read -p "Q: Did you know that you can add a logo to your site? [y/n] " -u 1 logo
+               if [[ -e $www/lodspeakr ]]; then
+                  if [[ ! -e /home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png ]]; then
+                     read -p "Q: Did you know that you can add a logo to your site? [y/n] " -u 1 logo
+                  else
+                     echo "(/home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png already exists)"
+                  fi
                else
-                  echo "(/home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png already exists)"
+                  echo "(LODSPeaKr is not installed yet, so its logo is not important.)"
                fi
 
                if [[ -n "$vm_ip" ]]; then # We are on a TWC VM
@@ -2494,14 +2498,18 @@ else
                echo "$div `whoami`"
                echo "Prizms does not need the index.html in the htdocs directory, since it uses lodspeakr"
                if [[ -e $www/index.html ]]; then
-                  echo
-                  echo "mv $www/index.html $www/it.works"
-                  echo
-                  read -p "Q: May we move the default index.html out of LODSPeaKr's way using the command above? [y/n] " -u 1 move_it
-                  if [[ "$move_it" == [yY] ]]; then
-                     sudo mv $www/index.html $www/it.works
+                  if [[ -e $www/lodspeakr ]]; then
+                     echo
+                     echo "mv $www/index.html $www/it.works"
+                     echo
+                     read -p "Q: May we move the default index.html out of LODSPeaKr's way using the command above? [y/n] " -u 1 move_it
+                     if [[ "$move_it" == [yY] ]]; then
+                        sudo mv $www/index.html $www/it.works
+                     else
+                        echo "Okay, we won't move it. But the site will not work."
+                     fi
                   else
-                     echo "Okay, we won't move it. But the site will not work."
+                     echo "(LODSPeaKr is not installed yet, so index.html isn't in the way yet.)"
                   fi
                else
                   echo "(the $www/index.html is not there, so it's not in lodspeakr's way.)"
@@ -2582,40 +2590,44 @@ else
                echo "This allows developers to prototype data views before committing them to the production site (e.g. $our_base_uri)."
                echo "Once finished, developers commit their code to $project_code_repository and the $project_user_name user pulls it to deploy at $our_base_uri."
                echo
-               enable_apache_module 'userdir' "run development clones of the $project_user_name Prizm's LODSPeaKr"  
+               if [[ -e $www/lodspeakr ]]; then
+                  enable_apache_module 'userdir' "run development clones of the $project_user_name Prizm's LODSPeaKr"  
 
-               if [[ ! -e /etc/apache2/mods-enabled/php5.conf ]]; then
-                  read -p "WARNING: /etc/apache2/mods-enabled/php5.conf does not exist, so we're not sure how to enable user-level php. (press enter to continue) " -u 1 oops
-                  #if [[ "$make_it" == [yY] ]]; then
-                  #   mkdir $user_home/public_html
-                  #else
-                  #   echo "Okay, we won't include lodspeakr/components into version control."
-                  #fi 
-               else
-                  if [[ ! `grep ".*#.*<IfModule *mod_userdir.c" /etc/apache2/mods-enabled/php5.conf` ]]; then
-                     echo
-                     echo "The following directive in /etc/apache2/mods-enabled/php5.conf needs to be **commented out** to enable user-level php."
-                     echo
-                     echo "    <IfModule mod_userdir.c>"
-                     echo "        <Directory /home/*/public_html>"
-                     echo "            php_admin_value engine Off"
-                     echo "        </Directory>"
-                     echo "    </IfModule>"
+                  if [[ ! -e /etc/apache2/mods-enabled/php5.conf ]]; then
+                     read -p "WARNING: /etc/apache2/mods-enabled/php5.conf does not exist, so we're not sure how to enable user-level php. (press enter to continue) " -u 1 oops
+                     #if [[ "$make_it" == [yY] ]]; then
+                     #   mkdir $user_home/public_html
+                     #else
+                     #   echo "Okay, we won't include lodspeakr/components into version control."
+                     #fi 
+                  else
+                     if [[ ! `grep ".*#.*<IfModule *mod_userdir.c" /etc/apache2/mods-enabled/php5.conf` ]]; then
+                        echo
+                        echo "The following directive in /etc/apache2/mods-enabled/php5.conf needs to be **commented out** to enable user-level php."
+                        echo
+                        echo "    <IfModule mod_userdir.c>"
+                        echo "        <Directory /home/*/public_html>"
+                        echo "            php_admin_value engine Off"
+                        echo "        </Directory>"
+                        echo "    </IfModule>"
 
-                     read -p "Q: Can you please go comment it out, and press 'y' when finished? [y/n] " -u 1 commented_out
-                     if [[ "$commented_out" == [yY] ]]; then
-                        if [[ ! `grep ".*#.*<IfModule *mod_userdir.c" /etc/apache2/mods-enabled/php5.conf` ]]; then
-                           echo "It doesn't look like you commented it out. Try again by running the installer again."
-                           read -p "Q: Can you please go comment it out, and press 'y' when finished? [y/n] " -u 1 commented_out
-                        fi
-                     else
-                        echo "Okay, but user-level php for your Prizms LODSPeakr will not be enabled."
-                     fi 
+                        read -p "Q: Can you please go comment it out, and press 'y' when finished? [y/n] " -u 1 commented_out
+                        if [[ "$commented_out" == [yY] ]]; then
+                           if [[ ! `grep ".*#.*<IfModule *mod_userdir.c" /etc/apache2/mods-enabled/php5.conf` ]]; then
+                              echo "It doesn't look like you commented it out. Try again by running the installer again."
+                              read -p "Q: Can you please go comment it out, and press 'y' when finished? [y/n] " -u 1 commented_out
+                           fi
+                        else
+                           echo "Okay, but user-level php for your Prizms LODSPeakr will not be enabled."
+                        fi 
+                     fi
                   fi
+               else
+                  echo "(LODSPeaKr isn't installed yet, so there is no need to set up development spaces.)"
                fi
             fi # end running as developer
 
-            if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
+            if [[ -z "$i_am_project_user" && -e $www/lodspeakr ]]; then # Running as developer e.g. jsmith not loxd
 
                echo
                echo "$div `whoami`"
@@ -3066,7 +3078,7 @@ else
                      echo "Okay, we won't set up the production environment."
                   fi
                else
-                  echo "WARNING: The user `whoami` cannot set up the production user $project_user_name because it does not have sudo."
+                  echo "NOTE: The user `whoami` cannot set up the production user $project_user_name because it does not have sudo."
                fi
             fi
 

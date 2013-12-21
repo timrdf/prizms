@@ -3054,11 +3054,12 @@ else
 
                      # Bootstrap the project user with this install script.
                      echo
-                     echo ${user_home%/*}/$project_user_name/opt/prizms
+                     echo Bootstrapping Prizms for project user at: ${user_home%/*}/$project_user_name/opt/prizms
+                     echo "(From $read_only_project_code_repository)"
                      echo
                      if [[ ! -e ${user_home%/*}/$project_user_name/opt/prizms ]]; then
-                        echo sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone http://github.com/timrdf/prizms.git"
-                             sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone http://github.com/timrdf/prizms.git"
+                        echo sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone https://github.com/timrdf/prizms.git"
+                             sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone https://github.com/timrdf/prizms.git"
                      else
                         echo sudo su - $project_user_name -c "cd opt/prizms; git pull"
                              sudo su - $project_user_name -c "cd opt/prizms; git pull"

@@ -703,6 +703,7 @@ else
    echo "Your user name is:                                         $person_user_name"
    echo "Your project's user name is (or will be):                  $project_user_name"
    echo "Your project's code repository ($vcs) is:                   $project_code_repository"
+   echo "Your production user will clone from read-only repository:  $read_only_project_code_repository"
    if [[ -n "$project_code_repository_branch" ]]; then
       echo "  (on branch $project_code_repository_branch)"
    else

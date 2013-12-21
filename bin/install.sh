@@ -153,6 +153,10 @@ else
       shift
    fi
 
+   read_only_project_code_repository=`echo $project_code_repository | sed 's/^git@:/git:\/\/\//'`
+   # ^ e.g. git@github.com:jimmccusker/melagrid.git -> git://github.com/jimmccusker/melagrid.git
+
+
    #
    project_code_repository_branch="" # May be empty - will use the default branch.
    if [[ "$1" == "--repos-branch" || "$1" == "--repo-branch" ]]; then
@@ -790,8 +794,10 @@ else
    
    if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
       development="development"
+      project_code_repository_to_clone="$project_code_repository"
    else
       development="production"
+      project_code_repository_to_clone="$read_only_project_code_repository"
    fi 
 
    if [[ ! -e $user_home/prizms ]]; then
@@ -877,28 +883,28 @@ else
 
          echo "Now let's install your $development copy of the $project_user_name Prizms."
          echo
-         read -p "Q: May we run '$vcs $clone $project_code_repository' from `pwd`? [y/n] " -u 1 install_it
+         read -p "Q: May we run '$vcs $clone $project_code_repository_to_clone' from `pwd`? [y/n] " -u 1 install_it
          if [[ "$install_it" == [yY] ]]; then
             # When the project user:
             # Your configuration specifies to merge with the ref 'master'
             # from the remote, but no such ref was fetched.
             echo
             touch .before_clone
-            $vcs $clone $project_code_repository
+            $vcs $clone $project_code_repository_to_clone
             status=$?
             dir=`find . -mindepth 1 -maxdepth 1 -type d -newer .before_clone`
             rm .before_clone
             echo
 
             if [ "$status" -eq 128 ]; then
-               echo "It seems that you didn't have permissions to $clone $project_code_repository"
+               echo "It seems that you didn't have permissions to $clone $project_code_repository_to_clone"
                echo "GitHub requires an ssh key to check out a writeable working clone"
                echo "See https://help.github.com/articles/generating-ssh-keys"
                echo
             elif [ "$status" -ne 0 ]; then
                echo "We're not sure what happended; $vcs returned $status"
             else
-               echo "Okay, $project_code_repository is now ${clone}'d to $dir." 
+               echo "Okay, $project_code_repository_to_clone is now ${clone}'d to $dir." 
             fi
             just_cloned="yes"
          else
@@ -955,8 +961,8 @@ else
             if [[ "$just_cloned" != "yes" ]]; then
                echo
                echo "$div `whoami`"
-               echo "Prizms will use $project_code_repository to coordinate your metadata between development and production."
-               echo "$project_code_repository is already ${clone}'d into $repodir."
+               echo "Prizms will use $project_code_repository_to_clone to coordinate your metadata between development and production."
+               echo "$project_code_repository_to_clone is already ${clone}'d into $repodir."
                echo
                read -p "Q: May we run '$vcs $pull' from `pwd`/prizms/$repodir to get the latest metadata? [y/n] " -u 1 pull_it
                if [[ "$pull_it" == [yY] ]]; then
@@ -3049,9 +3055,6 @@ else
                if [[ "$i_can_sudo" -eq 0 ]]; then
                   read -p "Q: Set up the production environment as the $project_user_name user? [y/n] " -u 1 as_project
                   if [[ "$as_project" == [yY] ]]; then
-                     read_only_project_code_repository=`echo $project_code_repository | sed 's/^git@:/git:\/\/\//'`
-                     # ^ e.g. git@github.com:jimmccusker/melagrid.git -> git://github.com/jimmccusker/melagrid.git
-
                      # Bootstrap the project user with this install script.
                      echo
                      echo Bootstrapping Prizms for project user at: ${user_home%/*}/$project_user_name/opt/prizms

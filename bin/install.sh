@@ -211,6 +211,7 @@ else
       shift
    fi
 
+   echo "Do you have sudo? (sudo -v)"
    i_can_sudo=`sudo -v &> /dev/null`
    i_can_sudo=$?
 
@@ -1898,6 +1899,9 @@ else
                fi # end $virtuoso_installed
 
                rm -f .prizms-apache-conf
+               # TODO: sudo apt-get install virtuoso-vad-isparql
+               # makes it available at http://opendap.tw.rpi.edu:8890/isparql/
+
             fi # end running as developer e.g. jsmith not loxd  (Post-configure Virtuoso)
 
 

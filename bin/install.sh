@@ -2879,6 +2879,9 @@ else
                   not_enabled=`$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled'`
                   if [[ -n "$not_enabled" ]]; then
                      echo
+                     echo "The following secondary datasets are *not* enabled:"
+                     $PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled' | sed 's/is .not. enabled.*$//' | sort
+                     echo
                      read -p "Q: Review derived datasets to enable? [y/n] " -u 1 review_them
                      if [[ "$review_them" == [yY] ]]; then
                         for not_enabled in `$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled' | awk '{print $1}'`; do

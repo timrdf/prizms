@@ -1659,7 +1659,7 @@ else
                         echo sudo mv .`basename $0`.ini $target
                              sudo mv .`basename $0`.ini $target
                         echo
-                        echo "Okay, we added to 'DirsAllowed'. Not it is set as:"
+                        echo "Okay, we added to 'DirsAllowed'. Now it is set as:"
                         echo
                         grep DirsAllowed $target
                         echo
@@ -1701,6 +1701,8 @@ else
                   if [[ -z "$vpw" ]]; then
                      echo
                      echo "$div `whoami`"
+                     # TODO: /usr/local/bin/isql-v 1111 dba dba
+                     # TODO: set password dba SOMEOTHERPASSWORD;
                      echo "If you just installed Virtuoso, and haven't changed the default password for the user 'dba',"
                      echo "you should do that now at http://localhost:8890/conductor."
                      if [[ -n "$vm_ip" ]]; then
@@ -2865,8 +2867,15 @@ else
             echo "$div `whoami`"
             echo "Prizms can derive secondary datasets using built-in scripts."
             echo "see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets"
+            
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                pushd data/source &> /dev/null
+                  enabled=`$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is enabled at'`
+                  if [[ -n "$enabled" ]]; then
+                     echo
+                     echo "The following secondary datasets are already enabled:"
+                     $PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is enabled at'
+                  fi
                   not_enabled=`$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled'`
                   if [[ -n "$not_enabled" ]]; then
                      echo

@@ -2874,7 +2874,7 @@ else
                   if [[ -n "$enabled" ]]; then
                      echo
                      echo "The following secondary datasets are already enabled:"
-                     $PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is enabled at'
+                     $PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is enabled at' | sed 's/is enabled at.*$//'
                   fi
                   not_enabled=`$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is .not. enabled'`
                   if [[ -n "$not_enabled" ]]; then

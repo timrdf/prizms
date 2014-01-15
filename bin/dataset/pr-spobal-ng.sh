@@ -79,83 +79,96 @@ if [ ${#version} -gt 0 -a `echo $version | grep ":" | wc -l | awk '{print $1}'` 
    echo "Version identifier invalid."
    exit 1
 fi
+iteration=`find -mindepth 1 -maxdepth 1 -name "$version*" | wc -l | awk '{print $1}'`
+if [[ "$iteration" -gt 0 ]]; then
+   let "iteration=$iteration+1"
+   iteration="_$iteration"
+   version=$version$iteration
+   version_reason="$version_reason (expanding to iteration)"
+fi
 shift 2
 
-echo "INFO url       : $url" # TODO: run spo balance for this name, if it's given.
 echo "INFO version   : $version $version_reason"
+echo "INFO iteration : $iteration"
+echo "INFO url       : $url"
+
 
 #
 # This script is invoked from a cr:directory-of-versions, 
 # e.g. source/contactingthecongress/directory-for-the-112th-congress/version
 #
-if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -name source` ]]; then
+#if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -name source` ]]; then
 
-   see='https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables'
-   endpoint=${CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT:?"not set; source csv2rdf4lod/source-me.sh or see $see"}
+see='https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables'
+endpoint=${CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT:?"not set; source csv2rdf4lod/source-me.sh or see $see"}
 
-   # Create the directory for the new version.
-   mkdir -p $version/source
+# Create the directory for the new version.
+mkdir -p $version/source
 
-   # Go into the directory that stores the original data obtained from the source organization.
-   echo INFO `cr-pwd.sh`/$version/source
-   pushd $version/source &> /dev/null
-      touch .__CSV2RDF4LOD_retrieval # Make a timestamp so we know what files were created during retrieval.
-      # - - - - - - - - - - - - - - - - - - - - Replace below for custom retrieval  - - - \
-      if [[ "$endpoint" =~ http* && \
-            -e ../../../src/unsummarized.rq && 
-            `which cache-queries.sh` ]]; then
-         cache-queries.sh "$endpoint" -o csv -q ../../../src/unsummarized.rq -od .
-      else
-         echo "   ERROR: Failed to create dataset `basename $0`:"                        
-         echo "      CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT: $endpoint"        
-         echo "      cache-queries.sh path: `which cache-queries.sh`"
-         echo "      ../../../src/unsummarized.rq:"
-         ls -lt ../../../src/unsummarized.rq
-      fi
-      if [ "$CSV2RDF4LOD_RETRIEVE_DROID_SOURCES" != "false" ]; then                     # |
-         sleep 1                                                                        # |
-         cr-droid.sh . > cr-droid.ttl                                                   # |
-      fi                                                                                # |
-      # - - - - - - - - - - - - - - - - - - - - Replace above for custom retrieval - - - -/
-   popd &> /dev/null
+# Go into the directory that stores the original data obtained from the source organization.
+echo INFO `cr-pwd.sh`/$version/source
+pushd $version/source &> /dev/null
+   touch .__CSV2RDF4LOD_retrieval # Make a timestamp so we know what files were created during retrieval.
+   # - - - - - - - - - - - - - - - - - - - - Replace below for custom retrieval  - - - \
+   if [[ "$endpoint" =~ http* && \
+         -e ../../../src/unsummarized.rq && 
+         `which cache-queries.sh` ]]; then
+      cache-queries.sh "$endpoint" -o csv -q ../../../src/unsummarized.rq -od .
+   else
+      echo "   ERROR: Failed to create dataset `basename $0`:"                        
+      echo "      CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT: $endpoint"        
+      echo "      cache-queries.sh path: `which cache-queries.sh`"
+      echo "      ../../../src/unsummarized.rq:"
+      ls -lt ../../../src/unsummarized.rq
+   fi
+   if [ "$CSV2RDF4LOD_RETRIEVE_DROID_SOURCES" != "false" ]; then                     # |
+      sleep 1                                                                        # |
+      cr-droid.sh . > cr-droid.ttl                                                   # |
+   fi                                                                                # |
+   # - - - - - - - - - - - - - - - - - - - - Replace above for custom retrieval - - - -/
+popd &> /dev/null
 
-   # Go into the conversion cockpit of the new version.
-   worthwhile="no"
-   pushd $version &> /dev/null
+# Go into the conversion cockpit of the new version.
+worthwhile="no"
+pushd $version &> /dev/null
 
-      if [ ! -e automatic ]; then
-         mkdir automatic
-      fi
+   if [ ! -e automatic ]; then
+      mkdir automatic
+   fi
 
-      retrieved_files=`find source -newer source/.__CSV2RDF4LOD_retrieval -type f | grep -v "pml.ttl$" | grep -v "cr-droid.ttl$"`
+   retrieved_files=`find source -newer source/.__CSV2RDF4LOD_retrieval -type f | grep -v "pml.ttl$" | grep -v "cr-droid.ttl$"`
 
-      ng=''
-      for sd_name in `cat source/unsummarized.rq.csv | sed 's/^"//;s/"$//' | grep "^http"`; do
+   for sd_name in `cat source/unsummarized.rq.csv | sed 's/^"//;s/"$//' | grep "^http"`; do
+      if [[ "$sd_name" =~ http* ]]; then
          worthwhile="yes"
          ng_ugly=`resource-name.sh --named-graph $endpoint $sd_name`
          ng_hash=`md5.sh -qs "$ng_ugly"`
          ng="$endpoint/id/named-graph/$ng_hash" 
          echo
-         echo "<$ng> sd:name <$sd_name> ."
-         echo
+         echo "<$ng>"
+         echo "   sd:name <$sd_name> ."
+         which vsr-spo-balance.sh
          vsr-spo-balance.sh -s "$endpoint" . "$sd_name" > automatic/$ng_hash.ttl
-      done
-
-      if [[ "$ng" != '' ]]; then
-         aggregate-source-rdf.sh automatic/*.ttl
+      else
+         echo "`basename $this` WARNING: skipping graph with name because not http*: $sd_name"
       fi
+   done
 
-   popd &> /dev/null
-
-   if [[ "$worthwhile" != 'yes' ]]; then
-      echo
-      echo "Note: version $version of dataset `cr-dataset-id.sh` did not become worthwhile; removing retrieval attempt."
-      echo
-      rm -rf $version
+   if [[ "$worthwhile" == 'yes' ]]; then
+      aggregate-source-rdf.sh automatic/*.ttl
    fi
-else
-   echo "Version exists; skipping."
+
+popd &> /dev/null
+
+if [[ "$worthwhile" != 'yes' ]]; then
+   echo
+   echo "Note: version $version of dataset `cr-dataset-id.sh` did not become worthwhile; removing retrieval attempt."
+   echo
+   rm -rf $version
 fi
+#else
+#   echo "Version exists; skipping."
+#fi
 
 if [[ `cr-pwd-type.sh` == "cr:conversion-cockpit" ]]; then
    popd ../ &> /dev/null

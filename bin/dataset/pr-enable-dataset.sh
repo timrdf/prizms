@@ -72,6 +72,9 @@ if [[ $# -eq 0 ]]; then
       done
       echo "   $datasetID   is $enabled at ${retrieval_trigger#$DATA/$trim} ($retrieve)"
    done
+
+   echo
+   echo "See https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets#enabling"
 else
    datasetID="$1"
    retrieval_trigger=$DATA/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/$datasetID/version/${latest}retrieve.sh

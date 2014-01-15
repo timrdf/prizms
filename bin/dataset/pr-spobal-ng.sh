@@ -10,7 +10,8 @@
 #
 #
 #
-#3> <> prov:specializationOf <https://github.com/timrdf/prizms/tree/master/bin/dataset/pr-spobal-ng.sh>;
+#3> <> a conversion:RetrievalTrigger, conversion:Idempotent;
+#3>    prov:specializationOf <https://github.com/timrdf/prizms/tree/master/bin/dataset/pr-spobal-ng.sh>;
 #3>    prov:wasDerivedFrom   <https://github.com/timrdf/csv2rdf4lod-automation/blob/master/bin/cr-create-versioned-dataset-dir.sh>;
 #3>    rdfs:seeAlso          <https://github.com/timrdf/prizms/wiki/pr-spobal-ng>;
 #3> .

@@ -149,7 +149,7 @@ pushd $version &> /dev/null
          echo "<$ng>"
          echo "   sd:name <$sd_name> ."
          which vsr-spo-balance.sh
-         vsr-spo-balance.sh -s "$endpoint" . "$sd_name" > automatic/$ng_hash.ttl
+         vsr-spo-balance.sh -s "$endpoint" `cr-dataset-uri.sh --uri` "$sd_name" > automatic/$ng_hash.ttl
       else
          echo "`basename $this` WARNING: skipping graph with name because not http*: $sd_name"
       fi

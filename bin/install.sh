@@ -3022,6 +3022,11 @@ else
                echo "Prizms implements the W3C PROV-AQ 'pingback' functionality."
                echo "See https://github.com/timrdf/prizms/wiki/prov-pingback"
                offer_install_aptget "pip" 'enable prov-pingback'
+               if [[ `which pip` ]]; then
+                  pip install -U distribute # https://github.com/pypa/pip/issues/1093#issuecomment-21704041
+               else
+                  echo "WARNING: cannot set up prov-pingback b/c pip is not installed."
+               fi
             fi # end "I am not project user"
 
 

@@ -3016,7 +3016,21 @@ else
             fi # end "I am not project user"
 
 
+            if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+               echo 
+               echo "$div `whoami`"
+               echo "Prizms implements the W3C PROV-AQ 'pingback' functionality."
+               echo "See https://github.com/timrdf/prizms/wiki/prov-pingback"
+               offer_install_aptget "pip" 'enable prov-pingback'
+            fi # end "I am not project user"
+
+
+
+
+
             # TODO: add warning if more than one "cr-cron.sh" in crontab
+
+
 
 
 

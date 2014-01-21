@@ -3037,6 +3037,7 @@ else
                   #pip install Flask
                   
                   # Worked, but need "do only once logic": sudo easy_install Flask
+                  echo hi
                else
                   echo "WARNING: cannot set up prov-pingback b/c pip is not installed."
                fi

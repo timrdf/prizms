@@ -3023,13 +3023,20 @@ else
                echo "See https://github.com/timrdf/prizms/wiki/prov-pingback"
                offer_install_aptget "pip" 'enable prov-pingback'
                if [[ `which pip` ]]; then
+                  # TODO: try wrapping this into virtualenv:
+                  # http://www.pythonforbeginners.com/basics/python-virtualenv-usage/
+                  # http://flask.pocoo.org/docs/installation/#virtualenv
+
                   #if [[ $i_can_sudo -eq 0 ]]; then # I can sudo.
                   #   echo sudo pip install -U distribute # https://github.com/pypa/pip/issues/1093#issuecomment-21704041
                   #        sudo pip install -U distribute # https://github.com/pypa/pip/issues/1093#issuecomment-21704041
                   #else
                   #   echo "WARNING: cannot set up prov-pingback b/c do not have sudo."
                   #fi
-                  pip install Flask
+   
+                  #pip install Flask
+                  
+                  sudo easy_install Flask
                else
                   echo "WARNING: cannot set up prov-pingback b/c pip is not installed."
                fi

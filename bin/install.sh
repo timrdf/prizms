@@ -3024,7 +3024,8 @@ else
                offer_install_aptget "pip" 'enable prov-pingback'
                if [[ `which pip` ]]; then
                   if [[ $i_can_sudo -eq 0 ]]; then # I can sudo.
-                     sudo pip install -U distribute # https://github.com/pypa/pip/issues/1093#issuecomment-21704041
+                     echo sudo pip install -U distribute # https://github.com/pypa/pip/issues/1093#issuecomment-21704041
+                          sudo pip install -U distribute # https://github.com/pypa/pip/issues/1093#issuecomment-21704041
                   else
                      echo "WARNING: cannot set up prov-pingback b/c do not have sudo."
                   fi

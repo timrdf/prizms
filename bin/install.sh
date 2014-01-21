@@ -395,6 +395,11 @@ else
       if [[ -z "$port" ]]; then
          port=8080 # Just for backward compatibility, this really is a bad assumption.
       fi
+      if [[ "$port" = '8080' ]]; then
+         path2="$path"
+      else
+         path2=""
+      fi
 
       already_there=""
       if [ -e $target ]; then
@@ -406,17 +411,17 @@ else
          echo "To expose the (port $port) Tomacat application server of SADI services at $our_base_uri/$path,"
          echo "the following apache configuration needs to be set in $target:"
          echo                                                                          # Mapping 5 (see above)
-         echo '  ProxyTimeout 1800'                                   > .prizms-apache-conf
-         echo '  ProxyRequests Off'                                  >> .prizms-apache-conf
-         echo                                                        >> .prizms-apache-conf
-         echo "  ProxyPass $path http://localhost:$port$path"        >> .prizms-apache-conf
-         echo "  ProxyPassReverse $path http://localhost:$port$path" >> .prizms-apache-conf
-         echo "  <Location $path>"                                   >> .prizms-apache-conf
-         echo '          Order allow,deny'                           >> .prizms-apache-conf
-         echo '          allow from all'                             >> .prizms-apache-conf
-         echo '          ProxyHTMLURLMap http://localhost:$port/ /'  >> .prizms-apache-conf
-         echo '          SetOutputFilter proxy-html'                 >> .prizms-apache-conf
-         echo '  </Location>'                                        >> .prizms-apache-conf
+         echo '  ProxyTimeout 1800'                                    > .prizms-apache-conf
+         echo '  ProxyRequests Off'                                   >> .prizms-apache-conf
+         echo                                                         >> .prizms-apache-conf
+         echo "  ProxyPass $path http://localhost:$port$path2"        >> .prizms-apache-conf
+         echo "  ProxyPassReverse $path http://localhost:$port$path2" >> .prizms-apache-conf
+         echo "  <Location $path>"                                    >> .prizms-apache-conf
+         echo '          Order allow,deny'                            >> .prizms-apache-conf
+         echo '          allow from all'                              >> .prizms-apache-conf
+         echo '          ProxyHTMLURLMap http://localhost:$port/ /'   >> .prizms-apache-conf
+         echo '          SetOutputFilter proxy-html'                  >> .prizms-apache-conf
+         echo '  </Location>'                                         >> .prizms-apache-conf
          cat .prizms-apache-conf
 
          # Tuck the new directives into the entire configuration file.

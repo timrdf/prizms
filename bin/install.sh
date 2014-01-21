@@ -390,29 +390,33 @@ else
 
    function add_proxy_pass {
       local target="$1" # e.g. '/etc/apache2/sites-available/default'
-      local path="$2"   # e.g. '/sadi-services'
+      local path="$2"   # e.g. '/sadi-services' '/annotator' '/prov-pingback'
+      local port="$3"   # e.g. '8080'           '8080'       '9412'
+      if [[ -z "$port" ]]; then
+         port=8080 # Just for backward compatibility, this really is a bad assumption.
+      fi
 
       already_there=""
       if [ -e $target ]; then
          already_there=`grep "Location $path" $target`
       fi
       echo "$div `whoami`"
-      echo "Some Apache directives (e.g., ProxyPass) need to be set in $target to expose your (port 8080) Tomcat application server at the URL $our_base_uri$path."
+      echo "Some Apache directives (e.g., ProxyPass) need to be set in $target to expose your (port $port) Tomcat application server at the URL $our_base_uri$path."
       if [[ -z "$already_there" ]]; then
-         echo "To expose the (port 8080) Tomacat application server of SADI services at $our_base_uri/$path,"
+         echo "To expose the (port $port) Tomacat application server of SADI services at $our_base_uri/$path,"
          echo "the following apache configuration needs to be set in $target:"
          echo                                                                          # Mapping 5 (see above)
-         echo '  ProxyTimeout 1800'                                  > .prizms-apache-conf
-         echo '  ProxyRequests Off'                                 >> .prizms-apache-conf
-         echo                                                       >> .prizms-apache-conf
-         echo "  ProxyPass $path http://localhost:8080$path"        >> .prizms-apache-conf
-         echo "  ProxyPassReverse $path http://localhost:8080$path" >> .prizms-apache-conf
-         echo "  <Location $path>"                                  >> .prizms-apache-conf
-         echo '          Order allow,deny'                          >> .prizms-apache-conf
-         echo '          allow from all'                            >> .prizms-apache-conf
-         echo '          ProxyHTMLURLMap http://localhost:8080/ /'  >> .prizms-apache-conf
-         echo '          SetOutputFilter proxy-html'                >> .prizms-apache-conf
-         echo '  </Location>'                                       >> .prizms-apache-conf
+         echo '  ProxyTimeout 1800'                                   > .prizms-apache-conf
+         echo '  ProxyRequests Off'                                  >> .prizms-apache-conf
+         echo                                                        >> .prizms-apache-conf
+         echo "  ProxyPass $path http://localhost:$port$path"        >> .prizms-apache-conf
+         echo "  ProxyPassReverse $path http://localhost:$port$path" >> .prizms-apache-conf
+         echo "  <Location $path>"                                   >> .prizms-apache-conf
+         echo '          Order allow,deny'                           >> .prizms-apache-conf
+         echo '          allow from all'                             >> .prizms-apache-conf
+         echo '          ProxyHTMLURLMap http://localhost:$port/ /'  >> .prizms-apache-conf
+         echo '          SetOutputFilter proxy-html'                 >> .prizms-apache-conf
+         echo '  </Location>'                                        >> .prizms-apache-conf
          cat .prizms-apache-conf
 
          # Tuck the new directives into the entire configuration file.
@@ -3041,7 +3045,7 @@ else
                else
                   echo "WARNING: cannot set up prov-pingback b/c pip is not installed."
                fi
-               add_proxy_pass '/etc/apache2/sites-available/default' '/prov-pingback'
+               add_proxy_pass '/etc/apache2/sites-available/default' '/prov-pingback' '9412'
             fi # end "I am not project user"
 
 

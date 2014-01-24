@@ -7,8 +7,6 @@
 
 [ -n "`readlink $0`" ] && this=`readlink $0` || this=$0
 HOME=$(cd ${this%/*/*} && echo ${PWD%/*})
-#export PATH=$PATH`$HOME/bin/util/cr-situate-paths.sh`
-#export CLASSPATH=$CLASSPATH`$HOME/bin/util/cr-situate-classpaths.sh`
 export PATH=$PATH`$HOME/bin/install/paths.sh`
 export CLASSPATH=$CLASSPATH`$HOME/bin/install/classpaths.sh`
 
@@ -70,9 +68,10 @@ pushd `cr-conversion-root.sh` &> /dev/null
    # ./healthdata-tw-rpi-edu/prov-pingback/version/20140123-1390489968-016e-98c11745f80caf7eb39dd0012a6b256c/access.ttl
    # ./provenanceweb-org/prov-pingback/version/20140123-1390489968-016e-f716f5b6fa6e2aa10164b4cd2ea51a7a/access.ttl
    for access in `find . -mindepth 5 -maxdepth 5 -name access.ttl`; do
-      echo ${access#./}
-      sdv=$(cd `dirname $access` && cr-sdv.sh)
-      if [[ -e $access/source && ! -e $access/publish ]]; then
+      echo "  ${access#./}"
+      pingpit=`dirname $access`
+      sdv=$(cd $pingpit && cr-sdv.sh)
+      if [[ -e $pingpit/source && ! -e $pingpit/publish ]]; then
          pushd `dirname $access` &> /dev/null
             for prov in `find source -name "*.prov.ttl"`; do
                pingback=${prov%.prov.ttl}

@@ -87,7 +87,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
                   fi
                done
             popd &> /dev/null
-         elif [[ -e $pingpit/source ]]; then
+         elif [[ ! -e $pingpit/source ]]; then
             echo "    (not yet retrieved)"
          fi
       else

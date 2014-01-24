@@ -89,7 +89,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
             popd &> /dev/null
          fi
       else
-         echo "   (not a PingbackDataset)"
+         echo "    (not a PingbackDataset)"
       fi
       #if [ "$dryrun" != "true" ]; then
       #   ln $access $cockpit/source/$sdv.access.ttl

@@ -86,7 +86,9 @@ pushd `cr-conversion-root.sh` &> /dev/null
                         rm $pingback $prov
                      fi
                   else
+                     echo "        -$acceptable"
                      acceptable="$acceptable source/`basename $pingback`" 
+                     echo "        -$acceptable"
                      echo "        $cockpit/source/$sdv.ttl"
                      if [ "$dryrun" != "true" ]; then
                         ln $pingback $cockpit/source/$sdv.ttl
@@ -96,7 +98,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
             done
             if [[ -n "$acceptable" ]]; then
                echo
-               echo "  publishing $acceptable"
+               echo "  publishing$acceptable"
                if [ "$dryrun" != "true" ]; then
                   pushd $pingpit &> /dev/null
                      aggregate-source-rdf.sh "$acceptable"

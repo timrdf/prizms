@@ -86,12 +86,14 @@ pushd `cr-conversion-root.sh` &> /dev/null
                         rm $pingback $prov
                      fi
                   else
-                     echo "        -$acceptable"
-                     acceptable="$acceptable source/`basename $pingback`" 
-                     echo "        -$acceptable"
-                     echo "        $cockpit/source/$sdv.ttl"
-                     if [ "$dryrun" != "true" ]; then
-                        ln $pingback $cockpit/source/$sdv.ttl
+                     if [[ `rdf2nt.sh $pingback | grep '<http://www.w3.org/ns/prov#' | wc -l | awk '{print $1}'` -gt 0 ]]; then
+                        acceptable="$acceptable source/`basename $pingback`" 
+                        echo "        $cockpit/source/$sdv.ttl"
+                        if [ "$dryrun" != "true" ]; then
+                           ln $pingback $cockpit/source/$sdv.ttl
+                        fi
+                     else
+                        echo "        Not publishing b/c did not contain any PROV-O statements `basename $pingback`."
                      fi
                   fi
                fi

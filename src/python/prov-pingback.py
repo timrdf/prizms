@@ -57,20 +57,21 @@ def acceptPingback(path):
 
         if len(request.form['provenance']) > 0 and request.form['provenance'].startswith('http'):
             url6 = urlparse(request.form['provenance'])
-            urlHash = getLocationHashName(request.form['provenance'])
+            if request.form['provenance'].startswith('http://provenanceweb.org'):
+                urlHash = getLocationHashName(request.form['provenance'])
 
-            sourceID  = re.sub('\.','-',url6.netloc)
-            datasetID = 'prov-pingback'
-            versionID = resourceID + '-' + urlHash #getTodayEpochHashName(4)
+                sourceID  = re.sub('\.','-',url6.netloc)
+                datasetID = 'prov-pingback'
+                versionID = resourceID + '-' + urlHash #getTodayEpochHashName(4)
 
-            sourceOrg        = CR_BASE_URI+'''/source/'''+sourceID
-            abstractDataset  = CR_BASE_URI+'''/source/'''+sourceID+'''/dataset/'''+datasetID
-            versionedDataset = CR_BASE_URI+'''/source/'''+sourceID+'''/dataset/'''+datasetID+'''/version/'''+versionID
+                sourceOrg        = CR_BASE_URI+'''/source/'''+sourceID
+                abstractDataset  = CR_BASE_URI+'''/source/'''+sourceID+'''/dataset/'''+datasetID
+                versionedDataset = CR_BASE_URI+'''/source/'''+sourceID+'''/dataset/'''+datasetID+'''/version/'''+versionID
 
-            if not os.path.exists(CR_CONVERSION_ROOT + '/' + sourceID + '/' + datasetID + '/version/' + versionID):
-                os.makedirs(CR_CONVERSION_ROOT + '/' + sourceID + '/' + datasetID + '/version/' + versionID)
-            # Analogous implementation (bash): https://github.com/timrdf/csv2rdf4lod-automation/blob/master/bin/cr-dcat-retrieval-url.sh
-            access = '''#
+                if not os.path.exists(CR_CONVERSION_ROOT + '/' + sourceID + '/' + datasetID + '/version/' + versionID):
+                    os.makedirs(CR_CONVERSION_ROOT + '/' + sourceID + '/' + datasetID + '/version/' + versionID)
+                # Analogous implementation (bash): https://github.com/timrdf/csv2rdf4lod-automation/blob/master/bin/cr-dcat-retrieval-url.sh
+                access = '''#
 #3> <> dcterms:modified "'''+datetime.now(pytz.utc).isoformat()+'''"^^xsd:dateTime .
 #
 
@@ -84,7 +85,7 @@ def acceptPingback(path):
 @prefix :           <'''+CR_BASE_URI+'''/id/> .
 
 <'''+versionedDataset+'''>
-   a void:Dataset, dcat:Dataset;
+   a void:Dataset, dcat:Dataset, conversion:PingbackDataset;
    conversion:source_identifier  "'''+sourceID+'''";
    conversion:dataset_identifier "'''+datasetID+'''";
    prov:wasDerivedFrom :download_'''+urlHash+''';
@@ -100,19 +101,21 @@ def acceptPingback(path):
 #   dcat:distribution :download;
 #.
 '''
-            f = open(CR_CONVERSION_ROOT + '/' + sourceID + '/' + datasetID + '/version/' + versionID + '/access.ttl', 'w')
-            f.write(access)
-            f.close()
-            #if len(url6) > 0 and 
-            #f = request.files['the_file']
-            #f.save('/home/prizms/prizms/opendap/data/source' + secure_filename(f.filename))
-            return '<a href="' + request.form['provenance'] + '">' + request.form['provenance'] + '</a><br/>' \
-                   'should contain provenance about derivations of the resource:<br/>'+  \
-                    'conversion:version_identifier: ' + steps[0] + '<br/><br/>' + \
-                    'Your pingback created <a href="'+versionedDataset+'">a void:Dataset with SDV attributes</a>:<br/><dl>' + \
-                    '<dt>source-id:</dt> <dd><a href="' + sourceOrg        + '">' + sourceID + '</a></dd></dt>' + \
-                    '<dt>dataset-id:</dt><dd><a href="' + abstractDataset  + '">' + datasetID + '</a></dd></dt>' + \
-                    '<dt>version-id:</dt><dd><a href="' + versionedDataset + '">' + versionID + '</a></dd></dt></dl>'
+                f = open(CR_CONVERSION_ROOT + '/' + sourceID + '/' + datasetID + '/version/' + versionID + '/access.ttl', 'w')
+                f.write(access)
+                f.close()
+                #if len(url6) > 0 and 
+                #f = request.files['the_file']
+                #f.save('/home/prizms/prizms/opendap/data/source' + secure_filename(f.filename))
+                return '<a href="' + request.form['provenance'] + '">' + request.form['provenance'] + '</a><br/>' \
+                       'should contain provenance about derivations of the resource:<br/>'+  \
+                        'conversion:version_identifier: ' + steps[0] + '<br/><br/>' + \
+                        'Your pingback created <a href="'+versionedDataset+'">a void:Dataset with SDV attributes</a>:<br/><dl>' + \
+                        '<dt>source-id:</dt> <dd><a href="' + sourceOrg        + '">' + sourceID + '</a></dd></dt>' + \
+                        '<dt>dataset-id:</dt><dd><a href="' + abstractDataset  + '">' + datasetID + '</a></dd></dt>' + \
+                        '<dt>version-id:</dt><dd><a href="' + versionedDataset + '">' + versionID + '</a></dd></dt></dl>'
+            else:
+                return 'Error: The provided provenance URI is from a domain "'+url6.netloc+'" that is not in our white list.', 409
         else:
             return 'The provenance should be provided using the parameter named "provenance", with a URI value. Retry the request with that parameter set.', 400
             

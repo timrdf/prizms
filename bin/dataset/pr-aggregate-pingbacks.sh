@@ -73,6 +73,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
       if [[ `rdf2nt.sh $access | grep '<http://purl.org/twc/vocab/conversion/PingbackDataset>' | wc -l | awk '{print $1}'` -gt 0 ]]; then
          pingpit=`dirname $access`
          sdv=$(cd $pingpit && cr-sdv.sh)
+         acceptable=''
          if [[ -e $pingpit/source && ! -e $pingpit/publish ]]; then
             for prov in `find $pingpit/source -name "*.prov.ttl"`; do
                pingback=${prov%.prov.ttl}
@@ -85,6 +86,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
                         rm $pingback $prov
                      fi
                   else
+                     acceptable="$acceptable source/`basename $pingback`" 
                      echo "        $cockpit/source/$sdv.ttl"
                      if [ "$dryrun" != "true" ]; then
                         ln $pingback $cockpit/source/$sdv.ttl
@@ -92,6 +94,14 @@ pushd `cr-conversion-root.sh` &> /dev/null
                   fi
                fi
             done
+            if [[ -n "$acceptable" ]]; then
+               echo "      publishing $acceptable"
+               if [ "$dryrun" != "true" ]; then
+                  pushd $pingpit &> /dev/null
+                     aggregate-source-rdf.sh "$acceptable"
+                  popd &> /dev/null
+               fi
+            fi
          elif [[ ! -e $pingpit/source ]]; then
             echo "    (not yet retrieved)"
          fi

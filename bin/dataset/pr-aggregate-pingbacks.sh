@@ -74,21 +74,19 @@ pushd `cr-conversion-root.sh` &> /dev/null
          pingpit=`dirname $access`
          sdv=$(cd $pingpit && cr-sdv.sh)
          if [[ -e $pingpit/source && ! -e $pingpit/publish ]]; then
-            pushd `dirname $access` &> /dev/null
-               for prov in `find source -name "*.prov.ttl"`; do
-                  pingback=${prov%.prov.ttl}
-                  if [[ -e "$pingback" ]]; then
-                     echo "    $prov"
-                     echo "        about pingback $pingback"
-                     if [[ -e "$pingback" && `valid-rdf.sh $pingback` != 'yes' ]]; then
-                        echo "    WARNING: `basename $0` removing pingback b/c not valid RDF: $pingback"
-                        if [ "$dryrun" != "true" ]; then
-                           rm $pingback $prov
-                        fi
+            for prov in `find $pingpit/source -name "*.prov.ttl"`; do
+               pingback=${prov%.prov.ttl}
+               if [[ -e "$pingback" ]]; then
+                  echo "    $prov"
+                  echo "        about pingback $pingback"
+                  if [[ -e "$pingback" && `valid-rdf.sh $pingback` != 'yes' ]]; then
+                     echo "    WARNING: `basename $0` removing pingback b/c not valid RDF: $pingback"
+                     if [ "$dryrun" != "true" ]; then
+                        rm $pingback $prov
                      fi
                   fi
-               done
-            popd &> /dev/null
+               fi
+            done
          elif [[ ! -e $pingpit/source ]]; then
             echo "    (not yet retrieved)"
          fi

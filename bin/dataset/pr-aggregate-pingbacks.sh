@@ -77,10 +77,10 @@ pushd `cr-conversion-root.sh` &> /dev/null
             for prov in `find $pingpit/source -name "*.prov.ttl"`; do
                pingback=${prov%.prov.ttl}
                if [[ -e "$pingback" ]]; then
-                  echo "    `basename $prov`"
-                  echo "        about pingback `basename $pingback`"
+                  echo "    source/`basename $prov`"
+                  echo "        about pingback source/`basename $pingback`"
                   if [[ -e "$pingback" && `valid-rdf.sh $pingback` != 'yes' ]]; then
-                     echo "    WARNING: `basename $0` removing pingback b/c not valid RDF: $pingback"
+                     echo "    WARNING: `basename $0` removing pingback b/c not valid RDF: source/`basename $pingback`"
                      if [ "$dryrun" != "true" ]; then
                         rm $pingback $prov
                      fi

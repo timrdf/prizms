@@ -70,22 +70,26 @@ pushd `cr-conversion-root.sh` &> /dev/null
    for access in `find . -mindepth 5 -maxdepth 5 -name access.ttl`; do
       echo
       echo "  ${access#./}"
-      pingpit=`dirname $access`
-      sdv=$(cd $pingpit && cr-sdv.sh)
-      if [[ -e $pingpit/source && ! -e $pingpit/publish ]]; then
-         pushd `dirname $access` &> /dev/null
-            for prov in `find source -name "*.prov.ttl"`; do
-               pingback=${prov%.prov.ttl}
-               echo "    $prov"
-               echo "        about $pingback"
-               if [[ -e "$pingback" && `valid-rdf.sh $pingback` != 'yes' ]]; then
-                  echo "WARNING: `basename $0` removing pingback b/c not valid RDF: $pingback"
-                  if [ "$dryrun" != "true" ]; then
-                     rm $pingback $prov
+      if [[ `rdf2nt.sh $access | grep '<http://purl.org/twc/vocab/conversion/PingbackDataset>' | wc -l | awk '{print $1}'` -gt 0 ]]; then
+         pingpit=`dirname $access`
+         sdv=$(cd $pingpit && cr-sdv.sh)
+         if [[ -e $pingpit/source && ! -e $pingpit/publish ]]; then
+            pushd `dirname $access` &> /dev/null
+               for prov in `find source -name "*.prov.ttl"`; do
+                  pingback=${prov%.prov.ttl}
+                  echo "    $prov"
+                  echo "        about $pingback"
+                  if [[ -e "$pingback" && `valid-rdf.sh $pingback` != 'yes' ]]; then
+                     echo "WARNING: `basename $0` removing pingback b/c not valid RDF: $pingback"
+                     if [ "$dryrun" != "true" ]; then
+                        rm $pingback $prov
+                     fi
                   fi
-               fi
-            done
-         popd &> /dev/null
+               done
+            popd &> /dev/null
+         fi
+      else
+         echo "   (not a PingbackDataset)"
       fi
       #if [ "$dryrun" != "true" ]; then
       #   ln $access $cockpit/source/$sdv.access.ttl

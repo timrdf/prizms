@@ -84,6 +84,11 @@ pushd `cr-conversion-root.sh` &> /dev/null
                      if [ "$dryrun" != "true" ]; then
                         rm $pingback $prov
                      fi
+                  else
+                     echo "  $cockpit/source/$sdv.ttl"
+                     if [ "$dryrun" != "true" ]; then
+                        ln $pingback $cockpit/source/$sdv.ttl
+                     fi
                   fi
                fi
             done
@@ -93,9 +98,6 @@ pushd `cr-conversion-root.sh` &> /dev/null
       else
          echo "    (not a PingbackDataset)"
       fi
-      #if [ "$dryrun" != "true" ]; then
-      #   ln $access $cockpit/source/$sdv.access.ttl
-      #fi
    done
    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

@@ -3045,7 +3045,7 @@ else
    
                   if [[ $i_can_sudo -eq 0 ]]; then # I can sudo.
                      sudo easy_install Flask
-                     sudo easy_install argparse
+                     sudo easy_install argparse pytz
                   fi
                   
                   # Worked, but need "do only once logic": sudo easy_install Flask

@@ -85,7 +85,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
                         rm $pingback $prov
                      fi
                   else
-                     echo "  $cockpit/source/$sdv.ttl"
+                     echo "        $cockpit/source/$sdv.ttl"
                      if [ "$dryrun" != "true" ]; then
                         ln $pingback $cockpit/source/$sdv.ttl
                      fi

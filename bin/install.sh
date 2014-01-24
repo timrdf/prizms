@@ -3043,8 +3043,10 @@ else
                   #   echo "WARNING: cannot set up prov-pingback b/c do not have sudo."
                   #fi
    
-                  easy_install install Flask
-                  easy_install install argparse
+                  if [[ $i_can_sudo -eq 0 ]]; then # I can sudo.
+                     sudo easy_install install Flask
+                     sudo easy_install install argparse
+                  fi
                   
                   # Worked, but need "do only once logic": sudo easy_install Flask
                else

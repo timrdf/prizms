@@ -3043,8 +3043,8 @@ else
                   #   echo "WARNING: cannot set up prov-pingback b/c do not have sudo."
                   #fi
    
-                  pip install Flask
-                  pip install argparse
+                  easy_install install Flask
+                  easy_install install argparse
                   
                   # Worked, but need "do only once logic": sudo easy_install Flask
                else

@@ -73,8 +73,8 @@ pushd `cr-conversion-root.sh` &> /dev/null
       if [[ `rdf2nt.sh $access | grep '<http://purl.org/twc/vocab/conversion/PingbackDataset>' | wc -l | awk '{print $1}'` -gt 0 ]]; then
          pingpit=`dirname $access`
          sdv=$(cd $pingpit && cr-sdv.sh)
-         acceptable=''
          if [[ -e $pingpit/source && ! -e $pingpit/publish ]]; then
+            acceptable=''
             for prov in `find $pingpit/source -name "*.prov.ttl"`; do
                pingback=${prov%.prov.ttl}
                if [[ -e "$pingback" ]]; then

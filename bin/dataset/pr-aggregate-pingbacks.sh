@@ -93,7 +93,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
                            ln $pingback $cockpit/source/$sdv.ttl
                         fi
                      else
-                        echo "        Not publishing b/c did not contain any PROV-O statements `basename $pingback`."
+                        echo "        Not publishing b/c did not contain any PROV-O statements: `basename $pingback`."
                      fi
                   fi
                fi

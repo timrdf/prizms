@@ -7,8 +7,10 @@
 
 [ -n "`readlink $0`" ] && this=`readlink $0` || this=$0
 HOME=$(cd ${this%/*/*} && echo ${PWD%/*})
-export PATH=$PATH`$HOME/bin/util/cr-situate-paths.sh`
-export CLASSPATH=$CLASSPATH`$HOME/bin/util/cr-situate-classpaths.sh`
+#export PATH=$PATH`$HOME/bin/util/cr-situate-paths.sh`
+#export CLASSPATH=$CLASSPATH`$HOME/bin/util/cr-situate-classpaths.sh`
+export PATH=$PATH`$HOME/bin/install/paths.sh`
+export CLASSPATH=$CLASSPATH`$HOME/bin/install/classpaths.sh`
 
 # cr:data-root cr:source cr:directory-of-datasets cr:dataset cr:directory-of-versions cr:conversion-cockpit
 ACCEPTABLE_PWDs="cr:bone"

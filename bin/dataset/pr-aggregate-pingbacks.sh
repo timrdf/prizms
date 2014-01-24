@@ -95,7 +95,8 @@ pushd `cr-conversion-root.sh` &> /dev/null
                fi
             done
             if [[ -n "$acceptable" ]]; then
-               echo "      publishing $acceptable"
+               echo
+               echo "  publishing $acceptable"
                if [ "$dryrun" != "true" ]; then
                   pushd $pingpit &> /dev/null
                      aggregate-source-rdf.sh "$acceptable"

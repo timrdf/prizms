@@ -8,7 +8,7 @@
 #
 #
 
-WHITE_LIST='provenanceweb.org'
+WHITE_LIST = ['provenanceweb.org','healthdata.tw.rpi.edu','dig.csail.mit.edu']
 
 from urlparse import urlparse, urlunparse
 import re
@@ -57,7 +57,7 @@ def acceptPingback(path):
 
         if len(request.form['provenance']) > 0 and request.form['provenance'].startswith('http'):
             url6 = urlparse(request.form['provenance'])
-            if request.form['provenance'].startswith('http://provenanceweb.org'):
+            if url6.netloc in WHITE_LIST:
                 urlHash = getLocationHashName(request.form['provenance'])
 
                 sourceID  = re.sub('\.','-',url6.netloc)

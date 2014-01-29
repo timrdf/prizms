@@ -96,7 +96,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
                         #   ln $pingback $cockpit/source/$sdv.ttl
                         #fi
                      else
-                        echo "        Valid RDF, but does not contain PROV-O statements (not publishing): `basename $pingback`."
+                        echo "        (valid RDF, but does not contain PROV-O statements (not publishing): `basename $pingback`)"
                      fi
                   fi
                fi

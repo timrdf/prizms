@@ -58,10 +58,11 @@ fi
 pushd `cr-conversion-root.sh` &> /dev/null
    cockpit="$sourceID/$datasetID/version/$versionID"
    if [ "$dryrun" != "true" ]; then
-      mkdir -p $cockpit/source $cockpit/automatic &> /dev/null
-      rm -rf $cockpit/source/*                    &> /dev/null
+      mkdir -p $cockpit/source $cockpit/automatic              &> /dev/null
+      rm -rf $cockpit/source/* $cockpit/automatic/includes.txt &> /dev/null
    fi
 
+   include_in_this_version=''
    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
    echo "Aggregating all Pingback access metadata in `pwd` into $cockpit/source/." >&2
    # from e.g.
@@ -70,8 +71,8 @@ pushd `cr-conversion-root.sh` &> /dev/null
    for access in `find . -mindepth 5 -maxdepth 5 -name access.ttl`; do
       echo
       echo "  ${access#./}"
+      pingpit=`dirname $access`
       if [[ `rdf2nt.sh $access | grep '<http://purl.org/twc/vocab/conversion/PingbackDataset>' | wc -l | awk '{print $1}'` -gt 0 ]]; then
-         pingpit=`dirname $access`
          sdv=$(cd $pingpit && cr-sdv.sh)
          if [[ -e $pingpit/source && ! -e $pingpit/publish ]]; then
             # Retrieved but not published.
@@ -118,6 +119,29 @@ pushd `cr-conversion-root.sh` &> /dev/null
          else
             echo "    (??)"
          fi
+
+
+
+
+         include_in_this_version="$include_in_this_version" # If retrieved today, or not in any previous version.
+         for prov in `find $pingpit/source -name "*.prov.ttl"`; do
+            pingback=${prov%.prov.ttl}
+            if [[ -e "$pingback" ]]; then
+               echo "    $pingback"
+               found='no'
+               for includes in `find us/pr-aggregate-pingbacks -mindepth 4 -maxdepth 4 -name "includes.txt"`; do
+                  if [[ "$found" != 'yes' ]]; then
+                     echo grep $pingback $includes
+                     grep $pingback $includes
+                     there=$?
+                     if [[ "$there" != 0 ]]; then
+                        found='yes'
+                        echo $pingback >> $cockpit/automatic/includes.txt
+                     fi
+                  fi   
+               done
+            fi
+         done
       else
          echo "    (not a PingbackDataset)"
       fi
@@ -126,13 +150,13 @@ pushd `cr-conversion-root.sh` &> /dev/null
 
    pushd $cockpit &> /dev/null
       echo
-      echo aggregate-source-rdf.sh --link-as-latest automatic/meta.ttl source/*.ttl 
+      echo aggregate-source-rdf.sh --link-as-latest automatic/meta.ttl `cat automatic/includes.txt` 
       if [ "$dryrun" != "true" ]; then
          cr-default-prefixes.sh --turtle                                     > automatic/meta.ttl
          echo "<`cr-dataset-uri.sh --uri`> a conversion:AggregateDataset ." >> automatic/meta.ttl
          cat automatic/meta.ttl | grep -v "@prefix"
    
-         aggregate-source-rdf.sh --link-as-latest automatic/meta.ttl source/*.ttl
+         aggregate-source-rdf.sh --link-as-latest automatic/meta.ttl `cat automatic/includes.txt`
      fi
   popd &> /dev/null
 

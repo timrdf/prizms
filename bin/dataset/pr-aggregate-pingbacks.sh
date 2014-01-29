@@ -136,10 +136,13 @@ pushd `cr-conversion-root.sh` &> /dev/null
                      there=$?
                      if [[ "$there" != 0 ]]; then
                         found='yes'
-                        echo $pingback >> $cockpit/automatic/includes.txt
                      fi
                   fi   
                done
+               if [[ "$found" != 'yes' ]]; then
+                  echo "Including $pingback"
+                  echo "$pingback" >> $cockpit/automatic/includes.txt
+               fi
             fi
          done
       else

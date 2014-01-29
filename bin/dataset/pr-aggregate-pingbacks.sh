@@ -91,10 +91,11 @@ pushd `cr-conversion-root.sh` &> /dev/null
                   else
                      if [[ `rdf2nt.sh $pingback | grep '<http://www.w3.org/ns/prov#' | wc -l | awk '{print $1}'` -gt 0 ]]; then
                         acceptable="$acceptable source/`basename $pingback`" 
-                        echo "        $cockpit/source/$sdv.ttl"
+                        #echo "        $cockpit/source/$sdv.ttl"
                         #if [ "$dryrun" != "true" ]; then
                         #   ln $pingback $cockpit/source/$sdv.ttl
                         #fi
+                        echo "    (will include in this version)" # Let the loop below handle it.
                      else
                         echo "        (valid RDF, but does not contain PROV-O statements (not publishing): `basename $pingback`)"
                      fi
@@ -146,7 +147,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
                      fi
                      echo "$pingback" >> $cockpit/automatic/${III}includes.txt
                   else
-                     echo "    (already included in pr-aggregate-pingbacks version $is_in_version"
+                     echo "    (already included in $is_in_version"
                   fi
                fi
             done

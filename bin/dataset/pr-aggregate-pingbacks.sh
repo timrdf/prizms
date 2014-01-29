@@ -74,6 +74,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
          pingpit=`dirname $access`
          sdv=$(cd $pingpit && cr-sdv.sh)
          if [[ -e $pingpit/source && ! -e $pingpit/publish ]]; then
+            # Retrieved but not published.
             acceptable=''
             for prov in `find $pingpit/source -name "*.prov.ttl"`; do
                pingback=${prov%.prov.ttl}
@@ -109,6 +110,10 @@ pushd `cr-conversion-root.sh` &> /dev/null
             fi
          elif [[ ! -e $pingpit/source ]]; then
             echo "    (not yet retrieved)"
+         elif [[ -e $pingpit/source && -e $pingpit/publish ]]; then
+            echo "    (already retrieved and published)"
+         else
+            echo "    (??)"
          fi
       else
          echo "    (not a PingbackDataset)"

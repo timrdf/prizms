@@ -128,18 +128,18 @@ pushd `cr-conversion-root.sh` &> /dev/null
             pingback=${prov%.prov.ttl}
             if [[ -e "$pingback" ]]; then
                echo "    $pingback"
-               found='no'
+               has_been_aggregated='no'
                for includes in `find us/pr-aggregate-pingbacks -mindepth 4 -maxdepth 4 -name "includes.txt"`; do
-                  if [[ "$found" != 'yes' ]]; then
+                  if [[ "$has_been_aggregated" != 'yes' ]]; then
                      echo grep $pingback $includes
-                     grep $pingback $includes
+                     path=`grep $pingback $includes`
                      there=$?
                      if [[ "$there" == 0 ]]; then
-                        found='yes'
+                        has_been_aggregated='yes'
                      fi
                   fi   
                done
-               if [[ "$found" != 'yes' ]]; then
+               if [[ "$has_been_aggregated" != 'yes' ]]; then
                   echo "    (will include in this version)"
                   echo "$pingback" >> $cockpit/automatic/includes.txt
                fi

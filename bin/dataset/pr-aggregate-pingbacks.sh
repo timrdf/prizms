@@ -127,7 +127,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
                is_in_version=''
                for includes in `find $sourceID/$datasetID -mindepth 4 -maxdepth 4 -name "includes.txt"`; do
                   if [[ "$has_been_aggregated" != 'yes' ]]; then
-                     path=`grep $pingback $includes`
+                     path=`grep "$pingback" $includes`
                      there=$?
                      if [[ "$there" == 0 ]]; then
                         has_been_aggregated='yes'

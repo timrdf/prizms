@@ -131,18 +131,21 @@ pushd `cr-conversion-root.sh` &> /dev/null
                      there=$?
                      if [[ "$there" == 0 ]]; then
                         has_been_aggregated='yes'
+                        is_in_version="$includes"
                      fi
                   fi   
                done
                if [[ "$has_been_aggregated" != 'yes' ]]; then
-                  pushd ${pingback%source/*} &> /dev/null
-                     sdv=`cr-sdv.sh`
-                  popd &> /dev/null
                   echo "    (will include in this version)"
                   if [ "$dryrun" != "true" ]; then
+                     pushd ${pingback%source/*} &> /dev/null
+                        sdv=`cr-sdv.sh`
+                     popd &> /dev/null
                      ln -s `pwd`/$pingback `pwd`/$cockpit/source/$sdv
                   fi
                   echo "$pingback" >> $cockpit/automatic/${III}includes.txt
+               else
+                  echo "    (already included in pr-aggregate-pingbacks version $is_in_version"
                fi
             fi
          done

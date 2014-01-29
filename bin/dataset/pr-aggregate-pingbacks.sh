@@ -32,6 +32,7 @@ fi
 dryrun="false"
 if [ "$1" == "-n" ]; then
    dryrun="true"
+   III="dryrun_"
    dryrun.sh $dryrun beginning
    shift
 fi
@@ -58,11 +59,10 @@ fi
 pushd `cr-conversion-root.sh` &> /dev/null
    cockpit="$sourceID/$datasetID/version/$versionID"
    if [ "$dryrun" != "true" ]; then
-      mkdir -p $cockpit/source $cockpit/automatic              &> /dev/null
-      rm -rf $cockpit/source/* $cockpit/automatic/includes.txt &> /dev/null
+      mkdir -p $cockpit/source $cockpit/automatic &> /dev/null
+      rm -rf $cockpit/source/* $cockpit/automatic/${III}includes.txt $cockpit/automatic/includes.txt &> /dev/null
    fi
 
-   include_in_this_version=''
    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
    echo "Aggregating all Pingback access metadata in `pwd` into $cockpit/source/." >&2
    # from e.g.
@@ -92,9 +92,9 @@ pushd `cr-conversion-root.sh` &> /dev/null
                      if [[ `rdf2nt.sh $pingback | grep '<http://www.w3.org/ns/prov#' | wc -l | awk '{print $1}'` -gt 0 ]]; then
                         acceptable="$acceptable source/`basename $pingback`" 
                         echo "        $cockpit/source/$sdv.ttl"
-                        if [ "$dryrun" != "true" ]; then
-                           ln $pingback $cockpit/source/$sdv.ttl
-                        fi
+                        #if [ "$dryrun" != "true" ]; then
+                        #   ln $pingback $cockpit/source/$sdv.ttl
+                        #fi
                      else
                         echo "        Valid RDF, but does not contain PROV-O statements (not publishing): `basename $pingback`."
                      fi
@@ -120,15 +120,11 @@ pushd `cr-conversion-root.sh` &> /dev/null
             echo "    (??)"
          fi
 
-
-
-
-         include_in_this_version="$include_in_this_version" # If retrieved today, or not in any previous version.
          for prov in `find $pingpit/source -name "*.prov.ttl"`; do
             pingback=${prov%.prov.ttl}
             if [[ -e "$pingback" ]]; then
                has_been_aggregated='no'
-               for includes in `find us/pr-aggregate-pingbacks -mindepth 4 -maxdepth 4 -name "includes.txt"`; do
+               for includes in `find $sourceID/$datasetID -mindepth 4 -maxdepth 4 -name "includes.txt"`; do
                   if [[ "$has_been_aggregated" != 'yes' ]]; then
                      echo "    grep $pingback $includes"
                      path=`grep $pingback $includes`
@@ -143,10 +139,14 @@ pushd `cr-conversion-root.sh` &> /dev/null
                      sdv=`cr-sdv.sh`
                   popd &> /dev/null
                   echo "    (will include in this version)"
-                  echo "$pingback" >> $cockpit/automatic/includes.txt
+                  if [ "$dryrun" != "true" ]; then
+                     ln -s `pwd`/$pingback `pwd`/$cockpit/source/$sdv
+                  fi
+                  echo "$pingback" >> $cockpit/automatic/${III}includes.txt
                fi
             fi
          done
+
       else
          echo "    (not a PingbackDataset)"
       fi
@@ -155,13 +155,13 @@ pushd `cr-conversion-root.sh` &> /dev/null
 
    pushd $cockpit &> /dev/null
       echo
-      echo aggregate-source-rdf.sh --link-as-latest automatic/meta.ttl `cat automatic/includes.txt` 
+      echo aggregate-source-rdf.sh --link-as-latest automatic/meta.ttl source/*.ttl
       if [ "$dryrun" != "true" ]; then
          cr-default-prefixes.sh --turtle                                     > automatic/meta.ttl
          echo "<`cr-dataset-uri.sh --uri`> a conversion:AggregateDataset ." >> automatic/meta.ttl
          cat automatic/meta.ttl | grep -v "@prefix"
    
-         aggregate-source-rdf.sh --link-as-latest automatic/meta.ttl `cat automatic/includes.txt`
+         aggregate-source-rdf.sh --link-as-latest automatic/meta.ttl source/*.ttl
      fi
   popd &> /dev/null
 

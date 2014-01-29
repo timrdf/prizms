@@ -95,7 +95,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
                            ln $pingback $cockpit/source/$sdv.ttl
                         fi
                      else
-                        echo "        Not publishing b/c did not contain any PROV-O statements: `basename $pingback`."
+                        echo "        Valid RDF, but does not contain PROV-O statements (not publishing): `basename $pingback`."
                      fi
                   fi
                fi
@@ -108,6 +108,8 @@ pushd `cr-conversion-root.sh` &> /dev/null
                      aggregate-source-rdf.sh "$acceptable"
                   popd &> /dev/null
                fi
+            else
+               echo "    (nothing acceptable)"
             fi
          elif [[ ! -e $pingpit/source ]]; then
             echo "    (not yet retrieved)"

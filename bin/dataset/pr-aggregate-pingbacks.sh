@@ -140,7 +140,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
                   fi   
                done
                if [[ "$found" != 'yes' ]]; then
-                  echo "Including $pingback"
+                  echo "    (will include in this version)"
                   echo "$pingback" >> $cockpit/automatic/includes.txt
                fi
             fi

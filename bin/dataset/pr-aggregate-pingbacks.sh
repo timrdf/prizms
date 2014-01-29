@@ -134,7 +134,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
                      echo grep $pingback $includes
                      grep $pingback $includes
                      there=$?
-                     if [[ "$there" != 0 ]]; then
+                     if [[ "$there" == 0 ]]; then
                         found='yes'
                      fi
                   fi   

@@ -120,35 +120,37 @@ pushd `cr-conversion-root.sh` &> /dev/null
             echo "    (??)"
          fi
 
-         for prov in `find $pingpit/source -name "*.prov.ttl"`; do
-            pingback=${prov%.prov.ttl}
-            if [[ -e "$pingback" ]]; then
-               has_been_aggregated='no'
-               is_in_version=''
-               for includes in `find $sourceID/$datasetID -mindepth 4 -maxdepth 4 -name "includes.txt"`; do
+         if [[ -e $pingpit/publish ]]; then
+            for prov in `find $pingpit/source -name "*.prov.ttl"`; do
+               pingback=${prov%.prov.ttl}
+               if [[ -e "$pingback" ]]; then
+                  has_been_aggregated='no'
+                  is_in_version=''
+                  for includes in `find $sourceID/$datasetID -mindepth 4 -maxdepth 4 -name "includes.txt"`; do
+                     if [[ "$has_been_aggregated" != 'yes' ]]; then
+                        path=`grep "$pingback" $includes`
+                        there=$?
+                        if [[ "$there" == 0 ]]; then
+                           has_been_aggregated='yes'
+                           is_in_version="$includes"
+                        fi
+                     fi   
+                  done
                   if [[ "$has_been_aggregated" != 'yes' ]]; then
-                     path=`grep "$pingback" $includes`
-                     there=$?
-                     if [[ "$there" == 0 ]]; then
-                        has_been_aggregated='yes'
-                        is_in_version="$includes"
+                     echo "    (will include in this version)"
+                     if [ "$dryrun" != "true" ]; then
+                        pushd ${pingback%source/*} &> /dev/null
+                           sdv=`cr-sdv.sh`
+                        popd &> /dev/null
+                        ln -s `pwd`/$pingback `pwd`/$cockpit/source/$sdv
                      fi
-                  fi   
-               done
-               if [[ "$has_been_aggregated" != 'yes' ]]; then
-                  echo "    (will include in this version)"
-                  if [ "$dryrun" != "true" ]; then
-                     pushd ${pingback%source/*} &> /dev/null
-                        sdv=`cr-sdv.sh`
-                     popd &> /dev/null
-                     ln -s `pwd`/$pingback `pwd`/$cockpit/source/$sdv
+                     echo "$pingback" >> $cockpit/automatic/${III}includes.txt
+                  else
+                     echo "    (already included in pr-aggregate-pingbacks version $is_in_version"
                   fi
-                  echo "$pingback" >> $cockpit/automatic/${III}includes.txt
-               else
-                  echo "    (already included in pr-aggregate-pingbacks version $is_in_version"
                fi
-            fi
-         done
+            done
+         fi
 
       else
          echo "    (not a PingbackDataset)"

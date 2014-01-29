@@ -85,6 +85,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
                      echo "    WARNING: `basename $0` removing pingback b/c not valid RDF: source/`basename $pingback`"
                      if [ "$dryrun" != "true" ]; then
                         rm $pingback $prov
+                        echo `basename $pingback` >> $pingpit/source/cleansed.txt
                      fi
                   else
                      if [[ `rdf2nt.sh $pingback | grep '<http://www.w3.org/ns/prov#' | wc -l | awk '{print $1}'` -gt 0 ]]; then

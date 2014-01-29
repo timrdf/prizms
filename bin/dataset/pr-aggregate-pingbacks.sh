@@ -127,7 +127,6 @@ pushd `cr-conversion-root.sh` &> /dev/null
          for prov in `find $pingpit/source -name "*.prov.ttl"`; do
             pingback=${prov%.prov.ttl}
             if [[ -e "$pingback" ]]; then
-               echo "    $pingback"
                has_been_aggregated='no'
                for includes in `find us/pr-aggregate-pingbacks -mindepth 4 -maxdepth 4 -name "includes.txt"`; do
                   if [[ "$has_been_aggregated" != 'yes' ]]; then
@@ -140,6 +139,9 @@ pushd `cr-conversion-root.sh` &> /dev/null
                   fi   
                done
                if [[ "$has_been_aggregated" != 'yes' ]]; then
+                  pushd ${pingback%source/*} &> /dev/null
+                     sdv=`cr-sdv.sh`
+                  popd &> /dev/null
                   echo "    (will include in this version)"
                   echo "$pingback" >> $cockpit/automatic/includes.txt
                fi

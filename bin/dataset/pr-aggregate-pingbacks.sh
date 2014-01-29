@@ -109,7 +109,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
                   popd &> /dev/null
                fi
             else
-               echo "    (nothing acceptable)"
+               echo "    (retrieved, but nothing acceptable)"
             fi
          elif [[ ! -e $pingpit/source ]]; then
             echo "    (not yet retrieved)"

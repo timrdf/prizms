@@ -142,7 +142,7 @@ pushd `cr-conversion-root.sh` &> /dev/null
                         pushd ${pingback%source/*} &> /dev/null
                            sdv=`cr-sdv.sh`
                         popd &> /dev/null
-                        ln -s `pwd`/$pingback `pwd`/$cockpit/source/$sdv
+                        ln -s `pwd`/$pingback `pwd`/${cockpit#./}/source/$sdv
                      fi
                      echo "$pingback" >> $cockpit/automatic/${III}includes.txt
                   else

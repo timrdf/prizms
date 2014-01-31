@@ -147,6 +147,10 @@ pushd $version &> /dev/null
          echo
          echo "<$ng>"
          echo "   sd:name <$sd_name> ."
+         if [[ "$CSV2RDF4LOD_CONVERT_DEBUG_LEVEL" == 'fine' ]]; then
+            echo "ng_ugly: $ng_ugly"
+            echo "ng_hash: $ng_hash"
+         fi
          vsr-spo-balance.sh -s "$endpoint" `cr-dataset-uri.sh --uri` "$sd_name" > automatic/$ng_hash.ttl
          if [[ `valid-rdf.sh automatic/$ng_hash.ttl` == 'yes' && `void-triples.sh automatic/$ng_hash.ttl` == 'yes' ]]; then
             worthwhile="yes"

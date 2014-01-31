@@ -141,15 +141,18 @@ pushd $version &> /dev/null
 
    for sd_name in `cat source/unsummarized.rq.csv | sed 's/^"//;s/"$//' | grep "^http"`; do
       if [[ "$sd_name" =~ http* ]]; then
-         worthwhile="yes"
          ng_ugly=`resource-name.sh --named-graph $endpoint $sd_name`
          ng_hash=`md5.sh -qs "$ng_ugly"`
          ng="$endpoint/id/named-graph/$ng_hash" 
          echo
          echo "<$ng>"
          echo "   sd:name <$sd_name> ."
-         which vsr-spo-balance.sh
          vsr-spo-balance.sh -s "$endpoint" `cr-dataset-uri.sh --uri` "$sd_name" > automatic/$ng_hash.ttl
+         if [[ `valid-rdf.sh automatic/$ng_hash.ttl` == 'yes' && `void-triples.sh automatic/$ng_hash.ttl` == 'yes' ]]; then
+            worthwhile="yes"
+         else
+            mv automatic/$ng_hash.ttl automatic/$ng_hash.ttl.bad
+         fi
       else
          echo "`basename $this` WARNING: skipping graph with name because not http*: $sd_name"
       fi

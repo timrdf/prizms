@@ -141,6 +141,9 @@ pushd $version &> /dev/null
 
    for sd_name in `cat source/unsummarized.rq.csv | sed 's/^"//;s/"$//' | grep "^http"`; do
       if [[ "$sd_name" =~ http* ]]; then
+         if [[ "$CSV2RDF4LOD_CONVERT_DEBUG_LEVEL" == 'fine' ]]; then
+            echo "resource-name.sh --named-graph \"$endpoint\" \"$sd_name\""
+         fi
          ng_ugly=`resource-name.sh --named-graph $endpoint $sd_name`
          ng_hash=`md5.sh -qs "$ng_ugly"`
          ng="$endpoint/id/named-graph/$ng_hash" 

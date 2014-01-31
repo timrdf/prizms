@@ -152,7 +152,7 @@ pushd $version &> /dev/null
             echo "ng_hash: $ng_hash"
          fi
          vsr-spo-balance.sh -s "$endpoint" `cr-dataset-uri.sh --uri` "$sd_name" > automatic/$ng_hash.ttl
-         if [[ `valid-rdf.sh automatic/$ng_hash.ttl` == 'yes' && `void-triples.sh automatic/$ng_hash.ttl` == 'yes' ]]; then
+         if [[ `valid-rdf.sh automatic/$ng_hash.ttl` == 'yes' && `void-triples.sh automatic/$ng_hash.ttl` -gt 0 ]]; then
             worthwhile="yes"
          else
             mv automatic/$ng_hash.ttl automatic/$ng_hash.ttl.bad

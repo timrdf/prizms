@@ -1643,8 +1643,8 @@ else
                      template=$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/init.d
                      DAEMON=${VIRTUOSO_T:-'/usr/local/bin/virtuoso-t'}
                      DBBASE='/usr/local/var/lib/virtuoso/db'
-                     echo cat $template | sed "s/^DAEMON=.*$/DAEMON=$DAEMON/;s/^DBBASE=.*$/DBBASE=$DBBASE/"
-                     cat $template | sed "s/^DAEMON=.*$/DAEMON=$DAEMON/;s/^DBBASE=.*$/DBBASE=$DBBASE/" > .prizms-virtuoso-init.d
+                     echo "s/^DAEMON=.*$/DAEMON=$DAEMON/;s/^DBBASE=.*$/DBBASE=$DBBASE/"
+                     cat $template | sed "s/^DAEMON=.*$/DAEMON=$DAEMON/" | sed "s/^DBBASE=.*$/DBBASE=$DBBASE/" > .prizms-virtuoso-init.d
                      echo
                      echo "$div `whoami` ($virtuoso_install_method)"
                      echo "Virtuoso's init.d does not exist, but we need it to start and stop the server."

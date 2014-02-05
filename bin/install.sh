@@ -2794,6 +2794,8 @@ else
                   for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr -o -name components`; do
                      # e.g. /home/lebot/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr
                      #      /home/lebot/opt/prizms/lodspeakrs/csv2rdf4lod-lodspeakr/components
+                     echo find $upstream -mindepth 1 -maxdepth 2 -name components
+                          find $upstream -mindepth 1 -maxdepth 2 -name components
                      components=`find $upstream -mindepth 1 -maxdepth 2 -name components`
                      for ctype in services types; do
                         for component in `find $components/$ctype -mindepth 1 -maxdepth 1`; do

@@ -2782,7 +2782,7 @@ else
                echo "Prizms can use existing upstream LODSPeaKrs by referencing them within $target."
                echo
                echo "The upstream LODSPeaKrs are available from the following projects:"
-               for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
+               for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr -o -name components`; do
                   echo "  ${upstream%/*}"
                done
                echo
@@ -2792,8 +2792,11 @@ else
                echo
                if [[ "$cherry_pick" == [yY] ]]; then
                   for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr -o -name components`; do
+                     # e.g. /home/lebot/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr
+                     #      /home/lebot/opt/prizms/lodspeakrs/csv2rdf4lod-lodspeakr/components
+                     components=`find $upstream -mindepth 1 -maxdepth 2 -name components`
                      for ctype in services types; do
-                        for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
+                        for component in `find $components/$ctype -mindepth 1 -maxdepth 1`; do
                            # ^ e.g. /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
 
                            there=`grep "$conf.'components'..'$ctype'... = '$component';" $target`
@@ -2803,7 +2806,7 @@ else
                               disabled=`echo $there | grep "^//"`;
                               if [[ -z "$disabled" ]]; then
                                  echo " (already  enabled) $component"
-                                 primary="$www/lodspeakr/${component#$upstream/}"
+                                 primary="$www/lodspeakr/${component#$components/}"
                                  if [[ -e $primary ]]; then
                                     echo "  - NOTE that $primary will take precedence over $component"
                                  fi 

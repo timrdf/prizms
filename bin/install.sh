@@ -1650,10 +1650,26 @@ else
                      echo
                      cat .prizms-virtuoso-init.d                  
                      echo
-                     read -p "Q: May we add $target, which uses DAEMON=$DAEMON and DBBASE=$DBBASE? [y/n] " -u 1 install_it
+                     read -p "Q: May we put the above at $target, which uses DAEMON=$DAEMON and DBBASE=$DBBASE? [y/n] " -u 1 install_it
                      echo
                      if [[ "$install_it" == [yY] ]]; then
                         sudo mv .prizms-virtuoso-init.d $target
+                        VIRTUOSO_INIT_D=$target
+                        echo "Virtuoso needs to be restarted for the setting to take effect, which can be done with:"
+                        echo
+                        echo "   sudo $VIRTUOSO_INIT_D stop"
+                        echo "   sudo $VIRTUOSO_INIT_D start"
+                        echo
+                        read -p "Restart virtuoso now (with the command above)? [y/n] " -u 1 restart_it
+                        if [[ "$restart_it" == [yY] ]]; then
+                           sudo $VIRTUOSO_INIT_D stop
+                           sudo $VIRTUOSO_INIT_D start
+                        else
+                           echo "Okay, we won't restart virtuoso. But you'll need to restart it to load data from $target."
+                           echo "See:"
+                           echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
+                           echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
+                        fi
                      else
                         echo "Okay, we won't add $target, but we can't start Virtuoso server..."
                      fi

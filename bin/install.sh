@@ -2795,8 +2795,14 @@ else
                      # e.g. /home/lebot/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr
                      #      /home/lebot/opt/prizms/lodspeakrs/csv2rdf4lod-lodspeakr/components
                      components=`find $upstream -mindepth 0 -maxdepth 1 -name components`
+                     if [[ ! -e "$components" ]]; then
+                        continue
+                     fi
                      for ctype in services types; do
-                        for component in `find $components/$ctype -mindepth 1 -maxdepth 1 >&2`; do
+                        if [[ ! -e "$components/$ctype" ]]; then
+                           continue
+                        fi
+                        for component in `find $components/$ctype -mindepth 1 -maxdepth 1`; do
                            # ^ e.g. /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
 
                            there=`grep "$conf.'components'..'$ctype'... = '$component';" $target`

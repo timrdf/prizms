@@ -1617,6 +1617,7 @@ else
                if [[ "$virtuoso_installed" == "yes" ]]; then
 
                   virtuoso_install_method=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh method`
+                               VIRTUOSO_T=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh virtuoso_t`
                              VIRTUOSO_INI=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh ini`
                           VIRTUOSO_INIT_D=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh init_d`
                             VIRTUOSO_ISQL=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh isql`
@@ -1636,6 +1637,29 @@ else
                   #        ^ The port on your machine that you connect to in order to get to the VM's Virtuoso SPARQL endpoint.
                   # 
                   # Now, load up http://localhost:8890/conductor in your laptop's web browser, and you're viewing the service from the VM.
+
+                  if [[ -z "$VIRTUOSO_INIT_D" ]]; then
+                     target=/etc/init.d/virtuoso-opensource
+                     template=$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/init.d
+                     DAEMON=${VIRTUOSO_T:-'/usr/local/bin/virtuoso-t'}
+                     DBBASE='/usr/local/var/lib/virtuoso/db'
+                     cat $template | sed "s/^DAEMON=.*$/DAEMON=$DAEMON/;s/^DBBASE=.*$/DBBASE=$DBBASE/" > .prizms-virtuoso-init.d
+                     echo
+                     echo "$div `whoami` ($virtuoso_install_method)"
+                     echo "Virtuoso's init.d does not exist, but we need it to start and stop the server."
+                     echo
+                     cat .prizms-virtuoso-init.d                  
+                     echo
+                     read -p "Q: May we add $target, which uses DAEMON=$DAEMON and DBBASE=$DBBASE? [y/n] " -u 1 install_it
+                     echo
+                     if [[ "$install_it" == [yY] ]]; then
+                        sudo mv .prizms-virtuoso-init.d $target
+                     else
+                        echo "Okay, we won't add $target, but we can't start Virtuoso server..."
+                     fi
+                  else
+                     echo "(Virtuoso's init.d is $VIRTUOSO_INIT_D)"
+                  fi
 
                   echo
                   echo "$div `whoami` ($virtuoso_install_method)"
@@ -1727,6 +1751,10 @@ else
                      echo "3) Click 'User Accounts' tab on the top."
                      echo "4) Click 'Edit' to the right of user 'dba'."
                      echo "5) Set and confirm the new password, and hit 'Save' at the bottom."
+                     echo
+                     echo "Or, you can change it through the command line, see:"
+                     wiki='https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore'
+                     echo "$wiki#wiki-changing-the-dba-password-through-isql-v"
                      echo
                      read -p "Q: Did you change the default password for Virtuoso user 'dba'? [y/n] " -u 1 changed
                      if [[ "$changed" != [yY] ]]; then
@@ -3083,6 +3111,7 @@ else
                   git add -f $added
                   git commit -m 'During Prizms install: added stub directories and readme files.'
                   # TODO: https://github.com/timrdf/prizms/issues/75
+                  git pull
                   git push
                else
                   echo

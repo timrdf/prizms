@@ -1654,7 +1654,10 @@ else
                      echo
                      if [[ "$install_it" == [yY] ]]; then
                         sudo mv .prizms-virtuoso-init.d $target
+                        sudo chown root:root $VIRTUOSO_INIT_D
+                        sudo chmod +x        $VIRTUOSO_INIT_D
                         VIRTUOSO_INIT_D=$target
+                        # TODO: this is the second place that we're restarting virtuoso, move it to a function.
                         echo "Virtuoso needs to be restarted for the setting to take effect, which can be done with:"
                         echo
                         echo "   sudo $VIRTUOSO_INIT_D stop"
@@ -1676,6 +1679,7 @@ else
                   else
                      echo "(Virtuoso's init.d is $VIRTUOSO_INIT_D)"
                   fi
+
 
                   echo
                   echo "$div `whoami` ($virtuoso_install_method)"

@@ -120,7 +120,7 @@ def acceptPingback(path):
             return 'The provenance should be provided using the parameter named "provenance", with a URI value. Retry the request with that parameter set.', 400
             
         return 'Input not valid', 400
-    else:
+    else: # TODO: use http://rdflib.github.io/sparqlwrapper/
         return '''
 <html>
     <meta>

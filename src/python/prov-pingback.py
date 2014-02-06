@@ -106,6 +106,7 @@ def acceptPingback(path):
 #
 
 @prefix rdfs:       <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf:       <http://xmlns.com/foaf/0.1/> .
 @prefix conversion: <http://purl.org/twc/vocab/conversion/> .
 @prefix dcat:       <http://www.w3.org/ns/dcat#> .
 @prefix void:       <http://rdfs.org/ns/void#> .

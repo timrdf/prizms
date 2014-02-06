@@ -1617,6 +1617,7 @@ else
                if [[ "$virtuoso_installed" == "yes" ]]; then
 
                   virtuoso_install_method=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh method`
+                               VIRTUOSO_T=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh virtuoso_t`
                              VIRTUOSO_INI=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh ini`
                           VIRTUOSO_INIT_D=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh init_d`
                             VIRTUOSO_ISQL=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh isql`
@@ -1636,6 +1637,49 @@ else
                   #        ^ The port on your machine that you connect to in order to get to the VM's Virtuoso SPARQL endpoint.
                   # 
                   # Now, load up http://localhost:8890/conductor in your laptop's web browser, and you're viewing the service from the VM.
+
+                  if [[ -z "$VIRTUOSO_INIT_D" ]]; then
+                     target=/etc/init.d/virtuoso-opensource
+                     template=$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/init.d
+                     DAEMON=${VIRTUOSO_T:-'/usr/local/bin/virtuoso-t'}
+                     DBBASE='/usr/local/var/lib/virtuoso/db'
+                     cat $template | perl -pi -e "s|^DAEMON=.*$|DAEMON=$DAEMON|" | perl -pi -e "s|^DBBASE=.*$|DBBASE=$DBBASE|" > .prizms-virtuoso-init.d
+                     echo
+                     echo "$div `whoami` ($virtuoso_install_method)"
+                     echo "Virtuoso's init.d does not exist, but we need it to start and stop the server."
+                     echo
+                     cat .prizms-virtuoso-init.d                  
+                     echo
+                     read -p "Q: May we put the above at $target, which uses DAEMON=$DAEMON and DBBASE=$DBBASE? [y/n] " -u 1 install_it
+                     echo
+                     if [[ "$install_it" == [yY] ]]; then
+                        sudo mv .prizms-virtuoso-init.d $target
+                        sudo chown root:root $VIRTUOSO_INIT_D
+                        sudo chmod +x        $VIRTUOSO_INIT_D
+                        VIRTUOSO_INIT_D=$target
+                        # TODO: this is the second place that we're restarting virtuoso, move it to a function.
+                        echo "Virtuoso needs to be restarted for the setting to take effect, which can be done with:"
+                        echo
+                        echo "   sudo $VIRTUOSO_INIT_D stop"
+                        echo "   sudo $VIRTUOSO_INIT_D start"
+                        echo
+                        read -p "Restart virtuoso now (with the command above)? [y/n] " -u 1 restart_it
+                        if [[ "$restart_it" == [yY] ]]; then
+                           sudo $VIRTUOSO_INIT_D stop
+                           sudo $VIRTUOSO_INIT_D start
+                        else
+                           echo "Okay, we won't restart virtuoso. But you'll need to restart it to load data from $target."
+                           echo "See:"
+                           echo "  https://github.com/jimmccusker/twc-healthdata/wiki/VM-Installation-Notes#wiki-virtuoso"
+                           echo "  https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore"
+                        fi
+                     else
+                        echo "Okay, we won't add $target, but we can't start Virtuoso server..."
+                     fi
+                  else
+                     echo "(Virtuoso's init.d is $VIRTUOSO_INIT_D)"
+                  fi
+
 
                   echo
                   echo "$div `whoami` ($virtuoso_install_method)"
@@ -1727,6 +1771,10 @@ else
                      echo "3) Click 'User Accounts' tab on the top."
                      echo "4) Click 'Edit' to the right of user 'dba'."
                      echo "5) Set and confirm the new password, and hit 'Save' at the bottom."
+                     echo
+                     echo "Or, you can change it through the command line, see:"
+                     wiki='https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore'
+                     echo "$wiki#wiki-changing-the-dba-password-through-isql-v"
                      echo
                      read -p "Q: Did you change the default password for Virtuoso user 'dba'? [y/n] " -u 1 changed
                      if [[ "$changed" != [yY] ]]; then
@@ -2734,7 +2782,7 @@ else
                echo "Prizms can use existing upstream LODSPeaKrs by referencing them within $target."
                echo
                echo "The upstream LODSPeaKrs are available from the following projects:"
-               for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
+               for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr -o -name components`; do
                   echo "  ${upstream%/*}"
                done
                echo
@@ -2743,9 +2791,18 @@ else
                read -p "Q: Cherry pick upstream LODSPeaKrs? [y/n] " -u 1 cherry_pick
                echo
                if [[ "$cherry_pick" == [yY] ]]; then
-                  for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr`; do
+                  for upstream in `find $project_user_home/opt/prizms/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr -o -name components`; do
+                     # e.g. /home/lebot/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr
+                     #      /home/lebot/opt/prizms/lodspeakrs/csv2rdf4lod-lodspeakr/components
+                     components=`find $upstream -mindepth 0 -maxdepth 1 -name components`
+                     if [[ ! -e "$components" ]]; then
+                        continue
+                     fi
                      for ctype in services types; do
-                        for component in `find $upstream/components/$ctype -mindepth 1 -maxdepth 1`; do
+                        if [[ ! -e "$components/$ctype" ]]; then
+                           continue
+                        fi
+                        for component in `find $components/$ctype -mindepth 1 -maxdepth 1`; do
                            # ^ e.g. /home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs
 
                            there=`grep "$conf.'components'..'$ctype'... = '$component';" $target`
@@ -2755,7 +2812,7 @@ else
                               disabled=`echo $there | grep "^//"`;
                               if [[ -z "$disabled" ]]; then
                                  echo " (already  enabled) $component"
-                                 primary="$www/lodspeakr/${component#$upstream/}"
+                                 primary="$www/lodspeakr/${component#$components/}"
                                  if [[ -e $primary ]]; then
                                     echo "  - NOTE that $primary will take precedence over $component"
                                  fi 
@@ -2764,7 +2821,9 @@ else
                                  echo " (already disabled) $component"
                               fi
                            else
-                              echo "^ not there; add $cherry_pick"
+                              echo
+                              echo $target
+                              echo "^ ^ - not in settings; add: $cherry_pick"
                               # =>
                               # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
                               # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
@@ -3083,6 +3142,7 @@ else
                   git add -f $added
                   git commit -m 'During Prizms install: added stub directories and readme files.'
                   # TODO: https://github.com/timrdf/prizms/issues/75
+                  git pull
                   git push
                else
                   echo

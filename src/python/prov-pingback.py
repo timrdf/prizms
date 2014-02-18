@@ -19,6 +19,8 @@ import os
 import hashlib
 import pytz
 
+from SPARQLWrapper import SPARQLWrapper, JSON
+
 from flask import Flask
 from flask import request
 from werkzeug import secure_filename
@@ -50,6 +52,26 @@ def acceptPingback(path):
     resourceID       = steps[0]
     authenticationID = steps[1]
 
+    sparql = SPARQLWrapper(CR_BASE_URI+"/sparql")
+    sparql.setQuery('''
+        prefix foaf:       <http://xmlns.com/foaf/0.1/>
+        prefix conversion: <http://purl.org/twc/vocab/conversion/>
+        select distinct ?g ?dataset ?topic
+        where { 
+          graph ?g {
+            ?dataset conversion:version_identifier "'''+resourceID+'''" .
+            optional { ?topic foaf:isPrimaryTopicOf ?dataset }
+          }
+        } limit 1
+    ''')
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+    aboutDataset = ""
+    aboutTopic = ""
+    for result in results["results"]["bindings"]:
+        aboutTopic   = result["topic"]["value"]
+        aboutDataset = result["dataset"]["value"]
+
     if request.method == 'POST':
 
         if len(steps) < 2 or steps[1] != 'mykey':
@@ -71,11 +93,20 @@ def acceptPingback(path):
                 if not os.path.exists(CR_CONVERSION_ROOT + '/' + sourceID + '/' + datasetID + '/version/' + versionID):
                     os.makedirs(CR_CONVERSION_ROOT + '/' + sourceID + '/' + datasetID + '/version/' + versionID)
                 # Analogous implementation (bash): https://github.com/timrdf/csv2rdf4lod-automation/blob/master/bin/cr-dcat-retrieval-url.sh
+
+                wasDerivedFrom = ""
+                wasDerivedFromExtra = ""
+                if len(aboutTopic) > 0:
+                    wasDerivedFrom = "\n   prov:wasDerivedFrom <" + aboutTopic + ">;"
+                    wasDerivedFromExtra = "\n\n<"+aboutTopic+">\n   foaf:isPrimaryTopicOf <"+aboutDataset+"> .\n"
+                elif len(aboutDataset) > 0: 
+                    wasDerivedFrom = "\n   prov:wasDerivedFrom <" + aboutDataset + ">;"
                 access = '''#
 #3> <> dcterms:modified "'''+datetime.now(pytz.utc).isoformat()+'''"^^xsd:dateTime .
 #
 
 @prefix rdfs:       <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf:       <http://xmlns.com/foaf/0.1/> .
 @prefix conversion: <http://purl.org/twc/vocab/conversion/> .
 @prefix dcat:       <http://www.w3.org/ns/dcat#> .
 @prefix void:       <http://rdfs.org/ns/void#> .
@@ -87,14 +118,14 @@ def acceptPingback(path):
 <'''+versionedDataset+'''>
    a void:Dataset, dcat:Dataset, conversion:PingbackDataset;
    conversion:source_identifier  "'''+sourceID+'''";
-   conversion:dataset_identifier "'''+datasetID+'''";
+   conversion:dataset_identifier "'''+datasetID+'''";'''+wasDerivedFrom+'''
    prov:wasDerivedFrom :download_'''+urlHash+''';
 .
 
 :download_'''+urlHash+'''
    a dcat:Distribution;
    dcat:downloadURL <'''+request.form['provenance']+'''>;
-.
+.'''+wasDerivedFromExtra+'''
 
 #<dataset/755681424697599a2e78460627dbf149>
 #   a dcat:Dataset;
@@ -108,9 +139,9 @@ def acceptPingback(path):
                 #f = request.files['the_file']
                 #f.save('/home/prizms/prizms/opendap/data/source' + secure_filename(f.filename))
                 return '<a href="' + request.form['provenance'] + '">' + request.form['provenance'] + '</a><br/>' \
-                       'should contain provenance about derivations of the resource:<br/>'+  \
+                       'should contain provenance about derivations of the resource: __' + aboutTopic + '<br/>'+  \
                         'conversion:version_identifier: ' + steps[0] + '<br/><br/>' + \
-                        'Your pingback created <a href="'+versionedDataset+'">a void:Dataset with SDV attributes</a>:<br/><dl>' + \
+                        'Your pingback created <a href="'+versionedDataset+'">a void:Dataset with the following SDV attributes</a>:<br/><dl>' + \
                         '<dt>source-id:</dt> <dd><a href="' + sourceOrg        + '">' + sourceID + '</a></dd></dt>' + \
                         '<dt>dataset-id:</dt><dd><a href="' + abstractDataset  + '">' + datasetID + '</a></dd></dt>' + \
                         '<dt>version-id:</dt><dd><a href="' + versionedDataset + '">' + versionID + '</a></dd></dt></dl>'

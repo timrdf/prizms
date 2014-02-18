@@ -59,8 +59,8 @@ popd &> /dev/null
 #
 pushd $PRIZMS_HOME/lodspeakrs &> /dev/null
    for repos in https://github.com/timrdf/prizms-lodspeakr.git \
-                https://github.com/jimmccusker/twc-healthdata.git \
                 https://github.com/timrdf/csv2rdf4lod-lodspeakr.git; do
+                #https://github.com/jimmccusker/twc-healthdata.git \
       echo
       directory=`basename $repos`
       directory=${directory%.*}

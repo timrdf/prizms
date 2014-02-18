@@ -1654,9 +1654,9 @@ else
                      echo
                      if [[ "$install_it" == [yY] ]]; then
                         sudo mv .prizms-virtuoso-init.d $target
+                        VIRTUOSO_INIT_D=$target
                         sudo chown root:root $VIRTUOSO_INIT_D
                         sudo chmod +x        $VIRTUOSO_INIT_D
-                        VIRTUOSO_INIT_D=$target
                         # TODO: this is the second place that we're restarting virtuoso, move it to a function.
                         echo "Virtuoso needs to be restarted for the setting to take effect, which can be done with:"
                         echo
@@ -2717,7 +2717,7 @@ else
                   # mkdir  ~/public_html; echo "hi" > ~/public_html/hi.txt
                   # http://lofd.tw.rpi.edu/~lebot/hi.txt
                   pushd $user_home/public_html &> /dev/null
-                     comps=$user_home/prizms/$project_user_name/lodspeakr/components
+                     comps=$user_home/prizms/$repodir/lodspeakr/components
                      base=$our_base_uri/~$person_user_name/
                      perms="-s chown=www-data chmod=774"
                      perms="-s chmod=777" # https://github.com/timrdf/prizms/issues/18 TODO
@@ -2822,8 +2822,7 @@ else
                               fi
                            else
                               echo
-                              echo $target
-                              echo "^ ^ - not in settings; add: $cherry_pick"
+                              echo "$target missing: $cherry_pick"
                               # =>
                               # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
                               # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
@@ -3105,6 +3104,7 @@ else
                   if [[ $i_can_sudo -eq 0 ]]; then # I can sudo.
                      sudo easy_install Flask
                      sudo easy_install argparse pytz
+                     sudo easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
                   fi
                   
                   # Worked, but need "do only once logic": sudo easy_install Flask

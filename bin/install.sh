@@ -1402,6 +1402,7 @@ else
                      "Ensure that all of the csv2rdf4lod-automation scripts can call each other." \
                      'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-not-set' \
                      'unable to invoke some scripts'
+                  export CSV2RDF4LOD_HOME=$PRIZMS_HOME/repos/csv2rdf4lod-automation
 
                   # Set DATAFAQS_HOME
                   change_source_me $target DATAFAQS_HOME "$user_prizms_home/repos/DataFAQs" \
@@ -1772,9 +1773,13 @@ else
                      echo "4) Click 'Edit' to the right of user 'dba'."
                      echo "5) Set and confirm the new password, and hit 'Save' at the bottom."
                      echo
-                     echo "Or, you can change it through the command line, see:"
+                     echo "Or, you can change it through the command line using the following:"
+                     echo "   /usr/local/bin/isql-v 1111 dba dba"
+                     echo "   set password dba SOMEOTHERPASSWORD;"
+                     echo "   exit;"
+                     echo ""
                      wiki='https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore'
-                     echo "$wiki#wiki-changing-the-dba-password-through-isql-v"
+                     echo "  See $wiki#wiki-changing-the-dba-password-through-isql-v"
                      echo
                      read -p "Q: Did you change the default password for Virtuoso user 'dba'? [y/n] " -u 1 changed
                      if [[ "$changed" != [yY] ]]; then

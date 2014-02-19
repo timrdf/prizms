@@ -2943,6 +2943,7 @@ else
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                pushd data/source &> /dev/null
                   export CSV2RDF4LOD_HOME=$PRIZMS_HOME/repos/csv2rdf4lod-automation # Shouldn't be needed in the long run; set above.
+                  export CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID="$our_source_id"
                   enabled=`$PRIZMS_HOME/bin/dataset/pr-enable-dataset.sh | grep 'is enabled at'`
                   if [[ -n "$enabled" ]]; then
                      echo

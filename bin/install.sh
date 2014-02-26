@@ -2141,6 +2141,7 @@ else
                   #fi
                else
                   echo "(Cannot install the webapp UI because tomcat installed: \"$tomcat_installed\", $PRIZMS_HOME/repos/semanteco-annotator-webapp DNE or cannot sudo ($i_can_sudo)"
+                  ls -l $PRIZMS_HOME/repos/semanteco-annotator-webapp
                fi
                # Reinstall by running:
                # sudo rm -rf /var/lib/tomcat6/webapps/annotator* ~/opt/prizms/repos/semanteco-annotator-webapp*

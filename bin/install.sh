@@ -3004,6 +3004,11 @@ else
 
             echo
             echo "$div `whoami`"
+            offer_install_aptget 'whois' 'support Secondary Derived Dataset pr-whois-domains.sh'
+
+
+            echo
+            echo "$div `whoami`"
             target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
             echo "Prizms automates dataset updates by regularly invoking $target with cron."
             echo "$target is maintained using version control,"

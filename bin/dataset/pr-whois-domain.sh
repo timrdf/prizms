@@ -48,10 +48,6 @@ if [ `${CSV2RDF4LOD_HOME}/bin/util/is-pwd-a.sh $ACCEPTABLE_PWDs` != "yes" ]; the
    exit 1
 fi
 
-if [[ `cr-pwd-type.sh` == "cr:conversion-cockpit" ]]; then
-   pushd ../ &> /dev/null
-fi
-
 TEMP="_"`basename $0``date +%s`_$$.tmp
 
 if [[ "$1" == "--help" ]]; then
@@ -61,41 +57,47 @@ if [[ "$1" == "--help" ]]; then
    exit 1
 fi
 
-
-#-#-#-#-#-#-#-#-#
-version="$1"
-version_reason=""
 url="$CSV2RDF4LOD_BASE_URI/source/$CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID/file/cr-full-dump/version/latest/conversion/us-cr-full-dump-latest.ttl.gz"
-if [[ "$1" == "cr:auto" && ${#url} -gt 0 ]]; then
-   version=`urldate.sh $url`
-   #echo "Attempting to use URL modification date to name version: $version"
-   version_reason="(URL's modification date)"
-fi
-if [[ ${#version} -eq 0                        || \
-      ${#version} -ne 11 && "$1" == "cr:auto"  || \
-                            "$1" == "cr:today" || \
-                            "$1" == "cr:force" ]]; then
-   # We couldn't determine the date from the URL (11 length from e.g. "2013-Aug-12")
-   # Or, there was no URL given.
-   # Or, we're told to use today's date.
-   version=`cr-make-today-version.sh 2>&1 | head -1`
-   #echo "Using today's date to name version: $version"
-   version_reason="(Today's date)"
-fi
-if [[ -e "$version" && "$1" == "cr:force"  ]]; then
-   version=`date +%Y-%b-%d-%H-%M_%s`
-fi
-if [ ${#version} -gt 0 -a `echo $version | grep ":" | wc -l | awk '{print $1}'` -gt 0 ]; then
-   # No colons allowed?
-   echo "Version identifier invalid."
-   exit 1
-fi
-iteration=`find -mindepth 1 -maxdepth 1 -name "$version*" | wc -l | awk '{print $1}'`
-if [[ "$iteration" -gt 0 ]]; then
-   let "iteration=$iteration+1"
-   iteration="_$iteration"
-   version=$version$iteration
-   version_reason="$version_reason (expanding to iteration)"
+if [[ `cr-pwd-type.sh` == "cr:conversion-cockpit" ]]; then
+   version="`cr-version-id.sh`"
+   version_reason="trigger situated in conversion cockpit"
+   rm -rf source manual automatic publish # Note: Won't remove SPARQL loads.
+   pushd ../ &> /dev/null
+else
+    #-#-#-#-#-#-#-#-#
+    version="$1"
+    version_reason=""
+    if [[ "$1" == "cr:auto" && ${#url} -gt 0 ]]; then
+       version=`urldate.sh $url`
+       #echo "Attempting to use URL modification date to name version: $version"
+       version_reason="(URL's modification date)"
+    fi
+    if [[ ${#version} -eq 0                        || \
+          ${#version} -ne 11 && "$1" == "cr:auto"  || \
+                                "$1" == "cr:today" || \
+                                "$1" == "cr:force" ]]; then
+       # We couldn't determine the date from the URL (11 length from e.g. "2013-Aug-12")
+       # Or, there was no URL given.
+       # Or, we're told to use today's date.
+       version=`cr-make-today-version.sh 2>&1 | head -1`
+       #echo "Using today's date to name version: $version"
+       version_reason="(Today's date)"
+    fi
+    if [[ -e "$version" && "$1" == "cr:force"  ]]; then
+       version=`date +%Y-%b-%d-%H-%M_%s`
+    fi
+    if [ ${#version} -gt 0 -a `echo $version | grep ":" | wc -l | awk '{print $1}'` -gt 0 ]; then
+       # No colons allowed?
+       echo "Version identifier invalid."
+       exit 1
+    fi
+    iteration=`find -mindepth 1 -maxdepth 1 -name "$version*" | wc -l | awk '{print $1}'`
+    if [[ "$iteration" -gt 0 ]]; then
+       let "iteration=$iteration+1"
+       iteration="_$iteration"
+       version=$version$iteration
+       version_reason="$version_reason (expanding to iteration)"
+    fi
 fi
 shift 2
 
@@ -107,7 +109,7 @@ echo "INFO url       : $url"
 # This script is invoked from a cr:directory-of-versions, 
 # e.g. source/contactingthecongress/directory-for-the-112th-congress/version
 #
-#if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -name source` ]]; then
+if [[ ! -d $version || ! -d $version/source || `find $version -empty -type d -name source` ]]; then
 
    see='https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables'
    endpoint=${CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT:?"not set; source csv2rdf4lod/source-me.sh or see $see"}
@@ -210,9 +212,9 @@ echo "INFO url       : $url"
    #   echo
    #   rm -rf $version
    #fi
-#else
-#   echo "Version exists; skipping."
-#fi
+else
+   echo "Version exists; skipping."
+fi
 
 if [[ `cr-pwd-type.sh` == "cr:conversion-cockpit" ]]; then
    popd ../ &> /dev/null

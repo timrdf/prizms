@@ -2157,6 +2157,7 @@ else
                echo "Prizms includes a mirror of DERI's RDFAlerts lint service (originally at http://swse.deri.org/RDFAlerts/)."
                echo "See https://www.w3.org/2001/sw/wiki/RDF_Alerts"
                echo "    http://notes.3kbo.com/validators"
+               echo "    https://github.com/timrdf/DataFAQs/wiki/RDFAlerts"
                echo ""
                war=$PRIZMS_HOME/repos/DataFAQs/lib/RDFAlerts.war
                war_local=`basename $war`

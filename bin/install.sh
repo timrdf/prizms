@@ -2140,13 +2140,51 @@ else
                   #   fi
                   #fi
                else
-                  echo "(Cannot install the webapp UI because tomcat installed: \"$tomcat_installed\", $PRIZMS_HOME/repos/semanteco-annotator-webapp DNE or cannot sudo ($i_can_sudo)"
+                  echo "(Cannot install the webapp UI because tomcat installed: \"$tomcat_installed\""
+                  echo " $PRIZMS_HOME/repos/semanteco-annotator-webapp DNE or cannot sudo ($i_can_sudo)"
                   ls -l $PRIZMS_HOME/repos/semanteco-annotator-webapp
                fi
                # Reinstall by running:
                # sudo rm -rf /var/lib/tomcat6/webapps/annotator* ~/opt/prizms/repos/semanteco-annotator-webapp*
             fi # end running as developer e.g. jsmith not loxd (Post-configure csv2rdf4lod annotator webapp service (in Tomcat))
 
+
+            # Install RDFAlerts.war (in Tomcat)
+            # See https://github.com/timrdf/prizms/issues/91
+            # https://github.com/timrdf/DataFAQs/wiki/RDFAlerts
+            if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+               echo "$div `whoami` ($i_can_sudo)"
+               echo "Prizms includes DERI's RDFAlerts lint service"
+               war=$PRIZMS_HOME/repos/DataFAQs/lib/RDFAlerts.war
+               war_local=`basename $war`
+               if [[ "$tomcat_installed" == "yes" && -e $war && "$i_can_sudo" -eq 0 ]]; then
+
+                  # Deploy the .war
+                  if [[ ! -e $webapps/$war_local ]]; then
+                     if [[ "$i_can_sudo" -eq 0 ]]; then
+                        read -p "Q: May we copy $war to $webapps/$war_local? [y/n] " -u 1 install_it
+                        if [[ "$install_it" == [yY] ]]; then
+                           sudo cp $war $webapps/$war_local
+                        else
+                           echo "Okay, we won't deploy $webapps/$war_local."
+                        fi
+                     else
+                        echo "WARNING: $webapps/$war_local does not exist, but `whoami` does not have sudo and thus can't deploy it."
+                     fi
+                  else
+                     echo "($webapps/$war_local already exists; no need to redeploy)"
+                  fi
+
+                  # Apache ProxyPass
+                  add_proxy_pass '/etc/apache2/sites-available/default' '/RDFAlerts'
+               else
+                  echo "(Cannot install RDFAlert because tomcat installed: \"$tomcat_installed\""
+                  echo " $PRIZMS_HOME/repos/semanteco-annotator-webapp DNE or cannot sudo ($i_can_sudo)"
+                  ls -l $PRIZMS_HOME/repos/semanteco-annotator-webapp
+               fi
+               # Reinstall by running:
+               # sudo rm -rf /var/lib/tomcat6/webapps/RDFAlerts*
+            fi # end running as developer e.g. jsmith not loxd (Install RDFAlerts webapp (in Tomcat))
 
 
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd

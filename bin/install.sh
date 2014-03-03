@@ -2154,7 +2154,10 @@ else
             # https://github.com/timrdf/DataFAQs/wiki/RDFAlerts
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                echo "$div `whoami` ($i_can_sudo)"
-               echo "Prizms includes DERI's RDFAlerts lint service"
+               echo "Prizms includes a mirror of DERI's RDFAlerts lint service (originally at http://swse.deri.org/RDFAlerts/)."
+               echo "See https://www.w3.org/2001/sw/wiki/RDF_Alerts"
+               echo "    http://notes.3kbo.com/validators"
+               echo ""
                war=$PRIZMS_HOME/repos/DataFAQs/lib/RDFAlerts.war
                war_local=`basename $war`
                if [[ "$tomcat_installed" == "yes" && -e $war && "$i_can_sudo" -eq 0 ]]; then

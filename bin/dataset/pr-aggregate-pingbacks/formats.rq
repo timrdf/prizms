@@ -1,0 +1,10 @@
+prefix dcterms: <http://purl.org/dc/terms/>
+construct {
+  ?format a dcterms:FileFormat .
+}
+where {
+  [] dcterms:format ?format .
+  filter not exists {
+    ?format rdfs:label ?label
+  }
+}

@@ -160,6 +160,10 @@ pushd `cr-conversion-root.sh` &> /dev/null
    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
    pushd $cockpit &> /dev/null
+      # TODO: go gather labels for the FileFormats that occur, so that we can use it in the Pingback report.
+      # cache-queries.sh $CSV2RDF4LOD_PUBLISH_VIRTUOSO_SPARQL_ENDPOINT -o ttl -q ~/opt/prizms/bin/dataset/pr-aggregate-pingbacks/formats.rq -od source
+      # vsr-follow.sh source/formats.rq.ttl --no-sameness --start-to --instances-of dcterms:FileFormat
+
       echo
       echo aggregate-source-rdf.sh --link-as-latest automatic/meta.ttl source/*
       if [ "$dryrun" != "true" ]; then

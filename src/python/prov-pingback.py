@@ -69,7 +69,8 @@ def acceptPingback(path):
     aboutDataset = ""
     aboutTopic = ""
     for result in results["results"]["bindings"]:
-        aboutTopic   = result["topic"]["value"]
+        if 'topic' in result:
+            aboutTopic   = result["topic"]["value"]
         aboutDataset = result["dataset"]["value"]
 
     if request.method == 'POST':

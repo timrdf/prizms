@@ -2485,7 +2485,7 @@ else
                         sudo bash -s base-url=$our_base_uri               \
                                   -s base-namespace=$our_base_uri         \
                                   -s sparql-endpoint=$our_base_uri/sparql \
-                                  -s chown=$lodchown < <(curl -sL http://lodspeakr.org/install)
+                                  -s chown=$lodchown < <(curl -sL http://lodspeakr.org/install-http)
                         # Question 1: http://lod.melagrid.org
                         # Question 2: <accept default>
                         # Question 3: http://lod.melagrid.org/sparql
@@ -2781,7 +2781,7 @@ else
                                   base-url=$base                \
                             base-namespace=$our_base_uri        \
                            sparql-endpoint=$our_base_uri/sparql \
-                           $perms < <(curl -sL http://lodspeakr.org/install)
+                           $perms < <(curl -sL http://lodspeakr.org/install-http)
                         #sudo chown -R `stat --format=%U:%G ~/` $user_home/public_html/lodspeakr
                      else
                         echo "Okay, we didn't install it."

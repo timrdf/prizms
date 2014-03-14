@@ -2482,7 +2482,10 @@ else
                         #sudo bash < <(curl -sL http://lodspeakr.org/install)
                         # omitting "-s chown=$lodchown" b/c it needs root.
                         #sudo su - $project_user_name -c "cd $www; bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql < <(curl -sL http://lodspeakr.org/install)"
-                        sudo bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql -s chown=$lodchown < <(curl -sL http://lodspeakr.org/install)
+                        sudo bash -s base-url=$our_base_uri               \
+                                  -s base-namespace=$our_base_uri         \
+                                  -s sparql-endpoint=$our_base_uri/sparql \
+                                  -s chown=$lodchown < <(curl -sL http://lodspeakr.org/install)
                         # Question 1: http://lod.melagrid.org
                         # Question 2: <accept default>
                         # Question 3: http://lod.melagrid.org/sparql
@@ -2774,7 +2777,11 @@ else
                      echo
                      read -p "Q: Install your Prizms LODSPeaKr development clone with the command above? [y/n] " -u 1 install_it
                      if [[ "$install_it" == [yY] ]]; then
-                        bash -s components=$comps base-url=$base base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql $perms < <(curl -sL http://lodspeakr.org/install)
+                        bash -s components=$comps               \
+                                  base-url=$base                \
+                            base-namespace=$our_base_uri        \
+                           sparql-endpoint=$our_base_uri/sparql \
+                           $perms < <(curl -sL http://lodspeakr.org/install)
                         #sudo chown -R `stat --format=%U:%G ~/` $user_home/public_html/lodspeakr
                      else
                         echo "Okay, we didn't install it."

@@ -3,6 +3,7 @@
 #3> <> a conversion:RetrievalTrigger, conversion:Idempotent;
 #3>    prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/dataset/pr-aggregate-pingbacks.sh>;
 #3>    prov:wasDerivedFrom   <https://github.com/timrdf/csv2rdf4lod-automation/blob/master/bin/dataset/cr-aggregate-dcat.sh>;
+#3>    dcterms:isPartOf <http://purl.org/twc/id/software/prizms>;
 #3>    rdfs:seeAlso          <https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets> .
 
 [ -n "`readlink $0`" ] && this=`readlink $0` || this=$0

@@ -1,7 +1,10 @@
 #!/bin/bash
 #
 #3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install.sh>;
-#3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/Installing-Prizms> .
+#3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/Installing-Prizms>;
+#3>    dcterms:isPartOf <http://purl.org/twc/id/software/prizms>;
+#3> .
+#3> <http://purl.org/twc/id/software/prizms> a doap:Project .
 
 TRUE='0'
 
@@ -23,6 +26,9 @@ if [[ ${0%install.sh} == $0 ]]; then # $0 is 'bash' etc when bootstrapping, it i
             read -p "Q: Try to install git with the command above? [y/n] " -u 1 install_it
             echo
             if [[ "$install_it" == [yY] ]]; then
+            #3> <http://purl.org/twc/id/software/prizms> 
+            #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Git_(software)>;
+            #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Apt-get> .
                sudo apt-get install git-core < <(echo 'y')
             fi
          fi
@@ -298,6 +304,8 @@ else
    }
 
    function enable_apache_module {
+      #3> <http://purl.org/twc/id/software/prizms> 
+      #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Apache_HTTP_Server> .
       enabled=0
       modules="$1"
       reason="$2"
@@ -486,6 +494,8 @@ else
    }
 
    function restart_tomcat {
+      #3> <http://purl.org/twc/id/software/prizms> 
+      #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Apache_Tomcat> .
       echo "Tomcat can be restarted with:"
       echo
       echo "  sudo /etc/init.d/tomcat6 stop"
@@ -838,6 +848,8 @@ else
             fi
          fi
 
+         #3> <http://purl.org/twc/id/software/prizms> 
+         #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Secure_Shell> .
          echo
          echo "$div `whoami`"
          echo "GitHub requires that you have an SSH key and that it be registered with them."
@@ -1575,6 +1587,10 @@ else
                avoid_sudo="--avoid-sudo"
                use_sudo=""
             fi
+            #3> <http://purl.org/twc/id/software/prizms> 
+            #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/csv2rdf4lod-automation>;
+            #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/DataFAQs>;
+            #3> .
             #
             # Install third party utilities (mostly with apt-get and tarball installs).
             #
@@ -1820,6 +1836,9 @@ else
 
                   echo
                   echo "$div `whoami`"
+                  #> <http://purl.org/twc/id/software/prizms> 
+                  #>    prov:wasDerivedFrom <todo>;
+                  #> .
                   offer_install_aptget \
                      'libapache2-mod-proxy-html' \
                      "expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql and the (port 8080) Tomcat application server of SADI services at $our_base_uri/sadi-services"
@@ -2149,6 +2168,13 @@ else
             fi # end running as developer e.g. jsmith not loxd (Post-configure csv2rdf4lod annotator webapp service (in Tomcat))
 
 
+            #3> <http://purl.org/twc/id/software/prizms> 
+            #3>    prov:wasDerivedFrom <https://www.w3.org/2001/sw/wiki/Special:ExportRDF/RDF_Alerts>;
+            #3> .
+            #3> <https://www.w3.org/2001/sw/wiki/Special:ExportRDF/RDF_Alerts>
+            #3>    rdfs:seeAlso <https://www.w3.org/2001/sw/wiki/RDF_Alerts>;
+            #3>    rdfs:seeAlso <https://github.com/timrdf/DataFAQs/wiki/RDFAlerts>;
+            #3> .
             # Install RDFAlerts.war (in Tomcat)
             # See https://github.com/timrdf/prizms/issues/91
             # https://github.com/timrdf/DataFAQs/wiki/RDFAlerts
@@ -2199,6 +2225,9 @@ else
             fi # end "I am not project user"
 
 
+            #3> <http://purl.org/twc/id/software/prizms> 
+            #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Jena_(framework)>;
+            #3> .
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
 
                # AS both DEVELOPER and PROJECT USER (after dependencies were installed).
@@ -2276,6 +2305,9 @@ else
                fi
             fi
 
+            #3> <http://purl.org/twc/id/software/prizms> 
+            #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/CKAN>;
+            #3> .
             ckankey=''
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                echo 
@@ -2452,6 +2484,9 @@ else
 
 
 
+            #3> <http://purl.org/twc/id/software/prizms> 
+            #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/lodspeakr>;
+            #3> .
             lodchown=www-data:$project_user_name # A) user 'www-data' so apache can write; B) a group where www-data can write
             if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                #
@@ -2473,6 +2508,12 @@ else
                   echo
                   read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
+                     #3> <http://purl.org/twc/id/software/lodspeakr> 
+                     #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/CURL>;
+                     #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Apache_HTTP_Server>;
+                     #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/PHP>;
+                     #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Sqlite>;
+                     #3> .
                      offer_install_aptget "curl apache2 php5 php5-cli php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
                      #owner_group=`stat --format=%U:%G $www`
                      #sudo chown $project_user_name:$project_user_name $www
@@ -3056,6 +3097,9 @@ else
             offer_install_aptget 'whois' 'support Secondary Derived Dataset pr-whois-domains.sh'
 
 
+            #3> <http://purl.org/twc/id/software/lodspeakr> 
+            #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Cron>;
+            #3> .
             echo
             echo "$div `whoami`"
             target="data/source/$our_source_id/cr-cron/version/cr-cron.sh"
@@ -3164,6 +3208,13 @@ else
                   #fi
    
                   if [[ $i_can_sudo -eq 0 ]]; then # I can sudo.
+                     #3> <http://purl.org/twc/id/software/lodspeakr> 
+                     #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Flask_(web_framework)>;
+                     #>    prov:wasDerivedFrom <todo>;
+                     #>    prov:wasDerivedFrom <todo>;
+                     #>    prov:wasDerivedFrom <todo>;
+                     #3>    prov:wasDerivedFrom <http://rdflib.github.io/sparqlwrapper/>;
+                     #3> .
                      sudo easy_install Flask
                      sudo easy_install argparse pytz
                      sudo easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/

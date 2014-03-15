@@ -14,6 +14,7 @@
 #3>    prov:wasDerivedFrom   <https://github.com/timrdf/prizms/tree/master/bin/dataset/pr-spobal-ng.sh>;
 #3>    rdfs:seeAlso          <https://github.com/timrdf/prizms/wiki/pr-spobal-ng>,
 #3>                          <https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets>;
+#3>    dcterms:isPartOf <http://purl.org/twc/id/software/prizms>;
 #3> .
 #
 # This script sets up a new version of a dataset when given a URL to a tabular file and some options

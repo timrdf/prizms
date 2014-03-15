@@ -1,8 +1,9 @@
 #!/bin/bash
 #
-# <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install/prizms-dependency-repos.sh>;
-#    prov:wasDerivedFrom   <https://github.com/timrdf/prizms/blob/master/bin/install/project-user.sh> .
-#
+#3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install/prizms-dependency-repos.sh>;
+#3>    prov:wasDerivedFrom   <https://github.com/timrdf/prizms/blob/master/bin/install/project-user.sh>;
+#3>    dcterms:isPartOf <http://purl.org/twc/id/software/prizms>;
+#3> .
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo
@@ -23,6 +24,11 @@ if [ ! -e $PRIZMS_HOME/lodspeakrs ]; then
    mkdir -p $PRIZMS_HOME/lodspeakrs
 fi
 
+#3> <http://purl.org/twc/id/software/prizms> 
+#3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/csv2rdf4lod-automation>;
+#3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/DataFAQs>;
+#3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/vsr>;
+#3> .
 pushd $PRIZMS_HOME/repos &> /dev/null
    for repos in https://github.com/timrdf/csv2rdf4lod-automation.git \
                 https://github.com/timrdf/DataFAQs.git \
@@ -41,19 +47,34 @@ pushd $PRIZMS_HOME/repos &> /dev/null
       fi
    done
    if [[ ! -e semanteco-annotator-webapp.zip ]]; then
+      #3> <http://purl.org/twc/id/software/prizms> 
+      #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/csv2rdf4lod-annotator>;
+      #3> .
+      #3> <http://purl.org/twc/id/software/csv2rdf4lod-annotator> 
+      #3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/csv2rdf4lod-annotator> .
       # See https://github.com/timrdf/prizms/wiki/csv2rdf4lod-annotator
       echo
       echo "curl semanteco-annotator-webapp.zip"
       url='https://orion.tw.rpi.edu/jenkins/job/semanteco-prizms-support/lastStableBuild/edu.rpi.tw.escience%24semanteco-annotator-webapp/artifact/*zip*/archive.zip'
+      #3> <http://purl.org/twc/id/software/prizms> 
+      #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/CURL>;
+      #3> .
       curl --insecure --progress-bar $url > semanteco-annotator-webapp.zip
    fi
    if [[ -e semanteco-annotator-webapp.zip && 
        ! -d semanteco-annotator-webapp ]]; then
+      #3> <http://purl.org/twc/id/software/prizms> 
+      #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/CURL>;
+      #3> .
       unzip semanteco-annotator-webapp.zip -d semanteco-annotator-webapp
    fi
    echo
 popd &> /dev/null
 
+#3> <http://purl.org/twc/id/software/prizms> 
+#3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/prizms-lodspeakr>;
+#3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/csv2rdf4lod-lodspeakr>;
+#3> .
 #
 # https://github.com/timrdf/prizms/issues/12
 #

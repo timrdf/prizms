@@ -1,7 +1,8 @@
 #!/bin/bash
 #
-# <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install/project-user.sh> .
-#
+#3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install/project-user.sh>;
+#3>    dcterms:isPartOf <http://purl.org/twc/id/software/prizms>;
+#3> .
 
 HOME=$(cd && echo ${PWD%/*}) # e.g. /Users or /home
 

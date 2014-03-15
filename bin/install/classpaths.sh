@@ -1,7 +1,9 @@
 #!/bin/bash
 #
 #3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install/classpaths.sh>;
-#3>    prov:wasDerivedFrom <https://github.com/timrdf/prizms/blob/master/bin/install/paths.sh> .
+#3>    prov:wasDerivedFrom <https://github.com/timrdf/prizms/blob/master/bin/install/paths.sh>;
+#3>    dcterms:isPartOf <http://purl.org/twc/id/software/prizms>;
+#3> .
 #
 # Usage:
 #   export PATH=$PATH`$DATAFAQS_HOME/bin/df-situate-paths.sh`

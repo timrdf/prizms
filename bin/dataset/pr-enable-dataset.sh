@@ -1,6 +1,8 @@
 #!/bin/bash
 #
-#3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/dataset/pr-enable-dataset.sh> .
+#3> <> prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/dataset/pr-enable-dataset.sh>;
+#3>    dcterms:isPartOf <http://purl.org/twc/id/software/prizms>;
+#3> .
 #
 # Usage:
 #

@@ -2668,8 +2668,10 @@ else
                if [[ -e $www/lodspeakr && -e $www/.htaccess ]]; then
                   grep '^RewriteRule .well_known/void void'    $www/.htaccess &> /dev/null
                   did_not_find_well_known=$?
+                  echo $did_not_find_well_known
                   grep '^RewriteRule \^\$ lodspeakr/index.php' $www/.htaccess &> /dev/null
                   did_not_find_lodspeakr=$?
+                  echo $did_not_find_lodspeakr
                   echo "- - - - -"
                   if [[ ! $did_not_find_well_known ]]; then
                      echo "(.well_known/void redirect is already installed.)"
@@ -2689,6 +2691,8 @@ else
                         sudo cp $www/.htaccess $proposed.orig
                         if [[ -e  $proposed.orig ]]; then
                            sudo cp $proposed $www/.htaccess
+                           echo "done!"
+                           cat $www/.htaccess
                         fi
                      else
                         echo "Okay, we won't add the redirect."

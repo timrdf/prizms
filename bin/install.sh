@@ -2673,13 +2673,13 @@ else
                   did_not_find_lodspeakr=$?
                   echo $did_not_find_lodspeakr
                   echo "- - - - -"
-                  if [[ ! $did_not_find_well_known ]]; then
+                  if [[ $did_not_find_well_known -eq 0 ]]; then
                      echo "(.well_known/void redirect is already installed.)"
-                  elif [[ ! $did_not_find_lodspeakr ]]; then
+                  elif [[ $did_not_find_lodspeakr -ne 0 ]]; then
                      echo "WARNING: will wait until lodspeakr redirect is installed."
                   elif [[ $i_can_sudo -ne 0 ]]; then
                      echo "WARNING: cannot modify $www/.htaccess b/c do not have sudo."
-                  elif [[ $did_not_find_well_known ]]; then
+                  elif [[ $did_not_find_well_known -ne 0 ]]; then
                      proposed=.varwww.htaccess_`date +%Y-%m-%d-%H-%M-%S`
                      cat $www/.htaccess | awk '{if($1=="RewriteRule" && \
                                                    $3=="lodspeakr/index.php"){print "RewriteRule .well_known/void void [L]";print}\

@@ -2666,13 +2666,15 @@ else
                echo "Vocabulary of Interlinked Data Note suggests to provide /.well_known/void."
                echo "see http://www.w3.org/TR/void/#well-known"
                if [[ -e $www/lodspeakr && -e $www/.htaccess ]]; then
-                  echo "well known:"
-                  well_known_installed=`grep '^RewriteRule .well_known/void void'    $www/.htaccess`
+                  grep '^RewriteRule .well_known/void void'    $www/.htaccess
+                  well_known_installed=$?
+                  echo "well known installed:"
                   echo $well_known_installed
-                  echo "lodspicket:"
-                  lodspeakr_installed=` grep '^RewriteRule \^\$ lodspeakr/index.php' $www/.htaccess`
+                  echo "lodspicket installed:"
+                  grep '^RewriteRule \^\$ lodspeakr/index.php' $www/.htaccess
+                  lodspeakr_installed=$?
                   echo $lodspeakr_installed
-                  if [[ -z "$well_known_installed" ]]; then
+                  if [[ -n "$well_known_installed" ]]; then
                      read -p "Q: Add .well_known/void redirect? [y/n] " -u 1 wellknown
                   else
                      echo "(/home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png already exists)"

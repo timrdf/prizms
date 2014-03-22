@@ -2675,6 +2675,8 @@ else
                      echo "(.well_known/void redirect is already installed.)"
                   elif [[ ! $did_not_find_lodspeakr ]]; then
                      echo "WARNING: will wait until lodspeakr redirect is installed."
+                  elif [[ $i_can_sudo -ne 0 ]]; then
+                     echo "WARNING: cannot modify $www/.htaccess b/c do not have sudo."
                   elif [[ $did_not_find_well_known ]]; then
                      proposed=.varwww.htaccess_`date +%Y-%m-%d-%H-%M-%S`
                      cat $www/.htaccess | awk '{if($1=="RewriteRule" && \
@@ -2683,6 +2685,14 @@ else
                      diff $www/.htaccess $proposed
                      echo
                      read -p "Q: Add .well_known/void redirect with the change to $www/.htaccess shown above? [y/n] " -u 1 wellknown
+                     if [[ "$wellknown" == [yY] ]]; then
+                        sudo cp $www/.htaccess $proposed.orig
+                        if [[ -e  $proposed.orig ]]; then
+                           sudo cp $proposed $www/.htaccess
+                        fi
+                     else
+                        echo "Okay, we won't add the redirect."
+                     fi
                   else
                      echo "WARNING: Not sure what happened."
                   fi

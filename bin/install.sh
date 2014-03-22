@@ -2672,7 +2672,7 @@ else
                   did_not_find_lodspeakr=$?
                   if [[ ! $did_not_find_well_known ]]; then
                      echo "(.well_known/void redirect is already installed.)"
-                  elif [[ $did_not_find_lodspeakr ]]; then
+                  elif [[ ! $did_not_find_lodspeakr ]]; then
                      echo "WARNING: will wait until lodspeakr redirect is installed."
                   elif [[ $did_not_find_well_known ]]; then
                      proposed=.varwww.htaccess_`date +%Y-%m-%d-%H-%M-%S`

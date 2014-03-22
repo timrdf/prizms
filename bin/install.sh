@@ -2666,9 +2666,9 @@ else
                echo "Vocabulary of Interlinked Data Note suggests to provide /.well_known/void."
                echo "see http://www.w3.org/TR/void/#well-known"
                if [[ -e $www/lodspeakr && -e $www/.htaccess ]]; then
-                  grep '^RewriteRule .well_known/void void'    $www/.htaccess
+                  grep '^RewriteRule .well_known/void void'    $www/.htaccess &> /dev/null
                   did_not_find_well_known=$?
-                  grep '^RewriteRule \^\$ lodspeakr/index.php' $www/.htaccess
+                  grep '^RewriteRule \^\$ lodspeakr/index.php' $www/.htaccess &> /dev/null
                   did_not_find_lodspeakr=$?
                   echo "- - - - -"
                   if [[ ! $did_not_find_well_known ]]; then

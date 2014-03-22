@@ -2667,18 +2667,24 @@ else
                echo "see http://www.w3.org/TR/void/#well-known"
                if [[ -e $www/lodspeakr && -e $www/.htaccess ]]; then
                   grep '^RewriteRule .well_known/void void'    $www/.htaccess
-                  well_known_installed=$?
-                  echo "well known installed: [$well_known_installed]"
+                  did_not_find_well_known=$?
                   grep '^RewriteRule \^\$ lodspeakr/index.php' $www/.htaccess
-                  lodspeakr_installed=$?
-                  echo "lodspicket installed: [$lodspeakr_installed]"
-                  if [[ $well_known_installed ]]; then
-                     read -p "Q: Add .well_known/void redirect? [y/n] " -u 1 wellknown
+                  did_not_find_lodspeakr=$?
+                  if [[ ! $did_not_find_well_known ]]; then
+                     echo "(.well_known/void redirect is already installed.)"
+                  elif [[ $did_not_find_lodspeakr ]]; then
+                     echo "WARNING: will wait until lodspeakr redirect is installed."
+                  elif [[ $did_not_find_well_known ]]; then
+                     proposed=.varwww.htaccess_`date +%Y-%m-%d-%H-%M-%S`
+                     cat $www/.htaccess | awk '{if($1 == "^RewriteRule" && $3 == "lodspeakr/index.php" ){print "hi";print}else{print}}' > $proposed
+                     diff $www.htaccess $proposed
+                     echo
+                     read -p "Q: Add .well_known/void redirect with the change to $www/.htaccess shown above? [y/n] " -u 1 wellknown
                   else
-                     echo "(/home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png already exists)"
+                     echo "WARNING: Not sure what happened."
                   fi
                else
-                  echo "(LODSPeaKr is not installed yet, so there is no need to redirect to it yet.)"
+                  echo "(LODSPeaKr is not installed yet, so there is no need to redirect /.well_known/void to /void yet.)"
                fi
             fi
 

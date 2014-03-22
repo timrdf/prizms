@@ -2668,12 +2668,10 @@ else
                if [[ -e $www/lodspeakr && -e $www/.htaccess ]]; then
                   grep '^RewriteRule .well_known/void void'    $www/.htaccess
                   well_known_installed=$?
-                  echo "well known installed:"
-                  echo $well_known_installed
-                  echo "lodspicket installed:"
+                  echo "well known installed: [$well_known_installed]"
                   grep '^RewriteRule \^\$ lodspeakr/index.php' $www/.htaccess
                   lodspeakr_installed=$?
-                  echo $lodspeakr_installed
+                  echo "lodspicket installed: [$lodspeakr_installed]"
                   if [[ -n "$well_known_installed" ]]; then
                      read -p "Q: Add .well_known/void redirect? [y/n] " -u 1 wellknown
                   else

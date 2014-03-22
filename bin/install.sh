@@ -2667,12 +2667,12 @@ else
                echo "see http://www.w3.org/TR/void/#well-known"
                if [[ -e $www/lodspeakr && -e $www/.htaccess ]]; then
                   echo "well known:"
-                  grep '^RewriteRule .well_known/void void'    $www/.htaccess
-                  did_not_find_wellknown=$?
+                  well_known_installed=`grep '^RewriteRule .well_known/void void'    $www/.htaccess`
+                  echo $well_known_installed
                   echo "lodspicket:"
-                  grep '^RewriteRule \^\$ lodspeakr/index.php' $www/.htaccess
-                  did_not_find_lodspeakr=$?
-                  if [[ $did_not_find_wellknown ]]; then
+                  lodspeakr_installed=` grep '^RewriteRule \^\$ lodspeakr/index.php' $www/.htaccess`
+                  echo $lodspeakr_installed
+                  if [[ -z "$well_known_installed" ]]; then
                      read -p "Q: Add .well_known/void redirect? [y/n] " -u 1 wellknown
                   else
                      echo "(/home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png already exists)"

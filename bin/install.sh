@@ -2610,8 +2610,6 @@ else
                # $conf['basedir'] = 'http://aquarius.tw.rpi.edu/projects/ieeevis/';
                # $conf['ns']['local']   = 'http://aquarius.tw.rpi.edu/projects/ieeevis/';
 
-
-
                # LODSPeaKr logo
                echo
                echo "$div `whoami`"
@@ -2627,7 +2625,9 @@ else
                else
                   echo "(LODSPeaKr is not installed yet, so its logo is not important.)"
                fi
+            fi
 
+            if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                if [[ -n "$vm_ip" ]]; then # We are on a TWC VM
                   #echo
                   #echo "$div `whoami`"
@@ -2654,7 +2654,33 @@ else
                   # This replaces the code above:
                   rewritebase $www/.htaccess
                fi
+            fi
 
+            if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
+               # Add redirect from /.well_known/void to /void using .htaccess:
+               #
+               # RewriteRule .well_known/void void [L]      # << --- Add this.
+               # RewriteRule ^$ lodspeakr/index.php [L]
+               echo
+               echo "$div `whoami`"
+               echo "Vocabulary of Interlinked Data Note suggests to provide /.well_known/void."
+               echo "see http://www.w3.org/TR/void/#well-known"
+               if [[ -e $www/lodspeakr && -e $www/.htaccess ]]; then
+                  echo "well known:"
+                  grep '^RewriteRule .well_known/void void'    $www/.htaccess
+                  echo "lodspicket:"
+                  grep '^RewriteRule \^\$ lodspeakr/index.php' $www/.htaccess
+                  if [[ ! -e /home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png ]]; then
+                     read -p "Q: Add .well_known/void redirect? [y/n] " -u 1 wellknown
+                  else
+                     echo "(/home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png already exists)"
+                  fi
+               else
+                  echo "(LODSPeaKr is not installed yet, so there is no need to redirect to it yet.)"
+               fi
+            fi
+
+            if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                # Avoid index.html
                echo
                echo "$div `whoami`"

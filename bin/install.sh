@@ -2657,6 +2657,7 @@ else
             fi
 
             if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
+               # https://github.com/timrdf/prizms/issues/95
                # Add redirect from /.well_known/void to /void using .htaccess:
                #
                # RewriteRule .well_known/void void [L]      # << --- Add this.

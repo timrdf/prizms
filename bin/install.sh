@@ -2672,7 +2672,7 @@ else
                   grep '^RewriteRule \^\$ lodspeakr/index.php' $www/.htaccess
                   lodspeakr_installed=$?
                   echo "lodspicket installed: [$lodspeakr_installed]"
-                  if [[ -n "$well_known_installed" ]]; then
+                  if [[ $well_known_installed ]]; then
                      read -p "Q: Add .well_known/void redirect? [y/n] " -u 1 wellknown
                   else
                      echo "(/home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png already exists)"

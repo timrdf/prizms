@@ -2677,7 +2677,7 @@ else
                      echo "WARNING: will wait until lodspeakr redirect is installed."
                   elif [[ $did_not_find_well_known ]]; then
                      proposed=.varwww.htaccess_`date +%Y-%m-%d-%H-%M-%S`
-                     cat $www/.htaccess | awk '{if($1 == "RewriteRule" && $3 == "lodspeakr/index.php" ){print "hi";print}else{print}}' > $proposed
+                     cat $www/.htaccess | awk '{if($1=="RewriteRule" && $3=="lodspeakr/index.php"){print "RewriteRule .well_known/void void";print}else{print}}' > $proposed
                      diff $www/.htaccess $proposed
                      echo
                      read -p "Q: Add .well_known/void redirect with the change to $www/.htaccess shown above? [y/n] " -u 1 wellknown

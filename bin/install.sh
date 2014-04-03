@@ -2082,6 +2082,13 @@ else
                                    sudo cp support-files/my-default.cnf /etc/prizms-mysql.cnf
                               echo sudo ln -s /etc/prizms-mysql.cnf /etc/my.cnf
                                    sudo ln -s /etc/prizms-mysql.cnf /etc/my.cnf
+
+                              if [[ `which apt-get` ]]; then
+                                 sudo apt-get install libaio1 libaio-dev
+                              elif [[ `which yum` ]]; then
+                                 sudo yum install libaio
+                              fi
+
                               echo sudo ./scripts/mysql_install_db --user=mysql
                                    sudo ./scripts/mysql_install_db --user=mysql
                               echo sudo chown -R root:mysql .

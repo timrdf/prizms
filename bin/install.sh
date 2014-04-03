@@ -2038,6 +2038,7 @@ else
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                if [[ -n "$install_mysql" ]]; then
                   echo "$div `whoami`"
+                  echo "Prizms will install MySQL if asked to do so."
                   if [[ ! -e /usr/local/mysql ]]; then
                      if [[ "$i_can_sudo" -eq 0 ]]; then
                         mysql_tar='http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.17-linux-glibc2.5-x86_64.tar.gz'
@@ -2142,6 +2143,14 @@ else
                                    sudo chown -R mysql:mysql data
                               echo sudo ./bin/mysqld_safe --user=mysql &
                                    sudo ./bin/mysqld_safe --user=mysql &
+
+                              read -p "Q: MySQL was just installed, but it WAS NOT SECURED. Secure it. Press any key to continue." -u 1 install_it
+                              #if [[ "$install_it" == [yY] ]]; then
+                              #   sudo cp $target .$target_`date +%Y-%m-%d-%H-%M-%S`
+                              #   #cat .prizms-apache-conf | sudo tee -a $target &> /dev/null
+                              #   sudo mv .apache-conf $target
+                              #   restart_apache
+                              #fi
                            popd
                         else
                            echo "(/etc/prizms-mysql.cnf already exists; skipping mysql_install_db)"

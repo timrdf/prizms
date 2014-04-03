@@ -2039,15 +2039,18 @@ else
                if [[ -n "$install_mysql" ]]; then
                   if [[ "$i_can_sudo" -eq 0 ]]; then
                      echo "$div `whoami`"
-                     echo $PRIZMS_HOME
-                     ls -lt $PRIZMS_HOME
                      mysql_tar='http://cdn.mysql.com/Downloads/MySQL-5.6/MySQL-5.6.17-1.linux_glibc2.5.i386.rpm-bundle.tar'
                      mysql_tar_base=`basename $mysql_tar`
                      if [[ ! -e $mysql_tar_local ]]; then
                         sudo curl -o "/usr/local/$mysql_tar_base" $mysql_tar
                      fi
-                     if [[ -e $mysql_tar_local ]]; then
+                     if [[ -e "/usr/local/$mysql_tar_base" && -n "$mysql_tar_base" ]]; then
                         ls -lt "/usr/local/$mysql_tar_base"
+                        pushd '/usr/local'
+                           touch $PRIZMS_HOME/repos/mysqltar
+                           sudo tar –xzf $mysql_tar_base
+                           find -type d -newer $PRIZMS_HOME/repos/mysqltar
+                        popd
                      else
                         echo "(WARNING: could not save $mysql_tar to /usr/local/$mysql_tar_base"
                      fi
@@ -2061,7 +2064,7 @@ else
                fi
             else
                echo 'mysql huh'
-            fi
+            fi # End "Running as developer" for installing mysql
 
             
 

@@ -2216,7 +2216,7 @@ else
                            pushd $PRIZMS_HOME/repos/
                               date > IVPR-Weave-Binaries.zip.timestamp
                               unzip IVPR-Weave-Binaries.zip
-                              weave_dir=`find . -maxdepth 1 -type d -newer IVPR-Weave-Binaries.zip.timestamp`
+                              weave_dir=`find . -type d -name IVPR-Weave-Binaries* -newer IVPR-Weave-Binaries.zip.timestamp`
                               echo `pwd`/$weave_dir
                               ls $weave_dir
                            popd

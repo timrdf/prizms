@@ -2224,7 +2224,7 @@ else
                               fi 
                            popd
                         fi
-                        if [[ -d $PRIZMS_HOME/repos/IVPR-Weave-Binaries ]]; then
+                        if [[ -d $PRIZMS_HOME/repos/IVPR-Weave-Binaries && -d "$webapps" && ! -e "$webapps/WeaveServices.war" ]]; then
                            echo sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/WeaveServices.war $webapps
                                 sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/WeaveServices.war $webapps
                            for ext in swf html swc js css; do

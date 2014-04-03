@@ -2200,7 +2200,6 @@ else
             # Set up Weave
             # http://info.oicweave.org/projects/weave/wiki/Installing_Weave
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
-               echo weave: $install_weave
                if [[ "$install_weave" == '--weave' ]]; then
                   if [[ "$tomcat_installed" == "yes" ]]; then
                      if [[ "$i_can_sudo" -eq 0 ]]; then
@@ -2208,8 +2207,8 @@ else
                         echo $weave_url
                         if [[ ! -e $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip ]]; then
                            curl -sLI $weave_url > $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip.version
-                           echo curl -o $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip
-                                curl -o $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip
+                           echo curl -o $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip $weave_url
+                                curl -o $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip $weave_url
                         fi
                      else
                         echo "(WARNING: Cannot install Weave b/c you do not have sudo.)" 

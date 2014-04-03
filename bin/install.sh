@@ -2201,14 +2201,16 @@ else
             # http://info.oicweave.org/projects/weave/wiki/Installing_Weave
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                if [[ "$install_weave" == '--weave' ]]; then
+                  echo "$div `whoami`"
+                  echo "Prizms will install Weave if you asked it to."
                   if [[ "$tomcat_installed" == "yes" ]]; then
                      if [[ "$i_can_sudo" -eq 0 ]]; then
                         weave_url='https://github.com/IVPR/Weave-Binaries/zipball/master' 
                         echo $weave_url
                         if [[ ! -e $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip ]]; then
                            curl -sLI $weave_url > $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip.version
-                           echo curl -o $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip $weave_url
-                                curl -o $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip $weave_url
+                           echo curl -L -o $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip $weave_url
+                                curl -L -o $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip $weave_url
                         fi
                      else
                         echo "(WARNING: Cannot install Weave b/c you do not have sudo.)" 

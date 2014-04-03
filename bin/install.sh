@@ -2037,9 +2037,9 @@ else
             # http://info.oicweave.org/projects/weave/wiki/MySQL_for_Linux
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                if [[ -n "$install_mysql" ]]; then
+                  echo "$div `whoami`"
                   if [[ ! -e /usr/local/mysql ]]; then
                      if [[ "$i_can_sudo" -eq 0 ]]; then
-                        echo "$div `whoami`"
                         mysql_tar='http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.17-linux-glibc2.5-x86_64.tar.gz'
                         mysql_tar_base=`basename $mysql_tar`
                         if [[ ! -e "/usr/local/$mysql_tar_base" ]]; then
@@ -2091,6 +2091,51 @@ else
 
                               echo sudo ./scripts/mysql_install_db --user=mysql
                                    sudo ./scripts/mysql_install_db --user=mysql
+
+                              #  To start mysqld at boot time you have to copy
+                              #  support-files/mysql.server to the right place for your system
+                              #  
+                              #  PLEASE REMEMBER TO SET A PASSWORD FOR THE MySQL root USER !
+                              #  To do so, start the server, then issue the following commands:
+                              #  
+                              #    ./bin/mysqladmin -u root password 'new-password'
+                              #    ./bin/mysqladmin -u root -h ieeevis.aquarius.tw.rpi.edu password 'new-password'
+                              #  
+                              #  Alternatively you can run:
+                              #  
+                              #    ./bin/mysql_secure_installation
+                              #  
+                              #  which will also give you the option of removing the test
+                              #  databases and anonymous user created by default.  This is
+                              #  strongly recommended for production servers.
+                              #  
+                              #  See the manual for more instructions.
+                              #  
+                              #  You can start the MySQL daemon with:
+                              #  
+                              #    cd . ; ./bin/mysqld_safe &
+                              #  
+                              #  You can test the MySQL daemon with mysql-test-run.pl
+                              #  
+                              #    cd mysql-test ; perl mysql-test-run.pl
+                              #  
+                              #  Please report any problems at http://bugs.mysql.com/
+                              #  
+                              #  The latest information about MySQL is available on the web at
+                              #  
+                              #    http://www.mysql.com
+                              #  
+                              #  Support MySQL by buying support/licenses at http://shop.mysql.com
+                              #  
+                              #  New default config file was created as ./my.cnf and
+                              #  will be used by default by the server when you start it.
+                              #  You may edit this file to change server settings
+                              #  
+                              #  WARNING: Default config file /etc/my.cnf exists on the system
+                              #  This file will be read by default by the MySQL server
+                              #  If you do not want to use this, either remove it, or use the
+                              #  --defaults-file argument to mysqld_safe when starting the server
+
                               echo sudo chown -R root:mysql .
                                    sudo chown -R root:mysql .
                               echo sudo chown -R mysql:mysql data

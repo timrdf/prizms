@@ -218,25 +218,25 @@ else
    fi
 
    #
-   install_weave='no'
+   install_weave=''
    if [[ "$1" == "--weave" ]]; then
-      install_weave='yes'
+      install_weave="$1"
       echo "Will install weave."
       shift
    fi
 
    # https://github.com/timrdf/csv2rdf4lod-automation/wiki/VIVO#installing-vivo
-   install_vivo='no'
+   install_vivo=''
    if [[ "$1" == "--vivo" ]]; then
-      install_vivo='yes'
+      install_vivo="$1"
       echo "Will install vivo."
       shift
    fi
 
    #
-   install_mysql='no'
+   install_mysql=''
    if [[ "$1" == "--mysql" ]]; then
-      install_mysql='yes'
+      install_mysql="$1"
       echo "Will install mysql."
       shift
    fi
@@ -1001,7 +1001,7 @@ else
                echo "    --upstream-ckan  $upstream_ckan                  \\"     >> .refresh-prizms-installation
                echo "    --our-base-uri   $our_base_uri                   \\"     >> .refresh-prizms-installation
                echo "    --our-source-id  $our_source_id                  \\"     >> .refresh-prizms-installation
-               echo "    --our-datahub-id $our_datahub_id"                        >> .refresh-prizms-installation
+               echo "    --our-datahub-id $our_datahub_id $install_mysql"         >> .refresh-prizms-installation
                chmod +x .refresh-prizms-installation
             fi
 
@@ -2036,7 +2036,7 @@ else
             # Install mysql (to support VIVO and/or Weave)
             # http://info.oicweave.org/projects/weave/wiki/MySQL_for_Linux
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
-               if [[ "$install_mysql" == 'yes' ]]; then
+               if [[ -n "$install_mysql" ]]; then
                   echo "$div `whoami`"
                   echo $PRIZMS_HOME
                   ls -lt $PRIZMS_HOME

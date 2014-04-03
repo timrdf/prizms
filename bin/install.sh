@@ -2212,6 +2212,15 @@ else
                            echo curl -L -o $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip $weave_url
                                 curl -L -o $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip $weave_url
                         fi
+                        if [[ ! -d $PRIZMS_HOME/repos/IVPR-Weave-Binaries ]]; then
+                           pushd $PRIZMS_HOME/repos/
+                              date > IVPR-Weave-Binaries.zip.timestamp
+                              unzip IVPR-Weave-Binaries.zip
+                              weave_dir=`find . -maxdepth 1 -type d -newer IVPR-Weave-Binaries.zip.timestamp`
+                              echo `pwd`/$weave_dir
+                              ls $weave_dir
+                           popd
+                        fi
                      else
                         echo "(WARNING: Cannot install Weave b/c you do not have sudo.)" 
                      fi

@@ -2043,7 +2043,11 @@ else
                   echo 'http://cdn.mysql.com/Downloads/MySQL-5.6/MySQL-5.6.17-1.linux_glibc2.5.i386.rpm-bundle.tar'
                   mysql_user_exists=`$PRIZMS_HOME/bin/install/project-user.sh mysql --exists`
                   echo "mysql user exists: $mysql_user_exists"
+               else
+                  echo 'mysql no'
                fi
+            else
+               echo 'mysql huh'
             fi
 
             

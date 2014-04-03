@@ -218,26 +218,28 @@ else
    fi
 
    #
+   install_mysql=''
+   if [[ "$1" == "--mysql" ]]; then
+      install_mysql="$1"
+      echo "Will install mysql."
+      shift
+   fi
+
+   #
    install_weave=''
    if [[ "$1" == "--weave" ]]; then
+      install_mysql='--mysql'
       install_weave="$1"
-      echo "Will install weave."
+      echo "Will install Weave (and MySQL)."
       shift
    fi
 
    # https://github.com/timrdf/csv2rdf4lod-automation/wiki/VIVO#installing-vivo
    install_vivo=''
    if [[ "$1" == "--vivo" ]]; then
+      install_mysql='--mysql'
       install_vivo="$1"
-      echo "Will install vivo."
-      shift
-   fi
-
-   #
-   install_mysql=''
-   if [[ "$1" == "--mysql" ]]; then
-      install_mysql="$1"
-      echo "Will install mysql."
+      echo "Will install VIVO (and MySQL)."
       shift
    fi
 
@@ -1001,7 +1003,7 @@ else
                echo "    --upstream-ckan  $upstream_ckan                  \\"     >> .refresh-prizms-installation
                echo "    --our-base-uri   $our_base_uri                   \\"     >> .refresh-prizms-installation
                echo "    --our-source-id  $our_source_id                  \\"     >> .refresh-prizms-installation
-               echo "    --our-datahub-id $our_datahub_id $install_mysql"         >> .refresh-prizms-installation
+               echo "    --our-datahub-id $our_datahub_id $install_mysql $install_weave" >> .refresh-prizms-installation
                chmod +x .refresh-prizms-installation
             fi
 
@@ -2191,6 +2193,29 @@ else
                                        "expose your (port 8080) Tomcat application server of SADI services at the URL $our_base_uri/sadi-services"
                   #                  ^ 'proxy' module is enabled when proxy_http is enabled.
                   #                    ... but not always... 
+               fi
+            fi
+
+
+            # Set up Weave
+            # http://info.oicweave.org/projects/weave/wiki/Installing_Weave
+            if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+               if [[ "$install_weave" == '--weave' ]]; then
+                  if [[ "$tomcat_installed" == "yes" ]]; then
+                     if [[ "$i_can_sudo" -eq 0 ]]; then
+                        weave_url='https://github.com/IVPR/Weave-Binaries/zipball/master' 
+                        echo $weave_url
+                        if [[ ! -e $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip ]]; then
+                           curl -sLI $weave_url > $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip.version
+                           echo curl -o $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip
+                                curl -o $PRIZMS_HOME/repos/IVPR-Weave-Binaries.zip
+                        fi
+                     else
+                        echo "(WARNING: Cannot install Weave b/c you do not have sudo.)" 
+                     fi
+                  else
+                     echo "(WARNING: Cannot install Weave b/c tomcat is not installed.)"
+                  fi
                fi
             fi
 

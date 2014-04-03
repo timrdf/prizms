@@ -2215,7 +2215,7 @@ else
                         if [[ ! -d $PRIZMS_HOME/repos/IVPR-Weave-Binaries ]]; then
                            pushd $PRIZMS_HOME/repos/
                               date > IVPR-Weave-Binaries.zip.timestamp
-                              unzip IVPR-Weave-Binaries.zip
+                              unzip -DD IVPR-Weave-Binaries.zip
                               weave_dir=`find . -type d -name IVPR-Weave-Binaries* -newer IVPR-Weave-Binaries.zip.timestamp`
                               echo `pwd`/$weave_dir
                               ls $weave_dir

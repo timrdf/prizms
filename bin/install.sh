@@ -2043,7 +2043,8 @@ else
                         mysql_tar='http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.17-linux-glibc2.5-x86_64.tar.gz'
                         mysql_tar_base=`basename $mysql_tar`
                         if [[ ! -e "/usr/local/$mysql_tar_base" ]]; then
-                           sudo curl -o "/usr/local/$mysql_tar_base" $mysql_tar
+                           echo sudo curl -o "/usr/local/$mysql_tar_base" $mysql_tar
+                                sudo curl -o "/usr/local/$mysql_tar_base" $mysql_tar
                         fi
                         if [[ -e "/usr/local/$mysql_tar_base" && -n "$mysql_tar_base" ]]; then
                            ls -lt "/usr/local/$mysql_tar_base"
@@ -2055,13 +2056,42 @@ else
                                       sudo tar xzf $mysql_tar_base
                               fi
                               #find -type d -newer $PRIZMS_HOME/repos/mysqltar
-                              sudo ln -s $mysql_dir 'mysql'
+                              echo sudo ln -s $mysql_dir 'mysql'
+                                   sudo ln -s $mysql_dir 'mysql'
                            popd
                         else
                            echo "(WARNING: could not save $mysql_tar to /usr/local/$mysql_tar_base"
                         fi
-                        mysql_user_exists=`$PRIZMS_HOME/bin/install/project-user.sh mysql --exists`
-                        echo "mysql user exists: $mysql_user_exists"
+
+                        mysql_user_exists=`$PRIZMS_HOME/bin/install/project-user.sh mysql --exists` # 'yes' or 'no'
+                        if [[ "$mysql_user_exists" == 'no' ]]; then
+                           echo sudo groupadd mysql
+                                sudo groupadd mysql
+                           echo sudo useradd -g mysql mysql
+                                sudo useradd -g mysql mysql
+                        else
+                           echo "(Skipping creation of mysql user; already exists)"
+                        fi
+
+                        mysql_user_exists=`$PRIZMS_HOME/bin/install/project-user.sh mysql --exists` # 'yes' or 'no'
+                        if [[ ! -e /etc/prizms-mysql.cnf && "$mysql_user_exists" == 'yes' ]]; then
+                           pushd mysql
+                              echo sudo cp support-files/my-default.cnf /etc/prizms-mysql.cnf
+                                   sudo cp support-files/my-default.cnf /etc/prizms-mysql.cnf
+                              echo sudo ln -s /etc/prizms-mysql.cnf /etc/my.cnf
+                                   sudo ln -s /etc/prizms-mysql.cnf /etc/my.cnf
+                              echo sudo ./scripts/mysql_install_db --user=mysql
+                                   sudo ./scripts/mysql_install_db --user=mysql
+                              echo sudo chown -R root:mysql .
+                                   sudo chown -R root:mysql .
+                              echo sudo chown -R mysql:mysql data
+                                   sudo chown -R mysql:mysql data
+                              echo sudo ./bin/mysqld_safe --user=mysql &
+                                   sudo ./bin/mysqld_safe --user=mysql &
+                           popd
+                        else
+                           echo "(/etc/prizms-mysql.cnf already exists; skipping mysql_install_db)"
+                        fi
                      else
                         echo "(WARNING: Cannot install mysql without sudo)"
                      fi

@@ -2073,8 +2073,10 @@ else
                            echo "(Skipping creation of mysql user; already exists)"
                         fi
 
+                        # sudo rm -rf /etc/my.cnf /usr/local/mysql /usr/local/mysql-5.6.17-linux-glibc2.5-x86_64
+
                         mysql_user_exists=`$PRIZMS_HOME/bin/install/project-user.sh mysql --exists` # 'yes' or 'no'
-                        if [[ ! -e /etc/prizms-mysql.cnf && "$mysql_user_exists" == 'yes' ]]; then
+                        if [[ ! -e /etc/prizms-mysql.cnf && "$mysql_user_exists" == 'yes' && -d '/usr/local/mysql' ]]; then
                            pushd '/usr/local/mysql'
                               echo sudo cp support-files/my-default.cnf /etc/prizms-mysql.cnf
                                    sudo cp support-files/my-default.cnf /etc/prizms-mysql.cnf

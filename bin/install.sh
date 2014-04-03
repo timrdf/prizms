@@ -2048,7 +2048,7 @@ else
                         ls -lt "/usr/local/$mysql_tar_base"
                         pushd '/usr/local'
                            touch $PRIZMS_HOME/repos/mysqltar
-                           sudo tar –xzf $mysql_tar_base
+                           sudo tar xzf $mysql_tar_base
                            find -type d -newer $PRIZMS_HOME/repos/mysqltar
                         popd
                      else

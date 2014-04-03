@@ -2200,6 +2200,7 @@ else
             # Set up Weave
             # http://info.oicweave.org/projects/weave/wiki/Installing_Weave
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+               echo weave: $install_weave
                if [[ "$install_weave" == '--weave' ]]; then
                   if [[ "$tomcat_installed" == "yes" ]]; then
                      if [[ "$i_can_sudo" -eq 0 ]]; then

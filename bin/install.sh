@@ -217,6 +217,30 @@ else
       shift
    fi
 
+   #
+   install_weave='no'
+   if [[ "$1" == "--weave" ]]; then
+      install_weave='yes'
+      echo "Will install weave."
+      shift
+   fi
+
+   # https://github.com/timrdf/csv2rdf4lod-automation/wiki/VIVO#installing-vivo
+   install_vivo='no'
+   if [[ "$1" == "--vivo" ]]; then
+      install_vivo='yes'
+      echo "Will install vivo."
+      shift
+   fi
+
+   #
+   install_mysql='no'
+   if [[ "$1" == "--mysql" ]]; then
+      install_mysql='yes'
+      echo "Will install mysql."
+      shift
+   fi
+
    echo "Do you have sudo? (sudo -v)"
    i_can_sudo=`sudo -v &> /dev/null`
    i_can_sudo=$?

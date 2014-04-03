@@ -2037,33 +2037,33 @@ else
             # http://info.oicweave.org/projects/weave/wiki/MySQL_for_Linux
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                if [[ -n "$install_mysql" ]]; then
-                  if [[ "$i_can_sudo" -eq 0 ]]; then
-                     echo "$div `whoami`"
-                     mysql_tar='http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.17-linux-glibc2.5-x86_64.tar.gz'
-                     mysql_tar_base=`basename $mysql_tar`
-                     if [[ ! -e "/usr/local/$mysql_tar_base" ]]; then
-                        sudo curl -o "/usr/local/$mysql_tar_base" $mysql_tar
-                     fi
-                     if [[ -e "/usr/local/$mysql_tar_base" && -n "$mysql_tar_base" ]]; then
-                        ls -lt "/usr/local/$mysql_tar_base"
-                        pushd '/usr/local'
-                           touch $PRIZMS_HOME/repos/mysqltar
-                           sudo tar xzf $mysql_tar_base
-                           find -type d -newer $PRIZMS_HOME/repos/mysqltar
-                        popd
+                  if [[ ! -e /usr/local/mysql ]]; then
+                     if [[ "$i_can_sudo" -eq 0 ]]; then
+                        echo "$div `whoami`"
+                        mysql_tar='http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.17-linux-glibc2.5-x86_64.tar.gz'
+                        mysql_tar_base=`basename $mysql_tar`
+                        if [[ ! -e "/usr/local/$mysql_tar_base" ]]; then
+                           sudo curl -o "/usr/local/$mysql_tar_base" $mysql_tar
+                        fi
+                        if [[ -e "/usr/local/$mysql_tar_base" && -n "$mysql_tar_base" ]]; then
+                           ls -lt "/usr/local/$mysql_tar_base"
+                           pushd '/usr/local'
+                              touch $PRIZMS_HOME/repos/mysqltar
+                              sudo tar xzf $mysql_tar_base
+                              find -type d -newer $PRIZMS_HOME/repos/mysqltar
+                           popd
+                        else
+                           echo "(WARNING: could not save $mysql_tar to /usr/local/$mysql_tar_base"
+                        fi
+                        mysql_user_exists=`$PRIZMS_HOME/bin/install/project-user.sh mysql --exists`
+                        echo "mysql user exists: $mysql_user_exists"
                      else
-                        echo "(WARNING: could not save $mysql_tar to /usr/local/$mysql_tar_base"
+                        echo "(WARNING: Cannot install mysql without sudo)"
                      fi
-                     mysql_user_exists=`$PRIZMS_HOME/bin/install/project-user.sh mysql --exists`
-                     echo "mysql user exists: $mysql_user_exists"
                   else
-                     echo "(WARNING: Cannot install mysql without sudo)"
+                     echo '(/usr/local/mysql already exists; not trying to install again)'
                   fi
-               else
-                  echo 'mysql no'
                fi
-            else
-               echo 'mysql huh'
             fi # End "Running as developer" for installing mysql
 
             

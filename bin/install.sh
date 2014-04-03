@@ -2217,9 +2217,20 @@ else
                               date > IVPR-Weave-Binaries.zip.timestamp
                               unzip -DD IVPR-Weave-Binaries.zip
                               weave_dir=`find . -maxdepth 1 -newer IVPR-Weave-Binaries.zip.timestamp -name IVPR-Weave-Binaries-*`
-                              echo `pwd`/$weave_dir
-                              ls $weave_dir
+                              if [[ -d "$weave_dir" ]]; then
+                                 mv "$weave_dir" IVPR-Weave-Binaries
+                              else
+                                 echo "(WARNING: Could not determine the unzipped IVPR-Weave-Binaries.zip)"
+                              fi 
                            popd
+                        fi
+                        if [[ -d $PRIZMS_HOME/repos/IVPR-Weave-Binaries ]]; then
+                           echo sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/WeaveServices.war $webapps
+                                sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/WeaveServices.war $webapps
+                           for ext in swf html swc js css; do
+                              echo sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/ROOT/*.$ext       $webapps/ROOT/
+                                   sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/ROOT/*.$ext       $webapps/ROOT/
+                           done 
                         fi
                      else
                         echo "(WARNING: Cannot install Weave b/c you do not have sudo.)" 

@@ -2232,7 +2232,7 @@ else
                                    sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/ROOT/*.$ext       $webapps/ROOT/
                            done 
                         fi
-                        add_proxy_pass '/etc/apache2/sites-available/default' '/weave' '8080'
+                        add_proxy_pass '/etc/apache2/sites-available/default' '/weave' '8080' 
                      else
                         echo "(WARNING: Cannot install Weave b/c you do not have sudo.)" 
                      fi

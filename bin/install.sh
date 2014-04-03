@@ -2048,10 +2048,13 @@ else
                         if [[ -e "/usr/local/$mysql_tar_base" && -n "$mysql_tar_base" ]]; then
                            ls -lt "/usr/local/$mysql_tar_base"
                            pushd '/usr/local'
-                              touch $PRIZMS_HOME/repos/mysqltar
-                              sudo tar xzf $mysql_tar_base
-                              find -type d -newer $PRIZMS_HOME/repos/mysqltar
+                              #touch $PRIZMS_HOME/repos/mysqltar
+                              echo sudo tar xzf $mysql_tar_base
+                                   sudo tar xzf $mysql_tar_base
+                              #find -type d -newer $PRIZMS_HOME/repos/mysqltar
                            popd
+                           mysql_dir=${mysql_tar_base%.tar.gz}
+                           sudo ln -s $mysql_dir 'mysql'
                         else
                            echo "(WARNING: could not save $mysql_tar to /usr/local/$mysql_tar_base"
                         fi

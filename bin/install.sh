@@ -2075,7 +2075,7 @@ else
 
                         mysql_user_exists=`$PRIZMS_HOME/bin/install/project-user.sh mysql --exists` # 'yes' or 'no'
                         if [[ ! -e /etc/prizms-mysql.cnf && "$mysql_user_exists" == 'yes' ]]; then
-                           pushd mysql
+                           pushd '/usr/local/mysql'
                               echo sudo cp support-files/my-default.cnf /etc/prizms-mysql.cnf
                                    sudo cp support-files/my-default.cnf /etc/prizms-mysql.cnf
                               echo sudo ln -s /etc/prizms-mysql.cnf /etc/my.cnf

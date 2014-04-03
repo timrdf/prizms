@@ -2034,8 +2034,12 @@ else
 
 
             # Install mysql (to support VIVO and/or Weave)
+            # http://info.oicweave.org/projects/weave/wiki/MySQL_for_Linux
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                if [[ "$install_mysql" == 'yes' ]]; then
+                  echo "$div `whoami`"
+                  echo $PRIZMS_HOME
+                  ls -lt $PRIZMS_HOME
                   echo 'http://cdn.mysql.com/Downloads/MySQL-5.6/MySQL-5.6.17-1.linux_glibc2.5.i386.rpm-bundle.tar'
                   mysql_user_exists=`$PRIZMS_HOME/bin/install/project-user.sh mysql --exists`
                   echo "mysql user exists: $mysql_user_exists"

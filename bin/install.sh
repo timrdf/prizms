@@ -34,9 +34,15 @@ if [[ ${0%install.sh} == $0 ]]; then # $0 is 'bash' etc when bootstrapping, it i
             read -p "Q: Try to install git with the command above? [y/n] " -u 1 install_it
             echo
             if [[ "$install_it" == [yY] ]]; then
-            #3> <http://purl.org/twc/id/software/prizms> 
-            #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Apt-get> .
-               sudo apt-get install git-core < <(echo 'y')
+               if [[ `which apt-get 2> /dev/null` ]]; then
+                  #3> <http://purl.org/twc/id/software/prizms> 
+                  #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Apt-get> .
+                  sudo apt-get install git-core < <(echo 'y')
+               elif [[ `which yum 2> /dev/null` ]]; then
+                  #3> <http://purl.org/twc/id/software/prizms> 
+                  #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Yellowdog_Updater,_Modified> .
+                  sudo yum install git-core
+               fi
             fi
          fi
          if [[ `which git 2> /dev/null` ]]; then

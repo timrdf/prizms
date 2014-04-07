@@ -2527,7 +2527,7 @@ else
                      echo "    $set_paths_cmd"
                   else
                      echo "WARNING: could not determine JENAROOT ($found_JENAROOT)."
-                  fi
+                  fi # TODO: This needs the production user to have installed JENA, this would be the second pass...
                   already_there=`grep "^$set_paths_cmd" $target`
                   echo
                   if [[ -n "$already_there" ]]; then

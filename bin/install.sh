@@ -16,18 +16,25 @@ if [[ ${0%install.sh} == $0 ]]; then # $0 is 'bash' etc when bootstrapping, it i
       cd
       read -p "Q: Bootstrap Prizms installation at `pwd`/opt/prizms? [y/n] " -u 1 install_it
       if [[ "$install_it" == [yY] ]]; then
-         if [[ ! `which git` ]]; then
+         if [[ ! `which git` && ( `which apt-get` || `which yum` ) ]]; then
+            #3> <http://purl.org/twc/id/software/prizms> 
+            #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Git_(software)>;
             echo
             echo "We need git to bootstrap Prizms' installation."
-            echo "git can be installed on Ubuntu with the command:"
-            echo
-            echo "  sudo apt-get install git-core"
+            if [[ `which apt-get` ]]; then
+               echo "git can be installed on Ubuntu with the command:"
+               echo
+               echo "  sudo apt-get install git-core"
+            elif [[ `which yum` ]]; then
+               echo "git can be installed on CentOS/RedHat with the command:"
+               echo
+               echo "  sudo yum install git-core"
+            fi
             echo
             read -p "Q: Try to install git with the command above? [y/n] " -u 1 install_it
             echo
             if [[ "$install_it" == [yY] ]]; then
             #3> <http://purl.org/twc/id/software/prizms> 
-            #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Git_(software)>;
             #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Apt-get> .
                sudo apt-get install git-core < <(echo 'y')
             fi
@@ -43,6 +50,8 @@ if [[ ${0%install.sh} == $0 ]]; then # $0 is 'bash' etc when bootstrapping, it i
             echo
             echo "Prizms bootstrap is installed. Run:"
             echo "  opt/prizms/bin/install.sh --help"
+         else
+            echo "ERROR: Cannot bootstrap prizms without git. Install git and try again."
          fi
       else
          echo "Okay, we won't do anything." 

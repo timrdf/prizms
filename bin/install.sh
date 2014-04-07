@@ -1397,10 +1397,10 @@ else
 
                #if [[ `value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target` == "true" ]]; then
                if [[ -d '/var/www' ]]; then
-               change_source_me $target CSV2RDF4LOD_PUBLISH_VARWWW_ROOT "/var/www" \
-                  "indicate the htdocs directory to publish RDF dump files to, which are used to load the SPARQL endpoint" \
-                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT' \
-                  'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_VARWWW_ROOT "/var/www" \
+                     "indicate the htdocs directory to publish RDF dump files to, which are used to load the SPARQL endpoint" \
+                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT' \
+                     'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
                else
                   echo "WARNING: /var/www DNE, where is apache?"
                fi
@@ -3635,7 +3635,12 @@ else
             fi # end "I am not project user"
 
             echo "$div `whoami`"
-            read -p "Q: Install PROV Pingback dependencies? [y/n] " -u 1 install_it
+            echo "Prizms implements the W3C PROV-AQ 'pingback' functionality."
+            echo "See https://github.com/timrdf/prizms/wiki/prov-pingback"
+            echo
+            echo "   easy_install virtualenv Flask argparse pytz SPARQLWrapper"
+            echo
+            read -p "Q: Install PROV Pingback dependencies with the command above? [y/n] " -u 1 install_it
             if [[ $install_it == [yY] ]]; then
                easy_install virtualenv
                easy_install Flask

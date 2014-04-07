@@ -3538,12 +3538,16 @@ else
                      #3>    prov:wasDerivedFrom <http://rdflib.github.io/sparqlwrapper/>;
                      #3> .
             echo PYTHONPATH: $PYTHONPATH
-                     echo easy_install virtualenv
-                     sudo -E easy_install virtualenv
-                     echo easy_install Flask
-                     sudo -E easy_install Flask
-                     sudo -E easy_install argparse pytz
-                     sudo -E easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
+                     #sudo -E easy_install virtualenv
+                     easy_install virtualenv
+                     #sudo -E easy_install Flask
+                     easy_install Flask
+                     #sudo -E easy_install Flask
+                     easy_install Flask
+                     #sudo -E easy_install argparse pytz
+                     easy_install argparse pytz
+                     #sudo -E easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
+                     easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
                   fi
                   
                   # Worked, but need "do only once logic": sudo easy_install Flask

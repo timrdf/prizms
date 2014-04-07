@@ -2574,15 +2574,19 @@ else
                #echo $PROJECT_PRIZMS_HOME # /home/melagrid/opt/prizms
                                           # /home/melagrid/opt/prizms/repos/DataFAQs/services
                if [[ ! -e $www/services ]]; then
-                  echo
-                  echo "   sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services"
-                  echo
-                  read -p "Q: May we link the DataFAQs services from your htdocs directory using the command above? [y/n] " -u 1 link_it
-                  if [[ "$link_it" == [yY] ]]; then
-                     echo sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services
-                          sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services
+                  if [[ -e $PROJECT_PRIZMS_HOME/repos/DataFAQs/services ]]; then
+                     echo
+                     echo "   sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services"
+                     echo
+                     read -p "Q: May we link the DataFAQs services from your htdocs directory using the command above? [y/n] " -u 1 link_it
+                     if [[ "$link_it" == [yY] ]]; then
+                        echo sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services
+                             sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services
+                     else
+                        echo "Okay, we won't link the DataFAQs services into your htdocs directory."
+                     fi
                   else
-                     echo "Okay, we won't link the DataFAQs services into your htdocs directory."
+                     echo "WARNING: $PROJECT_PRIZMS_HOME/repos/DataFAQs/services does not exist yet, does production user need to be set up?"
                   fi
                fi
             fi

@@ -3539,11 +3539,11 @@ else
                      #3> .
             echo PYTHONPATH: $PYTHONPATH
                      echo easy_install virtualenv
-                     sudo easy_install virtualenv
+                     sudo -E easy_install virtualenv
                      echo easy_install Flask
-                     sudo easy_install Flask
-                     sudo easy_install argparse pytz
-                     sudo easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
+                     sudo -E easy_install Flask
+                     sudo -E easy_install argparse pytz
+                     sudo -E easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
                   fi
                   
                   # Worked, but need "do only once logic": sudo easy_install Flask

@@ -3509,7 +3509,7 @@ else
             echo "Python headache"
             echo /home/`whoami`/opt/python/lib/site-packages/
             ls -lt /home/`whoami`/opt/python/lib/site-packages/
-            echo $PYTHONPATH
+            echo PYTHONPATH: $PYTHONPATH
  
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                echo 
@@ -3537,6 +3537,7 @@ else
                      #>    prov:wasDerivedFrom <todo>;
                      #3>    prov:wasDerivedFrom <http://rdflib.github.io/sparqlwrapper/>;
                      #3> .
+            echo PYTHONPATH: $PYTHONPATH
                      echo easy_install virtualenv
                      sudo easy_install virtualenv
                      echo easy_install Flask

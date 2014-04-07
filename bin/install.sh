@@ -16,16 +16,16 @@ if [[ ${0%install.sh} == $0 ]]; then # $0 is 'bash' etc when bootstrapping, it i
       cd
       read -p "Q: Bootstrap Prizms installation at `pwd`/opt/prizms? [y/n] " -u 1 install_it
       if [[ "$install_it" == [yY] ]]; then
-         if [[ ! `which git` && ( `which apt-get` || `which yum` ) ]]; then
+         if [[ ! `which git 2> /dev/null` && ( `which apt-get 2> /dev/null` || `which yum 2> /dev/null` ) ]]; then
             #3> <http://purl.org/twc/id/software/prizms> 
             #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Git_(software)>;
             echo
             echo "We need git to bootstrap Prizms' installation."
-            if [[ `which apt-get` ]]; then
+            if [[ `which apt-get 2> /dev/null` ]]; then
                echo "git can be installed on Ubuntu with the command:"
                echo
                echo "  sudo apt-get install git-core"
-            elif [[ `which yum` ]]; then
+            elif [[ `which yum 2> /dev/null` ]]; then
                echo "git can be installed on CentOS/RedHat with the command:"
                echo
                echo "  sudo yum install git-core"
@@ -39,7 +39,7 @@ if [[ ${0%install.sh} == $0 ]]; then # $0 is 'bash' etc when bootstrapping, it i
                sudo apt-get install git-core < <(echo 'y')
             fi
          fi
-         if [[ `which git` ]]; then
+         if [[ `which git 2> /dev/null` ]]; then
             echo
             echo mkdir -p `pwd`/opt
             echo

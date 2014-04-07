@@ -3446,6 +3446,58 @@ else
             fi # end "I am not project user"
 
 
+
+# TODO
+# The following error occurred while trying to add or remove files in the
+# installation directory:
+# 
+#     [Errno 2] No such file or directory: '/home/lebot/opt/python/lib/site-packages/test-easy-install-15254.pth'
+# 
+# The installation directory you specified (via --install-dir, --prefix, or
+# the distutils default setting) was:
+# 
+#     /home/lebot/opt/python/lib/site-packages/
+# 
+# This directory does not currently exist.  Please create it and try again, or
+# choose a different installation directory (using the -d or --install-dir
+# option).
+
+
+# TEST FAILED: /home/lebot/opt/python/lib/site-packages/ does NOT support .pth files
+# error: bad install directory or PYTHONPATH
+# 
+# You are attempting to install a package to a directory that is not
+# on PYTHONPATH and which Python does not read ".pth" files from.  The
+# installation directory you specified (via --install-dir, --prefix, or
+# the distutils default setting) was:
+# 
+#     /home/lebot/opt/python/lib/site-packages/
+# 
+# and your PYTHONPATH environment variable currently contains:
+# 
+#     ''
+# 
+# Here are some of your options for correcting the problem:
+# 
+# * You can choose a different installation directory, i.e., one that is
+#   on PYTHONPATH or supports .pth files
+# 
+# * You can add the installation directory to the PYTHONPATH environment
+#   variable.  (It must then also be on PYTHONPATH whenever you run
+#   Python and want to use the package(s) you are installing.)
+# 
+# * You can set up the installation directory to support ".pth" files by
+#   using one of the approaches described here:
+# 
+#   http://peak.telecommunity.com/EasyInstall.html#custom-installation-locations
+# 
+# Please make the appropriate changes for your system and try again.
+
+
+# TODO: export PYTHONPATH=/home/lebot/opt/python/lib/site-packages/
+
+
+
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                echo 
                echo "$div `whoami`"
@@ -3472,7 +3524,9 @@ else
                      #>    prov:wasDerivedFrom <todo>;
                      #3>    prov:wasDerivedFrom <http://rdflib.github.io/sparqlwrapper/>;
                      #3> .
+                     echo easy_install virtualenv
                      sudo easy_install virtualenv
+                     echo easy_install Flask
                      sudo easy_install Flask
                      sudo easy_install argparse pytz
                      sudo easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/

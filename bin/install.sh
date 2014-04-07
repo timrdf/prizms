@@ -429,7 +429,7 @@ else
       if [[ -z "$port" ]]; then
          port=8080 # Just for backward compatibility, this really is a bad assumption.
       fi
-      if [[ "$port" = '8080' ]]; then
+      if [[ "$port" == '8080' ]]; then
          path2="$path"
       else
          path2=""
@@ -3472,6 +3472,7 @@ else
                      #>    prov:wasDerivedFrom <todo>;
                      #3>    prov:wasDerivedFrom <http://rdflib.github.io/sparqlwrapper/>;
                      #3> .
+                     sudo easy_install virtualenv
                      sudo easy_install Flask
                      sudo easy_install argparse pytz
                      sudo easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/

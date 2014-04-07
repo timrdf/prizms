@@ -3497,6 +3497,13 @@ else
 # TODO: export PYTHONPATH=/home/lebot/opt/python/lib/site-packages/
 
 
+            if [[ ! -e /home/`whoami`/opt/python/lib/site-packages/ ]]; then
+               mkdir -p /home/`whoami`/opt/python/lib/site-packages/
+            fi
+            if [[ -z "$PYTHONPATH" ]]; then
+               echo export PYTHONPATH=$PYTHONPATH
+               export PYTHONPATH=/home/`whoami`/opt/python/lib/site-packages/ # TODO: this should go into source-me-as-<user>.sh
+            fi
 
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                echo 

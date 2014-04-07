@@ -3505,6 +3505,12 @@ else
                export PYTHONPATH=/home/`whoami`/opt/python/lib/site-packages/ # TODO: this should go into source-me-as-<user>.sh
             fi
 
+            echo "$div `whoami`" 
+            echo "Python headache"
+            echo /home/`whoami`/opt/python/lib/site-packages/
+            ls -lt /home/`whoami`/opt/python/lib/site-packages/
+            echo $PYTHONPATH
+ 
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                echo 
                echo "$div `whoami`"

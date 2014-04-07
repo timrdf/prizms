@@ -1356,11 +1356,52 @@ else
                   'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables' \
                   'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
 
+               echo "$div `whoami`"
+               echo "Prizms publishes its dump files using Apache." 
+               if [[ `$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target | awk '{print $1}'` == 'true' ]]; then
+                  if [[ ! `which httpd 2> /dev/null` ]]; then
+                     if [[ `which apt-get 2> /dev/null` ]]; then
+                        echo "It can be installed with:"
+                        echo
+                        echo "   sudo apt-get install apache2"
+                     elif [[ `which yum 2> /dev/null` ]]; then
+                        echo "It can be installed with:"
+                        echo
+                        echo "   sudo yum install httpd"
+                     fi
+                     if [[ "$i_can_sudo" -eq 0 ]]; then
+                        read -p "Q: May we change $ENVVAR to '$new_value' in $target? [y/n] " -u 1 install_it
+                        echo
+                        if [[ "$install_it" == [yY] ]]; then
+                           if [[ `which apt-get 2> /dev/null` ]]; then
+                              echo sudo apt-get install apache2
+                                   sudo apt-get install apache2
+                           elif [[ `which yum 2> /dev/null` ]]; then
+                              echo sudo yum install httpd
+                                   sudo yum install httpd
+                           fi
+                        else
+                           echo "Okay, we won't change it. You'll need to change it later$loss."
+                        fi
+                     else
+                        echo "(WARNING: Cannot install apache httpd b/c no sudo)"
+                     fi
+                  else
+                     echo "(http is already available at `which httpd`)"
+                  fi  
+               else
+                  echo "(But CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES is not true, so we don't need Apache HTTPD)"
+               fi
+
                #if [[ `value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target` == "true" ]]; then
+               if [[ -d '/var/www' ]]; then
                change_source_me $target CSV2RDF4LOD_PUBLISH_VARWWW_ROOT "/var/www" \
                   "indicate the htdocs directory to publish RDF dump files to, which are used to load the SPARQL endpoint" \
                   'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT' \
                   'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
+               else
+                  echo "WARNING: /var/www DNE, where is apache?"
+               fi
                #fi
 
 

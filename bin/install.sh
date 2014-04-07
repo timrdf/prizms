@@ -324,20 +324,24 @@ else
       for package in $packages; do
          echo "The package $package is required to"
          echo "$reason."
-         already_there=`dpkg -l | grep "^....$package "` # See what is available: apt-cache search libapache2-mod
-         if [[ -z "$already_there" ]]; then
-            echo "The $package package needs to be installed, which can be done with the following command:"
-            echo
-            echo "sudo apt-get install $package"
-            echo
-            read -p "Q: May we install the package above using the command above? [y/n] " -u 1 install_it
-            if [[ "$install_it" == [yY] ]]; then
-               echo sudo apt-get install $package
-                    sudo apt-get install $package
-               installed=1
+         if [[ `which apt-get 2> /dev/null` && `which dpkg 2> /dev/null` ]]; then
+            already_there=`dpkg -l | grep "^....$package "` # See what is available: apt-cache search libapache2-mod
+            if [[ -z "$already_there" ]]; then
+               echo "The $package package needs to be installed, which can be done with the following command:"
+               echo
+               echo "sudo apt-get install $package"
+               echo
+               read -p "Q: May we install the package above using the command above? [y/n] " -u 1 install_it
+               if [[ "$install_it" == [yY] ]]; then
+                  echo sudo apt-get install $package
+                       sudo apt-get install $package
+                  installed=1
+               fi
+            else
+               echo "($package is already installed)"
             fi
          else
-            echo "($package is already installed)"
+            echo "WARNING: no apt-get; yum it up for package $package"
          fi
          echo
       done
@@ -355,29 +359,33 @@ else
          return 0
       fi
       for module in $modules; do
-         echo
-         echo "sudo a2enmod $module | grep 'already enabled'"
-         echo
-         already_enabled=`sudo a2enmod $module 2> /dev/null | grep 'already enabled'`
-         # ^^ This enables it before we ask for permission, stating e.g. 'Module proxy_http already enabled' if it already was.
-         #    If it was already enabled, nothing to do.
-         #    If it wasn't already enabled and we don't get permission, we disable it.
-         if [[ -z "$already_enabled" ]]; then # "not already enabled"
-            echo "The Apache2 module $module needs to be enabled to"
-            echo "$reason."
-            echo "The $module module needs to be enabled, which can be done with the following command:"
+         if [[ `which a2enmod` ]]; then
             echo
-            echo "sudo a2enmod $module"
+            echo "sudo a2enmod $module | grep 'already enabled'"
             echo
-            read -p "Q: May we enable the module $module using the command above? [y/n] " -u 1 enable_it
-            if [[ "$enable_it" != [yY] ]]; then
-               sudo a2dismod $module # We just previously enabled it (to check), but they don't want it enabled.
-               echo "Okay, we won't enable $module."
+            already_enabled=`sudo a2enmod $module 2> /dev/null | grep 'already enabled'`
+            # ^^ This enables it before we ask for permission, stating e.g. 'Module proxy_http already enabled' if it already was.
+            #    If it was already enabled, nothing to do.
+            #    If it wasn't already enabled and we don't get permission, we disable it.
+            if [[ -z "$already_enabled" ]]; then # "not already enabled"
+               echo "The Apache2 module $module needs to be enabled to"
+               echo "$reason."
+               echo "The $module module needs to be enabled, which can be done with the following command:"
+               echo
+               echo "sudo a2enmod $module"
+               echo
+               read -p "Q: May we enable the module $module using the command above? [y/n] " -u 1 enable_it
+               if [[ "$enable_it" != [yY] ]]; then
+                  sudo a2dismod $module # We just previously enabled it (to check), but they don't want it enabled.
+                  echo "Okay, we won't enable $module."
+               else
+                  enabled=1
+               fi
             else
-               enabled=1
+               echo "(module $module is already enabled: $already_enabled)"
             fi
          else
-            echo "(module $module is already enabled: $already_enabled)"
+            echo "WARNING: Could not enable apache module $module b/c a2enmod is not available."
          fi
       done
       if [[ "$enabled" == "1" ]]; then
@@ -402,38 +410,42 @@ else
       echo
       echo "$div `whoami`"
       target="/etc/apache2/sites-available/default" 
-      if [[ -n "$reason" ]]; then
-         echo "$reason"
-      fi
-      echo ".htaccess files only work if the 'AllowOverride All' directive is set in $target, similar to:"
-      echo
-      echo "    <Directory /var/www/>"
-      echo "       AllowOverride All"
-      echo "       ..."
-      echo
-      #current=`sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1 | grep All`
-      current=`sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1 | sed 's/AllowOverride//' | grep All`
-      if [[ -z "$current" ]]; then
-         echo "We can change /var/www's AllowOverride to All (it is currently \"$current\"), making the new $target be:"
+      if [[ -e "$target" ]]; then
+         if [[ -n "$reason" ]]; then
+            echo "$reason"
+         fi
+         echo ".htaccess files only work if the 'AllowOverride All' directive is set in $target, similar to:"
          echo
-         sudo cat $target | awk '{if($1=="<Directory"){scope=$2} if($1=="AllowOverride" && scope=="/var/www/>"){print $1,"All"}else{print}}' > .prizms-apache-config
-         cat .prizms-apache-config
+         echo "    <Directory /var/www/>"
+         echo "       AllowOverride All"
+         echo "       ..."
          echo
-         echo "- - The difference is - -"
-         sudo diff $target .prizms-apache-config
-         echo
-         read -p "Q: May we update $target to enable AllowOverride All for /var/www? [y/n] " -u 1 install_it
-         if [[ "$install_it" == [yY] ]]; then
-            echo sudo cp $target ${target}_`date +%Y-%m-%d-%H-%M-%S`
-                 sudo cp $target ${target}_`date +%Y-%m-%d-%H-%M-%S`
-            echo sudo mv .prizms-apache-config $target
-                 sudo mv .prizms-apache-config $target
-            restart_apache
+         #current=`sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1 | grep All`
+         current=`sudo cat $target | awk '$0 ~ /Directory/ || $0 ~ /AllowOverride/ {print}' | grep -A1 var/www | tail -1 | sed 's/AllowOverride//' | grep All`
+         if [[ -z "$current" ]]; then
+            echo "We can change /var/www's AllowOverride to All (it is currently \"$current\"), making the new $target be:"
+            echo
+            sudo cat $target | awk '{if($1=="<Directory"){scope=$2} if($1=="AllowOverride" && scope=="/var/www/>"){print $1,"All"}else{print}}' > .prizms-apache-config
+            cat .prizms-apache-config
+            echo
+            echo "- - The difference is - -"
+            sudo diff $target .prizms-apache-config
+            echo
+            read -p "Q: May we update $target to enable AllowOverride All for /var/www? [y/n] " -u 1 install_it
+            if [[ "$install_it" == [yY] ]]; then
+               echo sudo cp $target ${target}_`date +%Y-%m-%d-%H-%M-%S`
+                    sudo cp $target ${target}_`date +%Y-%m-%d-%H-%M-%S`
+               echo sudo mv .prizms-apache-config $target
+                    sudo mv .prizms-apache-config $target
+               restart_apache
+            else
+               echo "Okay, we won't update $target."
+            fi
          else
-            echo "Okay, we won't update $target."
+            echo "($target seems to permit .htaccess files for /var/www)"
          fi
       else
-         echo "($target seems to permit .htaccess files for /var/www)"
+         echo "WARNING: Could not enable htaccess b/c $target does not exist."
       fi
    }
 
@@ -2030,23 +2042,25 @@ else
 
 
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+               virtuoso_installed=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh`
+               # ^^ https://github.com/timrdf/prizms/issues/79 
+               if [[ "$virtuoso_installed" == "yes" ]]; then
+                  target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
 
-               target="data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
+                  # set CSV2RDF4LOD_PUBLISH_VIRTUOSO true (ONLY for project user)
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_VIRTUOSO true \
+                     "enable loading the RDF dump files in the htdocs directory ($www/source) into the SPARQL endpoint" \
+                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore' \
+                     'unable to load the SPARQL endpoint'
 
-               # set CSV2RDF4LOD_PUBLISH_VIRTUOSO true (ONLY for project user)
-               change_source_me $target CSV2RDF4LOD_PUBLISH_VIRTUOSO true \
-                  "enable loading the RDF dump files in the htdocs directory ($www/source) into the SPARQL endpoint" \
-                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/Publishing-conversion-results-with-a-Virtuoso-triplestore' \
-                  'unable to load the SPARQL endpoint'
+                  # set CSV2RDF4LOD_PUBLISH_SUBSET_SAMPLES true (ONLY for project user)
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_SUBSET_SAMPLES true \
+                     "enable loading the *small* sample portions of the full RDF dump files into the SPARQL endpoint" \
+                     'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables' \
+                     'unable to load the SPARQL endpoint with samples of the RDF that you created'
 
-               # set CSV2RDF4LOD_PUBLISH_SUBSET_SAMPLES true (ONLY for project user)
-               change_source_me $target CSV2RDF4LOD_PUBLISH_SUBSET_SAMPLES true \
-                  "enable loading the *small* sample portions of the full RDF dump files into the SPARQL endpoint" \
-                  'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD-environment-variables' \
-                  'unable to load the SPARQL endpoint with samples of the RDF that you created'
-
-               # TODO: is logging location set up correctly? Yes, but verify.
-
+                  # TODO: is logging location set up correctly? Yes, but verify.
+               fi
             fi # end running as developer e.g. jsmith not loxd
 
 
@@ -2460,15 +2474,20 @@ else
                   echo "$div `whoami`"
                   echo ${PRIZMS_HOME%/*}
                   find ${PRIZMS_HOME%/*} -type d -name "apache-jena*" # /home/lebot/opt/apache-jena-2.7.4
-                  set_paths_cmd="export JENAROOT=`find ${PRIZMS_HOME%/*} -type d -name "apache-jena*" | tail -1 | sed "s/\`whoami\`/$user/g"`"
+                  found_JENAROOT=`find ${PRIZMS_HOME%/*} -type d -name "apache-jena*" | tail -1 | sed "s/\`whoami\`/$user/g"`
+                  set_paths_cmd="export JENAROOT=$found_JENAROOT"
                   echo "Apache Jena requires the shell environent variable JENAROOT to be set."
                   echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Apache-Jena"
-                  echo "The following command should appear in $your data/source/csv2rdf4lod-source-me-as-$user.sh."
-                  echo
-                  echo "    $set_paths_cmd"
+                  if [[ -n "$found_JENAROOT" && -d "$found_JENAROOT" ]]; then
+                     echo "The following command should appear in $your data/source/csv2rdf4lod-source-me-as-$user.sh."
+                     echo
+                     echo "    $set_paths_cmd"
+                  else
+                     echo "WARNING: could not determine JENAROOT ($found_JENAROOT)."
+                  fi
                   already_there=`grep "^$set_paths_cmd" $target`
                   echo
-                  if [ -n "$already_there" ]; then
+                  if [[ -n "$already_there" ]]; then
                      echo "It seems that you already have the following in $your $target, so we won't offer to add it again:"
                      echo
                      echo $already_there
@@ -2638,6 +2657,7 @@ else
             else
                echo
                echo "WARNING: could not find value of CSV2RDF4LOD_PUBLISH_VARWWW_ROOT (found $www) in `pwd`/data/source/csv2rdf4lod-source-me-as-$project_user_name.sh"
+               echo "WARNING: will not create htdocs /source directory and set permissions."
                if [[ ! -e data/source/csv2rdf4lod-source-me-as-$project_user_name.sh ]]; then
                   echo "Perhaps there is an issue pushing your changes to $project_code_repository ?"
                fi
@@ -3251,7 +3271,9 @@ else
             echo
             echo "Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml"
             echo
-            if [[ ! -e $www/robots.txt || \
+            if [[ ! -d "$www" ]]; then
+               echo "(WARNING: htdocs directory ($www) does not exist, not attempting robots.txt.)" 
+            elif [[ ! -e $www/robots.txt || \
                     -e $www/robots.txt && ! `grep "^Sitemap: $our_base_uri/source/$our_source_id/file/cr-sitemap/version/latest/conversion/sitemap.xml$" $www/robots.txt` ]]; then
                read -p "Q: Add the Sitemap directive to $www/robots.txt? [y/n] " -u 1 add_it
                if [[ "$add_it" == [yY] ]]; then

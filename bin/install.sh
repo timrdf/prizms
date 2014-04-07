@@ -28,7 +28,7 @@ if [[ ${0%install.sh} == $0 ]]; then # $0 is 'bash' etc when bootstrapping, it i
             elif [[ `which yum 2> /dev/null` ]]; then
                echo "git can be installed on CentOS/RedHat with the command:"
                echo
-               echo "  sudo yum -y install git-core"
+               echo "  sudo yum install git-core"
             fi
             echo
             read -p "Q: Try to install git with the command above? [y/n] " -u 1 install_it
@@ -41,7 +41,7 @@ if [[ ${0%install.sh} == $0 ]]; then # $0 is 'bash' etc when bootstrapping, it i
                elif [[ `which yum 2> /dev/null` ]]; then
                   #3> <http://purl.org/twc/id/software/prizms> 
                   #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Yellowdog_Updater,_Modified> .
-                  sudo yum -y install git-core
+                  sudo yum install git-core < <(echo 'y')
                fi
             fi
          fi

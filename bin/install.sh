@@ -3537,11 +3537,8 @@ else
                      #>    prov:wasDerivedFrom <todo>;
                      #3>    prov:wasDerivedFrom <http://rdflib.github.io/sparqlwrapper/>;
                      #3> .
-            echo PYTHONPATH: $PYTHONPATH
                      #sudo -E easy_install virtualenv
                      easy_install virtualenv
-                     #sudo -E easy_install Flask
-                     easy_install Flask
                      #sudo -E easy_install Flask
                      easy_install Flask
                      #sudo -E easy_install argparse pytz
@@ -3556,6 +3553,17 @@ else
                fi
                add_proxy_pass '/etc/apache2/sites-available/default' '/prov-pingback' '9412'
             fi # end "I am not project user"
+
+            echo "$div `whoami`"
+            read -p "Q: Install PROV Pingback dependencies? [y/n] " -u 1 install_it
+            if [[ $install_it == [yY] ]]; then
+               easy_install virtualenv
+               easy_install Flask
+               easy_install argparse pytz
+               easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
+            fi
+
+
 
 
 

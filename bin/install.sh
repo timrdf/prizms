@@ -1357,20 +1357,22 @@ else
                   'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
 
                echo "$div `whoami`"
-               echo "Prizms publishes its dump files using Apache." 
+               echo "Prizms publishes its dump files using Apache httpd." 
                if [[ `$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target | awk '{print $1}'` == 'true' ]]; then
                   if [[ ! `which httpd 2> /dev/null` ]]; then
                      if [[ `which apt-get 2> /dev/null` ]]; then
                         echo "It can be installed with:"
                         echo
                         echo "   sudo apt-get install apache2"
+                        echo
                      elif [[ `which yum 2> /dev/null` ]]; then
                         echo "It can be installed with:"
                         echo
                         echo "   sudo yum install httpd"
+                        echo
                      fi
                      if [[ "$i_can_sudo" -eq 0 ]]; then
-                        read -p "Q: May we change $ENVVAR to '$new_value' in $target? [y/n] " -u 1 install_it
+                        read -p "Q: May we install Apache httpd using the command above? [y/n] " -u 1 install_it
                         echo
                         if [[ "$install_it" == [yY] ]]; then
                            if [[ `which apt-get 2> /dev/null` ]]; then

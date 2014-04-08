@@ -1457,7 +1457,7 @@ else
                www=''
                if [[ -d /etc/httpd ]]; then
                   www='/var/www/html' # CentOS
-               elif if [[ `which apache2 2> /dev/null` ]]; then
+               elif [[ `which apache2 2> /dev/null` ]]; then
                   www='/var/www'
                fi
                if [[ -n "$www" ]]; then

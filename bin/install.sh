@@ -474,42 +474,46 @@ else
       fi
       echo "$div `whoami`"
       echo "Some Apache directives (e.g., ProxyPass) need to be set in $target to expose your (port $port) Tomcat application server at the URL $our_base_uri$path."
-      if [[ -z "$already_there" ]]; then
-         echo "To expose the (port $port) Tomacat application server of SADI services at $our_base_uri/$path,"
-         echo "the following apache configuration needs to be set in $target:"
-         echo                                                                          # Mapping 5 (see above)
-         echo "  ProxyTimeout 1800"                                    > .prizms-apache-conf
-         echo "  ProxyRequests Off"                                   >> .prizms-apache-conf
-         echo                                                         >> .prizms-apache-conf
-         echo "  ProxyPass $path http://localhost:$port$path2"        >> .prizms-apache-conf
-         echo "  ProxyPassReverse $path http://localhost:$port$path2" >> .prizms-apache-conf
-         echo "  <Location $path>"                                    >> .prizms-apache-conf
-         echo "          Order allow,deny"                            >> .prizms-apache-conf
-         echo "          allow from all"                              >> .prizms-apache-conf
-         echo "          ProxyHTMLURLMap http://localhost:$port/ /"   >> .prizms-apache-conf
-         echo "          SetOutputFilter proxy-html"                  >> .prizms-apache-conf
-         echo "  </Location>"                                         >> .prizms-apache-conf
-         cat .prizms-apache-conf
+      if [[ -e "$target" ]]; then
+         if [[ -z "$already_there" ]]; then
+            echo "To expose the (port $port) Tomacat application server of SADI services at $our_base_uri/$path,"
+            echo "the following apache configuration needs to be set in $target:"
+            echo                                                                          # Mapping 5 (see above)
+            echo "  ProxyTimeout 1800"                                    > .prizms-apache-conf
+            echo "  ProxyRequests Off"                                   >> .prizms-apache-conf
+            echo                                                         >> .prizms-apache-conf
+            echo "  ProxyPass $path http://localhost:$port$path2"        >> .prizms-apache-conf
+            echo "  ProxyPassReverse $path http://localhost:$port$path2" >> .prizms-apache-conf
+            echo "  <Location $path>"                                    >> .prizms-apache-conf
+            echo "          Order allow,deny"                            >> .prizms-apache-conf
+            echo "          allow from all"                              >> .prizms-apache-conf
+            echo "          ProxyHTMLURLMap http://localhost:$port/ /"   >> .prizms-apache-conf
+            echo "          SetOutputFilter proxy-html"                  >> .prizms-apache-conf
+            echo "  </Location>"                                         >> .prizms-apache-conf
+            cat .prizms-apache-conf
 
-         # Tuck the new directives into the entire configuration file.
-         local virtualhost=`sudo  grep    "</VirtualHost>" $target`
-         sudo cat $target | grep -v "</VirtualHost>" > .apache-conf
-         cat .prizms-apache-conf                    >> .apache-conf
-         echo                                       >> .apache-conf
-         echo $virtualhost                          >> .apache-conf
-         echo
-         echo The final configuration file will look like:
-         echo
-         cat .apache-conf
-         read -p "Q: May we add the directives above to $target? [y/n] " -u 1 install_it
-         if [[ "$install_it" == [yY] ]]; then
-            sudo cp $target .$target_`date +%Y-%m-%d-%H-%M-%S`
-            #cat .prizms-apache-conf | sudo tee -a $target &> /dev/null
-            sudo mv .apache-conf $target
-            restart_apache
+            # Tuck the new directives into the entire configuration file.
+            local virtualhost=`sudo  grep    "</VirtualHost>" $target`
+            sudo cat $target | grep -v "</VirtualHost>" > .apache-conf
+            cat .prizms-apache-conf                    >> .apache-conf
+            echo                                       >> .apache-conf
+            echo $virtualhost                          >> .apache-conf
+            echo
+            echo The final configuration file will look like:
+            echo
+            cat .apache-conf
+            read -p "Q: May we add the directives above to $target? [y/n] " -u 1 install_it
+            if [[ "$install_it" == [yY] ]]; then
+               sudo cp $target .$target_`date +%Y-%m-%d-%H-%M-%S`
+               #cat .prizms-apache-conf | sudo tee -a $target &> /dev/null
+               sudo mv .apache-conf $target
+               restart_apache
+            fi
+         else
+            echo "($target seems to already contain the ProxyPath directives to map $path to 8080)"
          fi
       else
-         echo "($target seems to already contain the ProxyPath directives to map $path to 8080)"
+         echo "(WARNING: could not set proxypass b/c config file doesn't exist: $target)"
       fi
    }
 

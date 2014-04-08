@@ -457,8 +457,8 @@ else
    # http://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-apache-config.html
    function add_proxy_pass {
       local target="$1" # e.g. '/etc/apache2/sites-available/default'
-      local path="$2"   # e.g. '/sadi-services' '/annotator' '/prov-pingback' '/weave'
-      local port="$3"   # e.g. '8080'           '8080'       '9412'           '8080'
+      local path="$2"   # e.g. '/sadi-services' '/annotator' '/prov-pingback' '/weave' '/sparql'
+      local port="$3"   # e.g. '8080'           '8080'       '9412'           '8080'   '8890'
       if [[ -z "$port" ]]; then
          port=8080 # Just for backward compatibility, this really is a bad assumption.
       fi
@@ -2023,52 +2023,61 @@ else
                   #        SetOutputFilter proxy-html
                   #  </Location>
 
-                  # TODO: replace this code with the function e.g. add_proxy_pass '/etc/apache2/sites-available/default' '/sparql'
-                  echo # (This Apache-config modification pattern is repeated below for Tomcat)
-                  echo "$div `whoami`"
-                  target='/etc/apache2/sites-available/default'
-                  already_there=""
-                  if [ -e $target ]; then
-                     already_there=`grep 'Location /sparql' $target`
-                  fi
-                  echo "Some Apache directives (e.g., ProxyPass) need to be set in $target to expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql."
-                  if [[ -z "$already_there" ]]; then
-                     echo "To expose the Virtuoso server on port 8890 at $our_base_uri/sparql,"
-                     echo "the following apache configuration needs to be set in $target:"
-                     echo                                                                       # Mapping 5 (see above)
-                     echo '  ProxyTimeout 1800'                                                > .prizms-apache-conf
-                     echo '  ProxyRequests Off'                                               >> .prizms-apache-conf
-                     echo                                                                     >> .prizms-apache-conf
-                     echo '  ProxyPass /sparql http://localhost:8890/sparql'                  >> .prizms-apache-conf
-                     echo '  ProxyPassReverse /sparql http://localhost:8890/sparql'           >> .prizms-apache-conf
-                     echo '  <Location /sparql>'                                              >> .prizms-apache-conf
-                     echo '          Order allow,deny'                                        >> .prizms-apache-conf
-                     echo '          allow from all'                                          >> .prizms-apache-conf
-                     echo '          ProxyHTMLURLMap / /sparql/ c'                            >> .prizms-apache-conf
-                     echo '          SetOutputFilter proxy-html'                              >> .prizms-apache-conf
-                     echo '  </Location>'                                                     >> .prizms-apache-conf
-                     cat .prizms-apache-conf
 
-                     # Tuck the new directives into the entire configuration file.
-                     virtualhost=`sudo  grep    "</VirtualHost>" $target`
-                     sudo cat $target | grep -v "</VirtualHost>" > .apache-conf
-                     cat .prizms-apache-conf                    >> .apache-conf
-                     echo                                       >> .apache-conf
-                     echo $virtualhost                          >> .apache-conf
-                     echo
-                     echo The final configuration file will look like:
-                     echo
-                     cat .apache-conf
-                     read -p "Q: May we add the directives above to $target? [y/n] " -u 1 install_it
-                     if [[ "$install_it" == [yY] ]]; then
-                        sudo cp $target .$target_`date +%Y-%m-%d-%H-%M-%S`
-                        #cat .prizms-apache-conf | sudo tee -a $target &> /dev/null
-                        sudo mv .apache-conf $target
-                        restart_apache
-                     fi
-                  else
-                     echo "($target seems to already contain the ProxyPath directives to map /sparql to 8890)"
-                  fi
+                  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+                  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+                  # NOTE: The following portion was abstracted into add_proxy_pass April 2014 (CentOs support)
+                  #echo
+                  #echo "$div `whoami`"
+                  #target='/etc/apache2/sites-available/default'
+                  #already_there=""
+                  #if [ -e $target ]; then
+                  #   already_there=`grep 'Location /sparql' $target`
+                  #fi
+                  #echo "Some Apache directives (e.g., ProxyPass) need to be set in $target to expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql."
+                  #if [[ -z "$already_there" ]]; then
+                  #   echo "To expose the Virtuoso server on port 8890 at $our_base_uri/sparql,"
+                  #   echo "the following apache configuration needs to be set in $target:"
+                  #   echo                                                                       # Mapping 5 (see above)
+                  #   echo '  ProxyTimeout 1800'                                                > .prizms-apache-conf
+                  #   echo '  ProxyRequests Off'                                               >> .prizms-apache-conf
+                  #   echo                                                                     >> .prizms-apache-conf
+                  #   echo '  ProxyPass /sparql http://localhost:8890/sparql'                  >> .prizms-apache-conf
+                  #   echo '  ProxyPassReverse /sparql http://localhost:8890/sparql'           >> .prizms-apache-conf
+                  #   echo '  <Location /sparql>'                                              >> .prizms-apache-conf
+                  #   echo '          Order allow,deny'                                        >> .prizms-apache-conf
+                  #   echo '          allow from all'                                          >> .prizms-apache-conf
+                  #   echo '          ProxyHTMLURLMap / /sparql/ c'                            >> .prizms-apache-conf
+                  #   echo '          SetOutputFilter proxy-html'                              >> .prizms-apache-conf
+                  #   echo '  </Location>'                                                     >> .prizms-apache-conf
+                  #   cat .prizms-apache-conf
+                  #
+                  #   # Tuck the new directives into the entire configuration file.
+                  #   virtualhost=`sudo  grep    "</VirtualHost>" $target`
+                  #   sudo cat $target | grep -v "</VirtualHost>" > .apache-conf
+                  #   cat .prizms-apache-conf                    >> .apache-conf
+                  #   echo                                       >> .apache-conf
+                  #   echo $virtualhost                          >> .apache-conf
+                  #   echo
+                  #   echo The final configuration file will look like:
+                  #   echo
+                  #   cat .apache-conf
+                  #   read -p "Q: May we add the directives above to $target? [y/n] " -u 1 install_it
+                  #   if [[ "$install_it" == [yY] ]]; then
+                  #      sudo cp $target .$target_`date +%Y-%m-%d-%H-%M-%S`
+                  #      #cat .prizms-apache-conf | sudo tee -a $target &> /dev/null
+                  #      sudo mv .apache-conf $target
+                  #      restart_apache
+                  #   fi
+                  #else
+                  #   echo "($target seems to already contain the ProxyPath directives to map /sparql to 8890)"
+                  #fi
+                  # NOTE: The portion above was abstracted into add_proxy_pass April 2014 (CentOs support)
+                  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+                  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+                  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+                  # NOTE: replaced the code above with the following on April 2014 during CentOS support:
+                  add_proxy_pass '/etc/apache2/sites-available/default' '/sparql' '8890'
 
                   # Adding the following to /etc/vservers/.httpd/ieeevis.conf avoids http://lofd.tw.rpi.edu falling into VM host.
                   #    Redirect permanent /projects/ieeevis /projects/ieeevis/

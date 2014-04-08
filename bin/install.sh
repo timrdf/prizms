@@ -1359,7 +1359,7 @@ else
                echo "$div `whoami`"
                echo "Prizms publishes its dump files using Apache httpd." 
                if [[ `$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target | awk '{print $1}'` == 'true' ]]; then
-                  if [[ ! `which httpd 2> /dev/null` ]]; then
+                  if [[ ! `which httpd 2> /dev/null` && ! `which apache2 2> /dev/null` ]]; then
                      if [[ `which apt-get 2> /dev/null` ]]; then
                         echo "It can be installed with:"
                         echo

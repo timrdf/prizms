@@ -2857,6 +2857,10 @@ else
             #3> <http://purl.org/twc/id/software/prizms> 
             #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/lodspeakr>;
             #3> .
+            group_defined=`groups | grep www-data`
+            if [[ -z "$group_defined" ]]; then
+               echo "WARNING: group www-data not defined"
+            fi
             lodchown=www-data:$project_user_name # A) user 'www-data' so apache can write; B) a group where www-data can write
             if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                #
@@ -2920,7 +2924,15 @@ else
             if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
    
                if [[ -e $www/lodspeakr ]]; then
-                  offer_install_aptget "curl apache2 php5 php5-cli php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
+                  if [[ `which apt-get 2> /dev/null` ]]; then
+                     # https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu
+                     offer_install_aptget "curl apache2 php5 php5-cli php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
+                  elif  [[ `which yum 2> /dev/null` ]]; then
+                     # https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-CentOS
+                     offer_install_yum "httpd sqlite git curl" 'run LODSPeaKr'
+                  else
+                     echo "WARNING: not sure how to install dependencies without apt-get or yum"
+                  fi
 
                   enable_apache_module 'rewrite' 'run LODSPeaKr'
                   enable_apache_module 'php5'    'run LODSPeaKr'

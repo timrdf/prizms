@@ -2356,52 +2356,60 @@ else
                   #        SetOutputFilter proxy-html
                   # </Location>
 
-                  echo # (This Apache-config modification pattern is repeated above for Virtuoso)
-                  # TODO: replace this code with the function e.g. add_proxy_pass '/etc/apache2/sites-available/default' '/sadi-services'
-                  echo "$div `whoami`"
-                  target='/etc/apache2/sites-available/default'
-                  already_there=""
-                  if [ -e $target ]; then
-                     already_there=`grep 'Location /sadi-services' $target`
-                  fi
-                  echo "Some Apache directives (e.g., ProxyPass) need to be set in $target to expose your (port 8080) Tomcat application server at the URL $our_base_uri/sadi-services."
-                  if [[ -z "$already_there" ]]; then
-                     echo "To expose the (port 8080) Tomacat application server of SADI services at $our_base_uri/sadi-services,"
-                     echo "the following apache configuration needs to be set in $target:"
-                     echo                                                                          # Mapping 5 (see above)
-                     echo '  ProxyTimeout 1800'                                                    > .prizms-apache-conf
-                     echo '  ProxyRequests Off'                                                   >> .prizms-apache-conf
-                     echo                                                                         >> .prizms-apache-conf
-                     echo '  ProxyPass /sadi-services http://localhost:8080/sadi-services'        >> .prizms-apache-conf
-                     echo '  ProxyPassReverse /sadi-services http://localhost:8080/sadi-services' >> .prizms-apache-conf
-                     echo '  <Location /sadi-services>'                                           >> .prizms-apache-conf
-                     echo '          Order allow,deny'                                            >> .prizms-apache-conf
-                     echo '          allow from all'                                              >> .prizms-apache-conf
-                     echo '          ProxyHTMLURLMap http://localhost:8080/ /'                    >> .prizms-apache-conf
-                     echo '          SetOutputFilter proxy-html'                                  >> .prizms-apache-conf
-                     echo '  </Location>'                                                         >> .prizms-apache-conf
-                     cat .prizms-apache-conf
-
-                     # Tuck the new directives into the entire configuration file.
-                     virtualhost=`sudo  grep    "</VirtualHost>" $target`
-                     sudo cat $target | grep -v "</VirtualHost>" > .apache-conf
-                     cat .prizms-apache-conf                    >> .apache-conf
-                     echo                                       >> .apache-conf
-                     echo $virtualhost                          >> .apache-conf
-                     echo
-                     echo The final configuration file will look like:
-                     echo
-                     cat .apache-conf
-                     read -p "Q: May we add the directives above to $target? [y/n] " -u 1 install_it
-                     if [[ "$install_it" == [yY] ]]; then
-                        sudo cp $target .$target_`date +%Y-%m-%d-%H-%M-%S`
-                        #cat .prizms-apache-conf | sudo tee -a $target &> /dev/null
-                        sudo mv .apache-conf $target
-                        restart_apache
-                     fi
-                  else
-                     echo "($target seems to already contain the ProxyPath directives to map /sadi-services to 8080)"
-                  fi
+                  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+                  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+                  # NOTE: The following portion was abstracted into add_proxy_pass April 2014 (CentOs support)
+                  #echo
+                  #echo "$div `whoami`"
+                  #target='/etc/apache2/sites-available/default'
+                  #already_there=""
+                  #if [ -e $target ]; then
+                  #   already_there=`grep 'Location /sadi-services' $target`
+                  #fi
+                  #echo "Some Apache directives (e.g., ProxyPass) need to be set in $target to expose your (port 8080) Tomcat application server at the URL $our_base_uri/sadi-services."
+                  #if [[ -z "$already_there" ]]; then
+                  #   echo "To expose the (port 8080) Tomacat application server of SADI services at $our_base_uri/sadi-services,"
+                  #   echo "the following apache configuration needs to be set in $target:"
+                  #   echo                                                                          # Mapping 5 (see above)
+                  #   echo '  ProxyTimeout 1800'                                                    > .prizms-apache-conf
+                  #   echo '  ProxyRequests Off'                                                   >> .prizms-apache-conf
+                  #   echo                                                                         >> .prizms-apache-conf
+                  #   echo '  ProxyPass /sadi-services http://localhost:8080/sadi-services'        >> .prizms-apache-conf
+                  #   echo '  ProxyPassReverse /sadi-services http://localhost:8080/sadi-services' >> .prizms-apache-conf
+                  #   echo '  <Location /sadi-services>'                                           >> .prizms-apache-conf
+                  #   echo '          Order allow,deny'                                            >> .prizms-apache-conf
+                  #   echo '          allow from all'                                              >> .prizms-apache-conf
+                  #   echo '          ProxyHTMLURLMap http://localhost:8080/ /'                    >> .prizms-apache-conf
+                  #   echo '          SetOutputFilter proxy-html'                                  >> .prizms-apache-conf
+                  #   echo '  </Location>'                                                         >> .prizms-apache-conf
+                  #   cat .prizms-apache-conf
+                  #
+                  #   # Tuck the new directives into the entire configuration file.
+                  #   virtualhost=`sudo  grep    "</VirtualHost>" $target`
+                  #   sudo cat $target | grep -v "</VirtualHost>" > .apache-conf
+                  #   cat .prizms-apache-conf                    >> .apache-conf
+                  #   echo                                       >> .apache-conf
+                  #   echo $virtualhost                          >> .apache-conf
+                  #   echo
+                  #   echo The final configuration file will look like:
+                  #   echo
+                  #   cat .apache-conf
+                  #   read -p "Q: May we add the directives above to $target? [y/n] " -u 1 install_it
+                  #   if [[ "$install_it" == [yY] ]]; then
+                  #      sudo cp $target .$target_`date +%Y-%m-%d-%H-%M-%S`
+                  #      #cat .prizms-apache-conf | sudo tee -a $target &> /dev/null
+                  #      sudo mv .apache-conf $target
+                  #      restart_apache
+                  #   fi
+                  #else
+                  #   echo "($target seems to already contain the ProxyPath directives to map /sadi-services to 8080)"
+                  #fi
+                  # NOTE: The portion above was abstracted into add_proxy_pass April 2014 (CentOs support)
+                  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+                  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+                  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+                  # NOTE: replaced the code above with the following on April 2014 during CentOS support:
+                  add_proxy_pass '/etc/apache2/sites-available/default' '/sadi-services' '8080'
                fi
             fi # end running as developer e.g. jsmith not loxd (Post-configure SADI service (in Tomcat))
 

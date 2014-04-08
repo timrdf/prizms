@@ -348,6 +348,8 @@ else
       return $installed
    }
 
+   # CentOS-specific:
+   # http://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-apache-config.html
    function enable_apache_module {
       #3> <http://purl.org/twc/id/software/prizms> 
       #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Apache_HTTP_Server> .
@@ -359,7 +361,7 @@ else
          return 0
       fi
       for module in $modules; do
-         if [[ `which a2enmod` ]]; then
+         if [[ `which a2enmod 2> /dev/null` ]]; then
             echo
             echo "sudo a2enmod $module | grep 'already enabled'"
             echo
@@ -401,6 +403,8 @@ else
       return $enabled
    }
 
+   # CentOS-specific:
+   # http://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-apache-config.html
    function enable_htaccess {
       if [[ ! $i_can_sudo -eq 0 ]]; then
          echo "WARNING: Could not attempt to enable Apache htaccess because `whoami` does not have sudo privileges."
@@ -409,7 +413,7 @@ else
       reason="$1"
       echo
       echo "$div `whoami`"
-      target="/etc/apache2/sites-available/default" 
+      target="/etc/apache2/sites-available/default"  # <- if on Ubuntu. If on CentOS, it's at /etc/httpd/...
       if [[ -e "$target" ]]; then
          if [[ -n "$reason" ]]; then
             echo "$reason"
@@ -449,6 +453,8 @@ else
       fi
    }
 
+   # CentOS-specific:
+   # http://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-apache-config.html
    function add_proxy_pass {
       local target="$1" # e.g. '/etc/apache2/sites-available/default'
       local path="$2"   # e.g. '/sadi-services' '/annotator' '/prov-pingback' '/weave'
@@ -532,6 +538,8 @@ else
       fi
    }
 
+   # CentOS-specific:
+   # http://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-apache-config.html
    function restart_apache {
       echo
       echo "$div `whoami`"
@@ -1938,6 +1946,8 @@ else
                   offer_install_aptget \
                      'libapache2-mod-proxy-html' \
                      "expose the (port 8890) Virtuoso server at the URL $our_base_uri/sparql and the (port 8080) Tomcat application server of SADI services at $our_base_uri/sadi-services"
+                  # TODO: CentOS does libapache2-mod-proxy-html differently; see:
+                  # http://wiki.opensemanticframework.org/index.php/Proxying_Virtuoso_Via_Apache2#Installing_Mod-Proxy-Html_on_any_Linux_Distribution
 
                   echo "$div `whoami`"
                   enable_apache_module 'proxy'      "expose your (port 8890) Virtuoso server at the URL $our_base_uri/sparql"
@@ -2158,9 +2168,9 @@ else
                               echo sudo ln -s /etc/prizms-mysql.cnf /etc/my.cnf
                                    sudo ln -s /etc/prizms-mysql.cnf /etc/my.cnf
 
-                              if [[ `which apt-get` ]]; then
+                              if [[ `which apt-get 2> /dev/null` ]]; then
                                  sudo apt-get install libaio1 libaio-dev
-                              elif [[ `which yum` ]]; then
+                              elif [[ `which yum 2> /dev/null` ]]; then
                                  sudo yum install libaio
                               fi
 
@@ -3601,7 +3611,7 @@ else
                echo "Prizms implements the W3C PROV-AQ 'pingback' functionality."
                echo "See https://github.com/timrdf/prizms/wiki/prov-pingback"
                offer_install_aptget "pip" 'enable prov-pingback'
-               if [[ `which pip` ]]; then
+               if [[ `which pip 2> /dev/null` ]]; then
                   # TODO: try wrapping this into virtualenv:
                   # http://www.pythonforbeginners.com/basics/python-virtualenv-usage/
                   # http://flask.pocoo.org/docs/installation/#virtualenv

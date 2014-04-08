@@ -348,6 +348,37 @@ else
       return $installed
    }
 
+   function offer_install_yum {
+      installed=0
+      packages="$1"
+      reason="$2"
+      for package in $packages; do
+         echo "The package $package is required to"
+         echo "$reason."
+         if [[ `which yum 2> /dev/null` ]]; then
+            already_there=`yum list installed | grep "^$package\\."` # e.g. yum list installed | grep ^xml-common\\. avoids 'xml-commons-apis.x86_64'
+            if [[ -z "$already_there" ]]; then
+               echo "The $package package needs to be installed, which can be done with the following command:"
+               echo
+               echo "sudo yum install $package"
+               echo
+               read -p "Q: May we install the package above using the command above? [y/n] " -u 1 install_it
+               if [[ "$install_it" == [yY] ]]; then
+                  echo sudo yum install $package
+                       sudo yum install $package
+                  installed=1
+               fi
+            else
+               echo "($package is already installed)"
+            fi
+         else
+            echo "WARNING: no yum; cannot install package $package"
+         fi
+         echo
+      done
+      return $installed
+   }
+
    # CentOS-specific:
    # http://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-apache-config.html
    function enable_apache_module {
@@ -542,19 +573,34 @@ else
       fi
    }
 
-   # CentOS-specific:
-   # http://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-apache-config.html
    function restart_apache {
-      echo
-      echo "$div `whoami`"
-      echo "Since we've made some changes to apache, we need to restart it so that they take effect."
-      echo
-      echo sudo service apache2 restart
-      echo
-      read -p "Q: May we restart apache using the command above? [y/n] " -u 1 restart_it
-      if [[ "$restart_it" == [yY] ]]; then
+      if [[ -d /etc/httpd ]]; then
+         # CentOS-specific:
+         # http://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-apache-config.html
+         echo
+         echo "$div `whoami`"
+         echo "Since we've made some changes to apache, we need to restart it so that they take effect."
+         echo
+         echo sudo /etc/init.d/httpd restart
+         echo
+         read -p "Q: May we restart apache using the command above? [y/n] " -u 1 restart_it
+         if [[ "$restart_it" == [yY] ]]; then
+            echo sudo /etc/init.d/httpd restart
+                 sudo /etc/init.d/httpd restart
+         fi
+      else   
+         # Ubuntu
+         echo
+         echo "$div `whoami`"
+         echo "Since we've made some changes to apache, we need to restart it so that they take effect."
+         echo
          echo sudo service apache2 restart
-              sudo service apache2 restart
+         echo
+         read -p "Q: May we restart apache using the command above? [y/n] " -u 1 restart_it
+         if [[ "$restart_it" == [yY] ]]; then
+            echo sudo service apache2 restart
+                 sudo service apache2 restart
+         fi
       fi
    }
 
@@ -1408,13 +1454,19 @@ else
                fi
 
                #if [[ `value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target` == "true" ]]; then
-               if [[ -d '/var/www' ]]; then
-                  change_source_me $target CSV2RDF4LOD_PUBLISH_VARWWW_ROOT "/var/www" \
+               www=''
+               if [[ -d /etc/httpd ]]; then
+                  www='/var/www/html' # CentOS
+               elif if [[ `which apache2 2> /dev/null` ]]; then
+                  www='/var/www'
+               fi
+               if [[ -n "$www" ]]; then
+                  change_source_me $target CSV2RDF4LOD_PUBLISH_VARWWW_ROOT "$www" \
                      "indicate the htdocs directory to publish RDF dump files to, which are used to load the SPARQL endpoint" \
                      'https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_PUBLISH_VARWWW_ROOT' \
                      'unable to publish RDF dump files, and unable to load the SPARQL endpoint'
                else
-                  echo "WARNING: /var/www DNE, where is apache?"
+                  echo "WARNING: Could not guess where htdocs directory is; cannot set CSV2RDF4LOD_PUBLISH_VARWWW_ROOT."
                fi
                #fi
 
@@ -2832,7 +2884,15 @@ else
                      #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/PHP>;
                      #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Sqlite>;
                      #3> .
-                     offer_install_aptget "curl apache2 php5 php5-cli php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
+                     if [[ `which apt-get 2> /dev/null` ]]; then
+                        # https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-Ubuntu
+                        offer_install_aptget "curl apache2 php5 php5-cli php5-sqlite php5-curl sqlite3" 'run LODSPeaKr'
+                     elif  [[ `which yum 2> /dev/null` ]]; then
+                        # https://github.com/alangrafu/lodspeakr/wiki/How-to-install-requisites-in-CentOS
+                        offer_install_yum "httpd sqlite git curl" 'run LODSPeaKr'
+                     else
+                        echo "WARNING: not sure how to install dependencies without apt-get or yum"
+                     fi
                      #owner_group=`stat --format=%U:%G $www`
                      #sudo chown $project_user_name:$project_user_name $www
                      pushd $www &> /dev/null

@@ -2552,13 +2552,13 @@ else
                   set_paths_cmd="export JENAROOT=$found_JENAROOT"
                   echo "Apache Jena requires the shell environent variable JENAROOT to be set."
                   echo "For details, see https://github.com/timrdf/csv2rdf4lod-automation/wiki/Apache-Jena"
-                  if [[ -n "$found_JENAROOT" && -d "$found_JENAROOT" ]]; then
+                  #if [[ -n "$found_JENAROOT" && -d "$found_JENAROOT" ]]; then
                      echo "The following command should appear in $your data/source/csv2rdf4lod-source-me-as-$user.sh."
                      echo
                      echo "    $set_paths_cmd"
-                  else
-                     echo "WARNING: could not determine JENAROOT ($found_JENAROOT)."
-                  fi # TODO: This needs the production user to have installed JENA, this would be the second pass...
+                  #else
+                  #   echo "WARNING: could not determine JENAROOT ($found_JENAROOT)."
+                  #fi # TODO: This needs the production user to have installed JENA, this would be the second pass...
                   already_there=`grep "^$set_paths_cmd" $target`
                   echo
                   if [[ -n "$already_there" ]]; then

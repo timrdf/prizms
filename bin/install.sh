@@ -1088,7 +1088,7 @@ else
                echo "    --upstream-ckan  $upstream_ckan                  \\"     >> .refresh-prizms-installation
                echo "    --our-base-uri   $our_base_uri                   \\"     >> .refresh-prizms-installation
                echo "    --our-source-id  $our_source_id                  \\"     >> .refresh-prizms-installation
-               echo "    --our-datahub-id $our_datahub_id $install_mysql $install_weave" >> .refresh-prizms-installation
+               echo "    --our-datahub-id $our_datahub_id $install_mysql $install_weave $install_vivo" >> .refresh-prizms-installation
                chmod +x .refresh-prizms-installation
             fi
 
@@ -2389,6 +2389,57 @@ else
                fi
             fi
 
+            # Set up VIVO
+            # 
+            if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+               if [[ "$install_vivo" == '--vivo' ]]; then
+                  echo "$div `whoami`"
+                  echo "Prizms will install VIVO if you asked it to."
+                  # Requires Java 7
+                  # Requires ant >1.8
+                  # Requires mysql >5.1
+                  if [[ "$tomcat_installed" == "yes" ]]; then
+                     if [[ "$i_can_sudo" -eq 0 ]]; then
+                        vivo_url='http://sourceforge.net/projects/vivo/files/VIVO%20Application%20Source/vivo-rel-1.6.1.zip/download' 
+                        echo $vivo_url
+                        if [[ ! -e $PRIZMS_HOME/repos/vivo-rel-1.6.1.zip ]]; then
+                           curl -sLI $vivo_url > $PRIZMS_HOME/repos/vivo-rel-1.6.1.zip.version
+                           echo curl -L -o $PRIZMS_HOME/repos/vivo-rel-1.6.1.zip $vivo_url
+                                curl -L -o $PRIZMS_HOME/repos/vivo-rel-1.6.1.zip $vivo_url
+                        fi
+                        if [[ ! -d $PRIZMS_HOME/repos/vivo-rel-1.6.1 ]]; then
+                           pushd $PRIZMS_HOME/repos/
+                              date > vivo-rel-1.6.1.zip.timestamp
+                              unzip -DD vivo-rel-1.6.1.zip
+                              vivo_dir=`find . -maxdepth 1 -newer vivo-rel-1.6.1.zip.timestamp -name IVPR-Weave-Binaries-*`
+                              echo VIVO_DIR: $vivo_dir
+                              #if [[ -d "$vivo_dir" ]]; then
+                              #   mv "$vivo_dir" IVPR-Weave-Binaries
+                              #else
+                              #   echo "(WARNING: Could not determine the unzipped IVPR-Weave-Binaries.zip)"
+                              #fi 
+                           popd
+                        fi
+                        if [[ -d $PRIZMS_HOME/repos/vivo-rel-1.6.1 ]]; then #&& -d "$webapps" && ! -e "$webapps/WeaveServices.war" ]]; then
+                           echo $PRIZMS_HOME/repos/vivo-rel-1.6.1 exists
+                           ls -lt $PRIZMS_HOME/repos/vivo-rel-1.6.1
+                        #   echo sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/WeaveServices.war $webapps
+                        #        sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/WeaveServices.war $webapps
+                        #   for ext in swf html swc js css; do
+                        #      echo sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/ROOT/*.$ext       $webapps/ROOT/
+                        #           sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/ROOT/*.$ext       $webapps/ROOT/
+                        #   done 
+                        fi
+                        #add_proxy_pass '/etc/apache2/sites-available/default' '/vivo' '8080' 
+                     else
+                        echo "(WARNING: Cannot install VIVO b/c you do not have sudo.)" 
+                     fi
+                  else
+                     echo "(WARNING: Cannot install VIVO b/c tomcat is not installed.)"
+                  fi
+               fi
+            fi
+
             # Post-configure SADI service (in Tomcat)
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                if [[ "$tomcat_installed" == "yes" ]]; then
@@ -3059,11 +3110,11 @@ else
                if [[ -e $www/lodspeakr && -e $www/.htaccess ]]; then
                   grep '^RewriteRule .well_known/void void'    $www/.htaccess &> /dev/null
                   did_not_find_well_known=$?
-                  echo $did_not_find_well_known
+                  #echo $did_not_find_well_known
                   grep '^RewriteRule \^\$ lodspeakr/index.php' $www/.htaccess &> /dev/null
                   did_not_find_lodspeakr=$?
-                  echo $did_not_find_lodspeakr
-                  echo "- - - - -"
+                  #echo $did_not_find_lodspeakr
+                  #echo "- - - - -"
                   if [[ $did_not_find_well_known -eq 0 ]]; then
                      echo "(.well_known/void redirect is already installed.)"
                   elif [[ $did_not_find_lodspeakr -ne 0 ]]; then

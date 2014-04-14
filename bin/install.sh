@@ -2225,6 +2225,8 @@ else
 
                         # sudo rm -rf /etc/prizms-mysql.cnf /etc/my.cnf /usr/local/mysql /usr/local/mysql-5.6.17-linux-glibc2.5-x86_64
 
+                        # TODO: ln: creating symbolic link `/etc/my.cnf': File exists message on FRESH INSTALL.
+
                         mysql_user_exists=`$PRIZMS_HOME/bin/install/project-user.sh mysql --exists` # 'yes' or 'no'
                         if [[ ! -e /etc/prizms-mysql.cnf && "$mysql_user_exists" == 'yes' && -d '/usr/local/mysql' ]]; then
                            pushd '/usr/local/mysql'
@@ -2397,6 +2399,13 @@ else
                   echo "Prizms will install VIVO if you asked it to."
                   # Requires Java 7
                   # Requires ant >1.8
+                  if [[ `which yum 2> /dev/null` ]]; then
+                     offer_install_aptget 'ant' 'Install VIVO'
+                  elif [[ `which yum 2> /dev/null` ]]; then
+                     offer_install_yum 'ant' 'Install VIVO'
+                  else
+                     echo "WARNING: VIVO; how to install without apt-get or yum?"
+                  fi
                   # Requires mysql >5.1
                   if [[ "$tomcat_installed" == "yes" ]]; then
                      if [[ "$i_can_sudo" -eq 0 ]]; then

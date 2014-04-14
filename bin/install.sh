@@ -2399,7 +2399,7 @@ else
                   echo "Prizms will install VIVO if you asked it to."
                   # Requires Java 7
                   # Requires ant >1.8
-                  if [[ `which yum 2> /dev/null` ]]; then
+                  if [[ `which apt-get 2> /dev/null` ]]; then
                      offer_install_aptget 'ant' 'Install VIVO'
                   elif [[ `which yum 2> /dev/null` ]]; then
                      offer_install_yum 'ant' 'Install VIVO'

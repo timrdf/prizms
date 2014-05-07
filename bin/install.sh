@@ -174,8 +174,14 @@ else
       shift
    fi
 
-   read_only_project_code_repository=`echo $project_code_repository | sed 's/^git@/git:\/\//; s/com:/com\//'`
-   # ^ e.g. git@github.com:jimmccusker/melagrid.git -> git://github.com/jimmccusker/melagrid.git
+   if [[ ! -e "$project_code_repository" ]]; then
+      read_only_project_code_repository=`echo $project_code_repository | sed 's/^git@/git:\/\//; s/com:/com\//'`
+      # ^ e.g. git@github.com:jimmccusker/melagrid.git -> git://github.com/jimmccusker/melagrid.git
+   else
+      # We're using a local file system as the repository.
+      # This will probably get into hairy permissions issues.
+      read_only_project_code_repository="$project_code_repository"
+   fi
 
 
    #
@@ -2292,7 +2298,7 @@ else
                                    sudo chown -R root:mysql .
                               echo sudo chown -R mysql:mysql data
                                    sudo chown -R mysql:mysql data
-                              echo sudo ./bin/mysqld_safe --user=mysql &
+                              echo sudo ./bin/mysqld_safe --user=mysql & # at /usr/local/mysql
                                    sudo ./bin/mysqld_safe --user=mysql &
 
                               read -p "Q: MySQL was just installed, but it WAS NOT SECURED. Secure it. Press any key to continue." -u 1 install_it
@@ -2302,6 +2308,12 @@ else
                               #   sudo mv .apache-conf $target
                               #   restart_apache
                               #fi
+
+                              # Above approach lead to; Robin reports better results from:
+                              # http://www.cyberciti.biz/faq/how-to-install-mysql-under-rhel/
+                              # /etc/init.d/mysqld
+                              # /usr/bin/mysqld_safe
+                              # /usr/bin/mysqladmin
                            popd
                         else
                            echo "(/etc/prizms-mysql.cnf already exists; skipping mysql_install_db)"
@@ -2397,8 +2409,12 @@ else
                if [[ "$install_vivo" == '--vivo' ]]; then
                   echo "$div `whoami`"
                   echo "Prizms will install VIVO if you asked it to."
-                  # Requires Java 7
-                  # Requires ant >1.8
+                  # Requires Java 7 (already installed)
+                  # Requires ant >1.8 # TODO: http://ant.apache.org/manual/index.html
+                                       #TODO: http://mirror.reverse.net/pub/apache//ant/binaries/apache-ant-1.9.3-bin.zip
+                                      #  export ANT_HOME='/home/ec2-user/opt/prizms/repos/apache-ant-1.9.3'
+                                      # export PATH=$PATH:${ANT_HOME}/bin
+                                      # export JAVA_HOME='/usr/lib/jvm/jre-1.7.0-openjdk.x86_64'
                   if [[ `which apt-get 2> /dev/null` ]]; then
                      offer_install_aptget 'ant' 'Install VIVO'
                   elif [[ `which yum 2> /dev/null` ]]; then
@@ -2406,7 +2422,7 @@ else
                   else
                      echo "WARNING: VIVO; how to install without apt-get or yum?"
                   fi
-                  # Requires mysql >5.1
+                  # Requires mysql >5.1 (already installed above)
                   if [[ "$tomcat_installed" == "yes" ]]; then
                      if [[ "$i_can_sudo" -eq 0 ]]; then
                         vivo_url='http://sourceforge.net/projects/vivo/files/VIVO%20Application%20Source/vivo-rel-1.6.1.zip/download' 
@@ -2438,6 +2454,28 @@ else
                         #      echo sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/ROOT/*.$ext       $webapps/ROOT/
                         #           sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/ROOT/*.$ext       $webapps/ROOT/
                         #   done 
+
+# Manually:
+# mysql -u root -p
+# 
+# mysql> CREATE DATABASE vivodb CHARACTER SET utf8;
+# Query OK, 1 row affected (0.04 sec)
+# 
+# mysql> GRANT ALL ON vivodb.* TO 'SOME-USER-NAME'@'localhost' IDENTIFIED BY 'SOME-PASSWORD';
+# Query OK, 0 rows affected (0.00 sec)
+# 
+# mv example.build.properties build.properties
+# edit ^^ 
+#      tomcat.home = /var/lib/tomcat6 ($webapps above)
+#      TODO: design the location for vitro.home = (e.g. /home/ec2-user/opt/prizms/repos/vivo-rel-1.6.1/data)
+#
+# make sure ant 1.8 and java (NOT OPENJDK) SE 1.7 ( set ANT_HOME and JAVA_HOME to suit)
+# export ANT_OPTS='-Xms55m -Xmx55m'
+# sudo -E ant all
+#
+# cd data; cp example.runtime.properties runtime.properties
+
+ 
                         fi
                         #add_proxy_pass '/etc/apache2/sites-available/default' '/vivo' '8080' 
                      else

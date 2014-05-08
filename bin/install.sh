@@ -2566,7 +2566,9 @@ else
                   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
                   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
                   # NOTE: replaced the code above with the following on April 2014 during CentOS support:
-                  add_proxy_pass '/etc/apache2/sites-available/default' '/sadi-services' '8080'
+                  if [[ -e /var/lib/tomcat6/webapps/sadi-services.war ]]; then
+                     add_proxy_pass '/etc/apache2/sites-available/default' '/sadi-services' '8080'
+                  fi
                fi
             fi # end running as developer e.g. jsmith not loxd (Post-configure SADI service (in Tomcat))
 
@@ -2600,7 +2602,9 @@ else
                   fi
 
                   # Apache ProxyPass
-                  add_proxy_pass '/etc/apache2/sites-available/default' '/annotator'
+                  if [[ -e $webapps/annotator.war ]]; then
+                     add_proxy_pass '/etc/apache2/sites-available/default' '/annotator'
+                  fi
 
                   # Setting baseURI for the annotator webapp.
                   #if [[ -e $webapps/annotator.war ]]; then
@@ -2670,8 +2674,10 @@ else
                      echo "($webapps/$war_local already exists; no need to redeploy)"
                   fi
 
-                  # Apache ProxyPass
-                  add_proxy_pass '/etc/apache2/sites-available/default' '/RDFAlerts'
+                  if [[ -e $webapps/$war_local ]]; then
+                     # Apache ProxyPass
+                     add_proxy_pass '/etc/apache2/sites-available/default' '/RDFAlerts'
+                  fi
                else
                   echo "(Cannot install RDFAlert because tomcat installed: \"$tomcat_installed\""
                   echo " $PRIZMS_HOME/repos/semanteco-annotator-webapp DNE or cannot sudo ($i_can_sudo)"
@@ -2915,26 +2921,30 @@ else
                echo "$div `whoami`"
                echo "Prizms exposes a directory of python SADI services through Apache, which needs to know what implementation should handle the invocation."
                target="$PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess"
-               if [[ ! -e $target ]]; then
-                  echo "$target does not exist, but it should contain the following directives to enable the SADI services:"
-                  echo
-                  echo "Options -MultiViews"                     > .prizms-sadi-htaccess
-                  echo "SetHandler mod_python"                  >> .prizms-sadi-htaccess
-                  echo "PythonHandler sadi"                     >> .prizms-sadi-htaccess
-                  # SetEnv X_CKAN_API_Key     # This needs 'sudo a2enmod env' to take affect. # see http://httpd.apache.org/docs/2.2/mod/mod_env.html
-                  echo "SetEnv DATAFAQS_BASE_URI $our_base_uri" >> .prizms-sadi-htaccess
-                  cat .prizms-sadi-htaccess
-                  echo
-                  read -p "Q: May we install the directives above into $target? [y/n] " -u 1 install_it
-                  if [[ "$install_it" == [yY] ]]; then
-                     mv .prizms-sadi-htaccess $target
+               if [[ -h $www/services ]]; then
+                  if [[ ! -e $target ]]; then
+                     echo "$target does not exist, but it should contain the following directives to enable the SADI services:"
+                     echo
+                     echo "Options -MultiViews"                     > .prizms-sadi-htaccess
+                     echo "SetHandler mod_python"                  >> .prizms-sadi-htaccess
+                     echo "PythonHandler sadi"                     >> .prizms-sadi-htaccess
+                     # SetEnv X_CKAN_API_Key     # This needs 'sudo a2enmod env' to take affect. # see http://httpd.apache.org/docs/2.2/mod/mod_env.html
+                     echo "SetEnv DATAFAQS_BASE_URI $our_base_uri" >> .prizms-sadi-htaccess
+                     cat .prizms-sadi-htaccess
+                     echo
+                     read -p "Q: May we install the directives above into $target? [y/n] " -u 1 install_it
+                     if [[ "$install_it" == [yY] ]]; then
+                        mv .prizms-sadi-htaccess $target
+                     else
+                        echo "Okay, we won't update $target."
+                     fi
+                     # TODO: set envvars in /etc/apache2/envvars as:
+                     # export X_CKAN_API_Key=aabbcc
                   else
-                     echo "Okay, we won't update $target."
+                     echo "($PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess already exists, so mod_python should be configured to use sadi handler)"
                   fi
-                  # TODO: set envvars in /etc/apache2/envvars as:
-                  # export X_CKAN_API_Key=aabbcc
                else
-                  echo "($PROJECT_PRIZMS_HOME/repos/DataFAQs/services/.htaccess already exists, so mod_python should be configured to use sadi handler)"
+                  echo "($www/services is not a symoblic link, so we won't offer the .htaccess change.)"
                fi
                rm -f .prizms-sadi-htaccess
             fi

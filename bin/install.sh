@@ -1792,6 +1792,13 @@ else
             fi
             rm -f .before-prizms-installed-dependencies
 
+            # Post-configure raptor
+            if [[ -e /usr/local/lib/libraptor2.so && ! `which rapper` ]]; then
+               change_source_me "data/source/csv2rdf4lod-source-me-as-$project_user_name.sh" \
+                                'LD_LIBRARY_PATH' "\$LD_LIBRARY_PATH:/usr/local/lib" \
+                                'enable rapper 2 to find its shared library'
+            fi
+
             # Post-configure Virtuoso
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
 

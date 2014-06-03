@@ -1800,6 +1800,7 @@ else
             fi
 
             # Post-configure Virtuoso
+            # TODO: https://github.com/timrdf/prizms/issues/89
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
 
                virtuoso_installed=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/virtuoso/virtuoso-install-info.sh`
@@ -3163,16 +3164,16 @@ else
 
             if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
                # https://github.com/timrdf/prizms/issues/95
-               # Add redirect from /.well_known/void to /void using .htaccess:
+               # Add redirect from /.well-known/void to /void using .htaccess:
                #
-               # RewriteRule .well_known/void void [L]      # << --- Add this.
+               # RewriteRule .well-known/void void [L]      # << --- Add this.
                # RewriteRule ^$ lodspeakr/index.php [L]
                echo
                echo "$div `whoami`"
-               echo "Vocabulary of Interlinked Data Note suggests to provide /.well_known/void."
+               echo "Vocabulary of Interlinked Data Note suggests to provide /.well-known/void."
                echo "see http://www.w3.org/TR/void/#well-known"
                if [[ -e $www/lodspeakr && -e $www/.htaccess ]]; then
-                  grep '^RewriteRule .well_known/void void'    $www/.htaccess &> /dev/null
+                  grep '^RewriteRule .well-known/void void'    $www/.htaccess &> /dev/null
                   did_not_find_well_known=$?
                   #echo $did_not_find_well_known
                   grep '^RewriteRule \^\$ lodspeakr/index.php' $www/.htaccess &> /dev/null
@@ -3180,7 +3181,7 @@ else
                   #echo $did_not_find_lodspeakr
                   #echo "- - - - -"
                   if [[ $did_not_find_well_known -eq 0 ]]; then
-                     echo "(.well_known/void redirect is already installed.)"
+                     echo "(.well-known/void redirect is already installed.)"
                   elif [[ $did_not_find_lodspeakr -ne 0 ]]; then
                      echo "WARNING: will wait until lodspeakr redirect is installed."
                   elif [[ $i_can_sudo -ne 0 ]]; then
@@ -3188,11 +3189,11 @@ else
                   elif [[ $did_not_find_well_known -ne 0 ]]; then
                      proposed=.varwww.htaccess_`date +%Y-%m-%d-%H-%M-%S`
                      cat $www/.htaccess | awk '{if($1=="RewriteRule" && \
-                                                   $3=="lodspeakr/index.php"){print "RewriteRule .well_known/void void [L]";print}\
+                                                   $3=="lodspeakr/index.php"){print "RewriteRule .well-known/void void [L]";print}\
                                                 else{print}}' > $proposed
                      diff $www/.htaccess $proposed
                      echo
-                     read -p "Q: Add .well_known/void redirect with the change to $www/.htaccess shown above? [y/n] " -u 1 wellknown
+                     read -p "Q: Add .well-known/void redirect with the change to $www/.htaccess shown above? [y/n] " -u 1 wellknown
                      if [[ "$wellknown" == [yY] ]]; then
                         sudo cp $www/.htaccess $proposed.orig
                         if [[ -e  $proposed.orig ]]; then
@@ -3207,7 +3208,7 @@ else
                      echo "WARNING: Not sure what happened."
                   fi
                else
-                  echo "(LODSPeaKr is not installed yet, so there is no need to redirect /.well_known/void to /void yet.)"
+                  echo "(LODSPeaKr is not installed yet, so there is no need to redirect /.well-known/void to /void yet.)"
                fi
             fi
 

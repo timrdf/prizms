@@ -2968,6 +2968,7 @@ else
             #fi
 
 
+            # TODO: this should get moved to pvcs/bin/install/dependencies.sh
             #3> <http://purl.org/twc/id/software/prizms> 
             #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/node.js>;
             #3> .
@@ -3025,6 +3026,21 @@ else
                fi
             else
                echo "(npm is on PATH, so everything is okay.)"
+            fi
+
+            #3> <http://purl.org/twc/id/software/prizms> 
+            #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/node.js>;
+            #3> .
+            echo 
+            echo "$div `whoami`"
+            echo "Prizms' pvcs uses git2prov."
+            if [[ ! `which npm` ]]; then
+               # $ npm list
+               # /home/lebot/prizms/provenanceweb
+               # └── (empty)
+               if [[ "$i_can_sudo" -eq 0 ]]; then
+                  sudo npm install -g git2prov
+               fi
             fi
 
             #3> <http://purl.org/twc/id/software/prizms> 

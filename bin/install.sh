@@ -3067,11 +3067,7 @@ else
             if [[ ! -e /etc/init.d/git2prov ]]; then
                if [[ -e /usr/local/lib/node_modules/git2prov/scripts/git2prov ]]; then
                   if [[ "$i_can_sudo" -eq 0 ]]; then
-                     change_source_me /usr/local/lib/node_modules/git2prov/scripts/git2prov 'APPLICATION_DIR' /usr/local/lib/node_modules/git2prov
-                     #   target="$1"    # e.g. "data/source/csv2rdf4lod-source-me-for-$project_user_name.sh"
-                     #   ENVVAR="$2"    # e.g. 'CSV2RDF4LOD_PUBLISH_OUR_SOURCE_ID'; 
-                     #   new_value="$3" # e.g. "$our_source_id"
-                     #   purpose="$4"   # e.g. "indicate the source identifier for all datasets that it creates on its own"
+                     perl -pi -e 's|APPLICATION_DIR=.*$|APPLICATION_DIR=/usr/local/lib/node_modules/git2prov|' /usr/local/lib/node_modules/git2prov/scripts/git2prov
                      echo sudo chmod +x /usr/local/lib/node_modules/git2prov/scripts/git2prov
                           sudo chmod +x /usr/local/lib/node_modules/git2prov/scripts/git2prov
                      echo sudo ln -s /usr/local/lib/node_modules/git2prov/scripts/git2prov /etc/init.d/git2prov

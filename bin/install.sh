@@ -3034,20 +3034,32 @@ else
             echo 
             echo "$div `whoami`"
             echo "Prizms' pvcs uses git2prov."
-            if [[ `which npm` ]]; then
-               # $ npm list
-               # /home/lebot/prizms/provenanceweb
-               # └── (empty)
-               if [[ "$i_can_sudo" -eq 0 ]]; then
-                  read -p "Q: May we install git2prov with npm? [y/n] " -u 1 do_it
-                  if [[ "$do_it" == [yY] ]]; then
-                     sudo npm install -g git2prov
-                  else
-                     echo "Okay, we won't install git2prov with npm."
+            if [[ ! `which git2prov` ]]; then
+               if [[ `which npm` ]]; then
+                  # $ npm list
+                  # /home/lebot/prizms/provenanceweb
+                  # └── (empty)
+                  if [[ "$i_can_sudo" -eq 0 ]]; then
+                     read -p "Q: May we install git2prov with npm? [y/n] " -u 1 do_it
+                     if [[ "$do_it" == [yY] ]]; then
+                        sudo npm install -g git2prov
+                        # /usr/local/bin/git2prov        -> /usr/local/lib/node_modules/git2prov/bin/git2prov
+                        # /usr/local/bin/git2prov-server -> /usr/local/lib/node_modules/git2prov/bin/git2prov-server
+                        # git2prov@0.1.1 /usr/local/lib/node_modules/git2prov
+                        # ├── n3@0.2.7
+                        # ├── http-proxy@1.0.3 (eventemitter3@0.1.2)
+                        # └── express@3.4.8 (methods@0.1.0, merge-descriptors@0.0.1, range-parser@0.0.4, 
+                        #                    cookie-signature@1.0.1, debug@0.8.1, fresh@0.2.0, buffer-crc32@0.2.1, 
+                        #                    cookie@0.1.0, mkdirp@0.3.5, commander@1.3.2, send@0.1.4, connect@2.12.0)
+                     else
+                        echo "Okay, we won't install git2prov with npm."
+                     fi
                   fi
+               else
+                  echo "ERROR: npm not found; cannot install git2prov."
                fi
             else
-               echo "ERROR: npm not found; cannot install git2prov."
+               echo "(git2prov is at `which git2prov`; we're good.)"
             fi
 
             #3> <http://purl.org/twc/id/software/prizms> 

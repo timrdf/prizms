@@ -2974,6 +2974,8 @@ else
             echo 
             echo "$div `whoami`"
             echo "Prizms' pvcs git2prov requires node.js."
+            echo "  See https://github.com/timrdf/pvcs/wiki/git2prov#git2provconverterjs"
+            echo "  See https://github.com/timrdf/Git2PROV/wiki"
             if [[ ! `which npm` ]]; then
                # We're doing it from source so that we don't depend on apt-get on an old OS.
                read -p "Q: May we install node.js at ~/opt? [y/n] " -u 1 do_it
@@ -2998,17 +3000,19 @@ else
                            pushd ${gz%.tar.gz} &> /dev/null
                               pwd
                               ls -lt
-                              #if [[ -n "$sudo" ]]; then
-                              #   config_prefix=""
-                              #else
-                              #   config_prefix="--prefix=$base/raptor"
-                              #fi
-                              #echo $sudo ./configure $config_prefix >&2
-                              #     $sudo ./configure $config_prefix
-                              #echo $sudo make >&2
-                              #     $sudo make
-                              #echo $sudo make install >&2
-                              #     $sudo make install
+                              if [[ "$i_can_sudo" -eq 0 ]]; then
+                                 config_prefix=""
+                                 sudo='sudo'
+                              else
+                                 config_prefix="--prefix=$user_home/opt/${gz%.tar.gz}-installed"
+                                 sudo=''
+                              fi
+                              echo $sudo ./configure $config_prefix >&2
+                                   $sudo ./configure $config_prefix
+                              echo $sudo make >&2
+                                   $sudo make
+                              echo $sudo make install >&2
+                                   $sudo make install
                            popd &> /dev/null
                         fi
                         #$sudo rm -f `basename $gz`

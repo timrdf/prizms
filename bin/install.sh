@@ -2968,7 +2968,60 @@ else
             #fi
 
 
-
+            #3> <http://purl.org/twc/id/software/prizms> 
+            #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/node.js>;
+            #3> .
+            echo 
+            echo "$div `whoami`"
+            echo "Prizms' pvcs git2prov requires node.js."
+            if [[ ! `which npm` ]]; then
+               # We're doing it from source so that we don't depend on apt-get on an old OS.
+               read -p "Q: May we install node.js at ~/opt? [y/n] " -u 1 do_it
+               if [[ "$do_it" == [yY] ]]; then
+                  mkdir -p ~/opt && pushd ~/opt
+                     # http://nodejs.org/download/
+                     gz='http://nodejs.org/dist/v0.10.28/node-v0.10.28.tar.gz'
+                     TODO=''
+                     dryrun='false'
+                     echo $TODO curl -O $gz from `pwd`
+                     if [[ "$dryrun" != "true" ]]; then
+                        if [[ ! -e `basename $gz` ]]; then
+                           curl -O $gz
+                        fi
+                        gz=`basename $gz`
+                        if [[ ! -e ${gz%.tar.gz} ]]; then
+                           echo tar xvfz $gz
+                                tar xvfz $gz
+                           rm $gz
+                        fi
+                        if [[ -d ${gz%.tar.gz} ]]; then
+                           pushd ${gz%.tar.gz} &> /dev/null
+                              pwd
+                              ls -lt
+                              #if [[ -n "$sudo" ]]; then
+                              #   config_prefix=""
+                              #else
+                              #   config_prefix="--prefix=$base/raptor"
+                              #fi
+                              #echo $sudo ./configure $config_prefix >&2
+                              #     $sudo ./configure $config_prefix
+                              #echo $sudo make >&2
+                              #     $sudo make
+                              #echo $sudo make install >&2
+                              #     $sudo make install
+                           popd &> /dev/null
+                        fi
+                        #$sudo rm -f `basename $gz`
+                     else
+                        echo "[WARNING] could not install node.js because `whoami` does not have sudo permissions." >&2
+                     fi
+                  popd
+               else
+                  echo "Okay, we won't do anything, but you can't use the original git2prov."
+               fi
+            else
+               echo "(npm is on PATH, so everything is okay.)"
+            fi
 
             #3> <http://purl.org/twc/id/software/prizms> 
             #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/lodspeakr>;

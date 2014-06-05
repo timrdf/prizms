@@ -3029,7 +3029,7 @@ else
             fi
 
             #3> <http://purl.org/twc/id/software/prizms> 
-            #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/node.js>;
+            #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/git2prov>;
             #3> .
             echo 
             echo "$div `whoami`"
@@ -3060,6 +3060,29 @@ else
                fi
             else
                echo "(git2prov is at `which git2prov`; we're good.)"
+            fi
+            echo 
+            echo "$div `whoami`"
+            echo "Prizms' pvcs' git2prov can be init.d'd."
+            if [[ ! -e /etc/init.d/git2prov ]]; then
+               if [[ -e /usr/local/lib/node_modules/git2prov/scripts/git2prov ]]; then
+                  if [[ "$i_can_sudo" -eq 0 ]]; then
+                     echo sudo chmod +x /usr/local/lib/node_modules/git2prov/scripts/git2prov
+                          sudo chmod +x /usr/local/lib/node_modules/git2prov/scripts/git2prov
+                     echo sudo ln -s /usr/local/lib/node_modules/git2prov/scripts/git2prov /etc/init.d/git2prov
+                          sudo ln -s /usr/local/lib/node_modules/git2prov/scripts/git2prov /etc/init.d/git2prov
+                     echo sudo update-rc.d git2prov defaults
+                          sudo update-rc.d git2prov defaults
+                     echo sudo service git2prov start
+                          sudo service git2prov start
+                  else
+                     echo "no sudo"
+                  fi
+               else
+                  echo "no /usr/local/lib/node_modules/git2prov/scripts/git2prov"
+               fi
+            else
+               echo "(/etc/init.d/git2prov exists; we're good.)"
             fi
 
             #3> <http://purl.org/twc/id/software/prizms> 

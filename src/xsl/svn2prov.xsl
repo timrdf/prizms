@@ -17,12 +17,13 @@
 <xsl:param name="cr-dataset-id" select="'opendap'"/>
 <xsl:param name="cr-version-id" select="'svn'"/>
 
+<xsl:param name="svn" select="''"/> <!-- e.g. https://scm.opendap.org/svn -->
+
 <xsl:variable name="s"   select="concat($cr-base-uri,'/source/',$cr-source-id,'/')"/>
 <xsl:variable name="sd"  select="concat($s, 'dataset/',$cr-dataset-id,'/')"/>
 <xsl:variable name="sdv" select="concat($sd,'version/',$cr-version-id,'/')"/>
 <xsl:variable name="sdv_" select="concat($sd,'version/',$cr-version-id)"/>
 
-<xsl:variable name="svn" select="'https://scm.opendap.org/svn'"/>
 
 <xsl:variable name="prefixes"><xsl:text><![CDATA[@prefix prov:   <http://www.w3.org/ns/prov#>.
 @prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#>.
@@ -117,14 +118,15 @@
          <xsl:variable name="antecedent" select="concat('&lt;',$sdv,'revision/',@copyfrom-rev,replace(@copyfrom-path,' ','%20'),'&gt;')"/>
          <xsl:value-of select="concat($NL,'   prov:wasDerivedFrom ',$antecedent,';')"/>
       </xsl:if>
+      <xsl:variable name="no-svn" select="if(string-length($svn)) then '' else '# parameter *svn* missing...'"/>
       <xsl:value-of select="concat($NL,'   prov:specializationOf ',$revisionless,';',$NL,
                                    '.',$NL,
                                    $revisionless,$NL,
                                    '   #a pvcs:Mutable;',$NL,
                                    '   a  nfo:FileDataObject, prov:Entity;',$NL,
-                                   '   nfo:fileName     ',replace($svn,'.',' '),$DQ,$path,$DQ,';',$NL,
-                                   '   prv:serializedBy &lt;',$svn,$path,'&gt;;',$NL,
-                                   '   nfo:fileURL      &lt;',$svn,$path,'&gt;;',$NL,
+                                   $no-svn,'   nfo:fileName     ',replace($svn,'.',' '),$DQ,$path,$DQ,';',$NL,
+                                   $no-svn,'   prv:serializedBy &lt;',$svn,$path,'&gt;;',$NL,
+                                   $no-svn,'   nfo:fileURL      &lt;',$svn,$path,'&gt;;',$NL,
                                    '.')"/>
    </xsl:for-each>
 

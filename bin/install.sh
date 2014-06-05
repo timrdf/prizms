@@ -3034,13 +3034,20 @@ else
             echo 
             echo "$div `whoami`"
             echo "Prizms' pvcs uses git2prov."
-            if [[ ! `which npm` ]]; then
+            if [[ `which npm` ]]; then
                # $ npm list
                # /home/lebot/prizms/provenanceweb
                # └── (empty)
                if [[ "$i_can_sudo" -eq 0 ]]; then
-                  sudo npm install -g git2prov
+                  read -p "Q: May we install git2prov with npm? [y/n] " -u 1 do_it
+                  if [[ "$do_it" == [yY] ]]; then
+                     sudo npm install -g git2prov
+                  else
+                     echo "Okay, we won't install git2prov with npm."
+                  fi
                fi
+            else
+               echo "ERROR: npm not found; cannot install git2prov."
             fi
 
             #3> <http://purl.org/twc/id/software/prizms> 

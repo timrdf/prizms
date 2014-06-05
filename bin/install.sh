@@ -3087,7 +3087,7 @@ else
             else
                echo "(/etc/init.d/git2prov exists; we're good.)"
             fi
-            if [[ ! -e /etc/init.d/git2prov ]]; then
+            if [[ -e /etc/init.d/git2prov ]]; then
                if [[ "$i_can_sudo" -eq 0 ]]; then
                   add_proxy_pass '/etc/apache2/sites-available/default' '/git2prov' 8905
                   # local target="$1" # e.g. '/etc/apache2/sites-available/default'

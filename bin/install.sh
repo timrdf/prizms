@@ -3068,7 +3068,7 @@ else
                if [[ -e /usr/local/lib/node_modules/git2prov/scripts/git2prov ]]; then
                   if [[ "$i_can_sudo" -eq 0 ]]; then
                      sudo perl -pi -e 's|APPLICATION_DIR=.*$|APPLICATION_DIR=/usr/local/lib/node_modules/git2prov|' /usr/local/lib/node_modules/git2prov/scripts/git2prov
-                     sudo perl -pi -e 's|sudo node bin/proxy 80 8905|#sudo node bin/proxy 80 8905|'                 /usr/local/lib/node_modules/git2prov/scripts/git2prov
+                     sudo perl -pi -e 's| sudo node bin/proxy 80 8905|#sudo node bin/proxy 80 8905|'                /usr/local/lib/node_modules/git2prov/scripts/git2prov
                      sudo perl -pi -e 's|echo \$! > \$PROXY_PID_FILE|#echo \$! \> \$PROXY_PID_FILE|'                /usr/local/lib/node_modules/git2prov/scripts/git2prov
                      echo sudo chmod +x /usr/local/lib/node_modules/git2prov/scripts/git2prov
                           sudo chmod +x /usr/local/lib/node_modules/git2prov/scripts/git2prov
@@ -3086,6 +3086,17 @@ else
                fi
             else
                echo "(/etc/init.d/git2prov exists; we're good.)"
+            fi
+            if [[ ! -e /etc/init.d/git2prov ]]; then
+               if [[ "$i_can_sudo" -eq 0 ]]; then
+                  add_proxy_pass '/etc/apache2/sites-available/default' '/git2prov' 8905
+                  # local target="$1" # e.g. '/etc/apache2/sites-available/default'
+                  # local path="$2"   # e.g. '/sadi-services' '/annotator' '/prov-pingback' '/weave' '/sparql'
+                  # local port="$3"   # e.g. '8080'           '8080'       '9412'           '8080'   '8890'
+                  # 8905
+               else
+                  echo "WARNING: cannot add proxy pass to git2prov at 8905; no sudo"
+               fi
             fi
 
             #3> <http://purl.org/twc/id/software/prizms> 

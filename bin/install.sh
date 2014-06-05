@@ -3067,7 +3067,7 @@ else
             if [[ ! -e /etc/init.d/git2prov ]]; then
                if [[ -e /usr/local/lib/node_modules/git2prov/scripts/git2prov ]]; then
                   if [[ "$i_can_sudo" -eq 0 ]]; then
-                     perl -pi -e 's|APPLICATION_DIR=.*$|APPLICATION_DIR=/usr/local/lib/node_modules/git2prov|' /usr/local/lib/node_modules/git2prov/scripts/git2prov
+                     sudo perl -pi -e 's|APPLICATION_DIR=.*$|APPLICATION_DIR=/usr/local/lib/node_modules/git2prov|' /usr/local/lib/node_modules/git2prov/scripts/git2prov
                      echo sudo chmod +x /usr/local/lib/node_modules/git2prov/scripts/git2prov
                           sudo chmod +x /usr/local/lib/node_modules/git2prov/scripts/git2prov
                      echo sudo ln -s /usr/local/lib/node_modules/git2prov/scripts/git2prov /etc/init.d/git2prov

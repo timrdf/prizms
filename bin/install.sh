@@ -3064,6 +3064,7 @@ else
             echo 
             echo "$div `whoami`"
             echo "Prizms' pvcs' git2prov can be init.d'd."
+            echo "   See https://github.com/mmlab/Git2PROV#running-as-a-service-on-a-linuxunix-machine"
             if [[ ! -e /etc/init.d/git2prov ]]; then
                if [[ -e /usr/local/lib/node_modules/git2prov/scripts/git2prov ]]; then
                   if [[ "$i_can_sudo" -eq 0 ]]; then
@@ -3098,6 +3099,9 @@ else
                   echo "WARNING: cannot add proxy pass to git2prov at 8905; no sudo"
                fi
             fi
+
+            # TODO: sudo apt-get install subversion
+            # TODO: sudo apt-get install mercurial
 
             #3> <http://purl.org/twc/id/software/prizms> 
             #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/lodspeakr>;

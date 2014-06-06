@@ -28,11 +28,13 @@ fi
 #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/csv2rdf4lod-automation>;
 #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/DataFAQs>;
 #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/vsr>;
+#3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/pvcs>;
 #3> .
 pushd $PRIZMS_HOME/repos &> /dev/null
    for repos in https://github.com/timrdf/csv2rdf4lod-automation.git \
                 https://github.com/timrdf/DataFAQs.git \
-                https://github.com/timrdf/vsr.git; do
+                https://github.com/timrdf/vsr.git \
+                https://github.com/timrdf/pvcs.git; do
       echo
       directory=`basename $repos`
       directory=${directory%.*}

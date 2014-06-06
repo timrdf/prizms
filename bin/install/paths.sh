@@ -63,7 +63,8 @@ fi
 
 for situate in $HOME/repos/csv2rdf4lod-automation/bin/util/cr-situate-paths.sh \
                $HOME/repos/vsr/bin/vsr-situate-paths.sh                        \
-               $HOME/repos/DataFAQs/bin/df-situate-paths.sh ; do
+               $HOME/repos/DataFAQs/bin/df-situate-paths.sh \
+               $HOME/repos/pvcs/bin/install/paths.sh ; do
    missing=$missing`$situate`
 done
 

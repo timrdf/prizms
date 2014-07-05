@@ -4003,6 +4003,51 @@ else
                easy_install argparse pytz
                easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
             fi
+            # TODO: when avoid installing if they are already installed.
+            # Info about installs:
+            # Q: Install PROV Pingback dependencies with the command above? [y/n] y
+            # Searching for virtualenv
+            # Best match: virtualenv 1.11.4
+            # Processing virtualenv-1.11.4-py2.6.egg
+            # virtualenv 1.11.4 is already the active version in easy-install.pth
+            # Installing virtualenv script to /home/lodcloud/opt/python/bin
+            # Installing virtualenv-2.6 script to /home/lodcloud/opt/python/bin
+            # 
+            # Using /usr/local/lib/python2.6/dist-packages/virtualenv-1.11.4-py2.6.egg
+            # Processing dependencies for virtualenv
+            # Finished processing dependencies for virtualenv
+            # Searching for Flask
+            # Best match: Flask 0.10.1
+            # Processing Flask-0.10.1-py2.6.egg
+            # Flask 0.10.1 is already the active version in easy-install.pth
+            # 
+            # Using /usr/local/lib/python2.6/dist-packages/Flask-0.10.1-py2.6.egg
+            # Processing dependencies for Flask
+            # Finished processing dependencies for Flask
+            # Searching for argparse
+            # Best match: argparse 1.2.1
+            # Processing argparse-1.2.1-py2.6.egg
+            # argparse 1.2.1 is already the active version in easy-install.pth
+            # 
+            # Using /usr/local/lib/python2.6/dist-packages/argparse-1.2.1-py2.6.egg
+            # Processing dependencies for argparse
+            # Finished processing dependencies for argparse
+            # Searching for pytz
+            # Best match: pytz 2013.9
+            # Processing pytz-2013.9-py2.6.egg
+            # pytz 2013.9 is already the active version in easy-install.pth
+            # 
+            # Using /usr/local/lib/python2.6/dist-packages/pytz-2013.9-py2.6.egg
+            # Processing dependencies for pytz
+            # Finished processing dependencies for pytz
+            # Searching for SPARQLWrapper
+            # Best match: SPARQLWrapper 1.5.2
+            # Processing SPARQLWrapper-1.5.2-py2.6.egg
+            # SPARQLWrapper 1.5.2 is already the active version in easy-install.pth
+            # 
+            # Using /usr/local/lib/python2.6/dist-packages/SPARQLWrapper-1.5.2-py2.6.egg
+            # Processing dependencies for SPARQLWrapper
+            # Finished processing dependencies for SPARQLWrapper
 
 
 

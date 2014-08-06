@@ -2978,6 +2978,7 @@ else
             echo "  See https://github.com/timrdf/pvcs/wiki/git2prov#git2provconverterjs"
             echo "  See https://github.com/timrdf/Git2PROV/wiki"
             if [[ ! `which npm` ]]; then
+               # TODO: make sure sudo apt-get install build-essential g++
                # We're doing it from source so that we don't depend on apt-get on an old OS.
                read -p "Q: May we install node.js at ~/opt? [y/n] " -u 1 do_it
                if [[ "$do_it" == [yY] ]]; then
@@ -3127,7 +3128,7 @@ else
                if [[ ! -e $www/lodspeakr ]]; then
                   echo "$www/lodspeakr is not set up yet. It can be installed with the command:"
                   echo
-                  echo " sudo bash -s base-url=$our_base_uri base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql chown=$lodchown < <(curl -sL http://lodspeakr.org/install)"
+                  echo " sudo -E bash -s base-url=$our_base_uri base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql chown=$lodchown < <(curl -sL http://lodspeakr.org/install)"
                   echo
                   read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
@@ -3154,10 +3155,10 @@ else
                         #sudo bash < <(curl -sL http://lodspeakr.org/install)
                         # omitting "-s chown=$lodchown" b/c it needs root.
                         #sudo su - $project_user_name -c "cd $www; bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql < <(curl -sL http://lodspeakr.org/install)"
-                        sudo bash -s base-url=$our_base_uri               \
-                                  -s base-namespace=$our_base_uri         \
-                                  -s sparql-endpoint=$our_base_uri/sparql \
-                                  -s chown=$lodchown < <(curl -sL http://lodspeakr.org/install-http)
+                        sudo -E bash -s base-url=$our_base_uri               \
+                                     -s base-namespace=$our_base_uri         \
+                                     -s sparql-endpoint=$our_base_uri/sparql \
+                                     -s chown=$lodchown < <(curl -sL http://lodspeakr.org/install-http)
                         # Question 1: http://lod.melagrid.org
                         # Question 2: <accept default>
                         # Question 3: http://lod.melagrid.org/sparql

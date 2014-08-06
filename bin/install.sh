@@ -176,11 +176,11 @@ else
 
    if [[ ! -e "$project_code_repository" ]]; then
       if [[ "$project_code_repository" =~ git@github.com* ]]; then
-         echo "assuming GitHub repo"
+         echo "Assuming GitHub repo: $project_code_repository"
          read_only_project_code_repository=`echo $project_code_repository | sed 's/^git@/git:\/\//; s/com:/com\//'`
          # ^ e.g. git@github.com:jimmccusker/melagrid.git -> git://github.com/jimmccusker/melagrid.git
       else
-         echo "Not a GitHub repo"
+         echo "Not a GitHub repo: $project_code_repository"
          read_only_project_code_repository="$project_code_repository"
       fi
    else

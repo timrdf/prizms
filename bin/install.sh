@@ -175,8 +175,14 @@ else
    fi
 
    if [[ ! -e "$project_code_repository" ]]; then
-      read_only_project_code_repository=`echo $project_code_repository | sed 's/^git@/git:\/\//; s/com:/com\//'`
-      # ^ e.g. git@github.com:jimmccusker/melagrid.git -> git://github.com/jimmccusker/melagrid.git
+      if [[ "$project_code_repository" =~ git@github.com* ]]; then
+         echo "assuming GitHub repo"
+         read_only_project_code_repository=`echo $project_code_repository | sed 's/^git@/git:\/\//; s/com:/com\//'`
+         # ^ e.g. git@github.com:jimmccusker/melagrid.git -> git://github.com/jimmccusker/melagrid.git
+      else
+         echo "Not a GitHub repo"
+         read_only_project_code_repository="$project_code_repository"
+      fi
    else
       # We're using a local file system as the repository.
       # This will probably get into hairy permissions issues.

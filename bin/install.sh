@@ -3049,7 +3049,7 @@ else
                   if [[ "$i_can_sudo" -eq 0 ]]; then
                      read -p "Q: May we install git2prov with npm? [y/n] " -u 1 do_it
                      if [[ "$do_it" == [yY] ]]; then
-                        sudo npm install -g git2prov
+                        sudo -E npm install -g git2prov # TODO: do this as an individual user?
                         # /usr/local/bin/git2prov        -> /usr/local/lib/node_modules/git2prov/bin/git2prov
                         # /usr/local/bin/git2prov-server -> /usr/local/lib/node_modules/git2prov/bin/git2prov-server
                         # git2prov@0.1.1 /usr/local/lib/node_modules/git2prov

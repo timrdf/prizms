@@ -404,7 +404,7 @@ else
          return 0
       fi
       for module in $modules; do
-         if [[ `which a2enmod 2> /dev/null` ]]; then
+         if [[ `sudo which a2enmod 2> /dev/null` ]]; then
             echo
             echo "sudo a2enmod $module | grep 'already enabled'"
             echo
@@ -534,6 +534,18 @@ else
             echo "          SetOutputFilter proxy-html"                  >> .prizms-apache-conf
             echo "  </Location>"                                         >> .prizms-apache-conf
             cat .prizms-apache-conf
+
+            # TODO: virtuoso 7.1 needs:
+            #   # taken from https://scm.escience.rpi.edu/trac/ticket/2000
+            #   <Location /sparql>
+            #           Order allow,deny
+            #           allow from all
+            #           ProxyPass http://localhost:8890/sparql
+            #           ProxyPassReverse /
+            #           ProxyHTMLURLMap         / /sparql/ c
+            #           ProxyHTMLURLMap         http://localhost:8890/ /sparql/
+            #           SetOutputFilter         INFLATE;DEFLATE;proxy-html
+            #   </Location>
 
             # Tuck the new directives into the entire configuration file.
             local virtualhost=`sudo  grep    "</VirtualHost>" $target`
@@ -1430,6 +1442,7 @@ else
                echo "Prizms publishes its dump files using Apache httpd." 
                if [[ `$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target | awk '{print $1}'` == 'true' ]]; then
                   if [[ ! `which httpd 2> /dev/null` && ! `which apache2 2> /dev/null` ]]; then
+                     # TODO: grep for 'apache2' also
                      if [[ `which apt-get 2> /dev/null` ]]; then
                         echo "It can be installed with:"
                         echo
@@ -4127,8 +4140,13 @@ else
                      echo "(From $read_only_project_code_repository)"
                      echo
                      if [[ ! -e ${user_home%/*}/$project_user_name/opt/prizms ]]; then
-                        echo sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone https://github.com/timrdf/prizms.git"
-                             sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; git clone https://github.com/timrdf/prizms.git"
+                        # If http_proxy is set, add 'git config --global http.proxy $http_proxy'
+                        git_global_proxy_cmd=""
+                        if [[ -n "$http_proxy" ]]; then
+                           git_global_proxy_cmd=" git config --global http.proxy $http_proxy; "
+                        fi
+                        echo sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; $git_global_proxy_cmd git clone https://github.com/timrdf/prizms.git"
+                             sudo su - $project_user_name -c "cd; mkdir -p opt; cd opt; $git_global_proxy_cmd git clone https://github.com/timrdf/prizms.git"
                      else
                         echo sudo su - $project_user_name -c "cd opt/prizms; git pull"
                              sudo su - $project_user_name -c "cd opt/prizms; git pull"

@@ -1,0 +1,360 @@
+@base <bin/dataset/pr-aggregate-pingbacks.sh> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix ov: <http://open.vocab.org/terms/> .
+@prefix frbr: <http://purl.org/vocab/frbr/core#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix moby: <http://www.mygrid.org.uk/mygrid-moby-service#> .
+@prefix conversion: <http://purl.org/twc/vocab/conversion/> .
+@prefix datafaqs: <http://purl.org/twc/vocab/datafaqs#> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/nfo/#> .
+@prefix sio: <http://semanticscience.org/resource/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix vsr: <http://purl.org/twc/vocab/vsr#> .
+@prefix pml: <http://provenanceweb.org/ns/pml#> .
+@prefix twi: <http://tw.rpi.edu/instances/> .
+
+<>
+    dcterms:isPartOf <http://purl.org/twc/id/software/prizms> ;
+    a conversion:Idempotent, conversion:RetrievalTrigger ;
+    rdfs:seeAlso <https://github.com/timrdf/csv2rdf4lod-automation/wiki/Aggregating-subsets-of-converted-datasets> ;
+    prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/dataset/pr-aggregate-pingbacks.sh> ;
+    prov:wasDerivedFrom <https://github.com/timrdf/csv2rdf4lod-automation/blob/master/bin/dataset/cr-aggregate-dcat.sh> .
+
+@base <bin/dataset/pr-enable-dataset.sh> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix ov: <http://open.vocab.org/terms/> .
+@prefix frbr: <http://purl.org/vocab/frbr/core#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix moby: <http://www.mygrid.org.uk/mygrid-moby-service#> .
+@prefix conversion: <http://purl.org/twc/vocab/conversion/> .
+@prefix datafaqs: <http://purl.org/twc/vocab/datafaqs#> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/nfo/#> .
+@prefix sio: <http://semanticscience.org/resource/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix vsr: <http://purl.org/twc/vocab/vsr#> .
+@prefix pml: <http://provenanceweb.org/ns/pml#> .
+@prefix twi: <http://tw.rpi.edu/instances/> .
+
+<>
+    dcterms:isPartOf <http://purl.org/twc/id/software/prizms> ;
+    prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/dataset/pr-enable-dataset.sh> .
+
+@base <bin/dataset/pr-neighborlod.sh> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix ov: <http://open.vocab.org/terms/> .
+@prefix frbr: <http://purl.org/vocab/frbr/core#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix moby: <http://www.mygrid.org.uk/mygrid-moby-service#> .
+@prefix conversion: <http://purl.org/twc/vocab/conversion/> .
+@prefix datafaqs: <http://purl.org/twc/vocab/datafaqs#> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/nfo/#> .
+@prefix sio: <http://semanticscience.org/resource/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix vsr: <http://purl.org/twc/vocab/vsr#> .
+@prefix pml: <http://provenanceweb.org/ns/pml#> .
+@prefix twi: <http://tw.rpi.edu/instances/> .
+
+<>
+    dcterms:isPartOf <http://purl.org/twc/id/software/prizms> ;
+    rdfs:seeAlso <https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets>, <https://github.com/timrdf/prizms/wiki/pr-spobal-ng> ;
+    prov:specializationOf <https://github.com/timrdf/prizms/tree/master/bin/dataset/pr-neighborlod.sh> ;
+    prov:wasDerivedFrom <https://github.com/timrdf/prizms/tree/master/bin/dataset/pr-spobal-ng.sh> .
+
+@base <bin/dataset/pr-spobal-ng.sh> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix ov: <http://open.vocab.org/terms/> .
+@prefix frbr: <http://purl.org/vocab/frbr/core#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix moby: <http://www.mygrid.org.uk/mygrid-moby-service#> .
+@prefix conversion: <http://purl.org/twc/vocab/conversion/> .
+@prefix datafaqs: <http://purl.org/twc/vocab/datafaqs#> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/nfo/#> .
+@prefix sio: <http://semanticscience.org/resource/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix vsr: <http://purl.org/twc/vocab/vsr#> .
+@prefix pml: <http://provenanceweb.org/ns/pml#> .
+@prefix twi: <http://tw.rpi.edu/instances/> .
+
+<>
+    dcterms:isPartOf <http://purl.org/twc/id/software/prizms> ;
+    a conversion:Idempotent, conversion:RetrievalTrigger ;
+    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/pr-spobal-ng> ;
+    prov:specializationOf <https://github.com/timrdf/prizms/tree/master/bin/dataset/pr-spobal-ng.sh> ;
+    prov:wasDerivedFrom <https://github.com/timrdf/csv2rdf4lod-automation/blob/master/bin/cr-create-versioned-dataset-dir.sh> .
+
+@base <bin/dataset/pr-whois-domain.sh> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix ov: <http://open.vocab.org/terms/> .
+@prefix frbr: <http://purl.org/vocab/frbr/core#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix moby: <http://www.mygrid.org.uk/mygrid-moby-service#> .
+@prefix conversion: <http://purl.org/twc/vocab/conversion/> .
+@prefix datafaqs: <http://purl.org/twc/vocab/datafaqs#> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/nfo/#> .
+@prefix sio: <http://semanticscience.org/resource/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix vsr: <http://purl.org/twc/vocab/vsr#> .
+@prefix pml: <http://provenanceweb.org/ns/pml#> .
+@prefix twi: <http://tw.rpi.edu/instances/> .
+
+<>
+    dcterms:isPartOf <http://purl.org/twc/id/software/prizms> ;
+    rdfs:seeAlso <https://github.com/timrdf/csv2rdf4lod-automation/wiki/Secondary-Derivative-Datasets>, <https://github.com/timrdf/prizms/wiki/Whois> ;
+    prov:specializationOf <https://github.com/timrdf/prizms/tree/master/bin/dataset/pr-whois-domain.sh> ;
+    prov:wasDerivedFrom <https://github.com/timrdf/prizms/tree/master/bin/dataset/pr-neighborlod.sh> .
+
+@base <bin/install/classpaths.sh> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix ov: <http://open.vocab.org/terms/> .
+@prefix frbr: <http://purl.org/vocab/frbr/core#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix moby: <http://www.mygrid.org.uk/mygrid-moby-service#> .
+@prefix conversion: <http://purl.org/twc/vocab/conversion/> .
+@prefix datafaqs: <http://purl.org/twc/vocab/datafaqs#> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/nfo/#> .
+@prefix sio: <http://semanticscience.org/resource/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix vsr: <http://purl.org/twc/vocab/vsr#> .
+@prefix pml: <http://provenanceweb.org/ns/pml#> .
+@prefix twi: <http://tw.rpi.edu/instances/> .
+
+<>
+    dcterms:isPartOf <http://purl.org/twc/id/software/prizms> ;
+    prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install/classpaths.sh> ;
+    prov:wasDerivedFrom <https://github.com/timrdf/prizms/blob/master/bin/install/paths.sh> .
+
+@base <bin/install/paths.sh> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix ov: <http://open.vocab.org/terms/> .
+@prefix frbr: <http://purl.org/vocab/frbr/core#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix moby: <http://www.mygrid.org.uk/mygrid-moby-service#> .
+@prefix conversion: <http://purl.org/twc/vocab/conversion/> .
+@prefix datafaqs: <http://purl.org/twc/vocab/datafaqs#> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/nfo/#> .
+@prefix sio: <http://semanticscience.org/resource/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix vsr: <http://purl.org/twc/vocab/vsr#> .
+@prefix pml: <http://provenanceweb.org/ns/pml#> .
+@prefix twi: <http://tw.rpi.edu/instances/> .
+
+<>
+    dcterms:isPartOf <http://purl.org/twc/id/software/prizms> ;
+    prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install/paths.sh> ;
+    prov:wasDerivedFrom <https://github.com/timrdf/DataFAQs/blob/master/bin/df-situate-paths.sh> .
+
+@base <bin/install/prizms-dependency-repos.sh> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix ov: <http://open.vocab.org/terms/> .
+@prefix frbr: <http://purl.org/vocab/frbr/core#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix moby: <http://www.mygrid.org.uk/mygrid-moby-service#> .
+@prefix conversion: <http://purl.org/twc/vocab/conversion/> .
+@prefix datafaqs: <http://purl.org/twc/vocab/datafaqs#> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/nfo/#> .
+@prefix sio: <http://semanticscience.org/resource/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix vsr: <http://purl.org/twc/vocab/vsr#> .
+@prefix pml: <http://provenanceweb.org/ns/pml#> .
+@prefix twi: <http://tw.rpi.edu/instances/> .
+
+<>
+    dcterms:isPartOf <http://purl.org/twc/id/software/prizms> ;
+    prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install/prizms-dependency-repos.sh> ;
+    prov:wasDerivedFrom <https://github.com/timrdf/prizms/blob/master/bin/install/project-user.sh> .
+
+<http://purl.org/twc/id/software/csv2rdf4lod-annotator>
+    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/csv2rdf4lod-annotator> .
+
+<http://purl.org/twc/id/software/prizms>
+    prov:wasDerivedFrom dbpedia:CURL, <http://purl.org/twc/id/software/DataFAQs>, <http://purl.org/twc/id/software/csv2rdf4lod-annotator>, <http://purl.org/twc/id/software/csv2rdf4lod-automation>, <http://purl.org/twc/id/software/csv2rdf4lod-lodspeakr>, <http://purl.org/twc/id/software/prizms-lodspeakr>, <http://purl.org/twc/id/software/vsr> .
+
+@base <bin/install/project-user.sh> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix ov: <http://open.vocab.org/terms/> .
+@prefix frbr: <http://purl.org/vocab/frbr/core#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix moby: <http://www.mygrid.org.uk/mygrid-moby-service#> .
+@prefix conversion: <http://purl.org/twc/vocab/conversion/> .
+@prefix datafaqs: <http://purl.org/twc/vocab/datafaqs#> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/nfo/#> .
+@prefix sio: <http://semanticscience.org/resource/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix vsr: <http://purl.org/twc/vocab/vsr#> .
+@prefix pml: <http://provenanceweb.org/ns/pml#> .
+@prefix twi: <http://tw.rpi.edu/instances/> .
+
+<>
+    dcterms:isPartOf <http://purl.org/twc/id/software/prizms> ;
+    prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install/project-user.sh> .
+
+@base <bin/install.sh> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix ov: <http://open.vocab.org/terms/> .
+@prefix frbr: <http://purl.org/vocab/frbr/core#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix moby: <http://www.mygrid.org.uk/mygrid-moby-service#> .
+@prefix conversion: <http://purl.org/twc/vocab/conversion/> .
+@prefix datafaqs: <http://purl.org/twc/vocab/datafaqs#> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/nfo/#> .
+@prefix sio: <http://semanticscience.org/resource/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix vsr: <http://purl.org/twc/vocab/vsr#> .
+@prefix pml: <http://provenanceweb.org/ns/pml#> .
+@prefix twi: <http://tw.rpi.edu/instances/> .
+
+<>
+    dcterms:isPartOf <http://purl.org/twc/id/software/prizms> ;
+    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/Installing-Prizms> ;
+    prov:specializationOf <https://github.com/timrdf/prizms/blob/master/bin/install.sh> .
+
+<http://purl.org/twc/id/software/lodspeakr>
+    prov:wasDerivedFrom dbpedia:Apache_HTTP_Server, dbpedia:CURL, dbpedia:Cron, <http://dbpedia.org/resource/Flask_(web_framework)>, dbpedia:PHP, dbpedia:Sqlite, <http://rdflib.github.io/sparqlwrapper/> .
+
+<http://purl.org/twc/id/software/prizms>
+    a doap:Project ;
+    prov:wasDerivedFrom dbpedia:Apache_HTTP_Server, dbpedia:Apache_Tomcat, dbpedia:Apt-get, dbpedia:CKAN, <http://dbpedia.org/resource/Git_(software)>, <http://dbpedia.org/resource/Jena_(framework)>, dbpedia:Secure_Shell, <http://purl.org/twc/id/software/DataFAQs>, <http://purl.org/twc/id/software/csv2rdf4lod-automation>, <http://purl.org/twc/id/software/lodspeakr>, <https://www.w3.org/2001/sw/wiki/Special:ExportRDF/RDF_Alerts> .
+
+<https://www.w3.org/2001/sw/wiki/Special:ExportRDF/RDF_Alerts>
+    rdfs:seeAlso <https://github.com/timrdf/DataFAQs/wiki/RDFAlerts>, <https://www.w3.org/2001/sw/wiki/RDF_Alerts> .
+

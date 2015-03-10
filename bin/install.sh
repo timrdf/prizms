@@ -1442,7 +1442,6 @@ else
                echo "Prizms publishes its dump files using Apache httpd." 
                if [[ `$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target | awk '{print $1}'` == 'true' ]]; then
                   if [[ ! `which httpd 2> /dev/null` && ! `which apache2 2> /dev/null` ]]; then
-                     # TODO: grep for 'apache2' also
                      if [[ `which apt-get 2> /dev/null` ]]; then
                         echo "It can be installed with:"
                         echo
@@ -2356,6 +2355,7 @@ else
 
             
 
+            # http://tomcat.apache.org/whichversion.html
             tomcat_installed="no"
             if [[ -e '/etc/tomcat6/tomcat-users.xml' && \
                   -e '/etc/init.d/tomcat6'           && \

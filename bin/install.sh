@@ -930,6 +930,7 @@ else
       exit 1
    fi
 
+   offer_install_aptget 'unzip' 'Unzip things'
 
    echo
    echo "$div `whoami`"
@@ -2357,12 +2358,21 @@ else
 
             # http://tomcat.apache.org/whichversion.html
             tomcat_installed="no"
-            if [[ -e '/etc/tomcat6/tomcat-users.xml' && \
-                  -e '/etc/init.d/tomcat6'           && \
-                  -d '/var/lib/tomcat6/webapps/' ]]; then
+            if [[ -e '/etc/tomcat7/tomcat-users.xml' && \
+                  -e '/etc/init.d/tomcat7'           && \
+                  -d '/var/lib/tomcat7/webapps/' ]]; then
+
+               tomcat_installed="yes"
+               webapps='/var/lib/tomcat7/webapps'
+
+            elif [[ -e '/etc/tomcat6/tomcat-users.xml' && \
+                    -e '/etc/init.d/tomcat6'           && \
+                    -d '/var/lib/tomcat6/webapps/' ]]; then
+
                tomcat_installed="yes"
                webapps='/var/lib/tomcat6/webapps'
             fi
+ 
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
                if [[ "$tomcat_installed" == "yes" ]]; then
                   # The following two are also done above if virtuoso is installed.
@@ -2403,6 +2413,7 @@ else
                         if [[ ! -d $PRIZMS_HOME/repos/IVPR-Weave-Binaries ]]; then
                            pushd $PRIZMS_HOME/repos/
                               date > IVPR-Weave-Binaries.zip.timestamp
+                              # TODO: unzip not found on some VMs. (sudo apt-cache search unzip)
                               unzip -DD IVPR-Weave-Binaries.zip
                               weave_dir=`find . -maxdepth 1 -newer IVPR-Weave-Binaries.zip.timestamp -name IVPR-Weave-Binaries-*`
                               if [[ -d "$weave_dir" ]]; then
@@ -2482,25 +2493,26 @@ else
                         #           sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/ROOT/*.$ext       $webapps/ROOT/
                         #   done 
 
-# Manually:
-# mysql -u root -p
-# 
-# mysql> CREATE DATABASE vivodb CHARACTER SET utf8;
-# Query OK, 1 row affected (0.04 sec)
-# 
-# mysql> GRANT ALL ON vivodb.* TO 'SOME-USER-NAME'@'localhost' IDENTIFIED BY 'SOME-PASSWORD';
-# Query OK, 0 rows affected (0.00 sec)
-# 
-# mv example.build.properties build.properties
-# edit ^^ 
-#      tomcat.home = /var/lib/tomcat6 ($webapps above)
-#      TODO: design the location for vitro.home = (e.g. /home/ec2-user/opt/prizms/repos/vivo-rel-1.6.1/data)
-#
-# make sure ant 1.8 and java (NOT OPENJDK) SE 1.7 ( set ANT_HOME and JAVA_HOME to suit)
-# export ANT_OPTS='-Xms55m -Xmx55m'
-# sudo -E ant all
-#
-# cd data; cp example.runtime.properties runtime.properties
+
+                        # Manually:
+                        # mysql -u root -p
+                        # 
+                        # mysql> CREATE DATABASE vivodb CHARACTER SET utf8;
+                        # Query OK, 1 row affected (0.04 sec)
+                        # 
+                        # mysql> GRANT ALL ON vivodb.* TO 'SOME-USER-NAME'@'localhost' IDENTIFIED BY 'SOME-PASSWORD';
+                        # Query OK, 0 rows affected (0.00 sec)
+                        # 
+                        # mv example.build.properties build.properties
+                        # edit ^^ 
+                        #      tomcat.home = /var/lib/tomcat6 ($webapps above)
+                        #      TODO: design the location for vitro.home = (e.g. /home/ec2-user/opt/prizms/repos/vivo-rel-1.6.1/data)
+                        #
+                        # make sure ant 1.8 and java (NOT OPENJDK) SE 1.7 ( set ANT_HOME and JAVA_HOME to suit)
+                        # export ANT_OPTS='-Xms55m -Xmx55m'
+                        # sudo -E ant all
+                        #
+                        # cd data; cp example.runtime.properties runtime.properties
 
  
                         fi
@@ -2586,7 +2598,10 @@ else
                   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
                   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
                   # NOTE: replaced the code above with the following on April 2014 during CentOS support:
-                  if [[ -e /var/lib/tomcat6/webapps/sadi-services.war ]]; then
+                  #if [[ -e /var/lib/tomcat6/webapps/sadi-services.war ]]; then
+                  #   add_proxy_pass '/etc/apache2/sites-available/default' '/sadi-services' '8080'
+                  #fi
+                  if [[ -e $webapps/sadi-services.war ]]; then
                      add_proxy_pass '/etc/apache2/sites-available/default' '/sadi-services' '8080'
                   fi
                fi

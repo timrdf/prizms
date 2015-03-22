@@ -40,36 +40,37 @@ pushd $PRIZMS_HOME/repos &> /dev/null
       directory=${directory%.*}
       echo $directory...
       if [ ! -e $directory ]; then
-         echo git clone $repos
-              git clone $repos
+         # http://stackoverflow.com/questions/1209999/using-git-to-get-just-the-latest-revision
+         echo git clone --depth=1 $repos
+              git clone --depth=1 $repos
       else
          pushd $directory &> /dev/null
             git pull
          popd &> /dev/null
       fi
    done
-   if [[ ! -e semanteco-annotator-webapp.zip ]]; then
-      #3> <http://purl.org/twc/id/software/prizms> 
-      #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/csv2rdf4lod-annotator>;
-      #3> .
-      #3> <http://purl.org/twc/id/software/csv2rdf4lod-annotator> 
-      #3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/csv2rdf4lod-annotator> .
-      # See https://github.com/timrdf/prizms/wiki/csv2rdf4lod-annotator
-      echo
-      echo "curl semanteco-annotator-webapp.zip"
-      url='https://orion.tw.rpi.edu/jenkins/job/semanteco-prizms-support/lastStableBuild/edu.rpi.tw.escience%24semanteco-annotator-webapp/artifact/*zip*/archive.zip'
-      #3> <http://purl.org/twc/id/software/prizms> 
-      #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/CURL>;
-      #3> .
-      curl --insecure --progress-bar $url > semanteco-annotator-webapp.zip
-   fi
-   if [[ -e semanteco-annotator-webapp.zip && 
-       ! -d semanteco-annotator-webapp ]]; then
-      #3> <http://purl.org/twc/id/software/prizms> 
-      #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/CURL>;
-      #3> .
-      unzip semanteco-annotator-webapp.zip -d semanteco-annotator-webapp
-   fi
+   #if [[ ! -e semanteco-annotator-webapp.zip ]]; then
+   #   #3> <http://purl.org/twc/id/software/prizms> 
+   #   #3>    prov:wasDerivedFrom <http://purl.org/twc/id/software/csv2rdf4lod-annotator>;
+   #   #3> .
+   #   #3> <http://purl.org/twc/id/software/csv2rdf4lod-annotator> 
+   #   #3>    rdfs:seeAlso <https://github.com/timrdf/prizms/wiki/csv2rdf4lod-annotator> .
+   #   # See https://github.com/timrdf/prizms/wiki/csv2rdf4lod-annotator
+   #   echo
+   #   echo "curl semanteco-annotator-webapp.zip"
+   #   url='https://orion.tw.rpi.edu/jenkins/job/semanteco-prizms-support/lastStableBuild/edu.rpi.tw.escience%24semanteco-annotator-webapp/artifact/*zip*/archive.zip'
+   #   #3> <http://purl.org/twc/id/software/prizms> 
+   #   #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/CURL>;
+   #   #3> .
+   #   curl --insecure --progress-bar $url > semanteco-annotator-webapp.zip
+   #fi
+   #if [[ -e semanteco-annotator-webapp.zip && 
+   #    ! -d semanteco-annotator-webapp ]]; then
+   #   #3> <http://purl.org/twc/id/software/prizms> 
+   #   #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/CURL>;
+   #   #3> .
+   #   unzip semanteco-annotator-webapp.zip -d semanteco-annotator-webapp
+   #fi
    echo
 popd &> /dev/null
 

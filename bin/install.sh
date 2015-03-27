@@ -51,8 +51,9 @@ if [[ ${0%install.sh} == $0 ]]; then # $0 is 'bash' etc when bootstrapping, it i
             echo
             mkdir -p `pwd`/opt
             cd opt
-            echo git clone https://github.com/timrdf/prizms.git
-            git clone https://github.com/timrdf/prizms.git
+            # http://stackoverflow.com/questions/1209999/using-git-to-get-just-the-latest-revision
+            echo git clone --depth=1 https://github.com/timrdf/prizms.git
+            git clone --depth=1 https://github.com/timrdf/prizms.git
             echo
             echo "Prizms bootstrap is installed. Run:"
             echo "  opt/prizms/bin/install.sh --help"
@@ -1442,7 +1443,11 @@ else
                echo "$div `whoami`"
                echo "Prizms publishes its dump files using Apache httpd." 
                if [[ `$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target | awk '{print $1}'` == 'true' ]]; then
-                  if [[ ! `which httpd 2> /dev/null` && ! `which apache2 2> /dev/null` ]]; then
+                  sudo_for_httpd_search=""
+                  if [[ "$i_can_sudo" -eq 0 ]]; then
+                     sudo_for_httpd_search="sudo"
+                  fi
+                  if [[ ! `$sudo_for_httpd_search which httpd 2> /dev/null` && ! `$sudo_for_httpd_search which apache2 2> /dev/null` ]]; then
                      if [[ `which apt-get 2> /dev/null` ]]; then
                         echo "It can be installed with:"
                         echo

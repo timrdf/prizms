@@ -11,9 +11,9 @@ if [[ $# -lt 1 || "$1" == "--help" || "$1" == "-h" ]]; then
    exit 1
 fi
 
-dryrun=''
+dryrun='yes'
 if [[ "$1" == '--dryrun' ]]; then
-   dryrun='yes'
+   dryrun=''
    shift
 fi
 

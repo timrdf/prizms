@@ -42,12 +42,10 @@ if [[ -z $exists ]]; then
    sudo mkdir -p $project_user_home
    echo sudo /usr/sbin/useradd --home $project_user_home/$user -m $user --shell /bin/bash
    if [[ -n "$dryrun" ]]; then
-      echo 'doing it'
         sudo /usr/sbin/useradd --home $project_user_home/$user -m $user --shell /bin/bash
    fi
    echo sudo /usr/sbin/usermod -g$user $user
    if [[ -n "$dryrun" ]]; then
-      echo 'doing it'
         sudo /usr/sbin/usermod -g$user $user
    fi
    admin="wheel" # Could be 'admin'

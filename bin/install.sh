@@ -927,8 +927,6 @@ else
          `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` = 'no' ]]; then # Running as developer e.g. jsmith not loxd
       echo
       echo "$div `whoami`"
-      #echo "${user_home%/*}/$project_user_name ($project_user_home_flag)"
-      echo "$PRIZMS_HOME/bin/install/project-user.sh $project_user_home_flag $project_user_name"
       $PRIZMS_HOME/bin/install/project-user.sh --dryrun $project_user_home_flag $project_user_name
       read -p "Q: Create user $project_user_name? [y/n] " -u 1 install_project_user
       if [[ "$install_project_user" == [yY] ]]; then

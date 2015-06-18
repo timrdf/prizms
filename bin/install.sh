@@ -508,18 +508,22 @@ else
             sudo cat $target | awk '{if($1=="<Directory"){scope=$2} if($1=="AllowOverride" && scope=="/var/www/>"){print $1,"All"}else{print}}' > .prizms-apache-config
             cat .prizms-apache-config
             echo
-            echo "- - The difference is - -"
-            sudo diff $target .prizms-apache-config
-            echo
-            read -p "Q: May we update $target to enable AllowOverride All for /var/www? [y/n] " -u 1 install_it
-            if [[ "$install_it" == [yY] ]]; then
-               echo sudo cp $target ${target}_`date +%Y-%m-%d-%H-%M-%S`
-                    sudo cp $target ${target}_`date +%Y-%m-%d-%H-%M-%S`
-               echo sudo mv .prizms-apache-config $target
-                    sudo mv .prizms-apache-config $target
-               restart_apache
+            if [[ `sudo diff -w $target .prizms-apache-config` ]]; then
+               echo "- - The difference is - -"
+               sudo diff $target .prizms-apache-config
+               echo
+               read -p "Q: May we update $target to enable AllowOverride All for /var/www? [y/n] " -u 1 install_it
+               if [[ "$install_it" == [yY] ]]; then
+                  echo sudo cp $target ${target}_`date +%Y-%m-%d-%H-%M-%S`
+                       sudo cp $target ${target}_`date +%Y-%m-%d-%H-%M-%S`
+                  echo sudo mv .prizms-apache-config $target
+                       sudo mv .prizms-apache-config $target
+                  restart_apache
+               else
+                  echo "Okay, we won't update $target."
+               fi
             else
-               echo "Okay, we won't update $target."
+               echo "($target seems to permit .htaccess files for /var/www, modulo whitespace delta)"
             fi
          else
             echo "($target seems to permit .htaccess files for /var/www)"

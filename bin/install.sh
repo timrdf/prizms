@@ -4000,18 +4000,19 @@ else
 # TODO: export PYTHONPATH=/home/lebot/opt/python/lib/site-packages/
 
 
-            if [[ ! -e /home/`whoami`/opt/python/lib/site-packages/ ]]; then
-               mkdir -p /home/`whoami`/opt/python/lib/site-packages/
+            #if [[ ! -e /home/`whoami`/opt/python/lib/site-packages/ ]]; then
+            if [[ ! -e $project_user_home/opt/python/lib/site-packages/ ]]; then
+               mkdir -p $project_user_home/opt/python/lib/site-packages/
             fi
             if [[ -z "$PYTHONPATH" ]]; then
                echo export PYTHONPATH=$PYTHONPATH
-               export PYTHONPATH=/home/`whoami`/opt/python/lib/site-packages/ # TODO: this should go into source-me-as-<user>.sh
+               export PYTHONPATH=$project_user_home/opt/python/lib/site-packages/ # TODO: this should go into source-me-as-<user>.sh
             fi
 
             echo "$div `whoami`" 
             echo "Python headache"
-            echo /home/`whoami`/opt/python/lib/site-packages/
-            ls -lt /home/`whoami`/opt/python/lib/site-packages/
+            echo $project_user_home/opt/python/lib/site-packages/
+            ls -lt $project_user_home/opt/python/lib/site-packages/
             echo PYTHONPATH: $PYTHONPATH
  
             if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd

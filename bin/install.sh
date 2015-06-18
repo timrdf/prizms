@@ -4241,7 +4241,7 @@ else
                echo
                echo "$div `whoami` after $project_user_name"
                www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
-               echo "HOW IN THE WORLD Prizms deploys DataFAQs services by linking to them from within the htdocs directory, which is currently $www"
+               echo "Prizms deploys DataFAQs services by linking to them from within the htdocs directory, which is currently $www"
                if [[ -d "$www" ]]; then
                   #pwd                       # /home/lebot/prizms/melagrid
                   #echo $PROJECT_PRIZMS_HOME # /home/melagrid/opt/prizms

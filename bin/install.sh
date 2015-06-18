@@ -4037,46 +4037,49 @@ else
                echo "Prizms implements the W3C PROV-AQ 'pingback' functionality."
                echo "See https://github.com/timrdf/prizms/wiki/prov-pingback"
                echo 
-               # Ubuntu 10 offer_install_aptget "pip" 'enable prov-pingback'
-               #offer_install_aptget "python-pip" 'enable prov-pingback' # Ubuntu 14
-               source $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/offer_install.sh
-               [[ $i_can_sudo -eq 0 ]] && sudo='sudo ' || sudo=''
-               offer_install_with_yum_or_apt_ifnowhich '.' 'python-pip'
-               if [[ `which pip 2> /dev/null` ]]; then
-                  # TODO: try wrapping this into virtualenv:
-                  # http://www.pythonforbeginners.com/basics/python-virtualenv-usage/
-                  # http://flask.pocoo.org/docs/installation/#virtualenv
+               read -p "Q: Install PROV Pingback dependencies with the command above? [y/n] " -u 1 install_it
+               if [[ $install_it == [yY] ]]; then
+                  # Ubuntu 10 offer_install_aptget "pip" 'enable prov-pingback'
+                  #offer_install_aptget "python-pip" 'enable prov-pingback' # Ubuntu 14
+                  source $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/offer_install.sh
+                  [[ $i_can_sudo -eq 0 ]] && sudo='sudo ' || sudo=''
+                  offer_install_with_yum_or_apt_ifnowhich '.' 'python-pip'
+                  if [[ `which pip 2> /dev/null` ]]; then
+                     # TODO: try wrapping this into virtualenv:
+                     # http://www.pythonforbeginners.com/basics/python-virtualenv-usage/
+                     # http://flask.pocoo.org/docs/installation/#virtualenv
 
-                  #if [[ $i_can_sudo -eq 0 ]]; then # I can sudo.
-                  #   echo sudo pip install -U distribute # https://github.com/pypa/pip/issues/1093#issuecomment-21704041
-                  #        sudo pip install -U distribute # https://github.com/pypa/pip/issues/1093#issuecomment-21704041
-                  #else
-                  #   echo "WARNING: cannot set up prov-pingback b/c do not have sudo."
-                  #fi
-   
-                  if [[ $i_can_sudo -eq 0 ]]; then # I can sudo.
-                     #3> <http://purl.org/twc/id/software/lodspeakr> 
-                     #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Flask_(web_framework)>;
-                     #>    prov:wasDerivedFrom <todo>;
-                     #>    prov:wasDerivedFrom <todo>;
-                     #>    prov:wasDerivedFrom <todo>;
-                     #3>    prov:wasDerivedFrom <http://rdflib.github.io/sparqlwrapper/>;
-                     #3> .
-                     sudo -E easy_install virtualenv
-                     #easy_install virtualenv
-                     sudo -E easy_install Flask
-                     #easy_install Flask
-                     sudo -E easy_install argparse pytz
-                     #easy_install argparse pytz
-                     sudo -E easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
-                     #easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
+                     #if [[ $i_can_sudo -eq 0 ]]; then # I can sudo.
+                     #   echo sudo pip install -U distribute # https://github.com/pypa/pip/issues/1093#issuecomment-21704041
+                     #        sudo pip install -U distribute # https://github.com/pypa/pip/issues/1093#issuecomment-21704041
+                     #else
+                     #   echo "WARNING: cannot set up prov-pingback b/c do not have sudo."
+                     #fi
+      
+                     if [[ $i_can_sudo -eq 0 ]]; then # I can sudo.
+                        #3> <http://purl.org/twc/id/software/lodspeakr> 
+                        #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Flask_(web_framework)>;
+                        #>    prov:wasDerivedFrom <todo>;
+                        #>    prov:wasDerivedFrom <todo>;
+                        #>    prov:wasDerivedFrom <todo>;
+                        #3>    prov:wasDerivedFrom <http://rdflib.github.io/sparqlwrapper/>;
+                        #3> .
+                        sudo -E easy_install virtualenv
+                        #easy_install virtualenv
+                        sudo -E easy_install Flask
+                        #easy_install Flask
+                        sudo -E easy_install argparse pytz
+                        #easy_install argparse pytz
+                        sudo -E easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
+                        #easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
+                     fi
+                     
+                     # Worked, but need "do only once logic": sudo easy_install Flask
+                  else
+                     echo "WARNING: cannot set up prov-pingback b/c pip is not installed."
                   fi
-                  
-                  # Worked, but need "do only once logic": sudo easy_install Flask
-               else
-                  echo "WARNING: cannot set up prov-pingback b/c pip is not installed."
+                  add_proxy_pass '/etc/apache2/sites-available/default' '/prov-pingback' '9412'
                fi
-               add_proxy_pass '/etc/apache2/sites-available/default' '/prov-pingback' '9412'
             fi # end "I am not project user"
 
             echo "$div `whoami`"

@@ -4036,6 +4036,7 @@ else
                echo "$div `whoami`"
                echo "Prizms implements the W3C PROV-AQ 'pingback' functionality."
                echo "See https://github.com/timrdf/prizms/wiki/prov-pingback"
+               echo 
                # Ubuntu 10 offer_install_aptget "pip" 'enable prov-pingback'
                #offer_install_aptget "python-pip" 'enable prov-pingback' # Ubuntu 14
                source $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/offer_install.sh
@@ -4061,14 +4062,14 @@ else
                      #>    prov:wasDerivedFrom <todo>;
                      #3>    prov:wasDerivedFrom <http://rdflib.github.io/sparqlwrapper/>;
                      #3> .
-                     #sudo -E easy_install virtualenv
-                     easy_install virtualenv
-                     #sudo -E easy_install Flask
-                     easy_install Flask
-                     #sudo -E easy_install argparse pytz
-                     easy_install argparse pytz
-                     #sudo -E easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
-                     easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
+                     sudo -E easy_install virtualenv
+                     #easy_install virtualenv
+                     sudo -E easy_install Flask
+                     #easy_install Flask
+                     sudo -E easy_install argparse pytz
+                     #easy_install argparse pytz
+                     sudo -E easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
+                     #easy_install SPARQLWrapper # http://rdflib.github.io/sparqlwrapper/
                   fi
                   
                   # Worked, but need "do only once logic": sudo easy_install Flask

@@ -1152,6 +1152,7 @@ else
                echo "    --me             $person_uri                     \\"     >> .refresh-prizms-installation
                #echo "    --my-email       $person_email                  \\"     >> .refresh-prizms-installation
                echo "    --proj-user      $project_user_name              \\"     >> .refresh-prizms-installation
+               echo "    $project_user_home_flag                          \\"     >> .refresh-prizms-installation
                echo "    --repos          $project_code_repository        \\"     >> .refresh-prizms-installation
                echo "    --repos-branch   $project_code_repository_branch \\"     >> .refresh-prizms-installation
                echo "    --upstream-ckan  $upstream_ckan                  \\"     >> .refresh-prizms-installation

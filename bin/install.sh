@@ -289,7 +289,7 @@ else
    i_can_sudo=$?
    if [[ $i_can_sudo -eq 0 ]]; then
       # For offer_install_with_yum_or_apt_ifnowhich (defined in the import offer_install.sh)
-      sudo="sudo "
+      export sudo="sudo "
    fi
 
    div="-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"

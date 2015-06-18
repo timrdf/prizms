@@ -163,8 +163,8 @@ else
    if [[ "$1" == "--proj-home" ]]; then
       if [[ "$2" != --* ]]; then
          project_user_home="$2/$project_user_name"
-         project_user_home_flag="--proj-home $2" # To pass to ourselves recursively.
-         home_flag="--home $2"                   # To pass to csv2rdf4lod-install-dependencies.sh
+         project_user_home_flag="--proj-home      $2" # To pass to ourselves recursively.
+         home_flag="--home $2"                        # To pass to csv2rdf4lod-install-dependencies.sh
          echo "setting project_user_home using new provided home: $project_user_home"
          shift
       fi
@@ -3484,14 +3484,15 @@ else
                      handled="yes"
                   fi
                   if [[ ! -e $www/lodspeakr/components && -d lodspeakr/components ]]; then
+                     # TODO: this needs to be done AFTER setting up production user.
                      echo
-                     echo "We need to link $www/lodspeakr/components to the version-controlled directory `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components"
+                     echo "We need to link $www/lodspeakr/components to the version-controlled directory $project_user_home/prizms/$repodir/lodspeakr/components"
                      echo
-                     echo "   sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components"
+                     echo "   sudo ln -s $project_user_home/prizms/$repodir/lodspeakr/components  $www/lodspeakr/components"
                      echo
                      read -p "Q: May we use $project_user_home/lodspeakr/components instead of $www/lodspeakr/components using the commands above? [y/n] " -u 1 move_it
                      if [[ "$move_it" == [yY] ]]; then
-                        sudo ln -s `pwd | sed "s/\`whoami\`/$project_user_name/"`/lodspeakr/components $www/lodspeakr/components
+                        sudo ln -s $project_user_home/prizms/$repodir/lodspeakr/components  $www/lodspeakr/components
                      else
                         echo "Okay, we won't include lodspeakr/components into version control."
                      fi 
@@ -4207,17 +4208,6 @@ else
                              sudo su - $project_user_name -c "cd opt/prizms; git pull"
                      fi
 
-                     echo calling sudo su - $project_user_name -c "cd; opt/prizms/bin/install.sh                                \
-                                                               --me                                                \
-                                                               --my-email                                          \
-                                                               --proj-user      $project_user_name                 \
-                                                               $project_user_home_flag                             \
-                                                               --repos          $read_only_project_code_repository \
-                                                               --repos-branch   $project_code_repository_branch    \
-                                                               --upstream-ckan  $upstream_ckan                     \
-                                                               --our-base-uri   $our_base_uri                      \
-                                                               --our-source-id  $our_source_id                     \
-                                                               --our-datahub-id $our_datahub_id"
                      sudo su - $project_user_name -c "cd; opt/prizms/bin/install.sh                                \
                                                                --me                                                \
                                                                --my-email                                          \
@@ -4274,7 +4264,7 @@ else
                else # Running as developer e.g. jsmith not loxd
                   echo "We're all done installing Prizms development environment for the user `whoami`."
                   echo
-                  echo "$div `whoami`"
+                  echo "$div `whoami` after $project_user_name"
                   echo "Now what?"
                   echo "* Check out the data site $our_base_uri/"
                   echo "* Check out the SPARQL endpoint $our_base_uri/sparql"

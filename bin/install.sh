@@ -287,11 +287,6 @@ else
    echo "Do you have sudo? (sudo -v)"
    i_can_sudo=`sudo -v &> /dev/null`
    i_can_sudo=$?
-   if [[ $i_can_sudo -eq 0 ]]; then
-      # For offer_install_with_yum_or_apt_ifnowhich (defined in the import offer_install.sh)
-      export sudo="sudo "
-      echo "setting sudo: $sudo" >&2
-   fi
 
    div="-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
    function change_source_me {
@@ -3057,6 +3052,11 @@ else
                if [[ "$do_it" == [yY] ]]; then
                   # \/ uses function defined by install-csv2rdf4lod-dependencies.sh
                   source $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/offer_install.sh
+                  if [[ $i_can_sudo -eq 0 ]]; then
+                     # For offer_install_with_yum_or_apt_ifnowhich (defined in the import offer_install.sh)
+                     export sudo="sudo "
+                     echo "setting sudo: $sudo" >&2
+                  fi
                   echo "sudo for offer_install_with_yum_or_apt_ifnowhich 'g++' 'g++': $sudo"
                   offer_install_with_yum_or_apt_ifnowhich 'g++' 'g++'
                   mkdir -p ~/opt && pushd ~/opt

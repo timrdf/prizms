@@ -42,10 +42,12 @@ if [[ -z $exists ]]; then
    admin="wheel" # Could be 'admin'
    echo sudo /usr/sbin/useradd --home $HOME/$user -m $user --shell /bin/bash
    if [[ -n "$dryrun" ]]; then
+      echo 'doing it'
         sudo /usr/sbin/useradd --home $HOME/$user -m $user --shell /bin/bash
    fi
    echo sudo /usr/sbin/usermod -g$user $user
    if [[ -n "$dryrun" ]]; then
+      echo 'doing it'
         sudo /usr/sbin/usermod -g$user $user
    fi
    #echo sudo /usr/sbin/usermod -g$user -G$admin $user # TODO: the user needs admin/wheel

@@ -343,6 +343,19 @@ else
       fi
    }
 
+   function offer_install {
+      # Move to this wrapper over offer_install_aptget and offer_install_yum
+      packages="$1"
+      reason="$2"
+      if [[ `which apt-get 2> /dev/null` ]]; then
+         offer_install_aptget "$packages" "$reason"
+      elif [[ `which yum 2> /dev/null` ]]; then
+         offer_install_yum "$packages" "$reason"
+      else
+         echo "WARNING: $packages; how to install without apt-get or yum?"
+      fi
+   }
+
    function offer_install_aptget {
       installed=0
       packages="$1"

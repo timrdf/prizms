@@ -4040,7 +4040,7 @@ else
                #offer_install_aptget "python-pip" 'enable prov-pingback' # Ubuntu 14
                source $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/offer_install.sh
                [[ $i_can_sudo -eq 0 ]] && sudo='sudo ' || sudo=''
-               offer_install_with_yum_or_apt_ifnowhich 'python-pip' 'enable prov-pingback'
+               offer_install_with_yum_or_apt_ifnowhich '.' 'python-pip'
                if [[ `which pip 2> /dev/null` ]]; then
                   # TODO: try wrapping this into virtualenv:
                   # http://www.pythonforbeginners.com/basics/python-virtualenv-usage/

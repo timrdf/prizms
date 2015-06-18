@@ -3062,7 +3062,6 @@ else
                      # For offer_install_with_yum_or_apt_ifnowhich (defined in the import offer_install.sh)
                      sudo="sudo "
                   fi
-                  echo "sudo for offer_install_with_yum_or_apt_ifnowhich 'g++' 'g++': $sudo"
                   offer_install_with_yum_or_apt_ifnowhich 'g++' 'g++'
                   mkdir -p ~/opt && pushd ~/opt
                      # http://nodejs.org/download/
@@ -4038,7 +4037,10 @@ else
                echo "Prizms implements the W3C PROV-AQ 'pingback' functionality."
                echo "See https://github.com/timrdf/prizms/wiki/prov-pingback"
                # Ubuntu 10 offer_install_aptget "pip" 'enable prov-pingback'
-               offer_install_aptget "python-pip" 'enable prov-pingback' # Ubuntu 14
+               #offer_install_aptget "python-pip" 'enable prov-pingback' # Ubuntu 14
+               source $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/offer_install.sh
+               [[ $i_can_sudo -eq 0 ]] && sudo='sudo ' || sudo=''
+               offer_install_with_yum_or_apt_ifnowhich 'python-pip' 'enable prov-pingback'
                if [[ `which pip 2> /dev/null` ]]; then
                   # TODO: try wrapping this into virtualenv:
                   # http://www.pythonforbeginners.com/basics/python-virtualenv-usage/

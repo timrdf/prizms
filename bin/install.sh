@@ -1146,7 +1146,7 @@ else
             if [[ -z "$i_am_project_user" ]]; then
                echo "#!/bin/bash"                                                  > .refresh-prizms-installation
                echo "if [[ \"\$1\" == "pull" ]]; then"                            >> .refresh-prizms-installation
-               echo "   pushd /home/$person_user_name/opt/prizms; git pull; popd" >> .refresh-prizms-installation
+               echo "   pushd $project_user_home/opt/prizms; git pull; popd"      >> .refresh-prizms-installation
                echo "fi"                                                          >> .refresh-prizms-installation
                echo "$this \\"                                                    >> .refresh-prizms-installation
                echo "    --me             $person_uri                     \\"     >> .refresh-prizms-installation
@@ -3324,13 +3324,13 @@ else
                echo
                echo "$div `whoami`"
                echo "LODSPeaKr permits a logo for the web site."
-               echo "The logo should be placed at /home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png"
+               echo "The logo should be placed at $project_user_home/prizms/$project_user_name/lodspeakr/components/static/img/logo.png"
                echo
                if [[ -e $www/lodspeakr ]]; then
-                  if [[ ! -e /home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png ]]; then
+                  if [[ ! -e $project_user_home/prizms/$project_user_name/lodspeakr/components/static/img/logo.png ]]; then
                      read -p "Q: Did you know that you can add a logo to your site? [y/n] " -u 1 logo
                   else
-                     echo "(/home/$person_user_name/prizms/$project_user_name/lodspeakr/components/static/img/logo.png already exists)"
+                     echo "($project_user_home/prizms/$project_user_name/lodspeakr/components/static/img/logo.png already exists)"
                   fi
                else
                   echo "(LODSPeaKr is not installed yet, so its logo is not important.)"

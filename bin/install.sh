@@ -3050,6 +3050,8 @@ else
                # We're doing it from source so that we don't depend on apt-get on an old OS.
                read -p "Q: May we install node.js at ~/opt? [y/n] " -u 1 do_it
                if [[ "$do_it" == [yY] ]]; then
+                  # \/ uses function defined by install-csv2rdf4lod-dependencies.sh
+                  offer_install_with_yum_or_apt_ifnowhich 'g++' 'g++'
                   mkdir -p ~/opt && pushd ~/opt
                      # http://nodejs.org/download/
                      gz='http://nodejs.org/dist/v0.10.28/node-v0.10.28.tar.gz'
@@ -3104,6 +3106,8 @@ else
             echo "$div `whoami`"
             echo "Prizms' pvcs uses git2prov."
             if [[ ! `which git2prov` ]]; then
+               # \/ uses function defined by install-csv2rdf4lod-dependencies.sh
+               offer_install_with_yum_or_apt_ifnowhich 'npm' 'npm'
                if [[ `which npm` ]]; then
                   # $ npm list
                   # /home/lebot/prizms/provenanceweb

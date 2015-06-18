@@ -919,6 +919,7 @@ else
 
    project_home=${user_home%/*}/$project_user_name
    PROJECT_PRIZMS_HOME=`echo $PRIZMS_HOME | sed "s/\`whoami\`/$project_user_name/g"`
+   PROJECT_PRIZMS_HOME="$project_user_home/opt/prizms"
 
    echo
    echo "$div `whoami`"

@@ -287,6 +287,10 @@ else
    echo "Do you have sudo? (sudo -v)"
    i_can_sudo=`sudo -v &> /dev/null`
    i_can_sudo=$?
+   if [[ $i_can_sudo -eq 0 ]]; then
+      # For offer_install_with_yum_or_apt_ifnowhich (defined in the import offer_install.sh)
+      sudo="sudo "
+   fi
 
    div="-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
    function change_source_me {

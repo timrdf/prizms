@@ -4192,7 +4192,8 @@ else
                      echo Bootstrapping Prizms for project user at: ${user_home%/*}/$project_user_name/opt/prizms
                      echo "(From $read_only_project_code_repository)"
                      echo
-                     if [[ ! -e ${user_home%/*}/$project_user_name/opt/prizms ]]; then
+                     #if [[ ! -e ${user_home%/*}/$project_user_name/opt/prizms ]]; then
+                     if [[ ! -e $project_user_home/opt/prizms ]]; then
                         # If http_proxy is set, add 'git config --global http.proxy $http_proxy'
                         git_global_proxy_cmd=""
                         if [[ -n "$http_proxy" ]]; then

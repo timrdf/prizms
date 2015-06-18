@@ -73,7 +73,8 @@ else
 
    if [[ "$1" == "--help" || "$1" == "-h" ]]; then
       echo
-      echo "usage: `basename $0` [--me <your-URI>] [--my-email <your-email>] [--proj-user <user>] [--repos <code-repo>] "
+      echo "usage: `basename $0` [--me <your-URI>] [--my-email <your-email>] "
+      echo "                  [--proj-user <user>] [--proj-home <dir>] [--repos <code-repo>] "
       echo "                  [--upstream-ckan <ckan>] [--our-base-uri <uri>] [--our-source-id <source-id>]"
       echo "                  [--our-datahub-id <datahub-id>]"
       echo
@@ -87,6 +88,8 @@ else
       echo "                  : This email will be set as git's user.email setting (with your confirmation)"
       echo
       echo " --proj-user      | the project's                       user name                        (e.g. melagrid)"
+      echo
+      echo " --proj-home      | the project's                       user directory home              (e.g. /data/home)"
       echo
       echo " --repos          | the project's code repository                                        (e.g. git@github.com:timrdf/ieeevis.git)"
       echo
@@ -146,6 +149,16 @@ else
    if [[ "$1" == "--proj-user" ]]; then
       if [[ "$2" != --* ]]; then
          project_user_name="$2"
+         shift
+      fi
+      shift
+   fi
+
+   # https://github.com/timrdf/prizms/issues/105
+   project_user_home_flag=""
+   if [[ "$1" == "--proj-home" ]]; then
+      if [[ "$2" != --* ]]; then
+         project_user_home_flag="--home $2"
          shift
       fi
       shift
@@ -915,7 +928,7 @@ else
       echo ${user_home%/*}/$project_user_name
       read -p "Q: Create user $project_user_name? [y/n] " -u 1 install_project_user
       if [[ "$install_project_user" == [yY] ]]; then
-         $PRIZMS_HOME/bin/install/project-user.sh $project_user_name
+         $PRIZMS_HOME/bin/install/project-user.sh $project_user_home_flag $project_user_name
          # TODO:
          # give yourself permission to write cache/ and settings.inc
          # give apache permission to write cache/ and meta/ (and optionally settings.inc.php)

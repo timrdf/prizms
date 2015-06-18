@@ -2838,31 +2838,6 @@ else
                enable_apache_module 'python' 'run DataFAQs SADI services'
             fi
 
-            echo
-            echo "$div `whoami`"
-            www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
-            echo "Prizms deploys DataFAQs services by linking to them from within the htdocs directory, which is currently $www"
-            if [[ -d "$www" ]]; then
-               #pwd                       # /home/lebot/prizms/melagrid
-               #echo $PROJECT_PRIZMS_HOME # /home/melagrid/opt/prizms
-                                          # /home/melagrid/opt/prizms/repos/DataFAQs/services
-               if [[ ! -e $www/services ]]; then
-                  if [[ -e $PROJECT_PRIZMS_HOME/repos/DataFAQs/services ]]; then
-                     echo
-                     echo "   sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services"
-                     echo
-                     read -p "Q: May we link the DataFAQs services from your htdocs directory using the command above? [y/n] " -u 1 link_it
-                     if [[ "$link_it" == [yY] ]]; then
-                        echo sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services
-                             sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services
-                     else
-                        echo "Okay, we won't link the DataFAQs services into your htdocs directory."
-                     fi
-                  else
-                     echo "WARNING: $PROJECT_PRIZMS_HOME/repos/DataFAQs/services does not exist yet, does production user need to be set up?"
-                  fi
-               fi
-            fi
 
             #3> <http://purl.org/twc/id/software/prizms> 
             #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/CKAN>;
@@ -4246,8 +4221,44 @@ else
                fi
             fi
 
+
+
+
+
+
+
+
+
+
             # Do any setup that the developer needs to do after the production user was setup.
 
+            echo
+            echo "$div `whoami`"
+            www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
+            echo "Prizms deploys DataFAQs services by linking to them from within the htdocs directory, which is currently $www"
+            if [[ -d "$www" ]]; then
+               #pwd                       # /home/lebot/prizms/melagrid
+               #echo $PROJECT_PRIZMS_HOME # /home/melagrid/opt/prizms
+                                          # /home/melagrid/opt/prizms/repos/DataFAQs/services
+               if [[ ! -e $www/services ]]; then
+                  if [[ -e $PROJECT_PRIZMS_HOME/repos/DataFAQs/services ]]; then
+                     if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+                        echo
+                        echo "   sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services"
+                        echo
+                        read -p "Q: May we link the DataFAQs services from your htdocs directory using the command above? [y/n] " -u 1 link_it
+                        if [[ "$link_it" == [yY] ]]; then
+                           echo sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services
+                                sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services
+                        else
+                           echo "Okay, we won't link the DataFAQs services into your htdocs directory."
+                        fi
+                     fi
+                  else
+                     echo "WARNING: $PROJECT_PRIZMS_HOME/repos/DataFAQs/services does not exist yet, does production user need to be set up?"
+                  fi
+               fi
+            fi
 
 
             echo

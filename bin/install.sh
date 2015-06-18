@@ -922,10 +922,13 @@ else
 
    #if [[ -z "$i_am_project_user" && `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` == "no" ]]; then
    #if [[ -z "$i_am_project_user" && ! -e ${user_home%/*}/$project_user_name ]]; then
-   if [[ -z "$i_am_project_user" && ! `grep "^${project_user_name}:" /etc/passwd` ]]; then # Running as developer e.g. jsmith not loxd
+   #if [[ -z "$i_am_project_user" && ! `grep "^${project_user_name}:" /etc/passwd` ]]; then # Running as developer e.g. jsmith not loxd
+   if [[ -z "$i_am_project_user" && \
+         `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` = 'no' ]]; then # Running as developer e.g. jsmith not loxd
       echo
       echo "$div `whoami`"
-      echo ${user_home%/*}/$project_user_name
+      #echo "${user_home%/*}/$project_user_name ($project_user_home_flag)"
+      $PRIZMS_HOME/bin/install/project-user.sh --dryrun $project_user_home_flag $project_user_name
       read -p "Q: Create user $project_user_name? [y/n] " -u 1 install_project_user
       if [[ "$install_project_user" == [yY] ]]; then
          $PRIZMS_HOME/bin/install/project-user.sh $project_user_home_flag $project_user_name

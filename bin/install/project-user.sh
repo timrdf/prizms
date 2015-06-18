@@ -7,8 +7,14 @@
 HOME=$(cd && echo ${PWD%/*}) # e.g. /Users or /home
 
 if [[ $# -lt 1 || "$1" == "--help" || "$1" == "-h" ]]; then
-   echo "usage: `basename $0` [--home <dir>] <project-user-name> [[--exists]"
+   echo "usage: `basename $0` [--dryrun] [--home <dir>] <project-user-name> [[--exists]"
    exit 1
+fi
+
+dryrun=''
+if [[ "$1" == '--dryrun' ]]; then
+   dryrun='yes'
+   shift
 fi
 
 # https://github.com/timrdf/prizms/issues/105
@@ -35,9 +41,13 @@ fi
 if [[ -z $exists ]]; then
    admin="wheel" # Could be 'admin'
    echo sudo /usr/sbin/useradd --home $HOME/$user -m $user --shell /bin/bash
+   if [[ -n "$dryrun" ]]; then
         sudo /usr/sbin/useradd --home $HOME/$user -m $user --shell /bin/bash
+   fi
    echo sudo /usr/sbin/usermod -g$user $user
+   if [[ -n "$dryrun" ]]; then
         sudo /usr/sbin/usermod -g$user $user
+   fi
    #echo sudo /usr/sbin/usermod -g$user -G$admin $user # TODO: the user needs admin/wheel
    #     sudo /usr/sbin/usermod -g$user -G$admin $user
 else

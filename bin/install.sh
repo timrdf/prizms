@@ -4225,65 +4225,56 @@ else
                else
                   echo "NOTE: The user `whoami` cannot set up the production user $project_user_name because it does not have sudo."
                fi
-            fi
 
+               # Do any setup that the developer needs to do after the production user was setup.
 
-
-
-
-
-
-
-
-
-            # Do any setup that the developer needs to do after the production user was setup.
-
-            echo
-            echo "$div `whoami`"
-            www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
-            echo "Prizms deploys DataFAQs services by linking to them from within the htdocs directory, which is currently $www"
-            if [[ -d "$www" ]]; then
-               #pwd                       # /home/lebot/prizms/melagrid
-               #echo $PROJECT_PRIZMS_HOME # /home/melagrid/opt/prizms
-                                          # /home/melagrid/opt/prizms/repos/DataFAQs/services
-               if [[ ! -e $www/services ]]; then
-                  if [[ -e $PROJECT_PRIZMS_HOME/repos/DataFAQs/services ]]; then
-                     if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
-                        echo
-                        echo "   sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services"
-                        echo
-                        read -p "Q: May we link the DataFAQs services from your htdocs directory using the command above? [y/n] " -u 1 link_it
-                        if [[ "$link_it" == [yY] ]]; then
-                           echo sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services
-                                sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services
-                        else
-                           echo "Okay, we won't link the DataFAQs services into your htdocs directory."
-                        fi
-                     fi
-                  else
-                     echo "WARNING: $PROJECT_PRIZMS_HOME/repos/DataFAQs/services does not exist yet, does production user need to be set up?"
-                  fi
-               fi
-            fi
-
-
-            echo
-            echo "$div `whoami`"
-            if [[ -n $i_am_project_user ]]; then
-               echo "We're all done installing Prizms production environment for the user `whoami`."
-            else # Running as developer e.g. jsmith not loxd
-               echo "We're all done installing Prizms development environment for the user `whoami`."
                echo
                echo "$div `whoami`"
-               echo "Now what?"
-               echo "* Check out the data site $our_base_uri/"
-               echo "* Check out the SPARQL endpoint $our_base_uri/sparql"
-               echo "* Start committing DCAT and eparams into github repository $project_code_repository"
-            fi
+               www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
+               echo "Prizms deploys DataFAQs services by linking to them from within the htdocs directory, which is currently $www"
+               if [[ -d "$www" ]]; then
+                  #pwd                       # /home/lebot/prizms/melagrid
+                  #echo $PROJECT_PRIZMS_HOME # /home/melagrid/opt/prizms
+                                             # /home/melagrid/opt/prizms/repos/DataFAQs/services
+                  if [[ ! -e $www/services ]]; then
+                     if [[ -e $PROJECT_PRIZMS_HOME/repos/DataFAQs/services ]]; then
+                        if [[ -z "$i_am_project_user" ]]; then  # Running as developer e.g. jsmith not loxd
+                           echo
+                           echo "   sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services"
+                           echo
+                           read -p "Q: May we link the DataFAQs services from your htdocs directory using the command above? [y/n] " -u 1 link_it
+                           if [[ "$link_it" == [yY] ]]; then
+                              echo sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services
+                                   sudo ln -s $PROJECT_PRIZMS_HOME/repos/DataFAQs/services $www/services
+                           else
+                              echo "Okay, we won't link the DataFAQs services into your htdocs directory."
+                           fi
+                        fi
+                     else
+                        echo "WARNING: $PROJECT_PRIZMS_HOME/repos/DataFAQs/services does not exist yet, does production user need to be set up?"
+                     fi
+                  fi
+               fi
 
-            # TODO: Add descriptions of the github and ckan I to what the prizms offers as linked data. 
-            # Use that same kind of file as the parameter to the install. 
-            # Organize it into a versioned dataset (just like everything else).
+
+               echo
+               echo "$div `whoami`"
+               if [[ -n $i_am_project_user ]]; then
+                  echo "We're all done installing Prizms production environment for the user `whoami`."
+               else # Running as developer e.g. jsmith not loxd
+                  echo "We're all done installing Prizms development environment for the user `whoami`."
+                  echo
+                  echo "$div `whoami`"
+                  echo "Now what?"
+                  echo "* Check out the data site $our_base_uri/"
+                  echo "* Check out the SPARQL endpoint $our_base_uri/sparql"
+                  echo "* Start committing DCAT and eparams into github repository $project_code_repository"
+               fi
+
+               # TODO: Add descriptions of the github and ckan I to what the prizms offers as linked data. 
+               # Use that same kind of file as the parameter to the install. 
+               # Organize it into a versioned dataset (just like everything else).
+            fi # Any setup after calling the production user's setup.
 
          popd &> /dev/null
       fi # if $repodir e.g. /home/lebot/prizms/melagrid

@@ -39,7 +39,7 @@ if [[ "$2" == "--exists" ]]; then
 fi
 
 if [[ -z $exists ]]; then
-   admin="wheel" # Could be 'admin'
+   sudo mkdir -p $project_user_home
    echo sudo /usr/sbin/useradd --home $project_user_home/$user -m $user --shell /bin/bash
    if [[ -n "$dryrun" ]]; then
       echo 'doing it'
@@ -50,6 +50,7 @@ if [[ -z $exists ]]; then
       echo 'doing it'
         sudo /usr/sbin/usermod -g$user $user
    fi
+   admin="wheel" # Could be 'admin'
    #echo sudo /usr/sbin/usermod -g$user -G$admin $user # TODO: the user needs admin/wheel
    #     sudo /usr/sbin/usermod -g$user -G$admin $user
 else

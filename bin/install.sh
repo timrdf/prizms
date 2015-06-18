@@ -154,17 +154,21 @@ else
       shift
    fi
 
+   # Note that this was around well before accepting the --proj-home flag.
+   project_user_home="${user_home%/*}/$project_user_name" # May be overwritten by --proj-home
+
    # https://github.com/timrdf/prizms/issues/105
    project_user_home_flag=""
+   home_flag=""
    if [[ "$1" == "--proj-home" ]]; then
       if [[ "$2" != --* ]]; then
-         project_user_home_flag="--home $2"
+         project_user_home="${2}/$project_user_name"
+         project_user_home_flag="--proj-home $2" # To pass to ourselves recursively.
+         home_flag="--home $2"                   # To pass to csv2rdf4lod-install-dependencies.sh
          shift
       fi
       shift
    fi
-
-   project_user_home="${user_home%/*}/$project_user_name"
 
    i_am_project_user=""
    if [[ "$project_user_name" == `whoami` ]]; then
@@ -950,10 +954,10 @@ else
          `$PRIZMS_HOME/bin/install/project-user.sh $project_user_name --exists` = 'no' ]]; then # Running as developer e.g. jsmith not loxd
       echo
       echo "$div `whoami`"
-      $PRIZMS_HOME/bin/install/project-user.sh --dryrun $project_user_home_flag $project_user_name
+      $PRIZMS_HOME/bin/install/project-user.sh --dryrun $home_flag $project_user_name
       read -p "Q: Create user $project_user_name? [y/n] " -u 1 install_project_user
       if [[ "$install_project_user" == [yY] ]]; then
-         $PRIZMS_HOME/bin/install/project-user.sh $project_user_home_flag $project_user_name
+         $PRIZMS_HOME/bin/install/project-user.sh $home_flag $project_user_name
          # TODO:
          # give yourself permission to write cache/ and settings.inc
          # give apache permission to write cache/ and meta/ (and optionally settings.inc.php)
@@ -4207,6 +4211,7 @@ else
                                                                --me                                                \
                                                                --my-email                                          \
                                                                --proj-user      $project_user_name                 \
+                                                               $project_user_home_flag                             \
                                                                --repos          $read_only_project_code_repository \
                                                                --repos-branch   $project_code_repository_branch    \
                                                                --upstream-ckan  $upstream_ckan                     \

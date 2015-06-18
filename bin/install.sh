@@ -4229,7 +4229,7 @@ else
                # Do any setup that the developer needs to do after the production user was setup.
 
                echo
-               echo "$div `whoami`"
+               echo "$div `whoami` after $project_user_name"
                www=`$PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_ROOT data/source/csv2rdf4lod-source-me-as-$project_user_name.sh`
                echo "Prizms deploys DataFAQs services by linking to them from within the htdocs directory, which is currently $www"
                if [[ -d "$www" ]]; then
@@ -4258,7 +4258,7 @@ else
 
 
                echo
-               echo "$div `whoami`"
+               echo "$div `whoami` after $project_user_name"
                if [[ -n $i_am_project_user ]]; then
                   echo "We're all done installing Prizms production environment for the user `whoami`."
                else # Running as developer e.g. jsmith not loxd

@@ -483,7 +483,13 @@ else
       reason="$1"
       echo
       echo "$div `whoami`"
-      target="/etc/apache2/sites-available/default"  # <- if on Ubuntu. If on CentOS, it's at /etc/httpd/...
+      target="/etc/apache2/sites-available/default"             # Ubuntu 10
+      if [[ ! -e "$target" && -e '/etc/apache2/sites-available/000-default.conf' ]]; then
+         target="/etc/apache2/sites-available/000-default.conf" # Ubuntu 14 
+      fi
+      if [[ ! -e "$target" && -e '/etc/httpd/sites-available/default' ]]; then
+         target="/etc/httpd/sites-available/default"            # CentOS (?)
+      fi
       if [[ -e "$target" ]]; then
          if [[ -n "$reason" ]]; then
             echo "$reason"
@@ -3054,8 +3060,7 @@ else
                   source $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/offer_install.sh
                   if [[ $i_can_sudo -eq 0 ]]; then
                      # For offer_install_with_yum_or_apt_ifnowhich (defined in the import offer_install.sh)
-                     export sudo="sudo "
-                     echo "setting sudo: $sudo" >&2
+                     sudo="sudo "
                   fi
                   echo "sudo for offer_install_with_yum_or_apt_ifnowhich 'g++' 'g++': $sudo"
                   offer_install_with_yum_or_apt_ifnowhich 'g++' 'g++'

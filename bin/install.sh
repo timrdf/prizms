@@ -1817,6 +1817,7 @@ else
             echo "Prizms uses a variety of third party utilities that we can try to install for you automatically."
             echo "The following utilities seem to already be installed okay:"
             echo
+            # TODO: create and pass parameter for https://github.com/timrdf/prizms/issues/107
             $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/install-csv2rdf4lod-dependencies.sh -n $avoid_sudo $use_sudo | grep "^.okay"
             echo
             $PRIZMS_HOME/repos/DataFAQs/bin/install-datafaqs-dependencies.sh                       -n $avoid_sudo $use_sudo | grep "^.okay"

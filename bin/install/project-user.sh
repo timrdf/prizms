@@ -48,7 +48,7 @@ if [[ -z $exists ]]; then
    if [[ -n "$dryrun" ]]; then
         sudo /usr/sbin/usermod -g$user $user
    fi
-   admin="wheel" # Could be 'admin'
+   #admin="wheel" # Could be 'admin'
    #echo sudo /usr/sbin/usermod -g$user -G$admin $user # TODO: the user needs admin/wheel
    #     sudo /usr/sbin/usermod -g$user -G$admin $user
 else

@@ -3056,6 +3056,7 @@ else
                if [[ "$do_it" == [yY] ]]; then
                   # \/ uses function defined by install-csv2rdf4lod-dependencies.sh
                   source $PRIZMS_HOME/repos/csv2rdf4lod-automation/bin/util/offer_install.sh
+                  echo "sudo for offer_install_with_yum_or_apt_ifnowhich 'g++' 'g++': $sudo"
                   offer_install_with_yum_or_apt_ifnowhich 'g++' 'g++'
                   mkdir -p ~/opt && pushd ~/opt
                      # http://nodejs.org/download/

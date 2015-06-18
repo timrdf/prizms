@@ -162,9 +162,10 @@ else
    home_flag=""
    if [[ "$1" == "--proj-home" ]]; then
       if [[ "$2" != --* ]]; then
-         project_user_home="${2}/$project_user_name"
+         project_user_home="$2/$project_user_name"
          project_user_home_flag="--proj-home $2" # To pass to ourselves recursively.
          home_flag="--home $2"                   # To pass to csv2rdf4lod-install-dependencies.sh
+         echo "setting project_user_home using new provided home: $project_user_home"
          shift
       fi
       shift
@@ -4201,6 +4202,17 @@ else
                              sudo su - $project_user_name -c "cd opt/prizms; git pull"
                      fi
 
+                     echo calling sudo su - $project_user_name -c "cd; opt/prizms/bin/install.sh                                \
+                                                               --me                                                \
+                                                               --my-email                                          \
+                                                               --proj-user      $project_user_name                 \
+                                                               $project_user_home_flag                             \
+                                                               --repos          $read_only_project_code_repository \
+                                                               --repos-branch   $project_code_repository_branch    \
+                                                               --upstream-ckan  $upstream_ckan                     \
+                                                               --our-base-uri   $our_base_uri                      \
+                                                               --our-source-id  $our_source_id                     \
+                                                               --our-datahub-id $our_datahub_id"
                      sudo su - $project_user_name -c "cd; opt/prizms/bin/install.sh                                \
                                                                --me                                                \
                                                                --my-email                                          \

@@ -1153,7 +1153,7 @@ else
             if [[ -z "$i_am_project_user" ]]; then
                echo "#!/bin/bash"                                                  > .refresh-prizms-installation
                echo "if [[ \"\$1\" == "pull" ]]; then"                            >> .refresh-prizms-installation
-               echo "   pushd $project_user_home/opt/prizms; git pull; popd"      >> .refresh-prizms-installation
+               echo "   pushd $PRIZMS_HOME; git pull; popd"                       >> .refresh-prizms-installation
                echo "fi"                                                          >> .refresh-prizms-installation
                echo "$this \\"                                                    >> .refresh-prizms-installation
                echo "    --me             $person_uri                     \\"     >> .refresh-prizms-installation

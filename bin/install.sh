@@ -115,10 +115,6 @@ else
       exit
    fi
 
-   #echo $PRIZMS_HOME
-   #echo $user_home
-   #echo $this
-
    # The parameters that we need to find out
 
    #
@@ -993,7 +989,7 @@ else
    fi
 
    user_home=$(cd && echo ${PWD}) # e.g. /home/smithj or /home/ieeevis
-   
+  
    if [[ -z "$i_am_project_user" ]]; then # Running as developer e.g. jsmith not loxd
       development="development"
       project_code_repository_to_clone="$project_code_repository"
@@ -1009,6 +1005,16 @@ else
    # The local directory that we expect by cloning $project_code_repository
    repodir=`basename $project_code_repository`
    repodir=${repodir%.*} # e.g. 'ieeevis', 'lofd', etc.
+
+   whoami
+   echo "PRIZMS_HOME         = $PRIZMS_HOME"
+   echo "user_home           = $user_home"
+   echo "this                = $this"
+   echo "project_user_home   = $project_user_home"
+   echo "project_home        = $project_home"
+   echo "PROJECT_PRIZMS_HOME = $PROJECT_PRIZMS_HOME (old way: `echo $PRIZMS_HOME | sed "s/\`whoami\`/$project_user_name/g"`)"
+   echo "user_home           = $user_home"
+   echo "repodir             = $repodir"
 
    pushd $user_home/prizms &> /dev/null
 
@@ -3626,7 +3632,8 @@ else
             # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
             #
             # Note that this requires the production user to be set up already. (TODO: or does it? Can't the production user just do it?)
-            if [[ -n "$i_am_project_user" && -e $www/lodspeakr/settings.inc.php ]]; then  # Running as production user e.g. loxd not jsmith # TODO: try to do as production user.
+            if [[ -z "$i_am_project_user" && -e $www/lodspeakr/settings.inc.php && -e $project_user_home/opt/prizms/lodspeakrs ]]; then  # Running as production user e.g. loxd not jsmith 
+               # Switched from -n to -z Jun 2015 to go developer not production user
                       target='/var/www/lodspeakr/settings.inc.php'
                target_backup="/var/www/lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
                sudo="sudo" # TODO: try to do as production user.

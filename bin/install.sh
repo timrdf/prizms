@@ -3631,8 +3631,9 @@ else
             # Link in existing upstream projects' LODSPeaKrs (https://github.com/timrdf/prizms/issues/12)
             # per https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories
             #
-            # Note that this requires the production user to be set up already. (TODO: or does it? Can't the production user just do it?)
-            if [[ -z "$i_am_project_user" && -h $www/lodspeakr/settings.inc.php && -e $PRIZMS_HOME/lodspeakrs ]]; then  # Running as production user e.g. loxd not jsmith 
+            # Note that this depends on the production user to be set up already.
+            # Although it could be done without it, it's a bit easier by avoiding some path-hacking.
+            if [[ -z "$i_am_project_user" && -h $www/lodspeakr/settings.inc.php && -e $PROJECT_PRIZMS_HOME/lodspeakrs ]]; then  # Running as production user e.g. loxd not jsmith 
                # Switched from -n to -z Jun 2015 to go developer not production user
                #       target='/var/www/lodspeakr/settings.inc.php'
                #target_backup="/var/www/lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
@@ -3648,7 +3649,7 @@ else
                echo "Prizms can use existing upstream LODSPeaKrs by referencing them within $target."
                echo
                echo "The upstream LODSPeaKrs are available from the following projects:"
-               for upstream in `find $PRIZMS_HOME/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr -o -name components`; do
+               for upstream in `find $PROJECT_PRIZMS_HOME/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr -o -name components`; do
                   echo "  ${upstream%/*}"
                done
                echo
@@ -3657,7 +3658,7 @@ else
                read -p "Q: Cherry pick upstream LODSPeaKrs? [y/n] " -u 1 cherry_pick
                echo
                if [[ "$cherry_pick" == [yY] ]]; then
-                  for upstream in `find $PRIZMS_HOME/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr -o -name components`; do
+                  for upstream in `find $PROJECT_PRIZMS_HOME/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr -o -name components`; do
                      # e.g. /home/lebot/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr
                      #      /home/lebot/opt/prizms/lodspeakrs/csv2rdf4lod-lodspeakr/components
                      components=`find $upstream -mindepth 0 -maxdepth 1 -name components`

@@ -3659,6 +3659,7 @@ else
                read -p "Q: Cherry pick upstream LODSPeaKrs? [y/n] " -u 1 cherry_pick
                echo
                if [[ "$cherry_pick" == [yY] ]]; then
+                  chmod +w $target $target_backup
                   for upstream in `find $PROJECT_PRIZMS_HOME/lodspeakrs -mindepth 2 -maxdepth 2 -type d -name lodspeakr -o -name components`; do
                      # e.g. /home/lebot/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr
                      #      /home/lebot/opt/prizms/lodspeakrs/csv2rdf4lod-lodspeakr/components
@@ -3701,7 +3702,7 @@ else
                               if [[ ${#enable} -gt 0 ]]; then
                                  cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}' > $target_replacement 
                                  diff $target_replacement $target
-                                 $sudo mv $target_replacement $target
+                                 $sudo mv $target $target_replacement
                                  #if [[ -h $target ]]; then
                                  added="$added $target" #lodspeakr/settings.inc.php"
                                  #fi

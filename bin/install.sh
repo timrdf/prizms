@@ -3680,14 +3680,14 @@ else
                            if [[ $there ]]; then
                               disabled=`echo $there | grep "^//"`;
                               if [[ -z "$disabled" ]]; then
-                                 echo " (already  enabled) $component"
+                                 echo "   (already  enabled) $component"
                                  primary="$www/lodspeakr/${component#$components/}"
                                  if [[ -e $primary ]]; then
-                                    echo "  - NOTE that $primary will take precedence over $component"
+                                    echo "    - NOTE that $primary will take precedence over $component"
                                  fi 
                                  #TODO primary when components is soft linked: `$project_user_home/prizms/$project_user_name/lodspeakr/components/$ctype`
                               else
-                                 echo " (already disabled) $component"
+                                 echo "   (already disabled) $component"
                               fi
                            else
                               echo
@@ -3695,14 +3695,14 @@ else
                               # =>
                               # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
                               # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
-                              read -p "   Q: Add $component as an external LODSPeaKr component? [y/n] " -u 1 enable
+                              read -p "      Q: Add $component as an external LODSPeaKr component? [y/n] " -u 1 enable
                               if [[ $enable == [nN] ]]; then
                                  cherry_pick="// $cherry_pick"
                               fi
                               if [[ ${#enable} -gt 0 ]]; then
                                  cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}' > $target_replacement 
-                                 diff $target_replacement $target
-                                 $sudo mv $target $target_replacement
+                                 diff $target $target_replacement
+                                 $sudo mv $target_replacement $target
                                  #if [[ -h $target ]]; then
                                  added="$added $target" #lodspeakr/settings.inc.php"
                                  #fi

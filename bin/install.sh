@@ -3691,11 +3691,11 @@ else
                               fi
                            else
                               echo
-                              echo "$target missing: $cherry_pick"
+                              echo "   $target missing: $cherry_pick"
                               # =>
                               # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
                               # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
-                              read -p "Q: Add $component as an external LODSPeaKr component? [y/n] " -u 1 enable
+                              read -p "   Q: Add $component as an external LODSPeaKr component? [y/n] " -u 1 enable
                               if [[ $enable == [nN] ]]; then
                                  cherry_pick="// $cherry_pick"
                               fi

@@ -3642,6 +3642,7 @@ else
                #if [[ -h $target ]]; then # FILE exists and is a symbolic link.
                       target='lodspeakr/settings.inc.php'
                target_backup="lodspeakr/.settings.inc.php_`date +%Y-%m-%d-%H-%M-%S`"
+               target_replacement="$target_backup.new"
                #fi
                $sudo cp $target $target_backup
                echo
@@ -3698,11 +3699,12 @@ else
                                  cherry_pick="// $cherry_pick"
                               fi
                               if [[ ${#enable} -gt 0 ]]; then
-                                 cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}' > .prizms-installer-settings.inc.php
-                                 $sudo mv .prizms-installer-settings.inc.php $target # TODO: try to do as production user.
-                                 if [[ -h $target ]]; then
-                                    added="$added lodspeakr/settings.inc.php"
-                                 fi
+                                 cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}' > $target_replacement 
+                                 diff $target_replacement $target
+                                 $sudo mv $target_replacement $target
+                                 #if [[ -h $target ]]; then
+                                 added="$added $target" #lodspeakr/settings.inc.php"
+                                 #fi
                               fi
                            fi
                         done

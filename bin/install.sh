@@ -3238,8 +3238,6 @@ else
                         #sudo bash < <(curl -sL http://lodspeakr.org/install)
                         # omitting "-s chown=$lodchown" b/c it needs root.
                         #sudo su - $project_user_name -c "cd $www; bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql < <(curl -sL http://lodspeakr.org/install)"
-                        echo pushed to $www
-                        curl -sL $lodspeakr_install
                         sudo -E bash -s        "base-url=$our_base_uri"        \
                                      -s  "base-namespace=$our_base_uri"        \
                                      -s "sparql-endpoint=$our_base_uri/sparql" \

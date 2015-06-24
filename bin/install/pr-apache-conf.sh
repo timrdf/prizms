@@ -27,13 +27,15 @@ if [[ "$1" == '--DocumentRoot' ]]; then
       fi
    else
       if [[ -d /etc/httpd ]]; then
-         www='/var/www/html' # CentOS
+         echo '/var/www/html' # CentOS
+         exit 1
       elif [[ `which apache2 2> /dev/null` ]]; then
-         www='/var/www'
+         echo '/var/www'
+         exit 1
       fi
    fi
 
-   exit 1
+   exit 2
 else
 
    # Ubuntu 10.04.4 LTS

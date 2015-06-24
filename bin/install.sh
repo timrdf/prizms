@@ -3208,7 +3208,7 @@ else
                echo "the version-controlled repository ($project_code_repository)." 
                echo
                if [[ ! -e $www/lodspeakr ]]; then
-                  lodspeakr_install='http://lodspeakr.org/install' # TODO: appending '-http' used to work.
+                  lodspeakr_install='http://lodspeakr.org/install-http' # TODO: appending '-http' used to work.
                   echo "$www/lodspeakr is not set up yet. It can be installed with the command:"
                   echo
                   echo " sudo -E bash -s base-url=$our_base_uri base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql chown=$lodchown < <(curl -sL $lodspeakr_install)"

@@ -18,10 +18,19 @@ me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
 if [[ "$1" == '--DocumentRoot' ]]; then
 
-   dir=`grep DocumentRoot \`$0\` | awk '{print $2}'`
-   if [[ -d "$dir" ]]; then
-      echo $dir
-      exit
+   conf=`$0`
+   if [[ -d "$conf" ]]; then
+      root=`grep DocumentRoot $conf | awk '{print $2}'`
+      if [[ -d "$root" ]]; then
+         echo $root
+         exit
+      fi
+   else
+      if [[ -d /etc/httpd ]]; then
+         www='/var/www/html' # CentOS
+      elif [[ `which apache2 2> /dev/null` ]]; then
+         www='/var/www'
+      fi
    fi
 
    exit 1

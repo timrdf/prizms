@@ -484,13 +484,18 @@ else
       reason="$1"
       echo
       echo "$div `whoami`"
-      target="/etc/apache2/sites-available/default"             # Ubuntu 10
-      if [[ ! -e "$target" && -e '/etc/apache2/sites-available/000-default.conf' ]]; then
-         target="/etc/apache2/sites-available/000-default.conf" # Ubuntu 14 
-      fi
-      if [[ ! -e "$target" && -e '/etc/httpd/sites-available/default' ]]; then
-         target="/etc/httpd/sites-available/default"            # CentOS (?)
-      fi
+
+      # Ubuntu 10.04.4 LTS
+      # /etc/apache2/sites-enabled/000-default: DocumentRoot /var/www
+      #target="/etc/apache2/sites-available/default"             # Ubuntu 10
+      #if [[ ! -e "$target" && -e '/etc/apache2/sites-available/000-default.conf' ]]; then
+      #   target="/etc/apache2/sites-available/000-default.conf" # Ubuntu 14 
+      #fi
+      #if [[ ! -e "$target" && -e '/etc/httpd/sites-available/default' ]]; then
+      #   target="/etc/httpd/sites-available/default"            # CentOS (?)
+      #fi
+      target=`$PRIZMS_HOME/bin/install/pr-apache-conf.sh`
+      docroot=`$PRIZMS_HOME/bin/install/pr-apache-conf.sh --DocumentRoot`
       if [[ -e "$target" ]]; then
          if [[ -n "$reason" ]]; then
             echo "$reason"
@@ -1537,12 +1542,12 @@ else
                fi
 
                #if [[ `value-of.sh CSV2RDF4LOD_PUBLISH_VARWWW_DUMP_FILES $target` == "true" ]]; then
-               www=''
-               if [[ -d /etc/httpd ]]; then
-                  www='/var/www/html' # CentOS
-               elif [[ `which apache2 2> /dev/null` ]]; then
-                  www='/var/www'
-               fi
+               www=`$PRIZMS_HOME/bin/install/pr-apache-conf.sh --DocumentRoot`
+               #if [[ -d /etc/httpd ]]; then
+               #   www='/var/www/html' # CentOS
+               #elif [[ `which apache2 2> /dev/null` ]]; then
+               #   www='/var/www'
+               #fi
                if [[ -n "$www" ]]; then
                   change_source_me $target CSV2RDF4LOD_PUBLISH_VARWWW_ROOT "$www" \
                      "indicate the htdocs directory to publish RDF dump files to, which are used to load the SPARQL endpoint" \
@@ -3701,16 +3706,19 @@ else
                               fi
                               if [[ ${#enable} -gt 0 ]]; then
                                  cat $target | awk -v add="$cherry_pick" '{if($0 ~ /^...Cherry-picked components/){print;print add}else{print}}' > $target_replacement 
-                                 diff $target $target_replacement
+                                 #diff $target $target_replacement
                                  $sudo mv $target_replacement $target
                                  #if [[ -h $target ]]; then
-                                 added="$added $target" #lodspeakr/settings.inc.php"
+                                 #added="$added $target" #lodspeakr/settings.inc.php"
                                  #fi
                               fi
                            fi
                         done
                      done
                   done
+                  if [[ `diff $target $target_replacement` ]]; then
+                     added="$added $target"
+                  fi
                else
                   echo "Okay, we won't walk through cherry picking upstream LODSPeaKrs; see"
                   echo "https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories"

@@ -3210,7 +3210,7 @@ else
                if [[ ! -e $www/lodspeakr ]]; then
                   echo "$www/lodspeakr is not set up yet. It can be installed with the command:"
                   echo
-                  echo " sudo -E bash -s base-url=$our_base_uri base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql chown=$lodchown < <(curl -sL http://lodspeakr.org/install)"
+                  echo " sudo -E bash -s base-url=$our_base_uri base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql chown=$lodchown < <(curl -sL http://lodspeakr.org/install-http)"
                   echo
                   read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
@@ -3240,7 +3240,7 @@ else
                         sudo -E bash -s base-url=$our_base_uri               \
                                      -s base-namespace=$our_base_uri         \
                                      -s sparql-endpoint=$our_base_uri/sparql \
-                                     -s chown=$lodchown < <(curl -sL http://lodspeakr.org/install-http)
+                                     -s chown=$lodchown < <(curl -sL http://lodspeakr.org/install) # TODO: this did have '-http' at the end but it 404s now.
                         # Question 1: http://lod.melagrid.org
                         # Question 2: <accept default>
                         # Question 3: http://lod.melagrid.org/sparql

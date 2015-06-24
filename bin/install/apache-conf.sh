@@ -22,7 +22,7 @@ me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 # Ubuntu 14.04.2 LTS
 # /etc/apache2/sites-enabled/000-default.conf:  DocumentRoot /var/www/html
 
-for sites in /etc/apache2/sites-available/; do
+for sites in /etc/apache2/sites-available; do
    if [[ -d $sites ]]; then
       for conf in default 000-default 000-default.conf; do
          if [[ -f $sites/$conf ]]; then

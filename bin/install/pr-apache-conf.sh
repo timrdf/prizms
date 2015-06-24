@@ -19,7 +19,7 @@ me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 if [[ "$1" == '--DocumentRoot' ]]; then
 
    conf=`$0`
-   if [[ -d "$conf" ]]; then
+   if [[ -e "$conf" ]]; then
       root=`grep DocumentRoot $conf | awk '{print $2}'`
       if [[ -d "$root" ]]; then
          echo $root

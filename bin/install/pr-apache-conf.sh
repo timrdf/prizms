@@ -7,7 +7,7 @@
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
    echo
-   echo "usage: `basename $0` [--DocumentRoot]]"
+   echo "usage: `basename $0` [--DocumentRoot]"
    echo
    echo "  Returns the file path of the Apache httpd configuration file on the local system."
    exit
@@ -18,7 +18,7 @@ me=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
 if [[ "$1" == '--DocumentRoot' ]]; then
 
-   dir=`grep DocumentRoot $0 | awk '{print $2}'`
+   dir=`grep DocumentRoot \`$0\` | awk '{print $2}'`
    if [[ -d "$dir" ]]; then
       echo $dir
       exit

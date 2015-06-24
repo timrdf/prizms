@@ -629,9 +629,9 @@ else
          read -p "Q: Update $htaccess with the above change? [y/n] " -u 1 update_it
          if [[ "$update_it" == [yY] ]]; then
             echo "sudo cp                      $htaccess $www/.htaccess_`date +%Y-%m-%d-%H-%M-%S`"
-            sudo cp                      $htaccess $www/.htaccess_`date +%Y-%m-%d-%H-%M-%S`
+                  sudo cp                      $htaccess $www/.htaccess_`date +%Y-%m-%d-%H-%M-%S`
             echo "sudo cp .prizms_www_htaccess $htaccess"
-            sudo cp .prizms_www_htaccess $htaccess
+                  sudo cp .prizms_www_htaccess $htaccess
          else
             echo "Okay, we won't modify $htaccess."
          fi
@@ -2226,7 +2226,8 @@ else
                   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
                   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
                   # NOTE: replaced the code above with the following on April 2014 during CentOS support:
-                  add_proxy_pass '/etc/apache2/sites-available/default' '/sparql' '8890'
+                  #add_proxy_pass '/etc/apache2/sites-available/default'        '/sparql' '8890'
+                  add_proxy_pass "`$PRIZMS_HOME/bin/install/pr-apache-conf.sh`" '/sparql' '8890'
 
                   # Adding the following to /etc/vservers/.httpd/ieeevis.conf avoids http://lofd.tw.rpi.edu falling into VM host.
                   #    Redirect permanent /projects/ieeevis /projects/ieeevis/
@@ -2495,7 +2496,8 @@ else
                                    sudo cp $PRIZMS_HOME/repos/IVPR-Weave-Binaries/ROOT/*.$ext       $webapps/ROOT/
                            done 
                         fi
-                        add_proxy_pass '/etc/apache2/sites-available/default' '/weave' '8080' 
+                        #add_proxy_pass '/etc/apache2/sites-available/default'        '/weave' '8080' 
+                        add_proxy_pass "`$PRIZMS_HOME/bin/install/pr-apache-conf.sh`" '/weave' '8080' 
                      else
                         echo "(WARNING: Cannot install Weave b/c you do not have sudo.)" 
                      fi
@@ -2666,7 +2668,8 @@ else
                   #   add_proxy_pass '/etc/apache2/sites-available/default' '/sadi-services' '8080'
                   #fi
                   if [[ -e $webapps/sadi-services.war ]]; then
-                     add_proxy_pass '/etc/apache2/sites-available/default' '/sadi-services' '8080'
+                     #add_proxy_pass '/etc/apache2/sites-available/default'        '/sadi-services' '8080'
+                     add_proxy_pass "`$PRIZMS_HOME/bin/install/pr-apache-conf.sh`" '/sadi-services' '8080'
                   fi
                fi
             fi # end running as developer e.g. jsmith not loxd (Post-configure SADI service (in Tomcat))
@@ -2702,7 +2705,8 @@ else
 
                   # Apache ProxyPass
                   if [[ -e $webapps/annotator.war ]]; then
-                     add_proxy_pass '/etc/apache2/sites-available/default' '/annotator'
+                     #add_proxy_pass '/etc/apache2/sites-available/default'        '/annotator'
+                     add_proxy_pass "`$PRIZMS_HOME/bin/install/pr-apache-conf.sh`" '/annotator'
                   fi
 
                   # Setting baseURI for the annotator webapp.
@@ -2775,7 +2779,8 @@ else
 
                   if [[ -e $webapps/$war_local ]]; then
                      # Apache ProxyPass
-                     add_proxy_pass '/etc/apache2/sites-available/default' '/RDFAlerts'
+                     #add_proxy_pass '/etc/apache2/sites-available/default'        '/RDFAlerts'
+                     add_proxy_pass "`$PRIZMS_HOME/bin/install/pr-apache-conf.sh`" '/RDFAlerts'
                   fi
                else
                   echo "(Cannot install RDFAlert because tomcat installed: \"$tomcat_installed\""
@@ -3173,7 +3178,8 @@ else
             fi
             if [[ -e /etc/init.d/git2prov ]]; then
                if [[ "$i_can_sudo" -eq 0 ]]; then
-                  add_proxy_pass '/etc/apache2/sites-available/default' '/git2prov' 8905
+                  #add_proxy_pass '/etc/apache2/sites-available/default'        '/git2prov' 8905
+                  add_proxy_pass "`$PRIZMS_HOME/bin/install/pr-apache-conf.sh`" '/git2prov' 8905
                   # local target="$1" # e.g. '/etc/apache2/sites-available/default'
                   # local path="$2"   # e.g. '/sadi-services' '/annotator' '/prov-pingback' '/weave' '/sparql'
                   # local port="$3"   # e.g. '8080'           '8080'       '9412'           '8080'   '8890'
@@ -3697,7 +3703,7 @@ else
                               fi
                            else
                               echo
-                              echo "   $target missing: $cherry_pick"
+                              echo "   $target does not yet have: $cherry_pick"
                               # =>
                               # $conf['components']['types'][] = '/home/alvaro/previousproject1/lodspeakr/components/types/foaf:Person';
                               # $conf['components']['services'][] = '/home/lofd/opt/prizms/lodspeakrs/twc-healthdata/lodspeakr/components/services/namedGraphs';
@@ -3717,7 +3723,7 @@ else
                         done
                      done
                   done
-                  if [[ `diff $target $target_replacement` ]]; then
+                  if [[ `diff $target $target_backup` ]]; then
                      added="$added $target"
                   fi
                else
@@ -4086,7 +4092,8 @@ else
                   else
                      echo "WARNING: cannot set up prov-pingback b/c pip is not installed."
                   fi
-                  add_proxy_pass '/etc/apache2/sites-available/default' '/prov-pingback' '9412'
+                  #add_proxy_pass '/etc/apache2/sites-available/default'        '/prov-pingback' '9412'
+                  add_proxy_pass "`$PRIZMS_HOME/bin/install/pr-apache-conf.sh`" '/prov-pingback' '9412'
                fi
             fi # end "I am not project user"
 

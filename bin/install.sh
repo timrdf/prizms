@@ -3208,9 +3208,10 @@ else
                echo "the version-controlled repository ($project_code_repository)." 
                echo
                if [[ ! -e $www/lodspeakr ]]; then
+                  lodspeakr_install='http://lodspeakr.org/install' # TODO: appending '-http' used to work.
                   echo "$www/lodspeakr is not set up yet. It can be installed with the command:"
                   echo
-                  echo " sudo -E bash -s base-url=$our_base_uri base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql chown=$lodchown < <(curl -sL http://lodspeakr.org/install-http)"
+                  echo " sudo -E bash -s base-url=$our_base_uri base-namespace=$our_base_uri sparql-endpoint=$our_base_uri/sparql chown=$lodchown < <(curl -sL $lodspeakr_install)"
                   echo
                   read -p "Q: Would you like to install LODSPeaKr? [y/n] " -u 1 install_it
                   if [[ "$install_it" == [yY] ]]; then
@@ -3237,10 +3238,10 @@ else
                         #sudo bash < <(curl -sL http://lodspeakr.org/install)
                         # omitting "-s chown=$lodchown" b/c it needs root.
                         #sudo su - $project_user_name -c "cd $www; bash -s base-url=$our_base_uri -s base-namespace=$our_base_uri -s sparql-endpoint=$our_base_uri/sparql < <(curl -sL http://lodspeakr.org/install)"
-                        sudo -E bash -s base-url=$our_base_uri               \
-                                     -s base-namespace=$our_base_uri         \
+                        sudo -E bash -s        base-url=$our_base_uri        \
+                                     -s  base-namespace=$our_base_uri        \
                                      -s sparql-endpoint=$our_base_uri/sparql \
-                                     -s chown=$lodchown < <(curl -sL http://lodspeakr.org/install) # TODO: this did have '-http' at the end but it 404s now.
+                                     -s           chown=$lodchown < <(curl -sL $lodspeakr_install)
                         # Question 1: http://lod.melagrid.org
                         # Question 2: <accept default>
                         # Question 3: http://lod.melagrid.org/sparql

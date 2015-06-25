@@ -3886,6 +3886,10 @@ else
             echo "$div `whoami`"
             offer_install_aptget 'whois' 'support Secondary Derived Dataset pr-whois-domains.sh'
 
+            echo
+            echo "$div `whoami`"
+            offer_install_aptget 'poppler-utils' 'extract text from PDF documents'
+
 
             #3> <http://purl.org/twc/id/software/lodspeakr> 
             #3>    prov:wasDerivedFrom <http://dbpedia.org/resource/Cron>;

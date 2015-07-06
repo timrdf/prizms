@@ -46,9 +46,9 @@ fi
 
 if [[ -z $exists ]]; then
    sudo mkdir -p $project_user_home
-   echo sudo /usr/sbin/useradd --home $project_user_home/$user -m $user --shell /bin/bash
+   echo sudo /usr/sbin/useradd --home $project_user_home/$user --create-home $user --shell /bin/bash
    if [[ -n "$dryrun" ]]; then
-        sudo /usr/sbin/useradd --home $project_user_home/$user -m $user --shell /bin/bash
+        sudo /usr/sbin/useradd --home $project_user_home/$user --create-home $user --shell /bin/bash
    fi
    # undo it with (http://www.cyberciti.biz/faq/linux-remove-user-command/): 
    #    userdel -r $user

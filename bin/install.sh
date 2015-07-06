@@ -175,8 +175,12 @@ else
          home_flag="--home $2"                        # To pass to csv2rdf4lod-install-dependencies.sh
          echo "setting project_user_home using new provided home: $project_user_home"
          shift
+      else
+         echo "keeping original project_user_home: $project_user_home"
       fi
       shift
+   else
+      echo "keeping original project_user_home: $project_user_home"
    fi
 
    i_am_project_user=""

@@ -20,8 +20,14 @@ fi
 # https://github.com/timrdf/prizms/issues/105
 project_user_home="$HOME"
 if [[ "$1" == '--home' ]]; then
-   project_user_home="$2"
-   shift 2
+   if [[ ${#2} -gt 0 ]]; then
+      project_user_home="$2"
+      echo "accepting adjusted user home via argument: $project_user_home" >&2
+      shift
+   else
+      echo "WARNING '--home' did not have value; ignoring and using default home: \"$project_user_home\"" >&2
+   fi
+   shift
 fi
 
 user="$1"
@@ -44,6 +50,8 @@ if [[ -z $exists ]]; then
    if [[ -n "$dryrun" ]]; then
         sudo /usr/sbin/useradd --home $project_user_home/$user -m $user --shell /bin/bash
    fi
+   # undo it with (http://www.cyberciti.biz/faq/linux-remove-user-command/): 
+   #    userdel -r $user
    echo sudo /usr/sbin/usermod -g$user $user
    if [[ -n "$dryrun" ]]; then
         sudo /usr/sbin/usermod -g$user $user

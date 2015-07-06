@@ -68,7 +68,6 @@ if [[ ${0%install.sh} == $0 ]]; then # $0 is 'bash' etc when bootstrapping, it i
 else
 
    PRIZMS_HOME=$(cd ${0%/*} && echo ${PWD%/*})
-   user_home=$(cd && echo ${PWD})
    this=$(cd ${0%/*} && echo ${PWD})/`basename $0`
 
    if [[ "$1" == "--help" || "$1" == "-h" ]]; then
@@ -82,6 +81,8 @@ else
       echo "  (these arguments must be provided in the order listed)"
       echo
       echo " --me             | [optional] the project developer's  URI                              (e.g. http://jsmith.me/foaf#me)"
+      echo
+      echo " --as             | [optional] the project developer's user name                         (e.g. jsmith)"
       echo
       echo " --my-email       |            the project developer's  email address                    (e.g. me@jsmith.me)"
       echo "                  : This email will be used to create an SSH key (if none exists; with your confirmation)"
@@ -128,13 +129,18 @@ else
    fi
 
    person_user_name=`whoami`
+   user_home=$(cd && echo ${PWD})
    if [[ "$1" == "--as" ]]; then # https://github.com/timrdf/prizms/issues/108
       if [[ "$2" != --* ]]; then
          person_user_name="$2"
+         # jsmith:x:5048:5048:John Smith,,,:/home/jsmith:/bin/bash
+         user_home=`grep $person_user_name /etc/passwd | awk -F: '{print $6}'`
          shift
       fi
       shift
    fi
+
+   echo "choosing user_home: $user_home"
 
    #
    person_email=""

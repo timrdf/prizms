@@ -972,7 +972,7 @@ else
       $PRIZMS_HOME/bin/install/project-user.sh --dryrun $home_flag $project_user_name
       read -p "Q: Create user $project_user_name? [y/n] " -u 1 install_project_user
       if [[ "$install_project_user" == [yY] ]]; then
-         echo calling $PRIZMS_HOME/bin/install/project-user.sh $home_flag $project_user_name >&2
+         echo calling $PRIZMS_HOME/bin/install/project-user.sh $home_flag $project_user_name
          $PRIZMS_HOME/bin/install/project-user.sh $home_flag $project_user_name
          # TODO:
          # give yourself permission to write cache/ and settings.inc

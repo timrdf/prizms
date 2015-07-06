@@ -157,7 +157,7 @@ else
    project_user_home_flag=""
    home_flag=""
    if [[ "$1" == "--proj-home" ]]; then
-      if [[ "$2" != --* ]]; then
+      if [[ ${#2} -gt 0 && "$2" != --* ]]; then
          project_user_home="$2/$project_user_name"
          project_user_home_flag="--proj-home      $2" # To pass to ourselves recursively.
          home_flag="--home $2"                        # To pass to csv2rdf4lod-install-dependencies.sh

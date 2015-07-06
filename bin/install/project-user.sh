@@ -36,6 +36,7 @@ user="$1"
 
    echo sudo cat /etc/passwd | cut -d: -f1 | grep $user
 exists=`sudo cat /etc/passwd | cut -d: -f1 | grep $user`
+group_exists=`cut -d: -f1 /etc/group | grep prizms`
 
 if [[ "$2" == "--exists" ]]; then
    if [[ -z $exists ]]; then
@@ -46,17 +47,25 @@ if [[ "$2" == "--exists" ]]; then
    exit
 fi
 
+if [[ -z "$group_exists" ]]; then
+   # https://github.com/timrdf/prizms/issues/109
+   sudo groupadd 'prizms'
+fi
+
 if [[ -z "$exists" ]]; then
    sudo mkdir -p $project_user_home_base
    echo sudo /usr/sbin/useradd --home $project_user_home_base/$user --create-home $user --shell /bin/bash
    if [[ -n "$dryrun" ]]; then
         sudo /usr/sbin/useradd --home $project_user_home_base/$user --create-home $user --shell /bin/bash
    fi
+
+   # ^^
    # undo it with (http://www.cyberciti.biz/faq/linux-remove-user-command/): 
    #    userdel -r $user
-   echo sudo /usr/sbin/usermod -g$user $user
+
+   echo sudo /usr/sbin/usermod -gprizms -G$user $user
    if [[ -n "$dryrun" ]]; then
-        sudo /usr/sbin/usermod -g$user $user
+        sudo /usr/sbin/usermod -gprizms -G$user $user
    fi
    #admin="wheel" # Could be 'admin'
    #echo sudo /usr/sbin/usermod -g$user -G$admin $user # TODO: the user needs admin/wheel

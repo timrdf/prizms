@@ -21,13 +21,13 @@ fi
 
 # https://github.com/timrdf/prizms/issues/105
 project_user_home_base="$HOME_BASE"
-if [[ "$1" == '--home' ]]; then
+if [[ "$1" == '--home-base' ]]; then
    if [[ ${#2} -gt 0 ]]; then
       project_user_home_base="$2"
       echo "accepting adjusted user home via argument: $project_user_home_base" >&2
       shift
    else
-      echo "WARNING '--home' did not have value; ignoring and using default home: \"$project_user_home_base\"" >&2
+      echo "WARNING '--home-base' did not have value; ignoring and using default home: \"$project_user_home_base\"" >&2
    fi
    shift
 fi

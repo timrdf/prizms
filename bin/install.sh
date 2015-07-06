@@ -135,12 +135,12 @@ else
          person_user_name="$2"
          # jsmith:x:5048:5048:John Smith,,,:/home/jsmith:/bin/bash
          user_home=`grep $person_user_name /etc/passwd | awk -F: '{print $6}'`
+         echo "updating default user_home from 'cd && pwd' to 'grep passwd': $user_home"
          shift
       fi
       shift
    fi
 
-   echo "choosing user_home: $user_home"
 
    #
    person_email=""

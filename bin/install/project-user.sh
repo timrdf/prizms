@@ -4,11 +4,12 @@
 #3>    dcterms:isPartOf <http://purl.org/twc/id/software/prizms>;
 #3> .
 
-HOME=$(cd && echo ${PWD%/*}) # e.g. /Users or /home
+HOME_BASE=$(cd && echo ${PWD%/*}) # e.g. /Users or /home
 # ^^ Note, does not work when running as root.
 
 if [[ $# -lt 1 || "$1" == "--help" || "$1" == "-h" ]]; then
-   echo "usage: `basename $0` [--dryrun] [--home <dir>] <project-user-name> [[--exists]"
+   echo "usage: `basename $0` [--dryrun] [--home-base <dir>] <project-user-name> [[--exists]"
+   echo "    --home-base <dir> : Directory to create user home, e.g. '/home'. (This script will creating the user directory with in <dir>."
    exit 1
 fi
 
@@ -19,14 +20,14 @@ if [[ "$1" == '--dryrun' ]]; then
 fi
 
 # https://github.com/timrdf/prizms/issues/105
-project_user_home="$HOME"
+project_user_home_base="$HOME_BASE"
 if [[ "$1" == '--home' ]]; then
    if [[ ${#2} -gt 0 ]]; then
-      project_user_home="$2"
-      echo "accepting adjusted user home via argument: $project_user_home" >&2
+      project_user_home_base="$2"
+      echo "accepting adjusted user home via argument: $project_user_home_base" >&2
       shift
    else
-      echo "WARNING '--home' did not have value; ignoring and using default home: \"$project_user_home\"" >&2
+      echo "WARNING '--home' did not have value; ignoring and using default home: \"$project_user_home_base\"" >&2
    fi
    shift
 fi
@@ -46,10 +47,10 @@ if [[ "$2" == "--exists" ]]; then
 fi
 
 if [[ -z "$exists" ]]; then
-   sudo mkdir -p $project_user_home
-   echo sudo /usr/sbin/useradd --home $project_user_home/$user --create-home $user --shell /bin/bash
+   sudo mkdir -p $project_user_home_base
+   echo sudo /usr/sbin/useradd --home $project_user_home_base/$user --create-home $user --shell /bin/bash
    if [[ -n "$dryrun" ]]; then
-        sudo /usr/sbin/useradd --home $project_user_home/$user --create-home $user --shell /bin/bash
+        sudo /usr/sbin/useradd --home $project_user_home_base/$user --create-home $user --shell /bin/bash
    fi
    # undo it with (http://www.cyberciti.biz/faq/linux-remove-user-command/): 
    #    userdel -r $user

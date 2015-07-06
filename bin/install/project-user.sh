@@ -5,6 +5,7 @@
 #3> .
 
 HOME=$(cd && echo ${PWD%/*}) # e.g. /Users or /home
+# ^^ Note, does not work when running as root.
 
 if [[ $# -lt 1 || "$1" == "--help" || "$1" == "-h" ]]; then
    echo "usage: `basename $0` [--dryrun] [--home <dir>] <project-user-name> [[--exists]"
@@ -44,7 +45,7 @@ if [[ "$2" == "--exists" ]]; then
    exit
 fi
 
-if [[ -z $exists ]]; then
+if [[ -z "$exists" ]]; then
    sudo mkdir -p $project_user_home
    echo sudo /usr/sbin/useradd --home $project_user_home/$user --create-home $user --shell /bin/bash
    if [[ -n "$dryrun" ]]; then

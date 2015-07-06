@@ -163,14 +163,14 @@ else
 
    # Note that this was around well before accepting the --proj-home flag.
    project_user_home="${user_home%/*}/$project_user_name" # May be overwritten by --proj-home
-
-   # https://github.com/timrdf/prizms/issues/105
-   project_user_home_flag=""
-   home_flag=""
-   if [[ "$1" == "--proj-home" ]]; then
-      if [[ ${#2} -gt 0 && "$2" != --* ]]; then
-         echo "accepting install.sh --proj-home with $1 and $2"
-         project_user_home="$2/$project_user_name"
+                                                                       # \/
+   # https://github.com/timrdf/prizms/issues/105                       # ||
+   project_user_home_flag=""                                           # ||
+   home_flag=""                                                        # ||
+   if [[ "$1" == "--proj-home" ]]; then                                # ||
+      if [[ ${#2} -gt 0 && "$2" != --* ]]; then                        # ||
+         echo "accepting install.sh --proj-home with $1 and $2"        # ||
+         project_user_home="$2/$project_user_name"    # <= overwrites ===-/
          project_user_home_flag="--proj-home      $2" # To pass to ourselves recursively.
          home_flag="--home $2"                        # To pass to csv2rdf4lod-install-dependencies.sh
          echo "setting project_user_home using new provided home: $project_user_home"

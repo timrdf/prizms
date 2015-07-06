@@ -127,6 +127,15 @@ else
       shift
    fi
 
+   person_user_name=`whoami`
+   if [[ "$1" == "--as" ]]; then # https://github.com/timrdf/prizms/issues/108
+      if [[ "$2" != --* ]]; then
+         person_user_name="$2"
+         shift
+      fi
+      shift
+   fi
+
    #
    person_email=""
    if [[ "$1" == "--my-email" ]]; then
@@ -136,9 +145,6 @@ else
       fi
       shift
    fi
-
-   #
-   person_user_name=`whoami`
 
    #
    project_user_name=""

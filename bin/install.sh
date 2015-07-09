@@ -2976,11 +2976,12 @@ else
                      echo "Okay, we won't create $www/source, but you won't be able to publish RDF dump files or load the SPARQL endpoint."
                   fi
                fi
-               if [[ -e $www/source                                         && \
-                     `stat --format=%U $www/source` != "$project_user_name" && \
+               if [[ -e $www/source                             && \
+                     `stat --format=%G $www/source` != 'prizms' && \
                      -n "$project_user_name" ]]; then
+                     #`stat --format=%U $www/source` != "$project_user_name" && \ # changed to suit multiple prizms instances.
                   echo
-                  echo "$www/source is currently owned by `stat --format=%U $www/source`, but it should be owned by $project_user_name."
+                  echo "$www/source group is currently `stat --format=%G $www/source`, but it should be prizms."
                   echo "The correct ownership can be set using the following command."
                   echo
                   echo "   sudo chown -R $project_user_name:prizms $www/source"
@@ -2990,7 +2991,7 @@ else
                   if [[ "$create_it" == [yY] ]]; then
                      sudo chown -R $project_user_name:prizms $www/source
                   else
-                     echo "Okay, we won't change the owner of $www/source, but you won't be able to publish RDF dump files or load the SPARQL endpoint."
+                     echo "Okay, we won't change the group of $www/source, but you won't be able to publish RDF dump files or load the SPARQL endpoint."
                   fi
                fi
             else

@@ -2986,7 +2986,7 @@ else
                   echo
                   echo "   sudo chown -R $project_user_name:prizms $www/source"
                   echo
-                  read -p "Q: May we change ownership of $www/source with the command above? [y/n] " -u 1 create_it
+                  read -p "Q: May we change the group of $www/source with the command above? [y/n] " -u 1 create_it
                   echo
                   if [[ "$create_it" == [yY] ]]; then
                      sudo chown -R $project_user_name:prizms $www/source
@@ -4257,7 +4257,9 @@ else
                              sudo su - $project_user_name -c "cd opt/prizms; git pull"
                      fi
 
-                     sudo su - $project_user_name -c "cd; opt/prizms/bin/install.sh                                \
+                     sudo su - $project_user_name -c "cd; export http_proxy=$http_proxy;                           \
+                                                          export https_proxy=$https_proxy;                         \
+                                                          opt/prizms/bin/install.sh                                \
                                                                --me                                                \
                                                                --my-email                                          \
                                                                --proj-user      $project_user_name                 \
